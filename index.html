@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>第五位研究員｜第七層標本復原程序 v56 最終實測修補版</title>
+<title>第五位研究員｜第七層標本復原程序 v57 手機滑動修正版</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>:root {
@@ -3681,6 +3681,181 @@ font-size: 9px;
 letter-spacing: 1.2px;
 padding: 5px 8px;
 }
+}
+:root {
+--v57-bottom-reserve: 156px;
+--v57-top-reserve: 58px;
+}
+html {
+height: auto !important;
+min-height: 100%;
+overflow-y: auto !important;
+overscroll-behavior-y: contain;
+-webkit-text-size-adjust: 100%;
+}
+body {
+height: auto !important;
+min-height: 100dvh !important;
+overflow-y: auto !important;
+overflow-x: hidden !important;
+-webkit-overflow-scrolling: touch;
+touch-action: pan-y manipulation;
+}
+main#app {
+min-height: 100dvh;
+height: auto !important;
+overflow: visible !important;
+padding-top: max(var(--v57-top-reserve), calc(env(safe-area-inset-top, 0px) + 52px)) !important;
+padding-bottom: max(var(--v57-bottom-reserve), calc(env(safe-area-inset-bottom, 0px) + 150px)) !important;
+}
+.screen {
+position: relative;
+width: min(430px, calc(100vw - 22px));
+min-height: auto !important;
+max-height: none !important;
+height: auto !important;
+overflow: visible !important;
+margin-top: 0 !important;
+margin-bottom: 24px !important;
+padding-bottom: 24px !important;
+scroll-margin-bottom: 180px;
+}
+.screen.active {
+display: block;
+}
+.btn,
+.mode-choice,
+input,
+textarea,
+select {
+scroll-margin-bottom: 180px;
+}
+.btn:last-child,
+.screen > .btn:last-child {
+margin-bottom: 28px !important;
+}
+.v49-mini-map {
+bottom: max(12px, calc(env(safe-area-inset-bottom, 0px) + 10px)) !important;
+width: min(330px, calc(100vw - 88px)) !important;
+opacity: .58;
+z-index: 930;
+pointer-events: none !important;
+}
+.v54-final-badge,
+.v56-url-card {
+pointer-events: none;
+}
+.v54-final-badge {
+display: none;
+}
+.v50-audio-tension {
+right: 7px !important;
+top: max(112px, calc(env(safe-area-inset-top, 0px) + 106px)) !important;
+height: 82px !important;
+opacity: .48;
+pointer-events: none !important;
+z-index: 920;
+}
+.v51-status-line {
+top: max(8px, calc(env(safe-area-inset-top, 0px) + 7px)) !important;
+width: min(360px, calc(100vw - 54px)) !important;
+z-index: 925;
+opacity: .72;
+pointer-events: none !important;
+}
+.v52-audio-unlock {
+bottom: max(68px, calc(env(safe-area-inset-bottom, 0px) + 66px)) !important;
+width: min(330px, calc(100vw - 38px)) !important;
+z-index: 1045;
+}
+.v49-stage-frame,
+.v51-breath-layer,
+.v51-fine-noise,
+.v49-vignette-pulse,
+.v50-audio-pulse {
+pointer-events: none !important;
+}
+.hud {
+position: sticky !important;
+top: max(44px, calc(env(safe-area-inset-top, 0px) + 38px)) !important;
+z-index: 40;
+margin-bottom: 12px;
+}
+.game-board,
+.bone-bank,
+.clue-grid,
+.order-zone,
+.registry-list,
+.staff-card,
+.archive-card {
+max-height: none !important;
+overflow: visible !important;
+}
+.staff-panel.show {
+align-items: flex-start !important;
+overflow-y: auto !important;
+-webkit-overflow-scrolling: touch;
+padding-top: max(16px, calc(env(safe-area-inset-top, 0px) + 14px)) !important;
+padding-bottom: max(34px, calc(env(safe-area-inset-bottom, 0px) + 32px)) !important;
+}
+.staff-card {
+max-height: none !important;
+height: auto !important;
+margin-bottom: 36px !important;
+}
+.asset-results,
+.staff-log,
+.v55-qa-list {
+max-height: 210px !important;
+overflow-y: auto !important;
+-webkit-overflow-scrolling: touch;
+}
+.ending-visual,
+.camera-frame {
+max-height: none !important;
+}
+.archive-card {
+margin-bottom: 18px !important;
+}
+.v54-share-card {
+margin-bottom: 34px !important;
+}
+.orientation-modal.show {
+pointer-events: auto;
+}
+@media (max-width: 390px) {
+:root {
+--v57-bottom-reserve: 172px;
+--v57-top-reserve: 64px;
+}
+main#app {
+width: 100%;
+padding-left: 10px !important;
+padding-right: 10px !important;
+}
+.screen {
+width: min(420px, calc(100vw - 18px));
+padding-left: 14px !important;
+padding-right: 14px !important;
+}
+.v49-mini-map {
+width: min(300px, calc(100vw - 80px)) !important;
+}
+.btn {
+min-height: 48px;
+line-height: 1.35;
+}
+}
+@media (max-height: 720px) {
+.scene-box {
+min-height: 190px;
+}
+.v49-mini-map {
+opacity: .45;
+}
+.v50-audio-tension {
+display: none;
+}
 }</style>
 </head>
 <body>
@@ -3790,9 +3965,9 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
 <div class="v56-url-card">
 正式測試網址
-<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=56</code>
+<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=57</code>
 <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=56。</div>
+<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=57。</div>
 </div>
 <div class="v55-qa-panel">
 <div class="staff-subtitle">最終品質檢查</div>
@@ -3826,7 +4001,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
 <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/</span></div>
 <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
-<div class="staff-info-row"><b>版本類型</b><span>v56：最終實測修補、收藏編號、GitHub 快取提示</span></div>
+<div class="staff-info-row"><b>版本類型</b><span>v57：手機滑動修正、底部遮擋修補、實機操作優化</span></div>
 </div>
 <div class="perf-row">
 <div class="perf-chip" id="staffFpsInfo">FPS：--</div>
@@ -4062,9 +4237,9 @@ v44 集中資料設定
 =========================================================
 */
 const APP_CONFIG = {
-VERSION: "v56",
-URL_VERSION: "56",
-BUILD_TYPE: "最終實測修補版",
+VERSION: "v57",
+URL_VERSION: "57",
+BUILD_TYPE: "手機滑動修正版",
 PLAYER_PIN: "1931",
 STAFF_PASSWORD: "1931",
 FORMAL_MODE_DEFAULT: true,
@@ -4084,7 +4259,8 @@ V54_SHARE_TEXT_ENABLED: true,
 V55_RARITY_ENABLED: true,
 V55_QA_PANEL_ENABLED: true,
 V56_ARCHIVE_ID_ENABLED: true,
-V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=56"
+V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=57",
+V57_MOBILE_SCROLL_FIX: true
 };
 const SOUND_CONFIG = {
 ambient: "sounds/ambient.mp3",
@@ -4690,6 +4866,7 @@ formalMode: true,
 performanceLite: false,
 reducedMotion: false,
 staffLogs: [],
+v57ScrollFixBound: false,
 audioDirectorEnabled: true,
 audioDirectorTimer: null,
 audioIntensity: "normal",
@@ -4708,11 +4885,39 @@ this.setFormalMode(GAME_CONFIG.FORMAL_MODE_DEFAULT);
 this.setPerformanceLite(GAME_CONFIG.PERFORMANCE_LITE_DEFAULT);
 this.setReducedMotion(APP_CONFIG.REDUCED_MOTION_DEFAULT || window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches);
 this.bindOrientationCheck();
+this.v57BindMobileScrollFix();
 this.v49UpdateMiniMap("screen-title");
 this.v51UpdateStatusLine("screen-title");
 this.bindGlobalErrorLog();
 this.v50StartAudioDirector();
 if (APP_CONFIG.PRELOAD_CORE_ASSETS) this.preloadCoreAssets();
+},
+v57EnsureScrollTop(targetId = "") {
+if (!APP_CONFIG.V57_MOBILE_SCROLL_FIX) return;
+requestAnimationFrame(() => {
+window.scrollTo({top: 0, left: 0, behavior: "auto"});
+const active = document.querySelector(".screen.active");
+if (active) active.scrollIntoView({block: "start", inline: "nearest"});
+});
+},
+v57ScrollFocusedIntoView() {
+if (!APP_CONFIG.V57_MOBILE_SCROLL_FIX) return;
+document.addEventListener("focusin", (event) => {
+const target = event.target;
+if (!target || !target.scrollIntoView) return;
+setTimeout(() => {
+target.scrollIntoView({block: "center", inline: "nearest", behavior: "smooth"});
+}, 180);
+});
+},
+v57BindMobileScrollFix() {
+if (!APP_CONFIG.V57_MOBILE_SCROLL_FIX || this.v57ScrollFixBound) return;
+this.v57ScrollFixBound = true;
+this.v57ScrollFocusedIntoView();
+window.addEventListener("resize", () => {
+document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px");
+}, {passive:true});
+document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px");
 },
 v56GetArchiveId(data = null) {
 const ending = data || this.getEndingData();
@@ -5412,6 +5617,7 @@ this.staffPanelOpen = true;
 this.updateStaffPanelState();
 this.renderStaffLog();
 Engine.toast("工作人員面板已開啟。");
+setTimeout(() => panel?.scrollTo?.({top:0, behavior:"auto"}), 50);
 },
 closeStaffPanel() {
 const panel = document.getElementById("staffPanel");
@@ -5738,6 +5944,7 @@ const change = () => {
 if (current) current.classList.remove("active");
 target.classList.add("active");
 Engine.setStage(targetId);
+this.v57EnsureScrollTop(targetId);
 this.v49UpdateMiniMap(targetId);
 this.v51UpdateStatusLine(targetId);
 this.v49ShowChapter(targetId);
