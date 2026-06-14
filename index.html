@@ -410,6 +410,187 @@
       letter-spacing: 1px;
     }
 
+
+    /* v7：恐怖音效提示 */
+    .sound-warning {
+      margin-top: 8px;
+      color: rgba(200,184,148,.65);
+      font-size: 12px;
+      line-height: 1.55;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .sound-warning strong {
+      color: #9b2222;
+      font-weight: 700;
+    }
+
+
+    /* v8：音量強化提示 */
+    .volume-mode-text {
+      color: #c8b894;
+      font-weight: 700;
+    }
+
+
+    /* v9：開場同意、代號輸入、關鍵節點影像捕捉 */
+    .name-input {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      background: #050505;
+      border: 1px solid rgba(200,184,148,.65);
+      color: var(--bone);
+      font-family: inherit;
+      font-size: 16px;
+      letter-spacing: 2px;
+      outline: none;
+    }
+
+    .name-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 14px rgba(155,34,34,.55);
+    }
+
+    .consent-box {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(155,34,34,.55);
+      background: rgba(0,0,0,.36);
+      color: var(--dim);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .consent-box label {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      cursor: pointer;
+    }
+
+    .consent-box input {
+      margin-top: 4px;
+      transform: scale(1.15);
+      accent-color: #9b2222;
+    }
+
+    .start-status {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .mid-capture-label {
+      color: var(--red);
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+      text-shadow: 0 0 10px rgba(155,34,34,.75);
+    }
+
+    .forced-capture {
+      animation: capturePulse .9s ease both;
+    }
+
+    @keyframes capturePulse {
+      0% { filter: brightness(1); }
+      25% { filter: brightness(1.8) contrast(1.4); }
+      50% { filter: brightness(.45) contrast(1.7); }
+      100% { filter: brightness(1); }
+    }
+
+
+    /* v10：心理恐怖加強 */
+    .hallucination {
+      color: #ffeded !important;
+      text-shadow: 0 0 10px #cc0000, 0 0 18px #5d0d0d;
+      animation: hallucinationFlicker .42s infinite alternate;
+    }
+
+    .two-researchers-alert {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid rgba(155,34,34,.82);
+      background: rgba(155,34,34,.12);
+      color: #f4ead8;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+      letter-spacing: 1px;
+      box-shadow: inset 0 0 18px rgba(0,0,0,.72), 0 0 14px rgba(155,34,34,.22);
+    }
+
+    .two-researchers-alert.show {
+      display: block;
+      animation: alertFlicker 1.2s infinite alternate;
+    }
+
+    .gameover-registry {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(155,34,34,.55);
+      background: rgba(0,0,0,.42);
+    }
+
+    .gameover-registry .registry li:last-child {
+      color: #f4ead8;
+      text-shadow: 0 0 10px rgba(155,34,34,.75);
+    }
+
+    .name-flash {
+      position: fixed;
+      left: 50%;
+      top: 18%;
+      transform: translateX(-50%);
+      z-index: 28;
+      color: rgba(238,225,201,.92);
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      text-shadow: 0 0 12px rgba(155,34,34,.92);
+      white-space: nowrap;
+    }
+
+    .name-flash.show {
+      animation: nameFlash .62s ease both;
+    }
+
+    .password-knock {
+      animation: passwordKnock .5s ease both;
+    }
+
+    @keyframes hallucinationFlicker {
+      from { opacity: .48; transform: translateX(-1px); }
+      to { opacity: 1; transform: translateX(1px); }
+    }
+
+    @keyframes alertFlicker {
+      from { opacity: .75; }
+      to { opacity: 1; box-shadow: inset 0 0 24px rgba(0,0,0,.85), 0 0 22px rgba(155,34,34,.38); }
+    }
+
+    @keyframes nameFlash {
+      0% { opacity: 0; filter: blur(2px); }
+      18% { opacity: 1; filter: blur(0); }
+      38% { opacity: .25; transform: translateX(-50%) skewX(-8deg); }
+      62% { opacity: .92; transform: translateX(-50%) skewX(7deg); }
+      100% { opacity: 0; filter: blur(3px); }
+    }
+
+    @keyframes passwordKnock {
+      0% { transform: translateX(0); }
+      18% { transform: translateX(-4px); }
+      36% { transform: translateX(4px); }
+      54% { transform: translateX(-6px); }
+      72% { transform: translateX(6px); }
+      100% { transform: translateX(0); }
+    }
+
   </style>
 </head>
 
@@ -418,6 +599,7 @@
   <div class="flash" id="flash"></div>
   <div class="screen-static" id="screenStatic"></div>
   <div class="terror-overlay" id="terrorOverlay"></div>
+  <div class="name-flash" id="nameFlash"></div>
 
   <main class="app" id="app">
     <div class="hud" id="hud">
@@ -458,6 +640,23 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-content">
+          <div class="warning-title warning-breathe">研究員登錄</div>
+          請輸入本次觀測代號。若不輸入，系統將以「正在使用此裝置的人」登錄。
+          <input class="name-input" id="playerNameInput" maxlength="12" placeholder="輸入研究員代號">
+          <div class="consent-box">
+            <label>
+              <input type="checkbox" id="cameraConsent">
+              <span>
+                我同意本體驗使用相機進行「第五位影像捕捉」。影像只會顯示在本機網頁，不會上傳到伺服器；遊戲中可能在關鍵節點自動截取一次畫面。
+              </span>
+            </label>
+          </div>
+          <div class="status start-status" id="openingStatus"></div>
+        </div>
+      </div>
+
       <div class="difficulty-grid">
         <div class="diff selected" data-level="easy" onclick="selectDifficulty('easy', this)">
           <b>普通</b><span>5 顆心 / 無倒數 / 適合展示。</span>
@@ -473,8 +672,13 @@
         </div>
       </div>
 
-      <button class="btn" onclick="startProgram()">開始復原</button>
+      <button class="btn" onclick="startProgram()">同意並開始復原</button>
       <button class="btn secondary" onclick="toggleSound()">音效：<span id="soundLabel">開啟</span></button>
+      <button class="btn secondary" onclick="cycleVolumeMode()">音量模式：<span id="volumeModeLabel" class="volume-mode-text">極限</span></button>
+      <div class="sound-warning">
+        <strong>建議開聲音體驗。</strong><br>
+        本版本包含低頻、敲擊、雜訊低語與心跳聲。若覺得不夠大聲，請把手機音量拉高，並確認沒有開靜音模式。
+      </div>
     </section>
 
     <section class="screen" id="screen2">
@@ -584,7 +788,7 @@
         <li><span>第二位：叔叔</span><span style="color:var(--paper)">✓</span></li>
         <li><span>第三位：惹男</span><span style="color:var(--paper)">✓</span></li>
         <li><span>第四位：南宇</span><span style="color:var(--paper)">✓</span></li>
-        <li><span>第五位：＿＿＿＿</span><span style="color:var(--red)">●</span></li>
+        <li><span>第五位：<span id="finalResearcherName">＿＿＿＿</span></span><span style="color:var(--red)">●</span></li>
       </ul></div>
 
       <div class="check-list" id="checkList"></div>
@@ -601,6 +805,11 @@
           若畫面中出現第五位研究員，請勿替他命名。
         </div>
 
+        <div class="mid-capture-label" id="midCaptureLabel" style="display:none;">中途影像捕捉紀錄</div>
+        <div class="camera-frame" id="midCaptureFrame">
+          <img id="midCaptureImage" alt="中途影像捕捉紀錄">
+        </div>
+
         <div class="camera-frame" id="cameraFrame">
           <video id="cameraVideo" autoplay playsinline muted></video>
         </div>
@@ -615,6 +824,11 @@
         <button class="btn" id="takePhotoBtn" style="display:none;" onclick="takeFifthPhoto()">拍下第五位研究員</button>
         <button class="btn secondary" id="stopCameraBtn" style="display:none;" onclick="stopCameraCapture()">停止影像捕捉</button>
         <a class="photo-download" id="photoDownload" download="fifth-researcher-capture.png">下載捕捉影像</a>
+        <div class="two-researchers-alert" id="twoResearchersAlert">
+          影像分析完成。<br>
+          偵測到：<strong>兩名研究員</strong>。<br>
+          第二名研究員位置：你的背後。
+        </div>
 
         <div class="status" id="cameraStatus" style="display:none;"></div>
       </div>
@@ -634,12 +848,24 @@
       </div>
 
       <div class="card"><div class="card-content">
-        <div class="warning-title warning-breathe">心跳訊號中斷</div>
-        骨架沒有復原完成，但第九個位置已經被記錄。<br><br>
-        <span class="small">你可以重新開始，但第七層不會忘記你第一次錯在哪裡。</span>
+        <div class="warning-title warning-breathe">第五位已補齊</div>
+        封存程序失敗。<br>
+        系統沒有找到第五位研究員。<br>
+        系統製造了第五位研究員。<br><br>
+        <span class="small">你可以重新開始，但第七層不會忘記你的代號、錯誤與影像。</span>
       </div></div>
 
-      <button class="btn" onclick="restartGame()">重新開始</button>
+      <div class="gameover-registry">
+        <ul class="registry">
+          <li><span>第一位：海哥</span><span style="color:var(--paper)">✓</span></li>
+          <li><span>第二位：叔叔</span><span style="color:var(--paper)">✓</span></li>
+          <li><span>第三位：惹男</span><span style="color:var(--paper)">✓</span></li>
+          <li><span>第四位：南宇</span><span style="color:var(--paper)">✓</span></li>
+          <li><span>第五位：<span id="gameoverResearcherName">正在使用此裝置的人</span></span><span style="color:var(--red)">●</span></li>
+        </ul>
+      </div>
+
+      <button class="btn" onclick="restartGame()">重新封存，但無法刪除紀錄</button>
     </section>
   </main>
 
@@ -677,7 +903,7 @@
 
     const checks=["已閱讀封存通知","已看見九塊骨頭","已完成標本復原","已辨認羅馬數字","已解出封存密碼","已開啟百寶封存箱","已被第七層記錄為觀測者"];
 
-    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null;
+    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=3.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null;
     const flippedMap={};
 
     window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));startGlitch();});
@@ -691,18 +917,81 @@
     function toggleSound(){
       soundOn=!soundOn;
       document.getElementById("soundLabel").textContent=soundOn?"開啟":"關閉";
-      if(soundOn) playTone("click");
+      if(soundOn){
+        initAudio();
+        playTone("click");
+        if(document.getElementById("hud").classList.contains("show")){
+          startScaryAmbience();
+        }
+      }else{
+        stopScaryAmbience();
+      }
     }
 
-    function startProgram(){
+    function cycleVolumeMode(){
+      if(volumeMode==="normal"){
+        volumeMode="boost";
+        volumeBoost=2.2;
+      }else if(volumeMode==="boost"){
+        volumeMode="extreme";
+        volumeBoost=3.2;
+      }else{
+        volumeMode="normal";
+        volumeBoost=1.25;
+      }
+
+      const label=document.getElementById("volumeModeLabel");
+      if(label){
+        label.textContent = volumeMode==="normal" ? "標準" : volumeMode==="boost" ? "加強" : "極限";
+      }
+
+      playTone("warning");
+
+      if(ambientGain && audioCtx){
+        const now=audioCtx.currentTime;
+        const level=(0.018 + contamination * 0.00024) * volumeBoost;
+        ambientGain.gain.cancelScheduledValues(now);
+        ambientGain.gain.setTargetAtTime(Math.min(0.14, level), now, 0.35);
+      }
+    }
+
+    async function startProgram(){
+      const status=document.getElementById("openingStatus");
+      const consent=document.getElementById("cameraConsent");
+      const nameInput=document.getElementById("playerNameInput");
+
+      playerName=(nameInput && nameInput.value.trim()) ? nameInput.value.trim() : "正在使用此裝置的人";
+
+      if(!consent || !consent.checked){
+        status.style.display="block";
+        status.innerHTML="請先勾選影像捕捉同意。<br>本體驗需要在結尾與關鍵節點使用相機。";
+        playTone("wrong");
+        return;
+      }
+
+      status.style.display="block";
+      status.innerHTML="正在啟動聲音與影像捕捉權限……<br>請允許使用相機。";
+
+      initAudio();
+      playTone("openingScare");
+
+      const cameraReady=await requestInitialCameraPermission();
+
+      if(!cameraReady){
+        status.innerHTML="相機權限未開啟。<br>請允許相機後再開始，否則第五位影像捕捉無法執行。";
+        playTone("wrong");
+        return;
+      }
+
       const cfg=difficulties[difficulty];
-      hearts=cfg.hearts; remainingTime=cfg.time; mistakeCount=0; contamination=0; updateContamination();
+      hearts=cfg.hearts; remainingTime=cfg.time; mistakeCount=0; passwordMistakeCount=0; contamination=0; updateContamination();
       document.getElementById("hud").classList.add("show");
-      document.getElementById("difficultyLabel").textContent="難度："+cfg.name;
+      document.getElementById("difficultyLabel").textContent="難度："+cfg.name+" / "+playerName;
       updateHearts(); updateTimer();
       startTimer();
-      initAudio();
-      playTone("start");
+      startScaryAmbience();
+      startNameFlashEvents();
+      showTerror("聲音與影像已接入", playerName+" 已被第七層記錄");
       goTo("screen2");
     }
 
@@ -710,10 +999,11 @@
       document.querySelectorAll(".screen").forEach(sec=>sec.classList.remove("active"));
       const target=document.getElementById(id);
       if(target){target.classList.add("active");window.scrollTo(0,0);}
-      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();}
+      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();}
       else{document.getElementById("hud").classList.add("show");}
+      if(id==="screen4"){setTimeout(()=>captureMidGamePhoto("CONTAINMENT BOX ACCESS"), 900);}
       if(id==="screen5"){stopTimer();runEnding();}
-      if(id==="screenGameOver"){stopTimer();playTone("gameover");}
+      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();runGameOverEnding();playTone("gameover");}
     }
 
     function shuffleArray(array){
@@ -844,10 +1134,16 @@
           playTone("unlock"); vibrate([40,60,40]);
           setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}),180);
         }else{
+          passwordMistakeCount++;
           status.style.color="var(--red)";
-          status.innerHTML="密碼錯誤。<br>扣除一顆心。<br>第五位研究員位置校正中。";
+          status.innerHTML=getPasswordErrorText(passwordMistakeCount);
+          status.classList.remove("password-knock");
+          void status.offsetWidth;
+          status.classList.add("password-knock");
           input.value="";
-          loseHeart("密碼錯誤。");
+          playTone("distantKnock");
+          setTimeout(()=>playTone("distantKnock"), 260);
+          loseHeart("密碼錯誤。封存箱正在回敲。");
         }
       }else status.textContent="";
     }
@@ -860,12 +1156,15 @@
       contamination = Math.min(100, contamination + 24);
       updateHearts();
       updateContamination();
+      hallucinateBoneNames();
       shake();
       flash();
       staticBurst();
       showTerror("錯誤已被記錄", reason || "第七層正在靠近");
-      playTone("wrong");
-      vibrate([50,60,50]);
+      playTone("jumpScare");
+      setTimeout(()=>playTone("wrong"), 160);
+      vibrate([90,50,120,50,180]);
+      if(!midCaptureTaken){setTimeout(()=>captureMidGamePhoto("ERROR EVENT RECORDED"), 260);}
       if(hearts<=0){setTimeout(()=>goTo("screenGameOver"),520);}
     }
 
@@ -901,6 +1200,20 @@
     function runEnding(){
       const list=document.getElementById("checkList"), finalText=document.getElementById("finalText"), mirrorText=document.getElementById("mirrorText"), bottom=document.getElementById("bottomWarning");
       list.innerHTML=""; finalText.style.opacity="0"; mirrorText.textContent=""; bottom.textContent="不要回頭。";
+      const finalName=document.getElementById("finalResearcherName");
+      if(finalName) finalName.textContent=playerName;
+      const midImg=document.getElementById("midCaptureImage");
+      const midFrame=document.getElementById("midCaptureFrame");
+      const midLabel=document.getElementById("midCaptureLabel");
+      if(midCaptureData && midImg && midFrame && midLabel){
+        midImg.src=midCaptureData;
+        midFrame.classList.add("show");
+        midLabel.style.display="block";
+        const twoAlert=document.getElementById("twoResearchersAlert");
+        if(twoAlert){
+          twoAlert.classList.add("show");
+        }
+      }
       checks.forEach(function(text,index){
         const row=document.createElement("div");
         row.className="check-row"; row.innerHTML="<span>"+text+"</span><span style='color:var(--red);'>...</span>";
@@ -915,6 +1228,101 @@
     }
 
 
+    function hallucinateBoneNames(){
+      const hallucinations={
+        skull:"你的頭骨",
+        neck:"你的頸椎",
+        chest:"你的胸口",
+        leftWing:"你的左手",
+        rightWing:"你的右手",
+        pelvis:"你的骨盆",
+        leftLeg:"你的左腿",
+        rightLeg:"你的右腿",
+        tail:"第五位的位置"
+      };
+
+      const original=[];
+
+      boneData.forEach(bone=>{
+        const el=document.querySelector("#bone-"+bone.id+" .bone-name");
+        if(el && !document.getElementById("bone-"+bone.id).classList.contains("used")){
+          original.push([el, el.textContent]);
+          el.textContent=hallucinations[bone.id] || bone.name;
+          el.classList.add("hallucination");
+        }
+      });
+
+      if(original.length){
+        showTerror("骨頭名稱已改寫", "它正在把標本換成你");
+        playTone("staticWhisper");
+      }
+
+      setTimeout(()=>{
+        original.forEach(([el,text])=>{
+          el.textContent=text;
+          el.classList.remove("hallucination");
+        });
+      }, 880);
+    }
+
+    function getPasswordErrorText(count){
+      if(count===1){
+        return "密碼錯誤。<br>箱內傳來敲擊聲。<br>扣除一顆心。";
+      }
+      if(count===2){
+        return "密碼錯誤。<br>敲擊聲變成從手機背面傳來。<br>扣除一顆心。";
+      }
+      return "密碼錯誤。<br>它不是在箱子裡。<br>它在等你輸入下一次。";
+    }
+
+    function startNameFlashEvents(){
+      stopNameFlashEvents();
+      nameFlashId=setInterval(()=>{
+        if(!playerName || playerName==="正在使用此裝置的人") return;
+        const chance=contamination>=70 ? .72 : contamination>=35 ? .46 : .24;
+        if(Math.random()<chance){
+          flashPlayerName();
+        }
+      }, 4800);
+    }
+
+    function stopNameFlashEvents(){
+      if(nameFlashId){
+        clearInterval(nameFlashId);
+        nameFlashId=null;
+      }
+    }
+
+    function flashPlayerName(){
+      const el=document.getElementById("nameFlash");
+      if(!el) return;
+
+      const messages=[
+        playerName+"，不要回頭",
+        "第五位："+playerName,
+        playerName+" 已被記錄",
+        "正在替 "+playerName+" 建檔",
+        playerName+" 的影像仍在回傳"
+      ];
+
+      el.textContent=messages[Math.floor(Math.random()*messages.length)];
+      el.classList.remove("show");
+      void el.offsetWidth;
+      el.classList.add("show");
+      setTimeout(()=>el.classList.remove("show"), 680);
+    }
+
+    function runGameOverEnding(){
+      const name=document.getElementById("gameoverResearcherName");
+      if(name) name.textContent=playerName || "正在使用此裝置的人";
+
+      contamination=100;
+      updateContamination();
+
+      setTimeout(()=>showTerror("第五位已補齊", playerName+" 無法從登錄表移除"), 380);
+      setTimeout(()=>flashPlayerName(), 1200);
+    }
+
     function updateContamination(){
       const text=document.getElementById("contaminationText");
       const fill=document.getElementById("contaminationFill");
@@ -922,6 +1330,13 @@
       if(fill) fill.style.width=contamination+"%";
       if(contamination>=72) document.body.classList.add("possessed");
       else document.body.classList.remove("possessed");
+
+      if(ambientGain && audioCtx){
+        const now=audioCtx.currentTime;
+        const level=(0.018 + contamination * 0.00024) * volumeBoost;
+        ambientGain.gain.cancelScheduledValues(now);
+        ambientGain.gain.setTargetAtTime(Math.min(0.14, level), now, 0.45);
+      }
     }
 
     function showTerror(main, sub){
@@ -941,6 +1356,78 @@
       setTimeout(()=>s.classList.remove("show"),520);
     }
 
+    async function requestInitialCameraPermission(){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        return false;
+      }
+
+      try{
+        if(!cameraStream){
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false
+          });
+        }
+
+        const video=document.getElementById("cameraVideo");
+        if(video){
+          video.srcObject=cameraStream;
+          try { await video.play(); } catch(e) {}
+        }
+
+        return true;
+      }catch(err){
+        return false;
+      }
+    }
+
+    function captureMidGamePhoto(reason){
+      if(midCaptureTaken || !cameraStream) return;
+
+      const video=document.getElementById("cameraVideo");
+      const canvas=document.getElementById("snapshotCanvas");
+
+      if(!video || !canvas || !video.videoWidth){
+        setTimeout(()=>captureMidGamePhoto(reason), 650);
+        return;
+      }
+
+      canvas.width=video.videoWidth;
+      canvas.height=video.videoHeight;
+      const ctx=canvas.getContext("2d");
+
+      ctx.save();
+      ctx.translate(canvas.width,0);
+      ctx.scale(-1,1);
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      ctx.restore();
+
+      ctx.fillStyle="rgba(0,0,0,.34)";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      ctx.fillStyle="rgba(155,34,34,.9)";
+      ctx.font=Math.max(22, canvas.width*0.045)+"px serif";
+      ctx.fillText("MID-CAPTURE / "+playerName, 24, canvas.height-48);
+      ctx.fillText(reason || "SEVENTH LAYER RECORDED", 24, canvas.height-20);
+
+      midCaptureData=canvas.toDataURL("image/png");
+      midCaptureTaken=true;
+
+      const app=document.getElementById("app");
+      if(app){
+        app.classList.remove("forced-capture");
+        void app.offsetWidth;
+        app.classList.add("forced-capture");
+        setTimeout(()=>app.classList.remove("forced-capture"), 950);
+      }
+
+      contamination = Math.min(100, contamination + 16);
+      updateContamination();
+      staticBurst();
+      showTerror("中途影像已捕捉", "它現在知道 "+playerName+" 的臉");
+      playTone("cameraSnap");
+    }
+
     async function startCameraCapture(){
       const status=document.getElementById("cameraStatus");
       const frame=document.getElementById("cameraFrame");
@@ -950,32 +1437,26 @@
       const stopBtn=document.getElementById("stopCameraBtn");
 
       status.style.display="block";
-      status.innerHTML="正在要求影像捕捉權限……<br>請允許使用相機。";
+      status.innerHTML="正在啟動影像捕捉……";
 
-      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-        status.innerHTML="此瀏覽器不支援相機功能。<br>請改用 iPhone Safari 或 Chrome 開啟 GitHub Pages 網址。";
-        return;
+      if(!cameraStream){
+        const ok=await requestInitialCameraPermission();
+        if(!ok){
+          status.innerHTML="相機權限未開啟，或瀏覽器拒絕影像捕捉。<br>請確認網址是 https://aaron0801.github.io/1931/，並允許相機權限。";
+          return;
+        }
       }
 
-      try{
-        cameraStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" },
-          audio: false
-        });
-
-        video.srcObject = cameraStream;
-        frame.classList.add("show");
-        startBtn.style.display="none";
-        takeBtn.style.display="block";
-        stopBtn.style.display="block";
-        status.innerHTML="影像捕捉已啟動。<br>請對準黑色鏡面，不要眨眼。";
-        contamination = Math.min(100, contamination + 12);
-        updateContamination();
-        showTerror("影像正在回傳", "第五位研究員可能已入鏡");
-        playTone("warning");
-      }catch(err){
-        status.innerHTML="相機權限未開啟，或瀏覽器拒絕影像捕捉。<br>請確認網址是 https://aaron0801.github.io/1931/，並允許相機權限。";
-      }
+      video.srcObject = cameraStream;
+      frame.classList.add("show");
+      startBtn.style.display="none";
+      takeBtn.style.display="block";
+      stopBtn.style.display="block";
+      status.innerHTML="影像捕捉已啟動。<br>請對準黑色鏡面，不要眨眼。";
+      contamination = Math.min(100, contamination + 12);
+      updateContamination();
+      showTerror("影像正在回傳", "第五位研究員可能已入鏡");
+      playTone("warning");
     }
 
     function takeFifthPhoto(){
@@ -1007,7 +1488,7 @@
 
       ctx.fillStyle="rgba(155,34,34,.82)";
       ctx.font=Math.max(22, canvas.width*0.045)+"px serif";
-      ctx.fillText("FIFTH RESEARCHER / IMAGE CAPTURED", 24, canvas.height-42);
+      ctx.fillText("FIFTH RESEARCHER / "+playerName, 24, canvas.height-42);
 
       const url=canvas.toDataURL("image/png");
       img.src=url;
@@ -1015,8 +1496,13 @@
       download.href=url;
       download.classList.add("show");
 
+      const twoAlert=document.getElementById("twoResearchersAlert");
+      if(twoAlert){
+        twoAlert.classList.add("show");
+      }
+
       status.style.display="block";
-      status.innerHTML="影像已捕捉。<br>若照片中多出一個人，請勿辨認。";
+      status.innerHTML="影像已捕捉。<br>系統正在比對第二名研究員的位置……";
       contamination = Math.min(100, contamination + 18);
       updateContamination();
       staticBurst();
@@ -1048,11 +1534,26 @@
     }
 
 
-    function restartGame(){stopCameraCapture();location.reload();}
+    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();location.reload();}
 
     function shake(){const app=document.getElementById("app");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),360);}
     function flash(){const f=document.getElementById("flash");f.style.display="block";setTimeout(()=>f.style.display="none",150);}
-    function startGlitch(){setInterval(function(){if(Math.random()>.62){const g=document.getElementById("glitch");g.classList.add("on");setTimeout(()=>g.classList.remove("on"),430);}},4200);}
+    function startGlitch(){
+      setInterval(function(){
+        if(Math.random()>.62){
+          const g=document.getElementById("glitch");
+          if(g){
+            const messages=["第五位已接觸","不要回頭","影像仍在回傳"];
+            if(playerName && playerName!=="正在使用此裝置的人"){
+              messages.push(playerName+" 已登錄");
+            }
+            g.textContent=messages[Math.floor(Math.random()*messages.length)];
+            g.classList.add("on");
+            setTimeout(()=>g.classList.remove("on"),430);
+          }
+        }
+      },4200);
+    }
     function vibrate(pattern){if(navigator.vibrate)navigator.vibrate(pattern);}
 
     function initAudio(){
@@ -1064,31 +1565,279 @@
       if(audioCtx && audioCtx.state==="suspended") audioCtx.resume();
     }
 
+    function masterGain(volume){
+      const g=audioCtx.createGain();
+      g.gain.setValueAtTime(Math.max(0.0001, volume), audioCtx.currentTime);
+      g.connect(audioCtx.destination);
+      return g;
+    }
+
+    function makeNoiseBuffer(duration){
+      const sampleRate=audioCtx.sampleRate;
+      const length=Math.max(1, Math.floor(sampleRate*duration));
+      const buffer=audioCtx.createBuffer(1,length,sampleRate);
+      const data=buffer.getChannelData(0);
+      for(let i=0;i<length;i++){
+        data[i]=(Math.random()*2-1) * (1 - i/length);
+      }
+      return buffer;
+    }
+
+    function playOsc(freq, duration, volume, type="sine", destination=null, slideTo=null){
+      if(!audioCtx) return;
+      const now=audioCtx.currentTime;
+      const osc=audioCtx.createOscillator();
+      const gain=audioCtx.createGain();
+
+      osc.type=type;
+      osc.frequency.setValueAtTime(freq, now);
+      if(slideTo){
+        osc.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), now+duration);
+      }
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(Math.min(0.42, Math.max(0.0001, volume * volumeBoost)), now+0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now+duration);
+
+      osc.connect(gain);
+      gain.connect(destination || audioCtx.destination);
+      osc.start(now);
+      osc.stop(now+duration+0.04);
+    }
+
+    function playNoise(duration, volume, filterType="bandpass", frequency=700, q=1.2){
+      if(!audioCtx) return;
+      const now=audioCtx.currentTime;
+      const source=audioCtx.createBufferSource();
+      const filter=audioCtx.createBiquadFilter();
+      const gain=audioCtx.createGain();
+
+      source.buffer=makeNoiseBuffer(duration);
+      filter.type=filterType;
+      filter.frequency.setValueAtTime(frequency, now);
+      filter.Q.setValueAtTime(q, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(Math.min(0.42, Math.max(0.0001, volume * volumeBoost)), now+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now+duration);
+
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      source.start(now);
+      source.stop(now+duration+0.05);
+    }
+
+    function startScaryAmbience(){
+      if(!soundOn) return;
+      initAudio();
+      if(!audioCtx || ambientGain) return;
+
+      const now=audioCtx.currentTime;
+      ambientGain=audioCtx.createGain();
+      ambientGain.gain.setValueAtTime(0.0001, now);
+      ambientGain.gain.exponentialRampToValueAtTime(0.035 * volumeBoost, now+1.2);
+      ambientGain.connect(audioCtx.destination);
+
+      const low1=audioCtx.createOscillator();
+      const low2=audioCtx.createOscillator();
+      const tremolo=audioCtx.createOscillator();
+      const tremGain=audioCtx.createGain();
+      const filter=audioCtx.createBiquadFilter();
+
+      low1.type="sine";
+      low2.type="triangle";
+      low1.frequency.setValueAtTime(38, now);
+      low2.frequency.setValueAtTime(57, now);
+
+      filter.type="lowpass";
+      filter.frequency.setValueAtTime(220, now);
+      filter.Q.setValueAtTime(0.8, now);
+
+      tremolo.type="sine";
+      tremolo.frequency.setValueAtTime(0.11, now);
+      tremGain.gain.setValueAtTime(0.006, now);
+
+      low1.connect(filter);
+      low2.connect(filter);
+      filter.connect(ambientGain);
+      tremolo.connect(tremGain);
+      tremGain.connect(ambientGain.gain);
+
+      low1.start();
+      low2.start();
+      tremolo.start();
+
+      ambientNodes=[low1,low2,tremolo,filter,tremGain];
+
+      heartbeatId=setInterval(function(){
+        if(!soundOn || !audioCtx) return;
+        if(Math.random() < 0.72 || contamination >= 48){
+          playHeartbeat();
+        }
+      }, 2600);
+
+      randomScareId=setInterval(function(){
+        if(!soundOn || !audioCtx) return;
+        const chance = contamination >= 72 ? 0.72 : contamination >= 36 ? 0.46 : 0.26;
+        if(Math.random() < chance){
+          const options=["distantKnock","whisper","staticWhisper","boneScratch"];
+          const pick=options[Math.floor(Math.random()*options.length)];
+          playTone(pick);
+        }
+      }, 5200);
+    }
+
+    function stopScaryAmbience(){
+      if(heartbeatId){clearInterval(heartbeatId);heartbeatId=null;}
+      if(randomScareId){clearInterval(randomScareId);randomScareId=null;}
+
+      if(audioCtx && ambientGain){
+        const now=audioCtx.currentTime;
+        try{
+          ambientGain.gain.cancelScheduledValues(now);
+          ambientGain.gain.setTargetAtTime(0.0001, now, 0.25);
+        }catch(e){}
+      }
+
+      ambientNodes.forEach(node=>{
+        try{
+          if(node.stop) node.stop(audioCtx.currentTime+0.45);
+        }catch(e){}
+      });
+
+      ambientNodes=[];
+      ambientGain=null;
+    }
+
+    function playHeartbeat(){
+      if(!audioCtx) return;
+      const vol = contamination >= 70 ? 0.17 : 0.115;
+      playOsc(54, .18, vol, "sine", null, 38);
+      setTimeout(()=>playOsc(48, .16, vol*.78, "sine", null, 34), 210);
+      if(contamination >= 75){
+        setTimeout(()=>playNoise(.18, .035, "lowpass", 180, .7), 80);
+      }
+    }
+
     function playTone(type){
       if(!soundOn) return;
       initAudio();
       if(!audioCtx) return;
-      const now=audioCtx.currentTime;
-      const gain=audioCtx.createGain();
-      gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.0001,now);
 
-      const osc=audioCtx.createOscillator();
-      osc.connect(gain);
+      if(type==="click"){
+        playOsc(260,.055,.055,"triangle",null,190);
+        playNoise(.06,.018,"highpass",900,1.3);
+      }
 
-      if(type==="click"){osc.type="sine";osc.frequency.setValueAtTime(180,now);gain.gain.exponentialRampToValueAtTime(.06,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.12);}
-      else if(type==="correct"){osc.type="triangle";osc.frequency.setValueAtTime(240,now);osc.frequency.exponentialRampToValueAtTime(390,now+.18);gain.gain.exponentialRampToValueAtTime(.08,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.25);}
-      else if(type==="wrong"){osc.type="sawtooth";osc.frequency.setValueAtTime(90,now);osc.frequency.exponentialRampToValueAtTime(45,now+.28);gain.gain.exponentialRampToValueAtTime(.12,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.38);}
-      else if(type==="flip"){osc.type="triangle";osc.frequency.setValueAtTime(130,now);osc.frequency.exponentialRampToValueAtTime(210,now+.22);gain.gain.exponentialRampToValueAtTime(.055,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.25);}
-      else if(type==="hint"){osc.type="sine";osc.frequency.setValueAtTime(320,now);gain.gain.exponentialRampToValueAtTime(.055,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.22);}
-      else if(type==="unlock"){osc.type="triangle";osc.frequency.setValueAtTime(180,now);osc.frequency.exponentialRampToValueAtTime(520,now+.35);gain.gain.exponentialRampToValueAtTime(.10,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.55);}
-      else if(type==="warning"){osc.type="square";osc.frequency.setValueAtTime(70,now);gain.gain.exponentialRampToValueAtTime(.10,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.35);}
-      else if(type==="gameover"){osc.type="sawtooth";osc.frequency.setValueAtTime(110,now);osc.frequency.exponentialRampToValueAtTime(30,now+.8);gain.gain.exponentialRampToValueAtTime(.15,now+.04);gain.gain.exponentialRampToValueAtTime(.0001,now+1);}
-      else if(type==="start"){osc.type="sine";osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(180,now+.4);gain.gain.exponentialRampToValueAtTime(.08,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.55);}
-      else if(type==="tick"){osc.type="sine";osc.frequency.setValueAtTime(420,now);gain.gain.exponentialRampToValueAtTime(.04,now+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+.08);}
-      else if(type==="whisper"){osc.type="sine";osc.frequency.setValueAtTime(55,now);gain.gain.exponentialRampToValueAtTime(.09,now+.04);gain.gain.exponentialRampToValueAtTime(.0001,now+1.2);}
-      osc.start(now);
-      osc.stop(now+1.3);
+      else if(type==="correct"){
+        playOsc(210,.16,.05,"triangle",null,330);
+        setTimeout(()=>playOsc(410,.12,.045,"sine",null,520),90);
+        playNoise(.13,.02,"bandpass",1600,2);
+      }
+
+      else if(type==="wrong"){
+        playOsc(74,.42,.13,"sawtooth",null,31);
+        playNoise(.36,.07,"lowpass",260,1.1);
+        setTimeout(()=>playTone("distantKnock"),120);
+        setTimeout(()=>playTone("staticWhisper"),260);
+      }
+
+      else if(type==="flip"){
+        playNoise(.2,.045,"bandpass",1250,2.5);
+        playOsc(140,.13,.035,"triangle",null,86);
+      }
+
+      else if(type==="hint"){
+        playTone("whisper");
+        setTimeout(()=>playOsc(310,.16,.035,"sine",null,240),160);
+      }
+
+      else if(type==="unlock"){
+        playOsc(88,.38,.09,"sawtooth",null,45);
+        setTimeout(()=>playNoise(.16,.075,"bandpass",900,4),100);
+        setTimeout(()=>playNoise(.22,.055,"highpass",1800,1.4),260);
+        setTimeout(()=>playOsc(520,.18,.045,"triangle",null,350),360);
+      }
+
+      else if(type==="warning"){
+        playHeartbeat();
+        setTimeout(()=>playHeartbeat(),520);
+        playNoise(.65,.04,"bandpass",520,1.6);
+      }
+
+      else if(type==="gameover"){
+        playNoise(.9,.095,"lowpass",240,1.1);
+        playOsc(95,1.1,.16,"sawtooth",null,22);
+        setTimeout(()=>playOsc(31,1.35,.15,"sine",null,18),250);
+        setTimeout(()=>playNoise(.5,.07,"bandpass",1800,5),420);
+        setTimeout(()=>playTone("whisper"),850);
+      }
+
+      else if(type==="start"){
+        playOsc(44,.9,.12,"sine",null,68);
+        playNoise(.8,.035,"lowpass",420,.8);
+        setTimeout(()=>playTone("distantKnock"),560);
+      }
+
+      else if(type==="tick"){
+        playOsc(430,.06,.035,"sine",null,390);
+        playNoise(.05,.012,"highpass",1500,1.1);
+      }
+
+      else if(type==="whisper"){
+        playNoise(.85,.048,"bandpass",900,5);
+        playOsc(63,.9,.035,"sine",null,51);
+        setTimeout(()=>playNoise(.42,.035,"bandpass",1250,7),180);
+      }
+
+      else if(type==="distantKnock"){
+        playOsc(72,.12,.12,"sine",null,54);
+        playNoise(.08,.045,"lowpass",170,.9);
+        setTimeout(()=>{
+          playOsc(66,.11,.09,"sine",null,48);
+          playNoise(.07,.033,"lowpass",150,.9);
+        },190);
+        if(Math.random()>.45){
+          setTimeout(()=>{
+            playOsc(58,.1,.075,"sine",null,42);
+            playNoise(.055,.025,"lowpass",130,.9);
+          },390);
+        }
+      }
+
+      else if(type==="boneScratch"){
+        playNoise(.35,.055,"bandpass",2200,6);
+        setTimeout(()=>playNoise(.22,.042,"highpass",2600,1.5),160);
+        playOsc(190,.22,.025,"triangle",null,92);
+      }
+
+      else if(type==="staticWhisper"){
+        playNoise(.5,.06,"highpass",1100,.9);
+        setTimeout(()=>playNoise(.25,.045,"bandpass",650,7),120);
+        setTimeout(()=>playOsc(49,.6,.035,"sine",null,44),80);
+      }
+
+      else if(type==="openingScare"){
+        playNoise(.72,.17,"lowpass",420,1.2);
+        playOsc(36,1.05,.2,"sawtooth",null,61);
+        setTimeout(()=>playNoise(.22,.22,"highpass",1600,1.1),180);
+        setTimeout(()=>playTone("distantKnock"),430);
+        setTimeout(()=>playTone("whisper"),720);
+      }
+
+      else if(type==="cameraSnap"){
+        playNoise(.08,.18,"highpass",2800,1.6);
+        setTimeout(()=>playOsc(82,.28,.14,"sawtooth",null,37),70);
+        setTimeout(()=>playNoise(.22,.12,"bandpass",700,5),180);
+      }
+
+      else if(type==="jumpScare"){
+        playNoise(.35,.26,"highpass",1800,1.2);
+        playOsc(52,.5,.22,"sawtooth",null,24);
+        setTimeout(()=>playNoise(.18,.23,"bandpass",900,8),90);
+        setTimeout(()=>playTone("distantKnock"),220);
+      }
     }
   </script>
 </body>
