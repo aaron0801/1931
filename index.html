@@ -2300,29 +2300,6 @@
        5. 專業特效模式切換
        ========================================================= */
 
-    .v22-fluid-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 2;
-      pointer-events: none;
-      opacity: .72;
-      mix-blend-mode: screen;
-      filter: blur(.35px) contrast(1.16) saturate(1.15);
-    }
-
-    .v22-matter-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 2;
-      pointer-events: none;
-      opacity: .22;
-      mix-blend-mode: screen;
-    }
-
     .v22-shader-distortion {
       position: fixed;
       inset: 0;
@@ -2369,25 +2346,6 @@
       margin-top: 9px;
       min-height: 42px;
       font-size: 12px;
-    }
-
-    .v22-pro-status {
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 48;
-      min-width: 150px;
-      padding: 9px 10px;
-      border: 1px solid rgba(191,164,116,.22);
-      background: rgba(0,0,0,.72);
-      color: rgba(241,229,207,.68);
-      font-size: 10px;
-      line-height: 1.45;
-      letter-spacing: 1px;
-      box-shadow:
-        inset 0 0 16px rgba(0,0,0,.82),
-        0 0 18px rgba(176,22,22,.16);
-      pointer-events: none;
     }
 
     .v22-engine-tag {
@@ -2451,23 +2409,657 @@
       100% { transform: scale(1.02) rotate(-.2deg); opacity: .08; }
     }
 
+
+    /* =========================================================
+       v23 高級精簡版介面
+       ---------------------------------------------------------
+       移除展示時不需要的開發面板，保留高級主視覺與遊戲互動。
+       ========================================================= */
+
+    .asset-tag,
+    .custom-audio-note,
+    .production-guide-btn,
+    .asset-guide,
+    .asset-status-panel,
+    .sound-library-panel,
+    .v22-pro-control,
+    .v22-pro-status,
+    .mode-indicator {
+      display: none !important;
+    }
+
+    .screen {
+      border-radius: 18px;
+    }
+
+    .premium-archive-deck {
+      border-radius: 14px;
+    }
+
+    .scene-image {
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .card,
+    .identity-panel {
+      border-radius: 14px;
+    }
+
+    .btn {
+      border-radius: 12px;
+      letter-spacing: 2px;
+    }
+
+    .v23-clean-note {
+      margin-top: 10px;
+      color: rgba(191,164,116,.56);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+
+    /* =========================================================
+       v24：電影級高級恐怖互動版
+       ---------------------------------------------------------
+       設計方向：
+       1. 不堆垃圾特效，改用「恐怖引擎」統一控制
+       2. 讓畫面有呼吸、深度、視差、污染值變化
+       3. 用 Canvas 做高效能活體背景，不靠大量 DOM
+       4. 手機效能不足時會自動降低特效密度
+       ========================================================= */
+
+    :root {
+      --fear: .22;
+      --pulse: 0;
+      --breath: 0;
+      --depth-x: 0px;
+      --depth-y: 0px;
+      --v24-red: #b51717;
+      --v24-bone: #f0dfc4;
+      --v24-gold: #bfa474;
+      --v24-black: #020202;
+    }
+
+    body {
+      --fearGlow: calc(var(--fear) * 1);
+    }
+
+    body.v24-cinematic {
+      background:
+        radial-gradient(circle at 50% calc(8% + var(--depth-y)), rgba(120,0,0,calc(.14 + var(--fear) * .16)), transparent 34%),
+        radial-gradient(circle at calc(18% + var(--depth-x)) 78%, rgba(176,22,22,calc(.06 + var(--fear) * .12)), transparent 32%),
+        radial-gradient(circle at calc(82% - var(--depth-x)) 76%, rgba(60,0,0,calc(.12 + var(--fear) * .14)), transparent 38%),
+        linear-gradient(180deg,#020202 0%, #090302 48%, #000 100%) !important;
+    }
+
+    body.v24-cinematic .app {
+      transform:
+        translate3d(calc(var(--depth-x) * .14), calc(var(--depth-y) * .12), 0)
+        scale(calc(1 + var(--breath) * .006));
+      transition: transform .12s linear;
+    }
+
+    body.v24-cinematic .screen {
+      box-shadow:
+        0 30px 90px rgba(0,0,0,.62),
+        0 0 calc(18px + var(--fear) * 42px) rgba(176,22,22,calc(.08 + var(--fear)*.16)),
+        inset 0 0 calc(40px + var(--fear) * 60px) rgba(0,0,0,.82) !important;
+    }
+
+    .v24-living-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+      opacity: calc(.35 + var(--fear) * .35);
+      mix-blend-mode: screen;
+      filter: blur(.15px) contrast(calc(1.05 + var(--fear) * .18));
+    }
+
+    .v24-depth-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      opacity: calc(.52 + var(--fear) * .28);
+      background:
+        radial-gradient(circle at 50% 44%, transparent 0 32%, rgba(0,0,0,.52) 64%, rgba(0,0,0,.94) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.72), transparent 20%, transparent 80%, rgba(0,0,0,.78));
+      mix-blend-mode: multiply;
+    }
+
+    .v24-scanline {
+      position: fixed;
+      inset: 0;
+      z-index: 39;
+      pointer-events: none;
+      opacity: calc(.08 + var(--fear) * .12);
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.035) 0 1px,
+          transparent 1px 4px
+        );
+      animation: v24ScanlineDrift 7s linear infinite;
+    }
+
+    .v24-cinematic-header {
+      margin: 12px 0 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(191,164,116,.20);
+      background:
+        linear-gradient(90deg, rgba(176,22,22,.11), transparent 42%, rgba(191,164,116,.06)),
+        rgba(0,0,0,.44);
+      box-shadow: inset 0 0 18px rgba(0,0,0,.72);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .v24-cinematic-header .v24-title {
+      color: rgba(240,223,196,.88);
+      font-size: 11px;
+      letter-spacing: 3px;
+      line-height: 1.35;
+    }
+
+    .v24-cinematic-header .v24-title b {
+      display: block;
+      color: #d92b2b;
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 10px rgba(176,22,22,.65);
+    }
+
+    .v24-sigil {
+      width: 56px;
+      height: 56px;
+      border: 1px solid rgba(191,164,116,.32);
+      border-radius: 50%;
+      position: relative;
+      box-shadow:
+        inset 0 0 18px rgba(0,0,0,.84),
+        0 0 16px rgba(176,22,22,.18);
+      animation: v24SigilRotate 16s linear infinite;
+    }
+
+    .v24-sigil::before,
+    .v24-sigil::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(176,22,22,.48);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      opacity: calc(.5 + var(--fear) * .4);
+    }
+
+    .v24-sigil::after {
+      inset: 17px;
+      transform: rotate(180deg);
+      border-color: rgba(191,164,116,.35);
+    }
+
+    .v24-fear-bar {
+      margin: 10px 0 12px;
+      height: 7px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(191,164,116,.16);
+      overflow: hidden;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.72);
+    }
+
+    .v24-fear-fill {
+      height: 100%;
+      width: calc(var(--fear) * 100%);
+      background:
+        linear-gradient(90deg, rgba(100,0,0,.85), rgba(176,22,22,.92), rgba(240,223,196,.42));
+      box-shadow: 0 0 14px rgba(176,22,22,.55);
+      transition: width .32s ease;
+    }
+
+    .v24-page-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(176,22,22,.28), transparent 22%),
+        linear-gradient(180deg, rgba(0,0,0,.96), rgba(36,0,0,.92), rgba(0,0,0,.98));
+      mix-blend-mode: screen;
+    }
+
+    .v24-page-transition.show {
+      animation: v24PageCut .55s ease both;
+    }
+
+    .v24-interaction-ripple {
+      position: fixed;
+      z-index: 91;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(240,223,196,.52);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 24px rgba(176,22,22,.55);
+    }
+
+    .v24-interaction-ripple.show {
+      animation: v24TouchRipple .75s ease-out both;
+    }
+
+    .v24-command-strip {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 70;
+      width: min(92vw, 420px);
+      min-height: 32px;
+      display: none;
+      padding: 8px 10px;
+      border: 1px solid rgba(191,164,116,.18);
+      background:
+        linear-gradient(90deg, rgba(176,22,22,.16), rgba(0,0,0,.76), rgba(191,164,116,.06));
+      color: rgba(240,223,196,.78);
+      font-size: 10px;
+      letter-spacing: 2px;
+      line-height: 1.45;
+      text-align: center;
+      box-shadow:
+        inset 0 0 14px rgba(0,0,0,.82),
+        0 0 20px rgba(176,22,22,.18);
+    }
+
+    .v24-command-strip.show {
+      display: block;
+      animation: v24CommandShow 1.8s ease both;
+    }
+
+    .v24-micro-choice {
+      position: fixed;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      z-index: 72;
+      width: min(90vw, 390px);
+      display: none;
+      padding: 13px;
+      border: 1px solid rgba(176,22,22,.52);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(176,22,22,.16), transparent 38%),
+        rgba(0,0,0,.84);
+      color: rgba(240,223,196,.9);
+      font-size: 12px;
+      line-height: 1.65;
+      text-align: center;
+      box-shadow:
+        inset 0 0 22px rgba(0,0,0,.86),
+        0 0 30px rgba(176,22,22,.24);
+    }
+
+    .v24-micro-choice.show {
+      display: block;
+      animation: ritualShow .42s ease both;
+    }
+
+    .v24-choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .v24-choice-row button {
+      min-height: 36px;
+      font-size: 11px;
+      margin: 0;
+    }
+
+    body.v24-low-power .v24-scanline,
+    body.v24-low-power .luxury-grain,
+    body.v24-low-power .blood-word-cloud {
+      opacity: .06 !important;
+    }
+
+    body.v24-low-power .v24-living-canvas {
+      opacity: .28 !important;
+    }
+
+    @keyframes v24ScanlineDrift {
+      from { transform: translateY(-12px); }
+      to { transform: translateY(12px); }
+    }
+
+    @keyframes v24SigilRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes v24PageCut {
+      0% { opacity: 0; transform: scale(1); }
+      20% { opacity: .85; transform: scale(1.02); }
+      52% { opacity: .24; transform: scale(1.01); }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
+    @keyframes v24TouchRipple {
+      0% { opacity: .9; width: 16px; height: 16px; }
+      100% { opacity: 0; width: 160px; height: 160px; }
+    }
+
+    @keyframes v24CommandShow {
+      0% { opacity: 0; transform: translateX(-50%) translateY(14px); filter: blur(4px); }
+      16% { opacity: 1; transform: translateX(-50%) translateY(0); filter: blur(0); }
+      78% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(8px); filter: blur(3px); }
+    }
+
+
+    /* =========================================================
+       v25：專業遊戲化精修版
+       ---------------------------------------------------------
+       正式版方向：
+       1. 單一 V25GameEngine 管理動畫、恐怖事件、FPS 自動降級
+       2. 移除多餘開發面板，畫面更乾淨
+       3. 新增遊戲階段 HUD、任務目標、威脅值、互動回饋
+       4. 手機優先，流暢度優先
+       ========================================================= */
+
+    :root {
+      --v25-fear: .18;
+      --v25-breath: 0;
+      --v25-depth-x: 0px;
+      --v25-depth-y: 0px;
+      --v25-red: #b51616;
+      --v25-bone: #f1e3c8;
+      --v25-gold: #bfa474;
+    }
+
+    body.v25-game {
+      background:
+        radial-gradient(circle at calc(50% + var(--v25-depth-x)) 8%, rgba(128,0,0,calc(.12 + var(--v25-fear) * .18)), transparent 36%),
+        radial-gradient(circle at 50% 96%, rgba(80,0,0,calc(.18 + var(--v25-fear) * .22)), transparent 42%),
+        linear-gradient(180deg,#020202,#080303 46%,#000) !important;
+    }
+
+    body.v25-game .app {
+      transform:
+        translate3d(calc(var(--v25-depth-x) * .12), calc(var(--v25-depth-y) * .10), 0)
+        scale(calc(1 + var(--v25-breath) * .004));
+      will-change: transform;
+    }
+
+    body.v25-game .screen {
+      box-shadow:
+        0 32px 88px rgba(0,0,0,.62),
+        0 0 calc(14px + var(--v25-fear) * 42px) rgba(181,22,22,calc(.07 + var(--v25-fear)*.18)),
+        inset 0 0 calc(34px + var(--v25-fear) * 55px) rgba(0,0,0,.82) !important;
+    }
+
+    .v25-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+      opacity: calc(.36 + var(--v25-fear) * .32);
+      mix-blend-mode: screen;
+      filter: contrast(calc(1.05 + var(--v25-fear) * .16));
+    }
+
+    .v25-depth-shade {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      opacity: calc(.48 + var(--v25-fear) * .26);
+      background:
+        radial-gradient(circle at 50% 42%, transparent 0 34%, rgba(0,0,0,.48) 66%, rgba(0,0,0,.94) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.70), transparent 18%, transparent 82%, rgba(0,0,0,.74));
+      mix-blend-mode: multiply;
+    }
+
+    .v25-stage-hud {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      z-index: 74;
+      width: min(92vw, 440px);
+      padding: 10px 12px;
+      border: 1px solid rgba(191,164,116,.22);
+      border-radius: 14px;
+      background:
+        linear-gradient(90deg, rgba(181,22,22,.16), rgba(0,0,0,.82) 42%, rgba(191,164,116,.08)),
+        rgba(0,0,0,.68);
+      color: rgba(241,227,200,.82);
+      box-shadow:
+        inset 0 0 18px rgba(0,0,0,.88),
+        0 12px 32px rgba(0,0,0,.42),
+        0 0 22px rgba(181,22,22,.16);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .v25-stage-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(191,164,116,.72);
+      margin-bottom: 7px;
+    }
+
+    .v25-stage-title {
+      color: rgba(241,227,200,.92);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px rgba(181,22,22,.42);
+    }
+
+    .v25-objective {
+      margin-top: 5px;
+      color: rgba(241,227,200,.70);
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: 1px;
+    }
+
+    .v25-threat-bar {
+      height: 5px;
+      margin-top: 8px;
+      border: 1px solid rgba(191,164,116,.13);
+      background: rgba(255,255,255,.04);
+      overflow: hidden;
+    }
+
+    .v25-threat-fill {
+      height: 100%;
+      width: calc(var(--v25-fear) * 100%);
+      background:
+        linear-gradient(90deg, rgba(80,0,0,.9), rgba(181,22,22,.95), rgba(241,227,200,.42));
+      box-shadow: 0 0 14px rgba(181,22,22,.52);
+      transition: width .28s ease;
+    }
+
+    .v25-toast {
+      position: fixed;
+      left: 50%;
+      top: 18px;
+      transform: translateX(-50%);
+      z-index: 88;
+      display: none;
+      width: min(92vw, 430px);
+      padding: 9px 11px;
+      border: 1px solid rgba(191,164,116,.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,.78);
+      color: rgba(241,227,200,.82);
+      font-size: 10px;
+      line-height: 1.45;
+      letter-spacing: 2px;
+      text-align: center;
+      box-shadow:
+        inset 0 0 16px rgba(0,0,0,.85),
+        0 0 22px rgba(181,22,22,.20);
+      pointer-events: none;
+    }
+
+    .v25-toast.show {
+      display: block;
+      animation: v25ToastIn 1.6s ease both;
+    }
+
+    .v25-cut {
+      position: fixed;
+      inset: 0;
+      z-index: 92;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(181,22,22,.30), transparent 24%),
+        linear-gradient(180deg, rgba(0,0,0,.98), rgba(42,0,0,.88), rgba(0,0,0,.98));
+      mix-blend-mode: screen;
+    }
+
+    .v25-cut.show {
+      animation: v25Cut .5s ease both;
+    }
+
+    .v25-touch {
+      position: fixed;
+      z-index: 93;
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(241,227,200,.56);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 22px rgba(181,22,22,.55);
+    }
+
+    .v25-touch.show {
+      animation: v25Touch .72s ease-out both;
+    }
+
+    .v25-choice {
+      position: fixed;
+      left: 50%;
+      bottom: 92px;
+      transform: translateX(-50%);
+      z-index: 90;
+      display: none;
+      width: min(90vw, 390px);
+      padding: 13px;
+      border: 1px solid rgba(181,22,22,.52);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,22,22,.16), transparent 40%),
+        rgba(0,0,0,.86);
+      color: rgba(241,227,200,.90);
+      font-size: 12px;
+      line-height: 1.65;
+      text-align: center;
+      box-shadow:
+        inset 0 0 22px rgba(0,0,0,.86),
+        0 0 30px rgba(181,22,22,.24);
+    }
+
+    .v25-choice.show {
+      display: block;
+      animation: ritualShow .32s ease both;
+    }
+
+    .v25-choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .v25-choice-row button {
+      min-height: 36px;
+      font-size: 11px;
+      margin: 0;
+    }
+
+    body.v25-low .luxury-grain,
+    body.v25-low .v24-scanline,
+    body.v25-low .screen-crack {
+      opacity: .05 !important;
+    }
+
+    body.v25-low .v25-canvas {
+      opacity: .28 !important;
+    }
+
+    @keyframes v25ToastIn {
+      0% { opacity: 0; transform: translateX(-50%) translateY(-12px); filter: blur(4px); }
+      16% { opacity: 1; transform: translateX(-50%) translateY(0); filter: blur(0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-6px); filter: blur(3px); }
+    }
+
+    @keyframes v25Cut {
+      0% { opacity: 0; transform: scale(1); }
+      18% { opacity: .85; transform: scale(1.02); }
+      48% { opacity: .20; }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
+    @keyframes v25Touch {
+      0% { opacity: .9; width: 18px; height: 18px; }
+      100% { opacity: 0; width: 150px; height: 150px; }
+    }
+
   </style>
 </head>
 
 <body>
 
+  <!-- v25 正式版遊戲層：單一 Canvas、階段 HUD、任務提示、轉場、觸控回饋 -->
+  <canvas id="v25Canvas" class="v25-canvas"></canvas>
+  <div class="v25-depth-shade"></div>
+  <div class="v25-cut" id="v25Cut"></div>
+  <div class="v25-touch" id="v25Touch"></div>
+  <div class="v25-toast" id="v25Toast"></div>
+  <div class="v25-choice" id="v25Choice"></div>
+  <div class="v25-stage-hud" id="v25StageHud">
+    <div class="v25-stage-top">
+      <span id="v25StageCode">LAYER 07</span>
+      <span id="v25ThreatText">THREAT 18%</span>
+    </div>
+    <div class="v25-stage-title" id="v25StageTitle">第七層封存系統</div>
+    <div class="v25-objective" id="v25Objective">輸入代號，啟動標本復原程序。</div>
+    <div class="v25-threat-bar"><div class="v25-threat-fill"></div></div>
+  </div>
+
+
+  <!-- v24 電影級恐怖互動層：活體背景、深度暗角、掃描線、轉場、觸控回饋 -->
+  <canvas id="v24LivingCanvas" class="v24-living-canvas"></canvas>
+  <div class="v24-depth-vignette"></div>
+  <div class="v24-scanline"></div>
+  <div class="v24-page-transition" id="v24PageTransition"></div>
+  <div class="v24-interaction-ripple" id="v24InteractionRipple"></div>
+  <div class="v24-command-strip" id="v24CommandStrip"></div>
+  <div class="v24-micro-choice" id="v24MicroChoice"></div>
+
+
   <!-- v22 專業視覺層：程式血液流體、物理碎骨、shader 破圖、點擊血波紋 -->
-  <canvas id="v22FluidCanvas" class="v22-fluid-canvas"></canvas>
-  <canvas id="v22MatterCanvas" class="v22-matter-canvas"></canvas>
   <div class="v22-warning-grid"></div>
   <div class="v22-shader-distortion" id="v22ShaderDistortion"></div>
   <div class="v22-blood-ripple" id="v22BloodRipple"></div>
-  <div class="v22-pro-status" id="v22ProStatus">
-    <span class="v22-engine-tag">V22 ENGINE</span><br>
-    Howler：等待<br>
-    GSAP：等待<br>
-    Matter：等待
-  </div>
 
 
   <!-- v21 高級恐怖介面：外框、膠片顆粒、血霧、鬼臉切入、狀態條 -->
@@ -2566,14 +3158,6 @@
       <h1>《第五位研究員》</h1>
       <h2>第七層標本復原程序</h2>
 
-
-      <div class="v22-pro-control" id="v22ProControl">
-        <strong>V22 專業特效引擎</strong><br>
-        已加入 Howler.js、GSAP、Matter.js 與程式血液流體。若手機太卡，可切換成效能模式。
-        <button class="btn secondary" onclick="toggleV22PerformanceMode()">專業特效：<span id="v22PerformanceLabel">高級</span></button>
-        <button class="btn secondary" onclick="triggerV22StressTest()">測試高級鬼影 / 血液 / 音效</button>
-      </div>
-
       <div class="premium-archive-deck" id="premiumArchiveDeck">
         <div class="archive-row">
           <div class="archive-chip">
@@ -2597,7 +3181,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">圖片位置：images/cover.jpg<br>封存檔案 / 地下研究站</div>
-        <div class="asset-tag">圖片：cover.jpg</div>
         <img src="images/cover.jpg" alt="第五位研究員封存檔案" onerror="this.style.display='none'">
         <div class="image-caption">ARCHIVE PHOTO / SEALED RECORD</div>
       </div>
@@ -2668,9 +3251,6 @@
       <button class="btn" onclick="startProgram()">開始復原</button>
       <button class="btn secondary" onclick="toggleSound()">音效：<span id="soundLabel">開啟</span></button>
       <button class="btn secondary" onclick="cycleVolumeMode()">音量模式：<span id="volumeModeLabel" class="volume-mode-text">極限</span></button>
-      <div class="custom-audio-note">
-        支援自備音效檔：建立 <code>sounds</code> 資料夾後放入 <code>ambient.mp3</code>、<code>scream.mp3</code>、<code>knock.mp3</code>、<code>scrape.mp3</code>、<code>heartbeat.mp3</code>、<code>glitch.mp3</code>、<code>boom.mp3</code>，網頁會優先播放你的音效。
-      </div>
       <div class="sound-warning"><span class="sound-active-mark">聲場狀態：等待啟動 / 點擊 20+ 畫面後開始</span><br>
         <strong>建議開聲音體驗。</strong><br>
         本版本包含低頻壓迫、牆內敲擊、混濁低語、隨機「不要回頭」、突然鬼叫與心跳聲。若沒有聽到，請確認已先啟動恐怖聲場、手機音量拉高，且沒有開靜音模式。
@@ -2683,7 +3263,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">圖片位置：images/fossil-board.jpg<br>九塊骨頭復原板</div>
-        <div class="asset-tag">圖片：fossil-board.jpg</div>
         <img src="images/fossil-board.jpg" alt="第七層化石復原板" onerror="this.style.display='none'">
         <div class="image-caption">SPECIMEN BOARD / NINE PIECES</div>
       </div>
@@ -2724,7 +3303,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">圖片位置：images/bone-markings.jpg<br>骨頭背面刻痕</div>
-        <div class="asset-tag">圖片：bone-markings.jpg</div>
         <img src="images/bone-markings.jpg" alt="骨頭背面羅馬數字刻痕" onerror="this.style.display='none'">
         <div class="image-caption">MARKINGS FOUND / DO NOT READ ALOUD</div>
       </div>
@@ -2764,7 +3342,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">圖片位置：images/sealed-box.jpg<br>百寶封存箱</div>
-        <div class="asset-tag">圖片：sealed-box.jpg</div>
         <img src="images/sealed-box.jpg" alt="百寶封存箱" onerror="this.style.display='none'">
         <div class="image-caption">CONTAINMENT BOX / LOCKED</div>
       </div>
@@ -2789,7 +3366,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">圖片位置：images/final-mirror.jpg<br>黑色鏡面與登錄表</div>
-        <div class="asset-tag">圖片：final-mirror.jpg</div>
         <img src="images/final-mirror.jpg" alt="第五位研究員黑色鏡面" onerror="this.style.display='none'">
         <div class="image-caption">OBSERVER IMAGE / CAPTURING</div>
       </div>
@@ -2856,7 +3432,6 @@
 
       <div class="scene-image">
         <div class="image-fallback">錯誤過多。<br>第七層已取得觀測者位置。</div>
-        <div class="asset-tag">圖片：game-over.jpg</div>
         <img src="images/game-over.jpg" alt="封存失敗" onerror="this.style.display='none'">
         <div class="image-caption">RECOVERY FAILED / POSITION FIXED</div>
       </div>
@@ -2892,7 +3467,7 @@
     3. 骨頭資料：搜尋 const boneData，可改骨頭名稱、圖片路徑、定位後文字
     4. 密碼：搜尋 input.value==="1931"，可改正確密碼
     5. 難度：搜尋 const difficulties，可改心數、時間、提示數
-    6. 恐怖事件：搜尋 startUltimateHorrorEvents，可調整隨機事件頻率
+    6. 恐怖事件：搜尋 startV23EventDirector，可調整隨機事件頻率
     =========================================================
   -->
 
@@ -2908,7 +3483,7 @@
     5. 如果音效不存在或讀取失敗，才會使用內建 Web Audio 備用音效。
     6. checkAllAssets() 可以檢查圖片與音效是否放對位置。
     7. initBloodCanvas() 負責程式生成流動血液背景。
-    8. startHorrorDirectorV18() 負責隨機恐怖事件。
+    8. v23 已改成單一恐怖導演 startV23EventDirector()。
     9. v19：相機為選用；不勾選也可以正常遊玩。
     10. v20：音效擴充到 30+ 個，並加入音效分組隨機播放。
     =========================================================
@@ -2925,7 +3500,7 @@
     3. luxury-ghost-cutin：高級鬼影切入，不用圖片。
     4. luxury-status-strip：隨機封存狀態提示。
     5. initLuxuryInterfaceV21()：啟動高級介面修飾。
-    6. startLuxuryVisualDirectorV21()：啟動高級恐怖視覺導演。
+    6. v23 使用單一高級恐怖導演，降低重複 interval。
     =========================================================
   -->
 
@@ -2939,7 +3514,6 @@
   -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
 
   <!--
@@ -2953,6 +3527,35 @@
     4. Canvas Fluid：不靠圖片，直接用程式畫流動血液。
     5. 所有外部套件都有 fallback，載入失敗不會讓遊戲壞掉。
     6. 如果你有放 sounds/*.mp3，仍然優先播放你的音效。
+    =========================================================
+  -->
+
+
+  <!--
+    =========================================================
+    v24 中文製作備註
+    =========================================================
+    這一版不是單純加特效，而是加入「電影級恐怖引擎」：
+    1. V25GameEngine：單一主引擎，統一管理動畫、恐怖事件、效能。
+    2. Canvas Living Background：高效能活體血管背景，不靠大量 DOM。
+    3. Adaptive Quality：自動偵測 FPS，太卡會降低特效。
+    4. Fear CSS Variables：污染值會改變亮度、血色、暗角、呼吸感。
+    5. Cinematic Transition：頁面切換會有電影式封存閃斷。
+    6. Micro Choice：偶爾出現小選擇，增加遊戲感，但不阻擋通關。
+    =========================================================
+  -->
+
+
+  <!--
+    =========================================================
+    v25 中文製作備註
+    =========================================================
+    這版做「專業遊戲化精修」：
+    1. 移除正式展示不需要的素材面板與重複特效引擎。
+    2. V25GameEngine 是單一主引擎，統一管理恐怖事件、Canvas、FPS、自動降級。
+    3. V25GameEngine.setStage() 會依頁面更新任務目標。
+    4. V25GameEngine.syncFear() 會依污染值與錯誤數控制介面恐怖程度。
+    5. 所有音效仍然優先使用 sounds 資料夾裡的自備 mp3。
     =========================================================
   -->
 
@@ -2994,7 +3597,7 @@
     let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=4.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null,mainMusicStarted=false,voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={},horrorDirectorV18Id=null,bloodCanvasReady=false,presentationMode=false,builtInAmbientNodes=[],builtInAmbientTimer=null,v20PanicChoiceId=null,v20SoundLastPlayed={};
     const flippedMap={};
 
-    window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));startGlitch();});
+    window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));});
 
     function selectDifficulty(level,el){
       difficulty=level;
@@ -3060,12 +3663,8 @@
       if(volLabel) volLabel.textContent="極限";
 
       startMainHorrorMusic();
-      startMenuHaunting();
-      startVoiceScares();
       playCustomSound("scream", "openingScream");
-      setTimeout(()=>playHumanHelpVoice("不要回頭"), 900);
       showTerror("第七層已開啟", "請輸入研究員代號");
-      startLuxuryVisualDirectorV21();
       showLuxuryStatusV21("SEVENTH LAYER INTERFACE / 介面已封存");
     }
 
@@ -3143,7 +3742,7 @@
     }
 
     function startVoiceScares(){
-      stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();
+      stopVoiceScares();stopUltimateHorrorEvents();
       voiceScareId=setInterval(()=>{
         if(!mainMusicStarted || !soundOn) return;
 
@@ -3195,24 +3794,8 @@
       setTimeout(()=>playCustomSound("knock", "distantKnock"), 520);
     }
 
-    /*
-      =========================================================
-      v17 製作備註：
-      - 自備音效路徑在 setupCustomSounds()
-      - 圖片路徑主要在 HTML 的 <img src="images/...">
-      - 九塊骨頭圖片在 const boneData
-      - 若素材未上傳，會自動改用文字或內建音效
-      =========================================================
-    */
 
-    function toggleAssetGuide(){
-      const guide=document.getElementById("assetGuide");
-      if(!guide) return;
-      guide.classList.toggle("show");
-      playTone("click");
-    }
-
-    function flashThinGhost(){
+function flashThinGhost(){
       const ghost=document.getElementById("thinGhost");
       if(!ghost) return;
       ghost.classList.remove("show");
@@ -3250,98 +3833,8 @@
       {type:"audio", key:"breath", label:"反向呼吸", path:"sounds/breath.mp3"}
     ];
 
-    /*
-      切換展示模式：
-      - 製作模式：會看到圖片與音效標籤，方便檢查。
-      - 展示模式：會隱藏素材標籤，看起來更像正式遊戲。
-    */
-    function togglePresentationMode(){
-      presentationMode=!presentationMode;
-      document.body.classList.toggle("presentation-mode", presentationMode);
-      const label=document.getElementById("modeIndicator");
-      if(label) label.textContent=presentationMode ? "目前：展示模式" : "目前：製作模式";
-      playTone("click");
-    }
 
-    /*
-      檢查所有素材是否存在：
-      會檢查 images 與 sounds 裡的檔案。
-      沒有素材也不會壞，只是會使用備用畫面或備用音效。
-    */
-    async function checkAllAssets(){
-      const panel=document.getElementById("assetStatusPanel");
-      if(!panel) return;
-
-      panel.classList.add("show");
-      panel.innerHTML='<strong>素材檢查：</strong><span class="asset-checking">檢查中……</span>';
-
-      const extendedAudioAssets=Object.keys(SOUND_FILES_V20 || {}).map(key=>({
-        type:"audio",
-        key:"v20_"+key,
-        label:"v20 音效："+key,
-        path:SOUND_FILES_V20[key]
-      }));
-
-      const mergedManifest=[...ASSET_MANIFEST, ...extendedAudioAssets];
-
-      const results=[];
-      for(const item of mergedManifest){
-        const ok=await checkAsset(item.path, item.type);
-        results.push({...item, ok});
-      }
-
-      const rows=results.map(item=>{
-        const status=item.ok
-          ? '<span class="asset-ok">已讀取</span>'
-          : '<span class="asset-missing">未找到，會使用備用效果</span>';
-        return `<tr><td>${item.type}</td><td><code>${item.path}</code></td><td>${item.label}</td><td>${status}</td></tr>`;
-      }).join("");
-
-      const missing=results.filter(r=>!r.ok).length;
-      panel.innerHTML=`
-        <strong>素材檢查完成：</strong>${missing===0 ? "全部素材已讀取。" : "有 "+missing+" 個素材尚未上傳。"}<br>
-        <table>
-          <tr><th>類型</th><th>路徑</th><th>用途</th><th>狀態</th></tr>
-          ${rows}
-        </table>
-        <div class="asset-note">未上傳不會造成網頁壞掉；圖片會顯示文字佔位，音效會使用內建 Web Audio 備用音。</div>
-      `;
-      playTone(missing===0 ? "correct" : "warning");
-    }
-
-    function checkAsset(path, type){
-      return new Promise(resolve=>{
-        if(type==="image"){
-          const img=new Image();
-          let finished=false;
-          const done=ok=>{
-            if(finished) return;
-            finished=true;
-            resolve(ok);
-          };
-          img.onload=()=>done(true);
-          img.onerror=()=>done(false);
-          img.src=path+"?assetCheck="+Date.now();
-          setTimeout(()=>done(false), 3500);
-        }else{
-          const audio=new Audio();
-          let finished=false;
-          const done=ok=>{
-            if(finished) return;
-            finished=true;
-            resolve(ok);
-          };
-          audio.oncanplaythrough=()=>done(true);
-          audio.onerror=()=>done(false);
-          audio.preload="auto";
-          audio.src=path+"?assetCheck="+Date.now();
-          audio.load();
-          setTimeout(()=>done(false), 3500);
-        }
-      });
-    }
-
-    /*
+/*
       程式生成血液背景：
       不用任何圖片，直接用 canvas 畫出不規則血流。
       污染值越高，血流速度與數量越明顯。
@@ -3603,62 +4096,9 @@
       builtInAmbientNodes=[];
     }
 
-    /*
-      v18 恐怖導演：
-      根據污染值決定恐怖事件密度。
-      污染值越高，越常出現鬼影、血字、黑屏、震動。
-    */
-    function startHorrorDirectorV18(){
-      stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();
-      horrorDirectorV18Id=setInterval(()=>{
-        const hud=document.getElementById("hud");
-        if(!hud || !hud.classList.contains("show")) return;
-
-        const rate=contamination>=80 ? .88 : contamination>=50 ? .62 : .36;
-        if(Math.random()>rate) return;
-
-        const words=[
-          "第五位",
-          "不要回頭",
-          playerName && playerName!=="正在使用此裝置的人" ? playerName : "觀測者",
-          "封存失敗",
-          "影像仍在回傳",
-          "它站在後面"
-        ];
-
-        const event=Math.floor(Math.random()*7);
-
-        if(event===0){
-          spawnBloodWord(words[Math.floor(Math.random()*words.length)]);
-        }else if(event===1){
-          triggerPanicVignette();
-          tremorInterface();
-        }else if(event===2){
-          flashThinGhost();
-        }else if(event===3){
-          playCustomSound("whisper", "staticWhisper");
-          spawnBloodWord("聽見了嗎");
-        }else if(event===4){
-          playCustomSound("knock", "distantKnock");
-          spawnBloodWord("箱子在敲");
-        }else if(event===5){
-          staticBurst();
-          triggerScreenCrack();
-        }else{
-          flashPlayerName();
-        }
-      },4300);
-    }
-
-    function stopHorrorDirectorV18(){
-      if(horrorDirectorV18Id){
-        clearInterval(horrorDirectorV18Id);
-        horrorDirectorV18Id=null;
-      }
-    }
 
 
-    /*
+/*
       =========================================================
       v20 完整音效庫
       ---------------------------------------------------------
@@ -3727,17 +4167,8 @@
       breath:["whisper","closeBreath","reverseBreath","mouthNoise","behindYou"]
     };
 
-    /*
-      顯示 / 隱藏 v20 音效庫清單
-    */
-    function toggleSoundLibraryPanel(){
-      const panel=document.getElementById("soundLibraryPanel");
-      if(!panel) return;
-      panel.classList.toggle("show");
-      playTone("click");
-    }
 
-    /*
+/*
       播放音效分組：
       - 同一組音效會隨機挑選
       - 會避免連續兩次播放同一個音效
@@ -3892,57 +4323,9 @@
       setTimeout(()=>box.classList.remove("show"), 6000);
     }
 
-    /*
-      v20 恐怖導演：
-      在 v18 的基礎上加更多事件。
-    */
-    function startV20EventDirector(){
-      stopV20EventDirector();stopLuxuryVisualDirectorV21();
-
-      v20PanicChoiceId=setInterval(()=>{
-        const hud=document.getElementById("hud");
-        if(!hud || !hud.classList.contains("show")) return;
-
-        const chance=contamination>=80 ? .72 : contamination>=50 ? .48 : .26;
-        if(Math.random()>chance) return;
-
-        const event=Math.floor(Math.random()*8);
-
-        if(event===0){
-          showSystemScan(playerName+" 的觀測資料正在被重新封存。");
-        }else if(event===1){
-          fakeCameraPulse();
-          spawnBloodWord("掃描完成");
-        }else if(event===2){
-          showPanicChoice();
-        }else if(event===3){
-          playSoundGroup("approach","wallScratch");
-          spawnBloodWord("它靠近了");
-        }else if(event===4){
-          playSoundGroup("knock","distantKnock");
-          spawnBloodWord("箱子回敲");
-        }else if(event===5){
-          playSoundGroup("breath","reverseBreath");
-          flashThinGhost();
-        }else if(event===6){
-          triggerPanicVignette();
-          tremorInterface();
-          playSoundGroup("system","staticWhisper");
-        }else{
-          flashPlayerName();
-        }
-      }, 6200);
-    }
-
-    function stopV20EventDirector(){
-      if(v20PanicChoiceId){
-        clearInterval(v20PanicChoiceId);
-        v20PanicChoiceId=null;
-      }
-    }
 
 
-    /*
+/*
       =========================================================
       v21 高級恐怖介面系統
       ---------------------------------------------------------
@@ -4034,48 +4417,13 @@
       setTimeout(()=>ghost.classList.remove("show"),760);
     }
 
-    function startLuxuryVisualDirectorV21(){
-      stopLuxuryVisualDirectorV21();
-
-      luxuryVisualDirectorV21Id=setInterval(()=>{
-        const hud=document.getElementById("hud");
-        const playing=hud && hud.classList.contains("show");
-
-        const baseChance=playing
-          ? (contamination>=80 ? .62 : contamination>=45 ? .38 : .18)
-          : .14;
-
-        if(Math.random()>baseChance) return;
-
-        const event=Math.floor(Math.random()*6);
-
-        if(event===0){
-          showLuxuryStatusV21("ARCHIVE BREACH / 封存外洩");
-        }else if(event===1){
-          spawnBloodWord(playerName && playerName!=="正在使用此裝置的人" ? playerName : "第五位");
-        }else if(event===2){
-          fakeCameraPulse();
-        }else if(event===3){
-          flashThinGhost();
-        }else if(event===4){
-          playSoundGroup("approach","wallScratch");
-          showLuxuryStatusV21("FOOTSTEP SIGNAL / 偵測到接近");
-        }else{
-          if(playing && contamination>=55) triggerLuxuryGhostV21();
-          else showSystemScan("封存系統正在重建第七層視覺介面。");
-        }
-      },5200);
-    }
-
-    function stopLuxuryVisualDirectorV21(){
-      if(luxuryVisualDirectorV21Id){
-        clearInterval(luxuryVisualDirectorV21Id);
-        luxuryVisualDirectorV21Id=null;
-      }
-    }
+    
 
 
-    async function startProgram(){
+
+
+
+async function startProgram(){
       const ageGate=document.getElementById("ageGate");
       if(ageGate && !ageGate.classList.contains("hidden")){
         showTerror("請先啟動聲音", "主畫面尚未解除封存");
@@ -4140,10 +4488,8 @@
       startTimer();
       startScaryAmbience();
       startNameFlashEvents();
-      startUltimateHorrorEvents();
-      startHorrorDirectorV18();
-      startV20EventDirector();
-      startLuxuryVisualDirectorV21();
+      V25GameEngine.start();
+      V25GameEngine.setStage("screen2");
 
       showTerror(cameraEnabled ? "聲音與影像已接入" : "純遊戲模式已啟動", playerName+" 已被第七層記錄");
 
@@ -4154,11 +4500,11 @@
       document.querySelectorAll(".screen").forEach(sec=>sec.classList.remove("active"));
       const target=document.getElementById(id);
       if(target){target.classList.add("active");window.scrollTo(0,0);}
-      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();}
+      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();}
       else{document.getElementById("hud").classList.add("show");}
       if(id==="screen4"){setTimeout(()=>captureMidGamePhoto("CONTAINMENT BOX ACCESS"), 900);}
       if(id==="screen5"){stopTimer();runEnding();}
-      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();runGameOverEnding();playTone("gameover");}
+      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();runGameOverEnding();playTone("gameover");}
     }
 
     function shuffleArray(array){
@@ -4515,7 +4861,7 @@
     function triggerCurseScan(){const el=document.getElementById("curseScan");if(!el)return;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playTone("wallScratch");setTimeout(()=>el.classList.remove("show"),1900);}
     function triggerScreenCrack(){const el=document.getElementById("screenCrack");if(!el)return;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playCustomSound("scrape", "boneCrack");setTimeout(()=>el.classList.remove("show"),900);}
     function startUltimateHorrorEvents(){
-      stopUltimateHorrorEvents();stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();
+      stopUltimateHorrorEvents();
       ultimateHorrorId=setInterval(()=>{
         const hud=document.getElementById("hud");
         if(!hud || !hud.classList.contains("show")) return;
@@ -4763,7 +5109,7 @@
         status.innerHTML="影像捕捉已停止。<br>但封存紀錄仍保留最後一次畫面。";
       }
     }
-    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();stopV20EventDirector();stopLuxuryVisualDirectorV21();location.reload();}
+    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();location.reload();}
 
     function shake(){const app=document.getElementById("app");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),360);}
     function flash(){const f=document.getElementById("flash");f.style.display="block";setTimeout(()=>f.style.display="none",150);}
@@ -5266,11 +5612,8 @@
       玩家按下 20+ 啟動後才會真正啟動音效，符合手機瀏覽器規則。
     */
     function initV22ProfessionalEngines(){
+      // v25：只初始化 Howler 音效；視覺統一交給 V25GameEngine。
       initV22HowlerAudio();
-      initV22FluidBlood();
-      initV22MatterBones();
-      startV22Director();
-      updateV22EngineStatus();
     }
 
     /*
@@ -5588,139 +5931,14 @@
       loop();
     }
 
-    /*
-      Matter.js 物理碎骨背景：
-      有 Matter.js 時會有碎片慢慢掉落。
-      沒有 Matter.js 就不啟動，不影響遊戲。
-    */
-    function initV22MatterBones(){
-      if(v22MatterReady) return;
 
-      if(typeof Matter==="undefined"){
-        updateV22EngineStatus();
-        return;
-      }
-
-      const canvas=document.getElementById("v22MatterCanvas");
-      if(!canvas) return;
-
-      v22MatterReady=true;
-
-      const Engine=Matter.Engine;
-      const Render=Matter.Render;
-      const Runner=Matter.Runner;
-      const Bodies=Matter.Bodies;
-      const Composite=Matter.Composite;
-
-      const engine=Engine.create();
-      engine.gravity.y=.08;
-
-      const width=window.innerWidth;
-      const height=window.innerHeight;
-
-      const render=Render.create({
-        canvas:canvas,
-        engine:engine,
-        options:{
-          width:width,
-          height:height,
-          wireframes:false,
-          background:"transparent",
-          pixelRatio:window.devicePixelRatio||1
-        }
-      });
-
-      const floor=Bodies.rectangle(width/2,height+40,width+160,80,{isStatic:true,render:{visible:false}});
-      const left=Bodies.rectangle(-40,height/2,80,height+160,{isStatic:true,render:{visible:false}});
-      const right=Bodies.rectangle(width+40,height/2,80,height+160,{isStatic:true,render:{visible:false}});
-      Composite.add(engine.world,[floor,left,right]);
-
-      const count=v22PerformanceMode==="high" ? 22 : 10;
-      for(let i=0;i<count;i++){
-        const x=Math.random()*width;
-        const y=-Math.random()*height*.8;
-        const w=10+Math.random()*34;
-        const h=4+Math.random()*11;
-
-        const body=Bodies.rectangle(x,y,w,h,{
-          frictionAir:.018,
-          restitution:.35,
-          angle:Math.random()*Math.PI,
-          render:{
-            fillStyle:`rgba(${120+Math.floor(Math.random()*60)},${20+Math.floor(Math.random()*20)},${18+Math.floor(Math.random()*20)},.28)`,
-            strokeStyle:"rgba(191,164,116,.22)",
-            lineWidth:1
-          }
-        });
-
-        Composite.add(engine.world,body);
-      }
-
-      Render.run(render);
-      Runner.run(Runner.create(),engine);
-
-      v22MatterEngine=engine;
-      v22MatterRender=render;
-      updateV22EngineStatus();
-    }
-
-    /*
+/*
       V22 專業恐怖導演：
       每隔幾秒根據污染值觸發更專業的複合事件。
     */
-    function startV22Director(){
-      stopV22Director();
+    
 
-      v22DirectorId=setInterval(()=>{
-        const hud=document.getElementById("hud");
-        const inGame=hud && hud.classList.contains("show");
-        const pollution=(typeof contamination==="number") ? contamination : 30;
-
-        const chance=inGame
-          ? (pollution>=80 ? .82 : pollution>=50 ? .58 : .34)
-          : .22;
-
-        if(Math.random()>chance) return;
-
-        const event=Math.floor(Math.random()*7);
-
-        if(event===0){
-          triggerV22GsapGhost();
-        }else if(event===1){
-          showSystemScan("V22 引擎偵測到非登錄骨骼回應。");
-          playV22SoundGroup("system","staticWhisper");
-        }else if(event===2){
-          playV22SoundGroup("approach","wallScratch");
-          spawnBloodWord("它穿過封存線");
-        }else if(event===3){
-          const shader=document.getElementById("v22ShaderDistortion");
-          if(shader){
-            shader.classList.remove("show");
-            void shader.offsetWidth;
-            shader.classList.add("show");
-          }
-          playV22SoundGroup("blackout","blackoutHit");
-        }else if(event===4){
-          fakeCameraPulse();
-          playV22SoundGroup("camera","cameraSnap");
-        }else if(event===5){
-          triggerPanicVignette();
-          tremorInterface();
-          playV22SoundGroup("breath","reverseBreath");
-        }else{
-          spawnBloodWord(playerName && playerName!=="正在使用此裝置的人" ? playerName : "第五位");
-        }
-      },4800);
-    }
-
-    function stopV22Director(){
-      if(v22DirectorId){
-        clearInterval(v22DirectorId);
-        v22DirectorId=null;
-      }
-    }
-
-    /*
+/*
       專業 / 效能模式：
       如果手機卡，可以切換成效能模式。
     */
@@ -5759,7 +5977,6 @@
         <span class="v22-engine-tag">V22 ENGINE</span><br>
         Howler：${typeof Howl!=="undefined" ? "已載入" : "備用"}<br>
         GSAP：${typeof gsap!=="undefined" ? "已載入" : "備用"}<br>
-        Matter：${typeof Matter!=="undefined" ? "已載入" : "備用"}<br>
         模式：${v22PerformanceMode==="high" ? "高級" : "效能"}
       `;
     }
@@ -5775,13 +5992,452 @@
       initV22ProfessionalEngines();
     };
 
+    document.addEventListener('DOMContentLoaded', initLuxuryInterfaceV21);
+
+
+    /*
+      =========================================================
+      V25GameEngine：正式版單一遊戲引擎
+      ---------------------------------------------------------
+      專業化重點：
+      - 單一 requestAnimationFrame 控制動態背景
+      - 單一 director interval 控制恐怖事件
+      - FPS 過低自動降低粒子數
+      - 階段 HUD 讓玩家知道目前任務
+      - 包裝 goTo / loseHeart / placeBone，讓互動更像遊戲
+      =========================================================
+    */
+    var V25GameEngine={
+      started:false,
+      low:false,
+      raf:null,
+      director:null,
+      canvas:null,
+      ctx:null,
+      w:0,
+      h:0,
+      ratio:1,
+      last:performance.now(),
+      breath:0,
+      particles:[],
+      veins:[],
+      fps:[],
+      stage:"screen1",
+      pointer:{x:.5,y:.5},
+
+      stages:{
+        screen1:{code:"ENTRY",title:"第七層封存系統",objective:"輸入代號，選擇難度，開始標本復原程序。"},
+        screen2:{code:"BONE TABLE",title:"骨骼復原台",objective:"選取下方骨頭，放入正確輪廓位置。放錯會提高污染值。"},
+        screen3:{code:"MARKING",title:"刻痕線索",objective:"翻看骨頭背面，找出羅馬數字與身體排序。"},
+        screen4:{code:"SEALED BOX",title:"百寶封存箱",objective:"輸入四位數密碼。錯誤次數越多，封存系統越不穩定。"},
+        screen5:{code:"REGISTER",title:"第五位研究員",objective:"完成登錄。可以選擇是否拍照保存影像。"},
+        screenGameOver:{code:"FAILED",title:"封存失敗",objective:"研究員資料已被第七層接管。"}
+      },
+
+      start(){
+        if(this.started) return;
+        this.started=true;
+
+        document.body.classList.add("v25-game");
+        this.canvas=document.getElementById("v25Canvas");
+        this.ctx=this.canvas ? this.canvas.getContext("2d") : null;
+
+        this.resize();
+        this.seed();
+        this.bind();
+        this.loop(performance.now());
+        this.startDirector();
+        this.setStage(this.stage);
+        this.toast("V25 GAME ENGINE / 封存介面已最佳化");
+      },
+
+      resize(){
+        if(!this.canvas || !this.ctx) return;
+        this.ratio=Math.min(2,window.devicePixelRatio||1);
+        this.w=window.innerWidth;
+        this.h=window.innerHeight;
+        this.canvas.width=Math.floor(this.w*this.ratio);
+        this.canvas.height=Math.floor(this.h*this.ratio);
+        this.canvas.style.width=this.w+"px";
+        this.canvas.style.height=this.h+"px";
+        this.ctx.setTransform(this.ratio,0,0,this.ratio,0,0);
+      },
+
+      bind(){
+        if(this.bound) return;
+        this.bound=true;
+
+        window.addEventListener("resize",()=>this.resize(),{passive:true});
+
+        window.addEventListener("pointermove",(e)=>{
+          this.pointer.x=e.clientX/Math.max(1,this.w);
+          this.pointer.y=e.clientY/Math.max(1,this.h);
+          document.documentElement.style.setProperty("--v25-depth-x", ((this.pointer.x-.5)*18).toFixed(2)+"px");
+          document.documentElement.style.setProperty("--v25-depth-y", ((this.pointer.y-.5)*18).toFixed(2)+"px");
+        },{passive:true});
+
+        window.addEventListener("pointerdown",(e)=>{
+          this.spawnBlood(e.clientX,e.clientY,this.low?7:16);
+          this.touch(e.clientX,e.clientY);
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("boneSelect","click");
+        },{passive:true});
+      },
+
+      seed(){
+        this.veins=[];
+        const count=this.low ? 9 : 18;
+        for(let i=0;i<count;i++){
+          const pts=[];
+          const sx=Math.random()*this.w;
+          const sy=Math.random()*this.h;
+          const len=3+Math.floor(Math.random()*5);
+          for(let j=0;j<len;j++){
+            pts.push({
+              x:sx+(Math.random()-.5)*190+j*20,
+              y:sy+j*(22+Math.random()*34)+(Math.random()-.5)*70
+            });
+          }
+          this.veins.push({
+            pts,
+            phase:Math.random()*Math.PI*2,
+            alpha:.035+Math.random()*.07,
+            red:85+Math.random()*80
+          });
+        }
+      },
+
+      fear(){
+        const c=(typeof contamination==="number" ? contamination : 18)/100;
+        const m=(typeof mistakeCount==="number" ? Math.min(.20,mistakeCount*.035) : 0);
+        const p=(Math.sin(this.breath*1.35)+1)*.035;
+        return Math.max(.16,Math.min(.95,.18+c*.76+m+p));
+      },
+
+      syncFear(){
+        const f=this.fear();
+        document.documentElement.style.setProperty("--v25-fear", f.toFixed(3));
+        const threat=document.getElementById("v25ThreatText");
+        if(threat) threat.textContent="THREAT "+Math.round(f*100)+"%";
+      },
+
+      measure(dt){
+        if(dt<=0) return;
+        const fps=1000/dt;
+        this.fps.push(fps);
+        if(this.fps.length>50) this.fps.shift();
+
+        if(this.fps.length===50){
+          const avg=this.fps.reduce((a,b)=>a+b,0)/this.fps.length;
+          if(avg<38 && !this.low){
+            this.low=true;
+            document.body.classList.add("v25-low");
+            this.seed();
+            this.toast("已切換效能模式 / EFFECTS OPTIMIZED");
+          }
+        }
+      },
+
+      loop(now){
+        const dt=Math.min(50,now-this.last);
+        this.last=now;
+        this.measure(dt);
+        this.breath+=dt*.0012;
+        document.documentElement.style.setProperty("--v25-breath", Math.sin(this.breath).toFixed(3));
+        this.syncFear();
+        this.draw(now,dt);
+        this.raf=requestAnimationFrame((t)=>this.loop(t));
+      },
+
+      draw(now,dt){
+        if(!this.ctx) return;
+        const ctx=this.ctx;
+        const f=this.fear();
+        ctx.clearRect(0,0,this.w,this.h);
+        ctx.globalCompositeOperation="screen";
+
+        for(const v of this.veins){
+          const phase=v.phase+now*.00042;
+          ctx.beginPath();
+          v.pts.forEach((p,i)=>{
+            const x=p.x+Math.sin(phase+i*.8)*10*f;
+            const y=p.y+Math.cos(phase+i*.7)*7*f;
+            if(i===0) ctx.moveTo(x,y);
+            else ctx.lineTo(x,y);
+          });
+          ctx.strokeStyle=`rgba(${v.red},0,0,${v.alpha+f*.055})`;
+          ctx.lineWidth=1+f*1.45;
+          ctx.shadowBlur=8+f*18;
+          ctx.shadowColor=`rgba(${v.red},0,0,.50)`;
+          ctx.stroke();
+        }
+
+        const rate=this.low ? .12 : (.20+f*.24);
+        if(Math.random()<rate){
+          this.spawnBlood(Math.random()*this.w,-30,this.low?1:Math.ceil(1+f*2.6));
+        }
+
+        for(let i=this.particles.length-1;i>=0;i--){
+          const p=this.particles[i];
+          p.x+=p.vx+Math.sin(now*.001+p.seed)*.16;
+          p.y+=p.vy+f*.32;
+          p.vy+=.002;
+          p.vx*=.992;
+          p.life-=dt*.055;
+
+          const t=Math.max(0,p.life/p.max);
+          const radius=p.r*(1+(1-t)*1.5);
+          const alpha=p.a*t*(.75+f*.55);
+
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius*5);
+          g.addColorStop(0,`rgba(${p.red},0,0,${alpha})`);
+          g.addColorStop(.45,`rgba(${Math.max(35,p.red-44)},0,0,${alpha*.60})`);
+          g.addColorStop(1,"rgba(0,0,0,0)");
+
+          ctx.fillStyle=g;
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,radius*5,0,Math.PI*2);
+          ctx.fill();
+
+          if(p.life<=0 || p.y>this.h+120) this.particles.splice(i,1);
+        }
+
+        ctx.shadowBlur=0;
+        ctx.globalCompositeOperation="source-over";
+
+        const max=this.low?110:300;
+        if(this.particles.length>max) this.particles.splice(0,this.particles.length-max);
+      },
+
+      spawnBlood(x,y,amount){
+        for(let i=0;i<amount;i++){
+          this.particles.push({
+            x:x+(Math.random()-.5)*84,
+            y:y+(Math.random()-.5)*52,
+            vx:(Math.random()-.5)*1.08,
+            vy:.28+Math.random()*1.32,
+            r:1.4+Math.random()*7.4,
+            red:86+Math.random()*88,
+            a:.045+Math.random()*.20,
+            life:78+Math.random()*126,
+            max:176,
+            seed:Math.random()*Math.PI*2
+          });
+        }
+      },
+
+      touch(x,y){
+        const el=document.getElementById("v25Touch");
+        if(!el) return;
+        el.style.left=x+"px";
+        el.style.top=y+"px";
+        el.classList.remove("show");
+        void el.offsetWidth;
+        el.classList.add("show");
+        setTimeout(()=>el.classList.remove("show"),760);
+      },
+
+      cut(){
+        const el=document.getElementById("v25Cut");
+        if(!el) return;
+        el.classList.remove("show");
+        void el.offsetWidth;
+        el.classList.add("show");
+        setTimeout(()=>el.classList.remove("show"),520);
+      },
+
+      toast(text){
+        const el=document.getElementById("v25Toast");
+        if(!el) return;
+        el.textContent=text || "第七層正在回應。";
+        el.classList.remove("show");
+        void el.offsetWidth;
+        el.classList.add("show");
+        setTimeout(()=>el.classList.remove("show"),1650);
+      },
+
+      setStage(id){
+        this.stage=id || this.stage;
+        const info=this.stages[this.stage] || this.stages.screen1;
+        const code=document.getElementById("v25StageCode");
+        const title=document.getElementById("v25StageTitle");
+        const obj=document.getElementById("v25Objective");
+        if(code) code.textContent=info.code;
+        if(title) title.textContent=info.title;
+        if(obj) obj.textContent=info.objective;
+        this.toast(info.code+" / "+info.title);
+      },
+
+      startDirector(){
+        this.stopDirector();
+        this.director=setInterval(()=>this.tick(),5200);
+      },
+
+      stopDirector(){
+        if(this.director){
+          clearInterval(this.director);
+          this.director=null;
+        }
+      },
+
+      tick(){
+        const hud=document.getElementById("hud");
+        const inGame=hud && hud.classList.contains("show");
+        const f=this.fear();
+        const chance=inGame ? (.26+f*.54) : (.12+f*.18);
+        if(Math.random()>chance) return;
+
+        const event=Math.floor(Math.random()*8);
+        if(event===0){
+          if(typeof triggerV22GsapGhost==="function") triggerV22GsapGhost();
+          this.toast("FACE TRACE / 非登錄臉孔靠近");
+        }else if(event===1){
+          if(typeof showSystemScan==="function") showSystemScan("封存系統正在校準你的觀測位置。");
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("system","staticWhisper");
+        }else if(event===2){
+          if(typeof fakeCameraPulse==="function") fakeCameraPulse();
+          this.toast("CAMERA PULSE / 未啟用相機仍偵測到影像訊號");
+        }else if(event===3){
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("knock","distantKnock");
+          if(typeof spawnBloodWord==="function") spawnBloodWord("箱子回敲");
+        }else if(event===4){
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("breath","reverseBreath");
+          if(typeof flashThinGhost==="function") flashThinGhost();
+        }else if(event===5){
+          const shader=document.getElementById("v22ShaderDistortion");
+          if(shader){
+            shader.classList.remove("show");
+            void shader.offsetWidth;
+            shader.classList.add("show");
+          }
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("blackout","blackoutHit");
+        }else if(event===6){
+          if(typeof triggerPanicVignette==="function") triggerPanicVignette();
+          if(typeof tremorInterface==="function") tremorInterface();
+          if(typeof playV22SoundGroup==="function") playV22SoundGroup("approach","wallScratch");
+        }else{
+          this.microChoice();
+        }
+      },
+
+      microChoice(){
+        const box=document.getElementById("v25Choice");
+        if(!box) return;
+
+        const choices=[
+          {
+            q:"封存系統要求校正觀測方向。",
+            a:"維持正面",
+            b:"確認背後",
+            ea:()=>{contamination=Math.min(100,contamination+3);this.toast("你選擇不回頭。");},
+            eb:()=>{contamination=Math.min(100,contamination+10);if(typeof triggerV22GsapGhost==="function") triggerV22GsapGhost();}
+          },
+          {
+            q:"第七層正在讀取你的代號。",
+            a:"刪除代號",
+            b:"保留代號",
+            ea:()=>{contamination=Math.min(100,contamination+8);if(typeof spawnBloodWord==="function") spawnBloodWord("刪除失敗");},
+            eb:()=>{contamination=Math.min(100,contamination+4);if(typeof flashPlayerName==="function") flashPlayerName();}
+          }
+        ];
+
+        const picked=choices[Math.floor(Math.random()*choices.length)];
+        box.innerHTML=`
+          ${picked.q}
+          <div class="v25-choice-row">
+            <button class="btn secondary" id="v25ChoiceA">${picked.a}</button>
+            <button class="btn secondary" id="v25ChoiceB">${picked.b}</button>
+          </div>
+        `;
+
+        box.classList.add("show");
+        if(typeof playV22SoundGroup==="function") playV22SoundGroup("breath","reverseBreath");
+
+        document.getElementById("v25ChoiceA").onclick=()=>{
+          picked.ea();
+          if(typeof updateContamination==="function") updateContamination();
+          box.classList.remove("show");
+        };
+
+        document.getElementById("v25ChoiceB").onclick=()=>{
+          picked.eb();
+          if(typeof updateContamination==="function") updateContamination();
+          box.classList.remove("show");
+        };
+
+        setTimeout(()=>box.classList.remove("show"),6600);
+      }
+    };
+
+    // 舊版 V24 名稱轉接，避免舊程式呼叫時出錯。
+    var V24HorrorEngine=V25GameEngine;
+
+    /*
+      v25 包裝頁面切換：
+      原本 goTo 還是保留，但外面多一層電影式轉場與任務更新。
+    */
+    if(!window._v25GoToWrapped && typeof goTo==="function"){
+      window._v25GoToWrapped=true;
+      window._v25OldGoTo=window.goTo;
+      window.goTo=function(id){
+        V25GameEngine.cut();
+        setTimeout(()=>{
+          window._v25OldGoTo(id);
+          V25GameEngine.setStage(id);
+        },110);
+      };
+    }
+
+    /*
+      v25 包裝扣血：
+      錯誤時增加血霧、音效與任務回饋。
+    */
+    if(!window._v25LoseHeartWrapped && typeof loseHeart==="function"){
+      window._v25LoseHeartWrapped=true;
+      window._v25OldLoseHeart=window.loseHeart;
+      window.loseHeart=function(reason){
+        V25GameEngine.toast("ERROR / "+(reason || "封存錯誤"));
+        V25GameEngine.spawnBlood(window.innerWidth*.5, window.innerHeight*.42, 20);
+        if(typeof playV22SoundGroup==="function") playV22SoundGroup("boneWrong","boneCrack");
+        return window._v25OldLoseHeart(reason);
+      };
+    }
+
+    /*
+      v25 包裝骨頭放置：
+      成功或失敗都會產生遊戲化回饋。
+    */
+    if(!window._v25PlaceBoneWrapped && typeof placeBone==="function"){
+      window._v25PlaceBoneWrapped=true;
+      window._v25OldPlaceBone=window.placeBone;
+      window.placeBone=function(slotId){
+        const before=progress;
+        const result=window._v25OldPlaceBone(slotId);
+        if(progress>before){
+          V25GameEngine.toast("BONE LOCKED / 骨位確認");
+          V25GameEngine.spawnBlood(window.innerWidth*.5, window.innerHeight*.35, 10);
+        }
+        return result;
+      };
+    }
+
+    /*
+      v25 包裝污染值：
+      污染值變化後同步到 CSS 變數與 HUD。
+    */
+    if(!window._v25UpdateContaminationWrapped && typeof updateContamination==="function"){
+      window._v25UpdateContaminationWrapped=true;
+      window._v25OldUpdateContamination=window.updateContamination;
+      window.updateContamination=function(){
+        const result=window._v25OldUpdateContamination();
+        V25GameEngine.syncFear();
+        return result;
+      };
+    }
+
     document.addEventListener("DOMContentLoaded",()=>{
-      updateV22EngineStatus();
-      initV22FluidBlood();
+      V25GameEngine.start();
     });
 
-
-    document.addEventListener('DOMContentLoaded', initLuxuryInterfaceV21);
   </script>
 </body>
 </html>
