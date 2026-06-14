@@ -982,25 +982,212 @@
       }
     }
 
+
+    /* v14：成人恐怖聲場與全畫面流動血液背景 */
+    .global-blood-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .62;
+      background:
+        radial-gradient(240px 160px at 18% 12%, rgba(120,0,0,.24), transparent 70%),
+        radial-gradient(320px 180px at 82% 8%, rgba(70,0,0,.24), transparent 74%),
+        radial-gradient(260px 210px at 48% 105%, rgba(130,0,0,.22), transparent 72%),
+        linear-gradient(180deg, rgba(35,0,0,.14), rgba(0,0,0,.06));
+      mix-blend-mode: screen;
+      animation: globalBloodFlow 10s ease-in-out infinite alternate;
+    }
+
+    .global-blood-layer::before {
+      content: "";
+      position: absolute;
+      inset: -18%;
+      background:
+        repeating-linear-gradient(
+          102deg,
+          transparent 0px,
+          transparent 42px,
+          rgba(115,0,0,.08) 44px,
+          rgba(145,0,0,.11) 50px,
+          transparent 58px
+        );
+      filter: blur(1px);
+      animation: veinSlide 14s linear infinite;
+    }
+
+    .global-blood-layer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 12% 0%, rgba(165,0,0,.18), transparent 26%),
+        radial-gradient(ellipse at 36% -5%, rgba(90,0,0,.20), transparent 22%),
+        radial-gradient(ellipse at 67% 0%, rgba(150,0,0,.14), transparent 24%),
+        radial-gradient(ellipse at 90% -2%, rgba(100,0,0,.18), transparent 22%);
+      animation: ceilingBleed 7.5s ease-in-out infinite alternate;
+    }
+
+    .blood-streams {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: .7;
+    }
+
+    .blood-streams span {
+      position: absolute;
+      top: -20vh;
+      width: 18px;
+      height: 42vh;
+      border-radius: 0 0 18px 18px;
+      background: linear-gradient(180deg, rgba(145,0,0,.82), rgba(64,0,0,.62), rgba(15,0,0,0));
+      box-shadow:
+        0 0 18px rgba(120,0,0,.34),
+        inset 0 -18px 22px rgba(0,0,0,.42);
+      filter: blur(.2px);
+      animation: longBloodDrip 9s ease-in-out infinite;
+    }
+
+    .blood-streams span:nth-child(1) { left: 3%; width: 26px; height: 38vh; animation-duration: 9.5s; animation-delay: .2s; }
+    .blood-streams span:nth-child(2) { left: 15%; width: 11px; height: 30vh; animation-duration: 7.4s; animation-delay: 1.3s; }
+    .blood-streams span:nth-child(3) { left: 28%; width: 36px; height: 46vh; animation-duration: 10.2s; animation-delay: .7s; }
+    .blood-streams span:nth-child(4) { left: 47%; width: 14px; height: 34vh; animation-duration: 8.2s; animation-delay: 1.7s; }
+    .blood-streams span:nth-child(5) { left: 61%; width: 30px; height: 44vh; animation-duration: 11s; animation-delay: .4s; }
+    .blood-streams span:nth-child(6) { left: 78%; width: 13px; height: 32vh; animation-duration: 7.8s; animation-delay: 2.2s; }
+    .blood-streams span:nth-child(7) { left: 92%; width: 34px; height: 48vh; animation-duration: 10.8s; animation-delay: 1s; }
+
+    .help-voice-text {
+      position: fixed;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      z-index: 35;
+      color: rgba(245,230,218,.95);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 8px;
+      opacity: 0;
+      pointer-events: none;
+      text-shadow:
+        0 0 8px #000,
+        0 0 18px rgba(155,34,34,.9),
+        0 0 32px rgba(155,34,34,.8);
+      white-space: nowrap;
+    }
+
+    .help-voice-text.show {
+      animation: helpTextBurst .9s ease both;
+    }
+
+    .adult-sound-badge {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid rgba(155,34,34,.42);
+      background: rgba(0,0,0,.38);
+      color: rgba(238,225,201,.78);
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 1px;
+    }
+
+    .sound-active-mark {
+      display: inline-block;
+      margin-top: 6px;
+      color: #d11212;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(155,34,34,.8);
+      animation: warningPulse 2s infinite ease-in-out;
+    }
+
+    .app {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(100,0,0,.08), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(120,0,0,.06), transparent 32%);
+    }
+
+    .card,
+    .difficulty-grid .diff,
+    .btn,
+    .skeleton,
+    .bone-pool,
+    .scene-image {
+      backdrop-filter: blur(1px);
+    }
+
+    .age-box h1::after {
+      content: "SOUND FIELD LOCKED";
+      display: block;
+      color: rgba(155,34,34,.92);
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-top: 8px;
+      text-shadow: 0 0 10px rgba(155,34,34,.8);
+    }
+
+    @keyframes globalBloodFlow {
+      0% { transform: translate3d(-8px, -6px, 0) scale(1); opacity: .44; }
+      50% { transform: translate3d(8px, 10px, 0) scale(1.04); opacity: .7; }
+      100% { transform: translate3d(-4px, 16px, 0) scale(1.02); opacity: .58; }
+    }
+
+    @keyframes veinSlide {
+      from { transform: translateX(-12%) translateY(-3%); }
+      to { transform: translateX(12%) translateY(4%); }
+    }
+
+    @keyframes ceilingBleed {
+      from { transform: translateY(-14px) scaleY(.92); opacity: .55; }
+      to { transform: translateY(18px) scaleY(1.15); opacity: .88; }
+    }
+
+    @keyframes longBloodDrip {
+      0% { transform: translateY(-22vh) scaleY(.82); opacity: .45; }
+      28% { transform: translateY(3vh) scaleY(1.06); opacity: .85; }
+      58% { transform: translateY(15vh) scaleY(1.18); opacity: .98; }
+      100% { transform: translateY(28vh) scaleY(.95); opacity: .35; }
+    }
+
+    @keyframes helpTextBurst {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.7) skewX(0); filter: blur(8px); }
+      14% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) skewX(-8deg); filter: blur(0); }
+      32% { opacity: .2; transform: translate(-50%, -50%) scale(.95) skewX(7deg); }
+      48% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) skewX(-4deg); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); filter: blur(8px); }
+    }
+
   </style>
 </head>
 
 <body>
+
+  <div class="global-blood-layer"></div>
+  <div class="blood-streams" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="help-voice-text" id="helpVoiceText">救救我</div>
+
 
   <div class="age-gate" id="ageGate">
     <div class="age-box">
       <div class="skull-mark">第七層啟動</div>
       <h1>20+ 恐怖體驗確認</h1>
       <div class="age-warning-text">
-        本體驗包含強烈恐怖音效、低頻壓迫、突然驚嚇聲、畫面閃爍、相機影像捕捉與心理恐怖內容。<br><br>
+        本體驗包含成人向恐怖聲場、低頻壓迫、混濁人聲、突然鬼叫、牆內敲擊、畫面閃爍、相機影像捕捉與心理恐怖內容。<br><br>
         <strong>請確認你已滿 20 歲，並願意開啟聲音與相機權限。</strong><br>
         若容易受驚、對閃爍畫面敏感，請勿繼續。
       </div>
-      <button class="btn" onclick="enterAdultHorrorMode()">我已滿 20 歲，啟動聲音</button>
-      <button class="btn secondary" onclick="previewScream()">測試驚嚇音效</button>
+      <button class="btn" onclick="enterAdultHorrorMode()">我已滿 20 歲，啟動恐怖聲場</button>
+      <button class="btn secondary" onclick="previewScream()">測試鬼叫與低頻</button>
       <div class="sound-test-line">
         因瀏覽器限制，音樂與音效必須在你按下按鈕後才能啟動。<br>
         建議使用 Safari / Chrome，手機音量先調到中高。
+      </div>
+      <div class="adult-sound-badge">
+        恐怖聲場啟動後，主畫面會持續播放低頻、反向呼吸、牆內敲擊與隨機「救救我」人聲。
       </div>
     </div>
   </div>
@@ -1110,9 +1297,9 @@
       <button class="btn" onclick="startProgram()">同意並開始復原</button>
       <button class="btn secondary" onclick="toggleSound()">音效：<span id="soundLabel">開啟</span></button>
       <button class="btn secondary" onclick="cycleVolumeMode()">音量模式：<span id="volumeModeLabel" class="volume-mode-text">極限</span></button>
-      <div class="sound-warning">
+      <div class="sound-warning"><span class="sound-active-mark">聲場狀態：等待啟動 / 點擊 20+ 畫面後開始</span><br>
         <strong>建議開聲音體驗。</strong><br>
-        本版本包含低頻、敲擊、雜訊低語與心跳聲。若覺得不夠大聲，請把手機音量拉高，並確認沒有開靜音模式。
+        本版本包含低頻壓迫、牆內敲擊、混濁人聲、隨機「救救我」、突然鬼叫與心跳聲。若沒有聽到，請確認已先啟動恐怖聲場、手機音量拉高，且沒有開靜音模式。
       </div>
     </section>
 
@@ -1340,7 +1527,7 @@
 
     const checks=["已閱讀封存通知","已看見九塊骨頭","已完成標本復原","已辨認羅馬數字","已解出封存密碼","已開啟百寶封存箱","已被第七層記錄為觀測者"];
 
-    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=3.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null,mainMusicStarted=false;
+    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=4.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null,mainMusicStarted=false,voiceScareId=null;
     const flippedMap={};
 
     window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));startGlitch();});
@@ -1371,7 +1558,7 @@
         volumeBoost=2.2;
       }else if(volumeMode==="boost"){
         volumeMode="extreme";
-        volumeBoost=3.2;
+        volumeBoost=4.2;
       }else{
         volumeMode="normal";
         volumeBoost=1.25;
@@ -1399,22 +1586,25 @@
       initAudio();
       mainMusicStarted=true;
       volumeMode="extreme";
-      volumeBoost=3.6;
+      volumeBoost=4.2;
 
       const volLabel=document.getElementById("volumeModeLabel");
       if(volLabel) volLabel.textContent="極限";
 
       startMainHorrorMusic();
       startMenuHaunting();
+      startVoiceScares();
       playTone("openingScream");
+      setTimeout(()=>playHumanHelpVoice("救救我"), 900);
       showTerror("第七層已開啟", "請輸入研究員代號");
     }
 
     function previewScream(){
       initAudio();
       volumeMode="extreme";
-      volumeBoost=3.6;
+      volumeBoost=4.2;
       playTone("openingScream");
+      playHumanHelpVoice("救救我");
       flashApparition();
     }
 
@@ -1423,7 +1613,7 @@
       initAudio();
       startScaryAmbience();
 
-      // 主畫面恐怖音樂：低頻、半音衝突、慢速不協和音
+      // 主畫面恐怖聲場：低頻持續壓迫、不協和音、牆內摩擦與反向呼吸。
       let chordCount=0;
       const chordTimer=setInterval(()=>{
         if(!mainMusicStarted || !soundOn || !audioCtx){
@@ -1431,18 +1621,20 @@
           return;
         }
         const chords=[
-          [39, 41, 58],
-          [36, 49, 51],
-          [44, 45, 67],
-          [31, 47, 54]
+          [28, 31, 43, 47],
+          [26, 39, 40, 56],
+          [33, 34, 52, 61],
+          [24, 36, 49, 50]
         ];
         const chord=chords[chordCount % chords.length];
         chord.forEach((freq,idx)=>{
-          setTimeout(()=>playOsc(freq, 2.8, 0.045, idx===0?"sawtooth":"sine", null, freq*0.92), idx*90);
+          setTimeout(()=>playOsc(freq, 3.6, 0.062, idx===0?"sawtooth":"triangle", null, freq*0.88), idx*120);
         });
-        if(Math.random()>.55) playTone("reverseBreath");
+        playNoise(1.8,.045,"lowpass",160,.8);
+        if(Math.random()>.42) playTone("reverseBreath");
+        if(Math.random()>.62) playTone("wallScratch");
         chordCount++;
-      }, 3600);
+      }, 3200);
     }
 
     function startMenuHaunting(){
@@ -1473,6 +1665,77 @@
         setTimeout(()=>e.classList.remove("show"), 560);
       }
       staticBurst();
+    }
+
+    function startVoiceScares(){
+      stopVoiceScares();
+      voiceScareId=setInterval(()=>{
+        if(!mainMusicStarted || !soundOn) return;
+
+        const pool=[
+          "救救我",
+          "不要拼",
+          "我在箱子裡",
+          "不要回頭",
+          "第五位不是我"
+        ];
+
+        const text=pool[Math.floor(Math.random()*pool.length)];
+        if(Math.random()>.38){
+          playHumanHelpVoice(text);
+        }else{
+          playTone("humanMoan");
+          flashHelpText(text);
+        }
+
+        if(Math.random()>.55){
+          flashApparition();
+        }
+      }, 9000);
+    }
+
+    function stopVoiceScares(){
+      if(voiceScareId){
+        clearInterval(voiceScareId);
+        voiceScareId=null;
+      }
+    }
+
+    function flashHelpText(text){
+      const el=document.getElementById("helpVoiceText");
+      if(!el) return;
+      el.textContent=text || "救救我";
+      el.classList.remove("show");
+      void el.offsetWidth;
+      el.classList.add("show");
+      setTimeout(()=>el.classList.remove("show"), 950);
+    }
+
+    function playHumanHelpVoice(text){
+      flashHelpText(text || "救救我");
+
+      // 盡量使用瀏覽器語音合成做出「有人求救」的感覺；不同手機聲音會略有不同。
+      try{
+        if("speechSynthesis" in window){
+          window.speechSynthesis.cancel();
+
+          const utter=new SpeechSynthesisUtterance(text || "救救我");
+          utter.lang="zh-TW";
+          utter.rate=0.62;
+          utter.pitch=0.35;
+          utter.volume=Math.min(1, 0.95);
+
+          const voices=window.speechSynthesis.getVoices();
+          const zhVoice=voices.find(v=>/zh|Chinese|Taiwan|Mandarin/i.test(v.lang + " " + v.name));
+          if(zhVoice) utter.voice=zhVoice;
+
+          window.speechSynthesis.speak(utter);
+        }
+      }catch(e){}
+
+      playTone("humanCryLayer");
+      setTimeout(()=>playTone("reverseBreath"), 260);
+      setTimeout(()=>playTone("distantKnock"), 520);
     }
 
     async function startProgram(){
@@ -1527,11 +1790,11 @@
       document.querySelectorAll(".screen").forEach(sec=>sec.classList.remove("active"));
       const target=document.getElementById(id);
       if(target){target.classList.add("active");window.scrollTo(0,0);}
-      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();}
+      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();}
       else{document.getElementById("hud").classList.add("show");}
       if(id==="screen4"){setTimeout(()=>captureMidGamePhoto("CONTAINMENT BOX ACCESS"), 900);}
       if(id==="screen5"){stopTimer();runEnding();}
-      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();runGameOverEnding();playTone("gameover");}
+      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();runGameOverEnding();playTone("gameover");}
     }
 
     function shuffleArray(array){
@@ -1819,7 +2082,7 @@
     function stopNameFlashEvents(){
       if(nameFlashId){
         clearInterval(nameFlashId);
-        nameFlashId=null,mainMusicStarted=false;
+        nameFlashId=null,mainMusicStarted=false,voiceScareId=null;
       }
     }
 
@@ -2065,7 +2328,7 @@
         status.innerHTML="影像捕捉已停止。<br>但封存紀錄仍保留最後一次畫面。";
       }
     }
-    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();location.reload();}
+    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();location.reload();}
 
     function shake(){const app=document.getElementById("app");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),360);}
     function flash(){const f=document.getElementById("flash");f.style.display="block";setTimeout(()=>f.style.display="none",150);}
@@ -2371,33 +2634,55 @@
       }
 
       else if(type==="openingScream"){
-        playNoise(.42,.34,"highpass",1700,1.1);
-        playOsc(44,.9,.26,"sawtooth",null,21);
-        setTimeout(()=>playNoise(.24,.32,"bandpass",950,9),110);
-        setTimeout(()=>playOsc(720,.22,.16,"square",null,410),160);
+        playNoise(.7,.4,"highpass",1500,1.1);
+        playOsc(32,1.35,.36,"sawtooth",null,18);
+        setTimeout(()=>playNoise(.34,.38,"bandpass",760,10),110);
+        setTimeout(()=>playOsc(620,.28,.22,"square",null,240),160);
         setTimeout(()=>playTone("ghostCry"),420);
+        setTimeout(()=>playTone("humanMoan"),780);
         flashApparition();
       }
 
       else if(type==="megaJumpScare"){
-        playNoise(.5,.38,"highpass",2100,1.25);
-        playOsc(58,.52,.3,"sawtooth",null,18);
-        setTimeout(()=>playNoise(.18,.34,"bandpass",780,10),70);
-        setTimeout(()=>playOsc(890,.16,.18,"square",null,350),110);
-        setTimeout(()=>playNoise(.28,.22,"lowpass",220,1),260);
+        playNoise(.62,.42,"highpass",1900,1.25);
+        playOsc(46,.62,.34,"sawtooth",null,16);
+        setTimeout(()=>playNoise(.24,.38,"bandpass",620,10),70);
+        setTimeout(()=>playOsc(760,.2,.22,"square",null,260),110);
+        setTimeout(()=>playNoise(.34,.25,"lowpass",180,1),260);
+        setTimeout(()=>playTone("humanCryLayer"),150);
       }
 
       else if(type==="ghostCry"){
-        playNoise(.7,.12,"bandpass",1300,7);
-        playOsc(780,.58,.09,"sawtooth",null,310);
-        setTimeout(()=>playOsc(520,.46,.08,"square",null,240),120);
-        setTimeout(()=>playNoise(.46,.12,"highpass",2600,1.2),180);
+        playNoise(.95,.22,"bandpass",980,9);
+        playOsc(610,.82,.16,"sawtooth",null,180);
+        setTimeout(()=>playOsc(390,.68,.14,"square",null,125),120);
+        setTimeout(()=>playNoise(.62,.2,"highpass",2400,1.2),180);
+        setTimeout(()=>playTone("humanCryLayer"),320);
       }
 
       else if(type==="reverseBreath"){
-        playNoise(1.05,.075,"bandpass",520,4.8);
-        playOsc(66,1.05,.055,"sine",null,82);
-        setTimeout(()=>playNoise(.42,.055,"lowpass",180,.9),560);
+        playNoise(1.35,.11,"bandpass",420,5.6);
+        playOsc(49,1.35,.09,"sine",null,73);
+        setTimeout(()=>playNoise(.55,.085,"lowpass",150,.9),560);
+      }
+
+      else if(type==="humanCryLayer"){
+        playNoise(.9,.16,"bandpass",760,8);
+        playOsc(310,.72,.11,"sawtooth",null,165);
+        setTimeout(()=>playOsc(220,.6,.1,"triangle",null,130),140);
+        setTimeout(()=>playNoise(.52,.12,"highpass",1900,1.3),260);
+      }
+
+      else if(type==="humanMoan"){
+        playNoise(1.1,.13,"bandpass",520,7);
+        playOsc(145,1.2,.12,"sawtooth",null,78);
+        setTimeout(()=>playOsc(91,.9,.09,"triangle",null,52),300);
+      }
+
+      else if(type==="wallScratch"){
+        playNoise(1.2,.09,"bandpass",2400,9);
+        setTimeout(()=>playNoise(.65,.075,"highpass",3200,1.6),280);
+        setTimeout(()=>playOsc(68,.8,.06,"sawtooth",null,41),160);
       }
     }
   </script>
