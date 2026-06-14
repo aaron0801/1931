@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>第五位研究員｜第七層標本復原程序</title>
+  <title>第五位研究員｜第七層標本復原程序 v38</title>
 
   <!--
     v26 專業套件：
@@ -15,7 +15,7 @@
 
   <style>
     /* =========================================
-       v26 設計系統：CRT 終端機 × 封存研究所 × 活體標本
+       v27 設計系統：CRT 終端機 × 封存研究所 × 活體標本
        ========================================= */
     :root {
       --bg: #030202;
@@ -809,6 +809,1193 @@
       * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
       #engine-canvas { opacity: .22; }
     }
+
+    /* v29：錯誤扣心提示視窗 */
+    .hud-hearts .broken {
+      color: #4a1111;
+      text-shadow: 0 0 8px rgba(170,0,0,.45);
+      display: inline-block;
+      animation: heartBreak .42s ease both;
+    }
+
+    .damage-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 950;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(3px);
+    }
+
+    .damage-modal.show {
+      display: flex;
+    }
+
+    .damage-card {
+      width: min(92vw, 360px);
+      border: 1px solid rgba(181,23,23,.62);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.18), transparent 42%),
+        linear-gradient(180deg, rgba(18,6,5,.96), rgba(0,0,0,.94));
+      color: var(--bone-light);
+      padding: 18px 16px 14px;
+      box-shadow:
+        inset 0 0 24px rgba(0,0,0,.88),
+        0 0 38px rgba(181,23,23,.28);
+      text-align: center;
+      animation: damageIn .28s ease both;
+    }
+
+    .damage-title {
+      color: var(--red-hot);
+      font-size: 18px;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(181,23,23,.62);
+    }
+
+    .damage-message {
+      color: rgba(232,220,196,.88);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .damage-hearts {
+      font-size: 23px;
+      letter-spacing: 4px;
+      color: var(--red-hot);
+      margin: 8px 0 12px;
+      text-shadow: 0 0 10px rgba(181,23,23,.55);
+    }
+
+    .damage-countdown {
+      color: rgba(191,164,116,.66);
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .damage-confirm {
+      margin-top: 6px;
+    }
+
+    @keyframes damageIn {
+      0% { opacity: 0; transform: scale(.88) translateY(12px); filter: blur(5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+
+    @keyframes heartBreak {
+      0% { transform: scale(1); filter: brightness(1); }
+      22% { transform: scale(1.35) rotate(-8deg); filter: brightness(2); }
+      52% { transform: scale(.82) rotate(8deg); filter: brightness(.8); }
+      100% { transform: scale(1) rotate(0); filter: brightness(1); }
+    }
+
+
+    /* v30：遊戲性優化 - 進度、提示、密碼回饋 */
+    .game-progress {
+      margin: 10px 0 14px;
+      padding: 10px;
+      border: 1px solid rgba(191,164,116,.16);
+      border-radius: 10px;
+      background: rgba(0,0,0,.42);
+      box-shadow: inset 0 0 14px rgba(0,0,0,.72);
+    }
+
+    .game-progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(191,164,116,.72);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 7px;
+    }
+
+    .game-progress-bar {
+      height: 6px;
+      border: 1px solid rgba(191,164,116,.14);
+      background: rgba(255,255,255,.04);
+      overflow: hidden;
+      border-radius: 99px;
+    }
+
+    .game-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(80,0,0,.9), rgba(181,23,23,.95), rgba(241,227,200,.40));
+      box-shadow: 0 0 14px rgba(181,23,23,.52);
+      transition: width .35s ease;
+    }
+
+    .hint-box {
+      display: none;
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid rgba(191,164,116,.20);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(181,23,23,.12), transparent 40%),
+        rgba(0,0,0,.50);
+      color: rgba(232,220,196,.86);
+      font-size: 12px;
+      line-height: 1.7;
+      letter-spacing: 1px;
+      text-align: left;
+      box-shadow: inset 0 0 16px rgba(0,0,0,.74);
+    }
+
+    .hint-box.show {
+      display: block;
+      animation: hintAppear .28s ease both;
+    }
+
+    .pin-input.pin-wrong {
+      animation: pinWrong .34s ease both;
+      border-color: var(--red-hot);
+      box-shadow: 0 0 18px rgba(181,23,23,.55);
+    }
+
+    .pin-input.pin-ok {
+      animation: pinOk .45s ease both;
+      border-color: var(--bone-light);
+      box-shadow: 0 0 18px rgba(232,220,196,.35);
+    }
+
+    .slot.just-filled,
+    .bone-item.just-used {
+      animation: lockPulse .42s ease both;
+    }
+
+    .ending-rank {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid rgba(191,164,116,.20);
+      border-radius: 10px;
+      background: rgba(0,0,0,.48);
+      color: rgba(232,220,196,.86);
+      font-size: 13px;
+      line-height: 1.65;
+      text-align: center;
+      box-shadow: inset 0 0 16px rgba(0,0,0,.74);
+    }
+
+    @keyframes hintAppear {
+      0% { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    @keyframes pinWrong {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-7px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    @keyframes pinOk {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes lockPulse {
+      0% { filter: brightness(1); transform: scale(1); }
+      45% { filter: brightness(1.8); transform: scale(1.06); }
+      100% { filter: brightness(1); transform: scale(1); }
+    }
+
+
+    /* v31：封存證明卡＋多結局 */
+    .archive-card {
+      display: none;
+      margin: 14px 0;
+      padding: 14px;
+      border: 1px solid rgba(191,164,116,.28);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.16), transparent 42%),
+        linear-gradient(135deg, rgba(255,255,255,.035), transparent 36%),
+        rgba(0,0,0,.58);
+      box-shadow:
+        inset 0 0 22px rgba(0,0,0,.84),
+        0 14px 32px rgba(0,0,0,.38);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .archive-card.show {
+      display: block;
+      animation: hintAppear .35s ease both;
+    }
+
+    .archive-card::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(191,164,116,.12);
+      pointer-events: none;
+    }
+
+    .archive-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .archive-card-title {
+      color: var(--red-hot);
+      font-size: 15px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 10px rgba(181,23,23,.58);
+    }
+
+    .archive-card-sub {
+      color: rgba(191,164,116,.68);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    .archive-seal {
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(181,23,23,.56);
+      border-radius: 50%;
+      color: rgba(241,227,200,.72);
+      font-size: 10px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-12deg);
+      box-shadow: inset 0 0 16px rgba(0,0,0,.78), 0 0 14px rgba(181,23,23,.22);
+    }
+
+    .archive-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255,255,255,.10);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .archive-row span:first-child {
+      color: rgba(191,164,116,.72);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .archive-row span:last-child {
+      color: rgba(241,227,200,.92);
+      text-align: right;
+    }
+
+    .ending-type {
+      margin: 12px 0;
+      padding: 10px;
+      border: 1px solid rgba(181,23,23,.36);
+      border-radius: 10px;
+      background: rgba(181,23,23,.10);
+      color: rgba(241,227,200,.88);
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .archive-note {
+      margin-top: 10px;
+      color: rgba(191,164,116,.58);
+      font-size: 10px;
+      line-height: 1.55;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .corrupted-ui .btn:not(.secondary) {
+      letter-spacing: 2px;
+    }
+
+    .corrupted-ui #stage-title::after {
+      content: " / 你已被記錄";
+      color: var(--red-hot);
+      text-shadow: 0 0 8px rgba(181,23,23,.55);
+    }
+
+
+    /* v32：骨頭圖片拼圖＋手機拖曳 */
+    .bone-item {
+      position: relative;
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .bone-item img {
+      max-width: 64px;
+      max-height: 42px;
+      object-fit: contain;
+      filter:
+        sepia(.22)
+        grayscale(.18)
+        contrast(1.16)
+        drop-shadow(0 0 6px rgba(181,23,23,.22));
+      pointer-events: none;
+      margin-bottom: 4px;
+    }
+
+    .bone-label {
+      font-size: 11px;
+      color: rgba(232,220,196,.82);
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    .slot img {
+      max-width: 92%;
+      max-height: 92%;
+      object-fit: contain;
+      filter:
+        sepia(.18)
+        grayscale(.12)
+        contrast(1.2)
+        drop-shadow(0 0 8px rgba(232,220,196,.18));
+      pointer-events: none;
+    }
+
+    .slot .slot-label {
+      position: absolute;
+      left: 50%;
+      bottom: -17px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      color: rgba(191,164,116,.58);
+      font-size: 9px;
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    .drag-ghost {
+      position: fixed;
+      z-index: 980;
+      left: 0;
+      top: 0;
+      width: 86px;
+      height: 72px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(181,23,23,.55);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.20), transparent 46%),
+        rgba(0,0,0,.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        inset 0 0 16px rgba(0,0,0,.82),
+        0 0 22px rgba(181,23,23,.30);
+      opacity: .92;
+    }
+
+    .drag-ghost img {
+      max-width: 74px;
+      max-height: 58px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(232,220,196,.22));
+    }
+
+    .drag-ghost span {
+      color: var(--bone-light);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .slot.drop-target {
+      border-color: var(--red-hot);
+      box-shadow:
+        0 0 18px rgba(181,23,23,.48),
+        inset 0 0 16px rgba(181,23,23,.18);
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    #slot-leftWing.drop-target {
+      transform: translate(-50%, -50%) rotate(-15deg) scale(1.05);
+    }
+
+    #slot-rightWing.drop-target {
+      transform: translate(-50%, -50%) rotate(15deg) scale(1.05);
+    }
+
+    .asset-path-note {
+      margin: 10px 0 14px;
+      padding: 10px;
+      border: 1px solid rgba(191,164,116,.14);
+      border-radius: 10px;
+      background: rgba(0,0,0,.36);
+      color: rgba(191,164,116,.66);
+      font-size: 10px;
+      line-height: 1.6;
+      letter-spacing: 1px;
+      text-align: left;
+    }
+
+
+    /* v33：吸附動畫＋骨架底圖＋骨頭比例統一 */
+    .bone-art-frame {
+      width: 72px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      margin-bottom: 4px;
+    }
+
+    .bone-art-frame img {
+      width: 72px !important;
+      height: 48px !important;
+      max-width: none !important;
+      max-height: none !important;
+      object-fit: contain;
+    }
+
+    .drag-ghost .bone-art-frame {
+      width: 86px;
+      height: 62px;
+      margin: 0;
+    }
+
+    .drag-ghost .bone-art-frame img {
+      width: 86px !important;
+      height: 62px !important;
+    }
+
+    .slot img {
+      width: 92%;
+      height: 92%;
+      object-fit: contain;
+    }
+
+    .skeleton-guide-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: calc(.15 + var(--fear-level) * .10);
+      filter:
+        grayscale(1)
+        sepia(.28)
+        contrast(1.16)
+        brightness(.82)
+        drop-shadow(0 0 12px rgba(181,23,23,.22));
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: screen;
+    }
+
+    .skeleton-guide-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: calc(.16 + var(--fear-level) * .08);
+      background:
+        radial-gradient(ellipse at 50% 15%, rgba(232,220,196,.16) 0 18px, transparent 22px),
+        linear-gradient(180deg, transparent 20%, rgba(232,220,196,.08) 20% 68%, transparent 72%),
+        radial-gradient(ellipse at 50% 43%, rgba(232,220,196,.12) 0 38px, transparent 42px),
+        radial-gradient(ellipse at 50% 63%, rgba(232,220,196,.10) 0 32px, transparent 36px),
+        linear-gradient(115deg, transparent 35%, rgba(232,220,196,.07) 36% 44%, transparent 45%),
+        linear-gradient(65deg, transparent 35%, rgba(232,220,196,.07) 36% 44%, transparent 45%);
+      filter: blur(.2px);
+    }
+
+    .game-board .slot {
+      z-index: 2;
+    }
+
+    .slot.snap-near {
+      border-color: rgba(241,227,200,.82);
+      box-shadow:
+        0 0 18px rgba(241,227,200,.28),
+        inset 0 0 16px rgba(181,23,23,.18);
+    }
+
+    .slot.snap-locked {
+      animation: snapLock .46s ease both;
+    }
+
+    .drag-ghost.snap-ready {
+      border-color: rgba(241,227,200,.82);
+      box-shadow:
+        inset 0 0 16px rgba(0,0,0,.82),
+        0 0 28px rgba(241,227,200,.25),
+        0 0 36px rgba(181,23,23,.35);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .drag-ghost.snap-wrong {
+      border-color: rgba(181,23,23,.86);
+      animation: ghostReject .24s ease both;
+    }
+
+    @keyframes snapLock {
+      0% { transform: translate(-50%, -50%) scale(.86); filter: brightness(2); }
+      45% { transform: translate(-50%, -50%) scale(1.14); filter: brightness(1.55); }
+      100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+    }
+
+    #slot-leftWing.snap-locked {
+      animation: snapLockLeft .46s ease both;
+    }
+
+    #slot-rightWing.snap-locked {
+      animation: snapLockRight .46s ease both;
+    }
+
+    @keyframes snapLockLeft {
+      0% { transform: translate(-50%, -50%) rotate(-15deg) scale(.86); filter: brightness(2); }
+      45% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.14); filter: brightness(1.55); }
+      100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); filter: brightness(1); }
+    }
+
+    @keyframes snapLockRight {
+      0% { transform: translate(-50%, -50%) rotate(15deg) scale(.86); filter: brightness(2); }
+      45% { transform: translate(-50%, -50%) rotate(15deg) scale(1.14); filter: brightness(1.55); }
+      100% { transform: translate(-50%, -50%) rotate(15deg) scale(1); filter: brightness(1); }
+    }
+
+    @keyframes ghostReject {
+      0%, 100% { transform: translate(-50%, -50%) translateX(0) scale(1); }
+      35% { transform: translate(-50%, -50%) translateX(-9px) scale(1.02); }
+      70% { transform: translate(-50%, -50%) translateX(9px) scale(1.02); }
+    }
+
+
+    /* v34：拖錯彈回＋最後骨頭黑屏事件 */
+    .blackout-event {
+      position: fixed;
+      inset: 0;
+      z-index: 990;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(181,23,23,.20), transparent 28%),
+        rgba(0,0,0,.96);
+      color: rgba(232,220,196,.90);
+      font-size: 15px;
+      letter-spacing: 4px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .blackout-event.show {
+      display: flex;
+      animation: blackoutPulse 1.45s ease both;
+    }
+
+    .blackout-event span {
+      display: block;
+      padding: 14px 16px;
+      border: 1px solid rgba(191,164,116,.20);
+      background: rgba(0,0,0,.55);
+      box-shadow: inset 0 0 18px rgba(0,0,0,.82), 0 0 34px rgba(181,23,23,.24);
+      text-shadow: 0 0 12px rgba(181,23,23,.62);
+    }
+
+    .drag-ghost {
+      will-change: left, top, transform, opacity;
+    }
+
+    .drag-ghost.returning {
+      transition:
+        left .26s cubic-bezier(.18,.72,.22,1.18),
+        top .26s cubic-bezier(.18,.72,.22,1.18),
+        transform .26s ease,
+        opacity .26s ease;
+      opacity: .86;
+    }
+
+    .drag-ghost.snapping {
+      transition:
+        left .18s cubic-bezier(.2,.9,.25,1),
+        top .18s cubic-bezier(.2,.9,.25,1),
+        transform .18s ease,
+        opacity .18s ease;
+      opacity: .98;
+    }
+
+    .bone-item.drag-source {
+      opacity: .42;
+      transform: scale(.96);
+    }
+
+    .slot.reject-flash {
+      animation: rejectFlash .36s ease both;
+    }
+
+    @keyframes blackoutPulse {
+      0% { opacity: 0; filter: blur(6px); }
+      15% { opacity: 1; filter: blur(0); }
+      52% { opacity: .94; }
+      100% { opacity: 0; filter: blur(8px); }
+    }
+
+    @keyframes rejectFlash {
+      0%,100% {
+        border-color: rgba(181,23,23,.36);
+        box-shadow: inset 0 0 16px rgba(0,0,0,.72);
+      }
+      40% {
+        border-color: rgba(255,54,54,.92);
+        box-shadow:
+          0 0 20px rgba(181,23,23,.52),
+          inset 0 0 18px rgba(181,23,23,.22);
+      }
+    }
+
+
+    /* v35：九塊骨頭背面線索 */
+    .clue-status {
+      margin: 10px 0 12px;
+      padding: 9px 10px;
+      border: 1px solid rgba(191,164,116,.16);
+      border-radius: 10px;
+      background: rgba(0,0,0,.38);
+      color: rgba(191,164,116,.72);
+      font-size: 11px;
+      letter-spacing: 1px;
+      line-height: 1.55;
+      text-align: center;
+      box-shadow: inset 0 0 14px rgba(0,0,0,.72);
+    }
+
+    .clue-grid.nine-bones {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .clue-grid.nine-bones .clue-card {
+      height: 96px;
+    }
+
+    .clue-front {
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px;
+    }
+
+    .clue-front img {
+      width: 54px;
+      height: 36px;
+      object-fit: contain;
+      filter:
+        sepia(.18)
+        grayscale(.18)
+        contrast(1.12)
+        drop-shadow(0 0 5px rgba(181,23,23,.18));
+      pointer-events: none;
+    }
+
+    .clue-front .clue-name {
+      font-size: 11px;
+      color: rgba(232,220,196,.72);
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    .clue-back.no-mark {
+      background: rgba(0,0,0,.72);
+      color: rgba(191,164,116,.50);
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: center;
+      border-color: rgba(191,164,116,.18);
+      text-shadow: none;
+    }
+
+    .clue-card.marked-found .clue-back {
+      box-shadow:
+        inset 0 0 18px rgba(0,0,0,.82),
+        0 0 16px rgba(181,23,23,.36);
+    }
+
+    .clue-card.unmarked-found {
+      opacity: .72;
+    }
+
+    .clue-card.unmarked-found .clue-back.no-mark {
+      color: rgba(191,164,116,.42);
+    }
+
+    .clue-mini-order {
+      margin: 10px 0;
+      color: rgba(232,220,196,.72);
+      font-size: 11px;
+      line-height: 1.7;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+
+    /* v36：四張刻痕排序解謎 */
+    .order-puzzle {
+      display: none;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid rgba(191,164,116,.18);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.12), transparent 44%),
+        rgba(0,0,0,.46);
+      box-shadow: inset 0 0 16px rgba(0,0,0,.78);
+    }
+
+    .order-puzzle.show {
+      display: block;
+      animation: hintAppear .32s ease both;
+    }
+
+    .order-title {
+      color: rgba(241,227,200,.90);
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 6px;
+      text-shadow: 0 0 10px rgba(181,23,23,.38);
+    }
+
+    .order-desc {
+      color: rgba(191,164,116,.72);
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .order-pool,
+    .order-slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin: 8px 0;
+    }
+
+    .order-card,
+    .order-slot {
+      min-height: 62px;
+      border: 1px solid rgba(191,164,116,.20);
+      border-radius: 9px;
+      background: rgba(0,0,0,.50);
+      color: rgba(241,227,200,.86);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 11px;
+      line-height: 1.25;
+      text-align: center;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.70);
+    }
+
+    .order-card b,
+    .order-slot b {
+      color: var(--red-hot);
+      font-size: 18px;
+      line-height: 1;
+      text-shadow: 0 0 8px rgba(181,23,23,.48);
+    }
+
+    .order-card:active,
+    .order-slot:active {
+      transform: scale(.96);
+    }
+
+    .order-card.used {
+      opacity: .25;
+      pointer-events: none;
+      border-style: dashed;
+    }
+
+    .order-slot {
+      min-height: 70px;
+      border-style: dashed;
+      color: rgba(191,164,116,.50);
+    }
+
+    .order-slot.filled {
+      border-style: solid;
+      border-color: rgba(241,227,200,.38);
+      color: rgba(241,227,200,.90);
+      background: rgba(181,23,23,.12);
+    }
+
+    .order-slot.correct-flash {
+      animation: orderCorrect .42s ease both;
+    }
+
+    .order-puzzle.wrong {
+      animation: pinWrong .36s ease both;
+      border-color: rgba(181,23,23,.72);
+      box-shadow:
+        inset 0 0 18px rgba(181,23,23,.18),
+        0 0 22px rgba(181,23,23,.24);
+    }
+
+    .order-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .order-log {
+      min-height: 20px;
+      margin-top: 8px;
+      color: rgba(191,164,116,.72);
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @keyframes orderCorrect {
+      0% { filter: brightness(1); transform: scale(1); }
+      48% { filter: brightness(1.9); transform: scale(1.06); }
+      100% { filter: brightness(1); transform: scale(1); }
+    }
+
+
+    /* v37：密碼箱恐怖強化 */
+    .sealed-box-visual {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(181,23,23,.10), transparent 38%),
+        linear-gradient(180deg, #161010, #050202);
+      border: 3px solid rgba(70,55,42,.72);
+      box-shadow:
+        inset 0 0 34px rgba(0,0,0,.88),
+        inset 0 0 20px rgba(181,23,23,.08);
+      transition: filter .25s ease, box-shadow .25s ease, transform .25s ease;
+      overflow: hidden;
+    }
+
+    .sealed-box-visual::before {
+      content: "";
+      width: 42px;
+      height: 54px;
+      border: 2px solid rgba(191,164,116,.38);
+      border-radius: 6px;
+      background:
+        radial-gradient(circle at 50% 70%, rgba(181,23,23,.32) 0 4px, transparent 5px),
+        #000;
+      box-shadow:
+        inset 0 0 14px rgba(0,0,0,.8),
+        0 0 12px rgba(181,23,23,.22);
+      margin-bottom: 10px;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .sealed-box-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(118deg, transparent 0 44%, rgba(241,227,200,.12) 45%, transparent 46%),
+        linear-gradient(63deg, transparent 0 56%, rgba(181,23,23,.16) 57%, transparent 58%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .box-caption {
+      font-size: 10px;
+      color: var(--bone-dim);
+      letter-spacing: 2px;
+      text-align: center;
+      line-height: 1.55;
+      padding: 0 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .box-knock-ring {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      width: 24px;
+      height: 24px;
+      border: 1px solid rgba(241,227,200,.45);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sealed-box-visual.knock {
+      animation: boxKnock .28s ease both;
+    }
+
+    .sealed-box-visual.knock .box-knock-ring {
+      animation: knockRing .58s ease both;
+    }
+
+    .sealed-box-visual.level-1 {
+      box-shadow:
+        inset 0 0 34px rgba(0,0,0,.88),
+        inset 0 0 28px rgba(181,23,23,.16),
+        0 0 18px rgba(181,23,23,.12);
+    }
+
+    .sealed-box-visual.level-2 {
+      filter: contrast(1.15) brightness(.92);
+      box-shadow:
+        inset 0 0 34px rgba(0,0,0,.88),
+        inset 0 0 38px rgba(181,23,23,.24),
+        0 0 24px rgba(181,23,23,.22);
+    }
+
+    .sealed-box-visual.level-2::after {
+      opacity: .62;
+    }
+
+    .sealed-box-visual.level-3 {
+      filter: contrast(1.28) brightness(.82) saturate(1.2);
+      box-shadow:
+        inset 0 0 34px rgba(0,0,0,.88),
+        inset 0 0 46px rgba(181,23,23,.34),
+        0 0 36px rgba(181,23,23,.32);
+      animation: boxPulseDanger 1.2s ease infinite;
+    }
+
+    .sealed-box-visual.level-3::after {
+      opacity: .95;
+    }
+
+    .sealed-box-visual.unlocked {
+      animation: boxUnlock .9s ease both;
+      filter: brightness(1.25) contrast(1.25);
+      box-shadow:
+        inset 0 0 34px rgba(0,0,0,.88),
+        0 0 42px rgba(241,227,200,.26),
+        0 0 62px rgba(181,23,23,.18);
+    }
+
+    .sealed-box-visual.unlocked::before {
+      transform: rotate(-18deg) translateY(-5px);
+      border-color: rgba(241,227,200,.78);
+      box-shadow:
+        inset 0 0 14px rgba(0,0,0,.8),
+        0 0 22px rgba(241,227,200,.34);
+    }
+
+    .box-status-panel {
+      margin: 10px 0 12px;
+      padding: 9px 10px;
+      border: 1px solid rgba(191,164,116,.16);
+      border-radius: 10px;
+      background: rgba(0,0,0,.42);
+      color: rgba(191,164,116,.72);
+      font-size: 11px;
+      line-height: 1.55;
+      letter-spacing: 1px;
+      text-align: center;
+      box-shadow: inset 0 0 14px rgba(0,0,0,.72);
+    }
+
+    .box-status-panel.danger {
+      border-color: rgba(181,23,23,.48);
+      color: rgba(241,227,200,.82);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.14), transparent 40%),
+        rgba(0,0,0,.50);
+    }
+
+    .box-status-panel .box-name {
+      color: var(--red-hot);
+      text-shadow: 0 0 8px rgba(181,23,23,.52);
+    }
+
+    @keyframes boxKnock {
+      0%,100% { transform: translateX(0); }
+      22% { transform: translateX(-6px); }
+      52% { transform: translateX(5px); }
+      76% { transform: translateX(-3px); }
+    }
+
+    @keyframes knockRing {
+      0% { opacity: .9; width: 20px; height: 20px; }
+      100% { opacity: 0; width: 180px; height: 180px; }
+    }
+
+    @keyframes boxPulseDanger {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.012); }
+    }
+
+    @keyframes boxUnlock {
+      0% { transform: scale(1); }
+      22% { transform: scale(1.03); }
+      48% { transform: scale(.985); }
+      100% { transform: scale(1.01); }
+    }
+
+
+    /* v38：多結局專屬畫面 */
+    .ending-visual {
+      display: none;
+      margin: 14px 0;
+      min-height: 148px;
+      border: 1px solid rgba(191,164,116,.18);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(181,23,23,.12), transparent 42%),
+        rgba(0,0,0,.55);
+      box-shadow:
+        inset 0 0 28px rgba(0,0,0,.84),
+        0 16px 34px rgba(0,0,0,.32);
+      position: relative;
+      overflow: hidden;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .ending-visual.show {
+      display: block;
+      animation: hintAppear .36s ease both;
+    }
+
+    .ending-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .34;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px);
+      mix-blend-mode: screen;
+    }
+
+    .ending-visual::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border: 1px solid rgba(191,164,116,.22);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-10deg);
+      box-shadow: inset 0 0 26px rgba(0,0,0,.72), 0 0 24px rgba(181,23,23,.14);
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .ending-visual-title {
+      position: relative;
+      z-index: 2;
+      color: var(--red-hot);
+      font-size: 18px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 12px rgba(181,23,23,.56);
+      margin-top: 10px;
+    }
+
+    .ending-visual-code {
+      position: relative;
+      z-index: 2;
+      margin-top: 8px;
+      color: rgba(191,164,116,.72);
+      font-size: 11px;
+      letter-spacing: 2px;
+      line-height: 1.55;
+    }
+
+    .ending-visual-desc {
+      position: relative;
+      z-index: 2;
+      margin: 12px auto 0;
+      max-width: 92%;
+      color: rgba(232,220,196,.86);
+      font-size: 12px;
+      line-height: 1.75;
+      letter-spacing: 1px;
+    }
+
+    .ending-visual.end-perfect {
+      border-color: rgba(241,227,200,.36);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(241,227,200,.10), transparent 44%),
+        rgba(0,0,0,.50);
+    }
+
+    .ending-visual.end-low {
+      border-color: rgba(191,164,116,.28);
+    }
+
+    .ending-visual.end-high {
+      border-color: rgba(181,23,23,.48);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(181,23,23,.24), transparent 48%),
+        rgba(0,0,0,.58);
+      animation: hintAppear .36s ease both, boxPulseDanger 1.5s ease infinite;
+    }
+
+    .ending-visual.end-watched {
+      border-color: rgba(120,140,160,.40);
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 7px),
+        radial-gradient(circle at 50% 0%, rgba(120,140,160,.16), transparent 48%),
+        rgba(0,0,0,.58);
+    }
+
+    .ending-visual.end-specimen {
+      border-color: rgba(181,23,23,.70);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(181,23,23,.34), transparent 42%),
+        linear-gradient(180deg, rgba(70,0,0,.32), rgba(0,0,0,.76)),
+        rgba(0,0,0,.72);
+      filter: contrast(1.18) saturate(1.1);
+    }
+
+    .archive-card.end-perfect .archive-seal { border-color: rgba(241,227,200,.72); color: rgba(241,227,200,.92); }
+    .archive-card.end-high .archive-seal,
+    .archive-card.end-specimen .archive-seal { border-color: rgba(181,23,23,.82); color: var(--red-hot); }
+    .archive-card.end-watched .archive-seal { border-color: rgba(120,140,160,.72); color: rgba(170,190,210,.86); }
+
+    .ending-stamp {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      z-index: 3;
+      color: rgba(191,164,116,.38);
+      font-size: 10px;
+      letter-spacing: 2px;
+      transform: rotate(-8deg);
+    }
+
   </style>
 </head>
 <body>
@@ -819,8 +2006,21 @@
   <div class="screen-cut" id="screenCut"></div>
   <div class="touch-ripple" id="touchRipple"></div>
   <div class="ghost-cut" id="ghostCut"></div>
+  <div class="blackout-event" id="blackoutEvent"><span id="blackoutText">標本完成</span></div>
   <div class="toast" id="toast"></div>
   <div class="micro-choice" id="microChoice"></div>
+
+  <!-- v29：扣心錯誤提示。按確認可關閉；未按 5 秒後自動關閉。 -->
+  <div class="damage-modal" id="damageModal">
+    <div class="damage-card">
+      <div class="damage-title">穩定度下降</div>
+      <div class="damage-message" id="damageMessage">封存程序出現排斥反應。</div>
+      <div class="damage-hearts" id="damageHearts">♥♥💔</div>
+      <div class="damage-countdown" id="damageCountdown">5 秒後自動關閉</div>
+      <button class="btn damage-confirm" onclick="Game.closeDamageNotice()">確認</button>
+    </div>
+  </div>
+
 
   <main id="app">
     <div class="hud" id="hud">
@@ -854,12 +2054,21 @@
       </div>
 
       <button class="btn" onclick="Game.startGame()">接入系統並開始復原</button>
-      <button class="btn secondary" onclick="Engine.initAudio()">啟動恐怖聲場</button>
+      <button class="btn secondary" onclick="Engine.initAudio()">啟動／修復恐怖聲場</button>
+      <p style="font-size:11px;text-align:center;color:var(--bone-dim);margin-top:8px;">如果 iPhone 沒聲音，請先關閉靜音模式，並按一次這個按鈕。</p>
     </section>
 
     <section class="screen" id="screen-puzzle">
       <h1>骨架定位</h1>
       <h2>SPECIMEN RECOVERY</h2>
+
+      <div class="game-progress">
+        <div class="game-progress-top">
+          <span>復原進度</span>
+          <span id="bone-progress-text">0 / 9</span>
+        </div>
+        <div class="game-progress-bar"><div class="game-progress-fill" id="bone-progress-fill"></div></div>
+      </div>
 
       <div class="game-board" id="game-board">
         <div class="slot" id="slot-skull" onclick="Game.placeBone('skull')">頭骨</div>
@@ -873,8 +2082,11 @@
         <div class="slot" id="slot-tail" onclick="Game.placeBone('tail')">尾端</div>
       </div>
 
+      <div class="asset-path-note">
+        骨頭圖片路徑：images/bones/skull.png、neck.png、chest.png、left-wing.png、right-wing.png、pelvis.png、left-leg.png、right-leg.png、tail.png。骨架底圖可放 images/bones/skeleton-guide.png。沒放圖片時會自動顯示文字或淡底圖。
+      </div>
       <div class="bone-pool" id="bone-pool"></div>
-      <p id="puzzle-log" style="font-size:12px;text-align:center;margin-top:15px;color:var(--bone-dim);">請點選下方殘骸，再點選上方對應位置。</p>
+      <p id="puzzle-log" style="font-size:12px;text-align:center;margin-top:15px;color:var(--bone-dim);">可點選骨頭後點位置，也可以拖曳。拖錯會彈回，最後一塊會觸發封存黑屏。</p>
       <button class="btn" id="btn-to-clue" style="display:none;" onclick="Game.switchScreen('screen-clue')">檢視骨頭背面</button>
     </section>
 
@@ -882,14 +2094,44 @@
       <h1>異常刻痕</h1>
       <h2>ANOMALOUS MARKINGS</h2>
 
-      <p>並非所有骨頭都有符號。只有四塊骨頭記得密碼。請依照身體由上到下的順序讀取。</p>
+      <p>九塊骨頭都要翻看背面，但不是每一塊都有話要說。只有四塊骨頭留有羅馬數字。找到四個刻痕後，請把它們依照身體由上到下排序。</p>
 
-      <div class="clue-grid">
-        <div class="clue-card" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front">頭骨</div><div class="clue-back">Ⅰ</div></div></div>
-        <div class="clue-card" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front">胸骨</div><div class="clue-back">Ⅸ</div></div></div>
-        <div class="clue-card" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front">骨盆</div><div class="clue-back">Ⅲ</div></div></div>
-        <div class="clue-card" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front">右腿</div><div class="clue-back">Ⅰ</div></div></div>
+      <div class="clue-status" id="clue-status">
+        已找到刻痕：0 / 4<br>
+        已翻看骨頭：0 / 9
       </div>
+
+      <div class="clue-grid nine-bones">
+        <div class="clue-card" data-id="skull" data-name="頭骨" data-roman="Ⅰ" data-marked="1" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/skull.png" onerror="this.style.display='none';"><span class="clue-name">頭骨</span></div><div class="clue-back">Ⅰ</div></div></div>
+        <div class="clue-card" data-id="neck" data-name="頸椎" data-marked="0" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/neck.png" onerror="this.style.display='none';"><span class="clue-name">頸椎</span></div><div class="clue-back no-mark">無刻痕<br>NO MARK</div></div></div>
+        <div class="clue-card" data-id="chest" data-name="胸骨" data-roman="Ⅸ" data-marked="1" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/chest.png" onerror="this.style.display='none';"><span class="clue-name">胸骨</span></div><div class="clue-back">Ⅸ</div></div></div>
+        <div class="clue-card" data-id="leftWing" data-name="左翼骨" data-marked="0" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/left-wing.png" onerror="this.style.display='none';"><span class="clue-name">左翼骨</span></div><div class="clue-back no-mark">無刻痕<br>NO MARK</div></div></div>
+        <div class="clue-card" data-id="rightWing" data-name="右翼骨" data-marked="0" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/right-wing.png" onerror="this.style.display='none';"><span class="clue-name">右翼骨</span></div><div class="clue-back no-mark">無刻痕<br>NO MARK</div></div></div>
+        <div class="clue-card" data-id="pelvis" data-name="骨盆" data-roman="Ⅲ" data-marked="1" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/pelvis.png" onerror="this.style.display='none';"><span class="clue-name">骨盆</span></div><div class="clue-back">Ⅲ</div></div></div>
+        <div class="clue-card" data-id="leftLeg" data-name="左腿骨" data-marked="0" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/left-leg.png" onerror="this.style.display='none';"><span class="clue-name">左腿骨</span></div><div class="clue-back no-mark">無刻痕<br>NO MARK</div></div></div>
+        <div class="clue-card" data-id="rightLeg" data-name="右腿骨" data-roman="Ⅰ" data-marked="1" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/right-leg.png" onerror="this.style.display='none';"><span class="clue-name">右腿骨</span></div><div class="clue-back">Ⅰ</div></div></div>
+        <div class="clue-card" data-id="tail" data-name="尾端碎骨" data-marked="0" onclick="Game.flipCard(this)"><div class="clue-inner"><div class="clue-front"><img src="images/bones/tail.png" onerror="this.style.display='none';"><span class="clue-name">尾端碎骨</span></div><div class="clue-back no-mark">無刻痕<br>NO MARK</div></div></div>
+      </div>
+
+      <div class="order-puzzle" id="order-puzzle">
+        <div class="order-title">刻痕排序程序</div>
+        <div class="order-desc">請把四塊有刻痕的骨頭依照身體由上到下排列。排對後，封存箱才會允許開啟。</div>
+        <div class="order-pool" id="order-pool"></div>
+        <div class="order-slots" id="order-slots">
+          <div class="order-slot" data-index="0" onclick="Game.removeOrderClue(0)">第 1 位</div>
+          <div class="order-slot" data-index="1" onclick="Game.removeOrderClue(1)">第 2 位</div>
+          <div class="order-slot" data-index="2" onclick="Game.removeOrderClue(2)">第 3 位</div>
+          <div class="order-slot" data-index="3" onclick="Game.removeOrderClue(3)">第 4 位</div>
+        </div>
+        <div class="order-actions">
+          <button class="btn secondary" onclick="Game.resetOrderPuzzle()">重排</button>
+          <button class="btn" onclick="Game.checkOrderPuzzle()">確認順序</button>
+        </div>
+        <div class="order-log" id="order-log">請點選上方刻痕卡，依序放入排序區。</div>
+      </div>
+
+      <button class="btn secondary" onclick="Game.showHint('clue')">要求系統破譯提示</button>
+      <div class="hint-box" id="clue-hint-box"></div>
 
       <button class="btn" id="btn-to-box" style="display:none;" onclick="Game.switchScreen('screen-box')">前往封存箱</button>
       <button class="btn secondary" onclick="Game.switchScreen('screen-puzzle')">返回骨架</button>
@@ -900,16 +2142,28 @@
       <h2>CONTAINMENT BOX</h2>
 
       <div class="scene-box" style="aspect-ratio:2/1;">
-        <img src="images/sealed-box.jpg" alt="封存箱" onerror="this.style.display='none'; this.parentNode.querySelector('.scene-caption').textContent='SEALED BOX / images/sealed-box.jpg 尚未放入';">
+        <img src="images/sealed-box.jpg" alt="封存箱" onerror="this.style.display='none';">
+        <div class="sealed-box-visual" id="sealed-box-visual">
+          <div class="box-knock-ring"></div>
+          <div class="box-caption" id="box-caption">缺一塊，就還能活。</div>
+        </div>
         <div class="scene-caption">SEALED BOX / images/sealed-box.jpg</div>
+      </div>
+
+      <div class="box-status-panel" id="box-status-panel">
+        錯誤次數：0 / 3<br>
+        封存狀態：等待密碼
       </div>
 
       <p style="text-align:center;">箱內傳出很輕的敲擊聲。<br>請輸入四位數封存密碼。</p>
 
       <input type="tel" id="pin-input" class="pin-input" maxlength="4" placeholder="••••" oninput="Game.checkPin()">
+      <button class="btn secondary" onclick="Game.showHint('pin')">要求密碼提示</button>
+      <div class="hint-box" id="pin-hint-box"></div>
       <p id="pin-log" class="text-warning" style="text-align:center;margin-top:15px;height:22px;"></p>
 
       <button class="btn" id="btn-to-ending" style="display:none;" onclick="Game.startEnding()">查看觀測結果</button>
+      <button class="btn secondary" onclick="Game.switchScreen('screen-clue')">返回上一頁</button>
     </section>
 
     <section class="screen" id="screen-ending">
@@ -932,6 +2186,36 @@
       </ul>
 
       <p id="ending-text" style="text-align:center;font-size:18px;margin-top:26px;"></p>
+
+      <div class="ending-visual" id="ending-visual">
+        <div class="ending-visual-title" id="ending-visual-title">結局讀取中</div>
+        <div class="ending-visual-code" id="ending-visual-code">ARCHIVE / 1931</div>
+        <div class="ending-visual-desc" id="ending-visual-desc">系統正在判定你是否仍屬於研究員名單。</div>
+        <div class="ending-stamp" id="ending-stamp">UNCLASSIFIED</div>
+      </div>
+
+      <div class="ending-rank" id="ending-rank" style="display:none;"></div>
+
+      <div class="archive-card" id="archive-card">
+        <div class="archive-card-top">
+          <div>
+            <div class="archive-card-title">封存證明卡</div>
+            <div class="archive-card-sub">ZUOZHEN ARCHIVE / CASE 1931</div>
+          </div>
+          <div class="archive-seal">SEALED</div>
+        </div>
+
+        <div class="archive-row"><span>封存編號</span><span id="archive-code">ARCHIVE-1931-0000</span></div>
+        <div class="archive-row"><span>第五位研究員</span><span id="archive-name">觀測者</span></div>
+        <div class="archive-row"><span>結局類型</span><span id="archive-ending">未分類</span></div>
+        <div class="archive-row"><span>污染程度</span><span id="archive-threat">0%</span></div>
+        <div class="archive-row"><span>錯誤紀錄</span><span id="archive-mistakes">0</span></div>
+        <div class="archive-row"><span>提示使用</span><span id="archive-hints">0</span></div>
+
+        <div class="archive-note">此卡僅儲存在你的裝置畫面中。若要保存，請按下方按鈕下載。</div>
+      </div>
+
+      <button class="btn" id="btn-save-archive" style="display:none;" onclick="Game.downloadArchiveCard()">保存封存證明卡</button>
       <button class="btn" id="btn-open-camera" style="display:none;" onclick="Game.openCamera()">開啟選用相機</button>
       <button class="btn" id="btn-take-photo" style="display:none;" onclick="Game.takePhoto()">拍下第五位影像</button>
       <a class="btn secondary" id="photo-download" style="display:none;text-decoration:none;text-align:center;" download="fifth-researcher.png">保存照片</a>
@@ -952,9 +2236,9 @@
   <script>
     /*
       =========================================================
-      v26 中文製作備註
+      v38 中文製作備註
       =========================================================
-      本版參考 Gemini 的乾淨架構，但修正並補強：
+      本版參考 Gemini 的乾淨架構，並新增密碼頁返回上一頁，但修正並補強：
       1. Engine 負責：Canvas 活體背景、音效、震動、衝擊、效能降級。
       2. Game 負責：流程、拼骨頭、翻線索、密碼、結尾、相機選用。
       3. 相機不強制；只有玩家勾選或結尾按下按鈕才會要求相機權限。
@@ -963,6 +2247,29 @@
       6. 圖片放在 images 資料夾，沒放也不會使遊戲壞掉。
       =========================================================
     */
+
+
+    /*
+      =========================================================
+      v34 可調設定
+      ---------------------------------------------------------
+      之後要改遊戲手感，優先改這裡，不要到處找數字。
+      =========================================================
+    */
+    const GAME_CONFIG = {
+      DAMAGE_MODAL_SECONDS: 5,
+      SNAP_DISTANCE_MIN: 52,
+      SNAP_DISTANCE_MAX: 92,
+      SNAP_DISTANCE_FACTOR: 1.35,
+      DRAG_START_DISTANCE: 8,
+      DRAG_RETURN_MS: 280,
+      DRAG_SNAP_MS: 190,
+      FINAL_BLACKOUT_MS: 1450,
+      AUTO_OPEN_CLUE_AFTER_PUZZLE: true,
+      LOW_FPS_LIMIT: 38,
+      MAX_PARTICLES_HIGH: 280,
+      MAX_PARTICLES_LOW: 100
+    };
 
     const Engine = {
       canvas: null,
@@ -978,6 +2285,9 @@
       lowPower: false,
       audioCtx: null,
       sounds: {},
+      soundState: {},
+      fallbackAmbientNodes: [],
+      fallbackAmbientTimer: null,
       isAudioReady: false,
       ambientStarted: false,
 
@@ -1124,7 +2434,7 @@
         this.ctx.shadowBlur = 0;
         this.ctx.globalCompositeOperation = "source-over";
 
-        const max = this.lowPower ? 100 : 280;
+        const max = this.lowPower ? GAME_CONFIG.MAX_PARTICLES_LOW : GAME_CONFIG.MAX_PARTICLES_HIGH;
         if (this.particles.length > max) this.particles.splice(0, this.particles.length - max);
 
         requestAnimationFrame(t => this.render(t));
@@ -1138,7 +2448,7 @@
 
         if (this.fpsSamples.length === 48) {
           const avg = this.fpsSamples.reduce((a,b) => a + b, 0) / this.fpsSamples.length;
-          if (avg < 38 && !this.lowPower) {
+          if (avg < GAME_CONFIG.LOW_FPS_LIMIT && !this.lowPower) {
             this.lowPower = true;
             document.body.classList.add("low-power");
             this.seed();
@@ -1252,7 +2562,7 @@
       setStage(id) {
         const stages = {
           "screen-title": ["ENTRY", "第七層封存系統", "輸入代號，選擇是否啟用相機，開始標本復原程序。"],
-          "screen-puzzle": ["BONE TABLE", "骨骼復原台", "選取下方骨頭，放入正確輪廓位置。"],
+          "screen-puzzle": ["BONE TABLE", "骨骼復原台", "點選或拖曳下方骨頭，放入正確輪廓位置。"],
           "screen-clue": ["MARKING", "異常刻痕", "翻看骨頭背面，依身體由上到下讀取羅馬數字。"],
           "screen-box": ["SEALED BOX", "百寶封存箱", "輸入四位數密碼。錯誤會提高威脅值。"],
           "screen-ending": ["REGISTER", "第五位研究員", "完成登錄。可選擇是否拍照保存影像。"],
@@ -1269,97 +2579,209 @@
         if (threat) threat.textContent = "THREAT " + Math.round(this.fear * 100) + "%";
       },
 
+      /*
+        v29 音效修復：
+        1. 有 sounds/*.mp3 時，優先用 Howler 播放你的音效。
+        2. 如果 sounds 檔案不存在、尚未載入、或 Howler 播放失敗，立刻改用 WebAudio 內建備用音。
+        3. iPhone / Safari 需要使用者點擊後才能播放，所以 initAudio() 必須由按鈕或開始遊戲觸發。
+      */
       initAudio() {
-        if (this.isAudioReady) {
-          this.play("click");
-          return;
+        this.ensureAudioContext();
+
+        if (this.audioCtx && this.audioCtx.state === "suspended") {
+          this.audioCtx.resume().catch(() => {});
         }
 
-        if (window.Howl) {
-          Object.entries(this.soundFiles).forEach(([key, src]) => {
-            this.sounds[key] = new Howl({
-              src: [src],
-              loop: key === "ambient",
-              volume: key === "ambient" ? .34 : .86,
-              preload: true,
-              onloaderror: () => {},
-              onplayerror: () => {}
+        if (!this.isAudioReady) {
+          if (window.Howl) {
+            Object.entries(this.soundFiles).forEach(([key, src]) => {
+              this.soundState[key] = "loading";
+              this.sounds[key] = new Howl({
+                src: [src],
+                loop: key === "ambient",
+                volume: key === "ambient" ? .34 : .86,
+                preload: true,
+                html5: false,
+                onload: () => {
+                  this.soundState[key] = "loaded";
+                },
+                onloaderror: () => {
+                  this.soundState[key] = "error";
+                },
+                onplayerror: () => {
+                  this.soundState[key] = "error";
+                  if (key !== "ambient") this.fallback(key);
+                }
+              });
             });
-          });
+          }
+
+          this.isAudioReady = true;
         }
 
-        this.isAudioReady = true;
         this.play("click");
-
-        if (this.sounds.ambient && !this.ambientStarted) {
-          this.sounds.ambient.play();
-          this.ambientStarted = true;
-        } else if (!this.sounds.ambient) {
-          this.startFallbackAmbient();
-        }
-
+        this.startAmbient();
         this.toast("AUDIO LINK / 聲場已接入");
       },
 
-      play(key) {
-        if (this.sounds[key]) {
+      ensureAudioContext() {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        if (!this.audioCtx) this.audioCtx = new AC();
+        return this.audioCtx;
+      },
+
+      startAmbient() {
+        if (this.ambientStarted) return;
+        this.ambientStarted = true;
+
+        const ambient = this.sounds.ambient;
+        if (ambient && this.soundState.ambient === "loaded") {
           try {
-            this.sounds[key].play();
+            ambient.play();
             return;
-          } catch(e) {}
+          } catch (e) {}
         }
-        this.fallback(key);
+
+        // 等 700ms 給 Howler 一點載入時間；如果 mp3 不存在，就啟動內建低頻背景。
+        setTimeout(() => {
+          if (this.sounds.ambient && this.soundState.ambient === "loaded") {
+            try {
+              this.sounds.ambient.play();
+              return;
+            } catch (e) {}
+          }
+          this.startFallbackAmbient();
+        }, 700);
+      },
+
+      play(key) {
+        if (!this.isAudioReady) {
+          this.ensureAudioContext();
+        }
+
+        if (this.audioCtx && this.audioCtx.state === "suspended") {
+          this.audioCtx.resume().catch(() => {});
+        }
+
+        const sound = this.sounds[key];
+
+        // mp3 已載入成功才用 Howler，避免 mp3 不存在時完全沒聲音。
+        if (sound && this.soundState[key] === "loaded") {
+          try {
+            sound.play();
+            return;
+          } catch(e) {
+            this.soundState[key] = "error";
+          }
+        }
+
+        // 如果音效還在 loading，先播放內建備用音，避免使用者當下聽不到。
+        if (key !== "ambient") {
+          this.fallback(key);
+        }
       },
 
       fallback(key) {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return;
-        if (!this.audioCtx) this.audioCtx = new AC();
-        if (this.audioCtx.state === "suspended") this.audioCtx.resume();
+        const ctx = this.ensureAudioContext();
+        if (!ctx) return;
+        if (ctx.state === "suspended") ctx.resume().catch(() => {});
 
-        const now = this.audioCtx.currentTime;
-        const osc = this.audioCtx.createOscillator();
-        const gain = this.audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(this.audioCtx.destination);
+        const now = ctx.currentTime;
 
-        if (["wrong","glitch","scream"].includes(key)) {
-          osc.type = "sawtooth";
-          osc.frequency.setValueAtTime(key === "scream" ? 520 : 62, now);
-          osc.frequency.exponentialRampToValueAtTime(key === "scream" ? 880 : 38, now + .22);
-          gain.gain.setValueAtTime(.20, now);
-          gain.gain.exponentialRampToValueAtTime(.01, now + .32);
-          osc.start(now);
-          osc.stop(now + .34);
+        const makeTone = (type, freq, start, duration, gainValue) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now + start);
+
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(key === "scream" ? 1600 : 720, now + start);
+
+          gain.gain.setValueAtTime(gainValue, now + start);
+          gain.gain.exponentialRampToValueAtTime(.001, now + start + duration);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(now + start);
+          osc.stop(now + start + duration + .02);
+        };
+
+        if (key === "wrong" || key === "glitch") {
+          makeTone("sawtooth", 72, 0, .26, .24);
+          makeTone("square", 43, .04, .30, .16);
+        } else if (key === "scream") {
+          makeTone("sawtooth", 520, 0, .18, .20);
+          makeTone("square", 820, .08, .22, .12);
         } else if (key === "knock") {
           [0,.18,.46].forEach(d => {
-            const o = this.audioCtx.createOscillator();
-            const g = this.audioCtx.createGain();
-            o.connect(g); g.connect(this.audioCtx.destination);
-            o.type = "sine";
-            o.frequency.setValueAtTime(80, now + d);
-            g.gain.setValueAtTime(.18, now + d);
-            g.gain.exponentialRampToValueAtTime(.01, now + d + .13);
-            o.start(now + d);
-            o.stop(now + d + .14);
+            makeTone("sine", 76, d, .12, .18);
+            makeTone("triangle", 48, d + .02, .15, .10);
           });
+        } else if (key === "correct") {
+          makeTone("triangle", 280, 0, .10, .10);
+          makeTone("sine", 420, .08, .12, .08);
+        } else if (key === "camera") {
+          makeTone("square", 720, 0, .045, .10);
+          makeTone("sine", 220, .06, .10, .07);
+        } else if (key === "breath") {
+          makeTone("sine", 58, 0, .55, .09);
+          makeTone("triangle", 92, .18, .42, .05);
+        } else if (key === "boom") {
+          makeTone("sawtooth", 44, 0, .45, .28);
+          makeTone("sine", 32, .04, .55, .18);
         } else {
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(380, now);
-          gain.gain.setValueAtTime(.08, now);
-          gain.gain.exponentialRampToValueAtTime(.01, now + .12);
-          osc.start(now);
-          osc.stop(now + .13);
+          makeTone("sine", 360, 0, .10, .08);
         }
       },
 
       startFallbackAmbient() {
-        if (this.ambientStarted) return;
-        this.ambientStarted = true;
-        setInterval(() => {
+        const ctx = this.ensureAudioContext();
+        if (!ctx) return;
+
+        // 避免重複建立低頻背景
+        if (this.fallbackAmbientNodes.length) return;
+
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(.0001, ctx.currentTime);
+        master.gain.exponentialRampToValueAtTime(.045, ctx.currentTime + 1.2);
+        master.connect(ctx.destination);
+
+        const low = ctx.createOscillator();
+        low.type = "sine";
+        low.frequency.setValueAtTime(42, ctx.currentTime);
+
+        const lowGain = ctx.createGain();
+        lowGain.gain.setValueAtTime(.55, ctx.currentTime);
+
+        const tremolo = ctx.createOscillator();
+        tremolo.type = "sine";
+        tremolo.frequency.setValueAtTime(.13, ctx.currentTime);
+
+        const tremoloGain = ctx.createGain();
+        tremoloGain.gain.setValueAtTime(.018, ctx.currentTime);
+
+        tremolo.connect(tremoloGain);
+        tremoloGain.connect(master.gain);
+
+        low.connect(lowGain);
+        lowGain.connect(master);
+
+        low.start();
+        tremolo.start();
+
+        this.fallbackAmbientNodes.push(low, lowGain, tremolo, tremoloGain, master);
+
+        this.fallbackAmbientTimer = setInterval(() => {
           if (!this.isAudioReady) return;
-          if (Math.random() > .55) this.fallback("knock");
-        }, 5200);
+          const r = Math.random();
+          if (r > .72) this.fallback("knock");
+          else if (r > .56) this.fallback("breath");
+        }, 4300);
       }
     };
 
@@ -1369,24 +2791,43 @@
       selectedBone: null,
       placedBones: 0,
       flippedCards: 0,
+      markedCluesFound: 0,
+      foundMarkedClues: [],
+      clueOrder: [],
+      orderSolved: false,
+      orderMistakes: 0,
+      boxAttempts: 0,
+      boxUnlocked: false,
+      endingData: null,
       stream: null,
       midEvent: null,
+      damageTimer: null,
+      damageCountdownTimer: null,
+      hintCount: 0,
+      pinLastLength: 0,
+      mistakeTotal: 0,
+      wrongBoneCount: 0,
+      wrongPinCount: 0,
+      startTime: 0,
+      archiveCode: "",
+      drag: {active:false, id:null, ghost:null, moved:false, target:null, sourceEl:null, startX:0, startY:0, originX:0, originY:0, lastTarget:null},
 
       bones: [
-        {id:"skull", name:"頭骨"},
-        {id:"neck", name:"頸椎"},
-        {id:"chest", name:"胸骨"},
-        {id:"leftWing", name:"左翼"},
-        {id:"rightWing", name:"右翼"},
-        {id:"pelvis", name:"骨盆"},
-        {id:"leftLeg", name:"左腿"},
-        {id:"rightLeg", name:"右腿"},
-        {id:"tail", name:"尾端"}
+        {id:"skull", name:"頭骨", img:"images/bones/skull.png"},
+        {id:"neck", name:"頸椎", img:"images/bones/neck.png"},
+        {id:"chest", name:"胸骨", img:"images/bones/chest.png"},
+        {id:"leftWing", name:"左翼", img:"images/bones/left-wing.png"},
+        {id:"rightWing", name:"右翼", img:"images/bones/right-wing.png"},
+        {id:"pelvis", name:"骨盆", img:"images/bones/pelvis.png"},
+        {id:"leftLeg", name:"左腿", img:"images/bones/left-leg.png"},
+        {id:"rightLeg", name:"右腿", img:"images/bones/right-leg.png"},
+        {id:"tail", name:"尾端", img:"images/bones/tail.png"}
       ],
 
       init() {
         Engine.init();
         this.renderBonePool();
+        this.updateBoneProgress();
         this.startDirector();
       },
 
@@ -1456,9 +2897,50 @@
         setTimeout(() => box.classList.remove("show"), 6500);
       },
 
+      updateBoneProgress() {
+        const text = document.getElementById("bone-progress-text");
+        const fill = document.getElementById("bone-progress-fill");
+        if (text) text.textContent = this.placedBones + " / " + this.bones.length;
+        if (fill) fill.style.width = ((this.placedBones / this.bones.length) * 100).toFixed(1) + "%";
+      },
+
+      showHint(type) {
+        this.hintCount++;
+        Engine.addFear(.08);
+        Engine.play("glitch");
+
+        if (type === "clue") {
+          const box = document.getElementById("clue-hint-box");
+          const hints = [
+            "九塊都要翻，但只有四塊有羅馬數字。找到後需要做排序。",
+            "排序不是照你翻到的順序，而是照身體位置。",
+            "正確順序是：頭骨 → 胸骨 → 骨盆 → 右腿骨；轉成數字就是 1、9、3、1。"
+          ];
+          const index = Math.min(this.hintCount - 1, hints.length - 1);
+          box.innerHTML = "<span class='text-warning'>破譯提示 " + Math.min(this.hintCount, 3) + "：</span>" + hints[index];
+          box.classList.add("show");
+          Engine.toast("HINT USED / 威脅值上升");
+        }
+
+        if (type === "pin") {
+          const box = document.getElementById("pin-hint-box");
+          const pinHints = [
+            "封存箱不會直接告訴你答案，但它會記得排序後的四個聲音。",
+            "頭骨、胸骨、骨盆、右腿骨依序轉成阿拉伯數字。",
+            "封存箱的年份是 1931。輸入前請確認刻痕順序。"
+          ];
+          const index = Math.min(this.hintCount - 1, pinHints.length - 1);
+          box.innerHTML = "<span class='text-warning'>密碼提示 " + Math.min(this.hintCount, 3) + "：</span>" + pinHints[index];
+          box.classList.add("show");
+          Engine.toast("PASSWORD HINT / 封存箱正在回應");
+        }
+      },
+
       startGame() {
         const name = document.getElementById("player-name").value.trim();
         if (name) this.playerName = name;
+        this.startTime = Date.now();
+        this.endingData = null;
         Engine.initAudio();
         document.getElementById("hud").classList.add("active");
         this.updateHUD();
@@ -1476,6 +2958,7 @@
           current.classList.remove("active");
           target.classList.add("active");
           Engine.setStage(targetId);
+          if (targetId === "screen-box") this.updateBoxState();
           window.scrollTo(0, 0);
         };
 
@@ -1495,17 +2978,303 @@
         }
       },
 
+      getBoneData(id) {
+        return this.bones.find(b => b.id === id);
+      },
+
+      createBoneImage(bone) {
+        const img = document.createElement("img");
+        img.src = bone.img;
+        img.alt = bone.name;
+        img.onerror = () => {
+          img.style.display = "none";
+        };
+        return img;
+      },
+
+      createBoneVisual(bone) {
+        const frame = document.createElement("div");
+        frame.className = "bone-art-frame";
+        frame.appendChild(this.createBoneImage(bone));
+        return frame;
+      },
+
+      addSlotLabel(slot, name) {
+        if (slot.querySelector(".slot-label")) return;
+        const label = document.createElement("span");
+        label.className = "slot-label";
+        label.textContent = name;
+        slot.appendChild(label);
+      },
+
+      getNearestSlot(clientX, clientY) {
+        let best = null;
+        let bestDist = Infinity;
+        const slots = [...document.querySelectorAll(".slot:not(.filled)")];
+
+        slots.forEach(slot => {
+          const rect = slot.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dist = Math.hypot(clientX - cx, clientY - cy);
+          const threshold = Math.max(
+            GAME_CONFIG.SNAP_DISTANCE_MIN,
+            Math.min(GAME_CONFIG.SNAP_DISTANCE_MAX, Math.max(rect.width, rect.height) * GAME_CONFIG.SNAP_DISTANCE_FACTOR)
+          );
+          if (dist < threshold && dist < bestDist) {
+            best = slot;
+            bestDist = dist;
+          }
+        });
+
+        return best;
+      },
+
+      highlightNearestSlot(clientX, clientY) {
+        const nearest = this.getNearestSlot(clientX, clientY);
+        document.querySelectorAll(".slot.snap-near").forEach(s => s.classList.remove("snap-near"));
+
+        if (nearest) {
+          nearest.classList.add("snap-near");
+          return nearest;
+        }
+
+        return null;
+      },
+
+      getElementCenter(el) {
+        const rect = el.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        };
+      },
+
+      cleanupDragSource(sourceEl) {
+        if (sourceEl) sourceEl.classList.remove("drag-source");
+      },
+
+      animateGhostReturn(ghost, sourceEl, after) {
+        if (!ghost) {
+          if (after) after();
+          return;
+        }
+
+        const center = sourceEl ? this.getElementCenter(sourceEl) : {x: window.innerWidth / 2, y: window.innerHeight / 2};
+        ghost.classList.remove("snap-ready", "snapping");
+        ghost.classList.add("returning");
+        ghost.style.left = center.x + "px";
+        ghost.style.top = center.y + "px";
+        ghost.style.transform = "translate(-50%, -50%) scale(.72)";
+        ghost.style.opacity = ".15";
+
+        setTimeout(() => {
+          ghost.remove();
+          this.cleanupDragSource(sourceEl);
+          if (after) after();
+        }, GAME_CONFIG.DRAG_RETURN_MS);
+      },
+
+      animateGhostSnap(ghost, slot, sourceEl, after) {
+        if (!ghost || !slot) {
+          if (after) after();
+          return;
+        }
+
+        const center = this.getElementCenter(slot);
+        ghost.classList.remove("returning");
+        ghost.classList.add("snapping");
+        ghost.style.left = center.x + "px";
+        ghost.style.top = center.y + "px";
+        ghost.style.transform = "translate(-50%, -50%) scale(.64)";
+        ghost.style.opacity = ".22";
+
+        setTimeout(() => {
+          ghost.remove();
+          this.cleanupDragSource(sourceEl);
+          if (after) after();
+        }, GAME_CONFIG.DRAG_SNAP_MS);
+      },
+
+      startDrag(e, bone, el) {
+        if (el.classList.contains("used")) return;
+
+        this.selectBone(bone.id, el);
+        this.drag.active = true;
+        this.drag.id = bone.id;
+        this.drag.moved = false;
+        this.drag.target = null;
+        this.drag.sourceEl = el;
+        this.drag.startX = e.clientX;
+        this.drag.startY = e.clientY;
+
+        const origin = this.getElementCenter(el);
+        this.drag.originX = origin.x;
+        this.drag.originY = origin.y;
+
+        const ghost = document.createElement("div");
+        ghost.className = "drag-ghost";
+        ghost.style.display = "none";
+
+        const visual = this.createBoneVisual(bone);
+        const label = document.createElement("span");
+        label.textContent = bone.name;
+        ghost.appendChild(visual);
+        ghost.appendChild(label);
+
+        document.body.appendChild(ghost);
+        this.drag.ghost = ghost;
+
+        if (el.setPointerCapture && e.pointerId !== undefined) {
+          try { el.setPointerCapture(e.pointerId); } catch(err) {}
+        }
+
+        e.preventDefault();
+      },
+
+      moveDrag(e) {
+        if (!this.drag.active || !this.drag.ghost) return;
+
+        const dist = Math.hypot(e.clientX - this.drag.startX, e.clientY - this.drag.startY);
+        if (!this.drag.moved && dist < GAME_CONFIG.DRAG_START_DISTANCE) {
+          e.preventDefault();
+          return;
+        }
+
+        if (!this.drag.moved) {
+          this.drag.moved = true;
+          this.drag.ghost.style.display = "flex";
+          if (this.drag.sourceEl) this.drag.sourceEl.classList.add("drag-source");
+        }
+
+        this.drag.ghost.style.left = e.clientX + "px";
+        this.drag.ghost.style.top = e.clientY + "px";
+
+        document.querySelectorAll(".slot.drop-target").forEach(s => s.classList.remove("drop-target"));
+        document.querySelectorAll(".slot.snap-near").forEach(s => s.classList.remove("snap-near"));
+
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        const directSlot = el ? el.closest(".slot") : null;
+        const nearSlot = this.highlightNearestSlot(e.clientX, e.clientY);
+        const slot = (directSlot && !directSlot.classList.contains("filled")) ? directSlot : nearSlot;
+
+        if (slot && !slot.classList.contains("filled")) {
+          slot.classList.add("drop-target");
+          this.drag.target = slot;
+          this.drag.ghost.classList.add("snap-ready");
+          this.drag.ghost.classList.remove("snap-wrong");
+          if (navigator.vibrate && this.drag.lastTarget !== slot.id) navigator.vibrate(18);
+          this.drag.lastTarget = slot.id;
+        } else {
+          this.drag.target = null;
+          this.drag.ghost.classList.remove("snap-ready");
+          this.drag.lastTarget = null;
+        }
+
+        e.preventDefault();
+      },
+
+      endDrag(e) {
+        if (!this.drag.active) return;
+
+        const target = this.drag.target;
+        const ghost = this.drag.ghost;
+        const sourceEl = this.drag.sourceEl;
+        const wasMoved = this.drag.moved;
+
+        document.querySelectorAll(".slot.drop-target").forEach(s => s.classList.remove("drop-target"));
+        document.querySelectorAll(".slot.snap-near").forEach(s => s.classList.remove("snap-near"));
+
+        this.drag.active = false;
+        this.drag.ghost = null;
+        this.drag.target = null;
+        this.drag.sourceEl = null;
+        this.drag.lastTarget = null;
+
+        // 單純點一下不視為拖曳；保留原本點選玩法，不顯示錯誤。
+        if (!wasMoved) {
+          if (ghost) ghost.remove();
+          this.cleanupDragSource(sourceEl);
+          e.preventDefault();
+          return;
+        }
+
+        const finalTarget = target || this.getNearestSlot(e.clientX, e.clientY);
+
+        if (finalTarget) {
+          const slotId = finalTarget.id.replace("slot-", "");
+
+          if (this.selectedBone === slotId) {
+            this.animateGhostSnap(ghost, finalTarget, sourceEl, () => this.placeBone(slotId));
+          } else {
+            if (ghost) ghost.classList.add("snap-wrong");
+            finalTarget.classList.add("reject-flash");
+            setTimeout(() => finalTarget.classList.remove("reject-flash"), 380);
+            this.animateGhostReturn(ghost, sourceEl, () => this.placeBone(slotId));
+          }
+        } else {
+          Engine.play("wrong");
+          Engine.toast("未進入骨架位置。");
+          this.animateGhostReturn(ghost, sourceEl);
+        }
+
+        e.preventDefault();
+      },
+
+      finalBoneBlackout() {
+        const layer = document.getElementById("blackoutEvent");
+        const text = document.getElementById("blackoutText");
+
+        if (text) text.textContent = "標本完成";
+        if (layer) {
+          layer.classList.remove("show");
+          void layer.offsetWidth;
+          layer.classList.add("show");
+        }
+
+        Engine.play("boom");
+        Engine.addFear(.28);
+        Engine.spawnBlood(window.innerWidth * .5, window.innerHeight * .42, 28);
+
+        setTimeout(() => {
+          if (layer) layer.classList.remove("show");
+
+          if (GAME_CONFIG.AUTO_OPEN_CLUE_AFTER_PUZZLE) {
+            this.switchScreen("screen-clue");
+          }
+        }, GAME_CONFIG.FINAL_BLACKOUT_MS);
+      },
+
       renderBonePool() {
         const pool = document.getElementById("bone-pool");
         pool.innerHTML = "";
         const shuffled = [...this.bones].sort(() => Math.random() - .5);
 
+        // 讓骨架 slot 保留文字標籤，放圖片後也知道原本位置。
+        this.bones.forEach(b => {
+          const slot = document.getElementById(`slot-${b.id}`);
+          if (slot) this.addSlotLabel(slot, b.name);
+        });
+
         shuffled.forEach(b => {
           const div = document.createElement("div");
           div.className = "bone-item";
           div.id = `item-${b.id}`;
-          div.textContent = b.name;
+
+          const visual = this.createBoneVisual(b);
+          const label = document.createElement("span");
+          label.className = "bone-label";
+          label.textContent = b.name;
+
+          div.appendChild(visual);
+          div.appendChild(label);
+
           div.onclick = () => this.selectBone(b.id, div);
+          div.addEventListener("pointerdown", e => this.startDrag(e, b, div), {passive:false});
+          div.addEventListener("pointermove", e => this.moveDrag(e), {passive:false});
+          div.addEventListener("pointerup", e => this.endDrag(e), {passive:false});
+          div.addEventListener("pointercancel", e => this.endDrag(e), {passive:false});
+
           pool.appendChild(div);
         });
       },
@@ -1528,13 +3297,30 @@
         if (slot.classList.contains("filled")) return;
 
         if (this.selectedBone === slotId) {
-          slot.classList.add("filled");
+          slot.classList.add("filled", "just-filled");
+          const boneData = this.getBoneData(this.selectedBone);
+          const oldLabel = slot.querySelector(".slot-label");
+          slot.innerHTML = "";
+          if (boneData) {
+            const lockedVisual = this.createBoneVisual(boneData);
+            slot.appendChild(lockedVisual);
+            this.addSlotLabel(slot, boneData.name);
+          } else if (oldLabel) {
+            slot.appendChild(oldLabel);
+          }
+
           const item = document.getElementById(`item-${this.selectedBone}`);
           item.classList.remove("selected");
-          item.classList.add("used");
+          item.classList.add("used", "just-used");
+          slot.classList.add("snap-locked");
+          setTimeout(() => {
+            slot.classList.remove("just-filled", "snap-locked");
+            item.classList.remove("just-used");
+          }, 520);
 
           this.selectedBone = null;
           this.placedBones++;
+          this.updateBoneProgress();
           document.getElementById("puzzle-log").textContent = "定位吻合。";
           Engine.play("correct");
           Engine.spawnBlood(window.innerWidth * .5, window.innerHeight * .35, 8);
@@ -1543,16 +3329,147 @@
             document.getElementById("puzzle-log").innerHTML = "<span class='text-warning'>復原完成。結構鎖定。</span>";
             document.getElementById("btn-to-clue").style.display = "block";
             Engine.impact("glitch");
+            this.finalBoneBlackout();
           }
         } else {
-          this.hearts--;
-          this.updateHUD();
-          Engine.impact("wrong");
+          this.wrongBoneCount++;
+          Engine.toast("吸附失敗 / 骨位不符");
+          this.loseHeart("骨位不符。標本出現排斥反應。");
           document.getElementById("puzzle-log").innerHTML = `<span class='text-warning'>排斥反應。剩餘穩定度：${this.hearts}</span>`;
+        }
+      },
 
-          if (this.hearts <= 0) {
-            this.gameOver();
+      updateClueStatus() {
+        const status = document.getElementById("clue-status");
+        if (!status) return;
+
+        status.innerHTML = `
+          已找到刻痕：${this.markedCluesFound} / 4<br>
+          已翻看骨頭：${this.flippedCards} / 9<br>
+          排序狀態：${this.orderSolved ? "已破譯" : "未破譯"}
+        `;
+      },
+
+      registerMarkedClue(card) {
+        const data = {
+          id: card.dataset.id,
+          name: card.dataset.name,
+          roman: card.dataset.roman
+        };
+
+        if (!this.foundMarkedClues.some(c => c.id === data.id)) {
+          this.foundMarkedClues.push(data);
+        }
+
+        if (this.foundMarkedClues.length >= 4) {
+          this.renderOrderPuzzle();
+        }
+      },
+
+      renderOrderPuzzle() {
+        const box = document.getElementById("order-puzzle");
+        const pool = document.getElementById("order-pool");
+        if (!box || !pool) return;
+
+        box.classList.add("show");
+        pool.innerHTML = "";
+
+        this.foundMarkedClues.forEach(clue => {
+          const card = document.createElement("div");
+          card.className = "order-card";
+          if (this.clueOrder.some(c => c && c.id === clue.id)) {
+            card.classList.add("used");
           }
+
+          card.innerHTML = `<span>${clue.name}</span><b>${clue.roman}</b>`;
+          card.onclick = () => this.addOrderClue(clue.id);
+          pool.appendChild(card);
+        });
+
+        this.renderOrderSlots();
+      },
+
+      renderOrderSlots() {
+        const slots = [...document.querySelectorAll(".order-slot")];
+
+        slots.forEach((slot, i) => {
+          const clue = this.clueOrder[i];
+          slot.classList.toggle("filled", !!clue);
+
+          if (clue) {
+            slot.innerHTML = `<span>${clue.name}</span><b>${clue.roman}</b>`;
+          } else {
+            slot.textContent = "第 " + (i + 1) + " 位";
+          }
+        });
+      },
+
+      addOrderClue(id) {
+        if (this.orderSolved) return;
+        if (this.clueOrder.length >= 4) {
+          Engine.toast("排序區已滿。");
+          return;
+        }
+
+        const clue = this.foundMarkedClues.find(c => c.id === id);
+        if (!clue) return;
+        if (this.clueOrder.some(c => c.id === id)) return;
+
+        this.clueOrder.push(clue);
+        Engine.play("click");
+        this.renderOrderPuzzle();
+      },
+
+      removeOrderClue(index) {
+        if (this.orderSolved) return;
+        if (!this.clueOrder[index]) return;
+
+        this.clueOrder.splice(index, 1);
+        Engine.play("click");
+        this.renderOrderPuzzle();
+      },
+
+      resetOrderPuzzle() {
+        if (this.orderSolved) return;
+
+        this.clueOrder = [];
+        document.getElementById("order-log").textContent = "排序已重置。請依身體由上到下重新排列。";
+        Engine.play("click");
+        this.renderOrderPuzzle();
+      },
+
+      checkOrderPuzzle() {
+        const box = document.getElementById("order-puzzle");
+        const log = document.getElementById("order-log");
+        const correct = ["skull", "chest", "pelvis", "rightLeg"];
+
+        if (this.clueOrder.length < 4) {
+          log.textContent = "排序尚未完成。";
+          Engine.toast("四個位置都需要填入。");
+          return;
+        }
+
+        const current = this.clueOrder.map(c => c.id);
+        const ok = correct.every((id, i) => current[i] === id);
+
+        if (ok) {
+          this.orderSolved = true;
+          log.innerHTML = "<span class='text-warning'>排序正確。密碼路徑已被破譯。</span>";
+          document.getElementById("btn-to-box").style.display = "block";
+          document.querySelectorAll(".order-slot").forEach(s => {
+            s.classList.add("correct-flash");
+            setTimeout(() => s.classList.remove("correct-flash"), 520);
+          });
+          Engine.play("correct");
+          Engine.toast("ORDER ACCEPTED / 1 9 3 1");
+          this.updateClueStatus();
+        } else {
+          this.orderMistakes++;
+          box.classList.remove("wrong");
+          void box.offsetWidth;
+          box.classList.add("wrong");
+          log.innerHTML = "<span class='text-warning'>排序錯誤。刻痕開始滲血。</span>";
+          this.loseHeart("刻痕順序錯誤。請依照身體由上到下排列。");
         }
       },
 
@@ -1560,13 +3477,83 @@
         if (!card.classList.contains("flipped")) {
           card.classList.add("flipped");
           this.flippedCards++;
-          Engine.play("click");
 
-          if (this.flippedCards >= 4) {
-            document.getElementById("btn-to-box").style.display = "block";
-            Engine.addFear(.18);
+          const marked = card.dataset.marked === "1";
+          if (marked) {
+            this.markedCluesFound++;
+            this.registerMarkedClue(card);
+            card.classList.add("marked-found");
+            Engine.play("correct");
+            Engine.addFear(.05);
+          } else {
+            card.classList.add("unmarked-found");
+            Engine.play("click");
+          }
+
+          this.updateClueStatus();
+
+          if (this.markedCluesFound >= 4) {
+            Engine.addFear(.12);
+            Engine.toast("四個刻痕已找到 / 請排列順序");
+            this.renderOrderPuzzle();
           }
         }
+      },
+
+      updateBoxState() {
+        const box = document.getElementById("sealed-box-visual");
+        const panel = document.getElementById("box-status-panel");
+        const caption = document.getElementById("box-caption");
+        if (!box || !panel || !caption) return;
+
+        box.classList.remove("level-1", "level-2", "level-3");
+        panel.classList.toggle("danger", this.boxAttempts >= 2);
+
+        if (this.boxUnlocked) {
+          box.classList.add("unlocked");
+          caption.textContent = "封存箱已開啟。";
+          panel.innerHTML = "錯誤次數：" + this.boxAttempts + " / 3<br>封存狀態：<span class='box-name'>已開啟</span>";
+          return;
+        }
+
+        if (this.boxAttempts >= 3) {
+          box.classList.add("level-3");
+          caption.innerHTML = "裡面的人正在使用你的名字。";
+          panel.innerHTML = "錯誤次數：" + this.boxAttempts + " / 3<br>封存狀態：<span class='box-name'>" + this.playerName + " 已被記錄</span>";
+        } else if (this.boxAttempts === 2) {
+          box.classList.add("level-2");
+          caption.textContent = "裂縫裡傳來第二個敲擊聲。";
+          panel.innerHTML = "錯誤次數：2 / 3<br>封存狀態：裂縫擴大";
+        } else if (this.boxAttempts === 1) {
+          box.classList.add("level-1");
+          caption.textContent = "箱子回敲了一下。";
+          panel.innerHTML = "錯誤次數：1 / 3<br>封存狀態：輕微異常";
+        } else {
+          caption.textContent = "缺一塊，就還能活。";
+          panel.innerHTML = "錯誤次數：0 / 3<br>封存狀態：等待密碼";
+        }
+      },
+
+      knockBox(strong = false) {
+        const box = document.getElementById("sealed-box-visual");
+        if (!box) return;
+
+        box.classList.remove("knock");
+        void box.offsetWidth;
+        box.classList.add("knock");
+
+        Engine.play(strong ? "boom" : "knock");
+        if (navigator.vibrate) navigator.vibrate(strong ? [50, 25, 70] : [28, 20, 28]);
+
+        setTimeout(() => box.classList.remove("knock"), 360);
+      },
+
+      unlockBox() {
+        this.boxUnlocked = true;
+        this.updateBoxState();
+        this.knockBox(true);
+        Engine.addFear(.18);
+        Engine.toast("BOX OPENED / 封存箱已開啟");
       },
 
       checkPin() {
@@ -1574,30 +3561,107 @@
         const log = document.getElementById("pin-log");
         input.value = input.value.replace(/\D/g, "").slice(0, 4);
 
+        if (input.value.length !== this.pinLastLength) {
+          this.pinLastLength = input.value.length;
+          Engine.play(input.value.length >= 4 ? "knock" : "click");
+        }
+
         if (input.value.length === 4) {
           if (input.value === "1931") {
             log.style.color = "var(--bone-light)";
             log.textContent = "驗證通過。封存箱開啟。";
+            input.classList.add("pin-ok");
             input.disabled = true;
             document.getElementById("btn-to-ending").style.display = "block";
             Engine.play("correct");
-            Engine.toast("SEAL ACCEPTED / 1931");
+            this.unlockBox();
           } else {
             log.textContent = "密碼錯誤。箱內傳來敲擊聲。";
+            input.classList.remove("pin-wrong");
+            void input.offsetWidth;
+            input.classList.add("pin-wrong");
             input.value = "";
-            Engine.impact("wrong");
-            Engine.play("knock");
-            this.hearts = Math.max(0, this.hearts - 1);
-            this.updateHUD();
-            if (this.hearts <= 0) this.gameOver();
+            this.pinLastLength = 0;
+            this.boxAttempts++;
+            this.wrongPinCount++;
+            this.updateBoxState();
+            this.knockBox(this.boxAttempts >= 2);
+            this.loseHeart("密碼錯誤。箱內傳來敲擊聲，穩定度下降。");
           }
         }
       },
 
       updateHUD() {
         let h = "";
-        for (let i = 0; i < 3; i++) h += i < this.hearts ? "♥" : "<span class='lost'>♥</span>";
+        for (let i = 0; i < 3; i++) {
+          h += i < this.hearts ? "♥" : "<span class='broken'>💔</span>";
+        }
         document.getElementById("hud-hearts").innerHTML = h;
+      },
+
+      showDamageNotice(message) {
+        const modal = document.getElementById("damageModal");
+        const msg = document.getElementById("damageMessage");
+        const hearts = document.getElementById("damageHearts");
+        const countdown = document.getElementById("damageCountdown");
+
+        if (!modal || !msg || !hearts || !countdown) return;
+
+        msg.textContent = message || "封存程序出現排斥反應。";
+        let heartText = "";
+        for (let i = 0; i < 3; i++) heartText += i < this.hearts ? "♥" : "💔";
+        hearts.textContent = heartText;
+
+        modal.classList.add("show");
+
+        let remain = GAME_CONFIG.DAMAGE_MODAL_SECONDS;
+        countdown.textContent = remain + " 秒後自動關閉";
+
+        clearTimeout(this.damageTimer);
+        clearInterval(this.damageCountdownTimer);
+
+        this.damageCountdownTimer = setInterval(() => {
+          remain--;
+          countdown.textContent = remain + " 秒後自動關閉";
+          if (remain <= 0) clearInterval(this.damageCountdownTimer);
+        }, 1000);
+
+        this.damageTimer = setTimeout(() => {
+          this.closeDamageNotice();
+        }, GAME_CONFIG.DAMAGE_MODAL_SECONDS * 1000);
+      },
+
+      closeDamageNotice() {
+        const modal = document.getElementById("damageModal");
+        if (modal) modal.classList.remove("show");
+        clearTimeout(this.damageTimer);
+        clearInterval(this.damageCountdownTimer);
+        this.damageTimer = null;
+        this.damageCountdownTimer = null;
+      },
+
+      loseHeart(message) {
+        this.mistakeTotal++;
+        this.hearts = Math.max(0, this.hearts - 1);
+        this.updateHUD();
+        this.showDamageNotice(message);
+        Engine.addFear(.12 + this.mistakeTotal * .035);
+        Engine.impact("wrong");
+
+        if (this.mistakeTotal >= 2) {
+          document.body.classList.add("corrupted-ui");
+        }
+
+        if (this.mistakeTotal >= 2 && this.hearts > 0) {
+          setTimeout(() => {
+            Engine.toast("錯誤累積 / 第七層開始接近");
+            if (Math.random() > .35) Engine.ghost();
+          }, 520);
+        }
+
+        if (this.hearts <= 0) {
+          setTimeout(() => this.gameOver(), 650);
+        }
       },
 
       gameOver() {
@@ -1609,6 +3673,7 @@
           document.getElementById("final-name").textContent = this.playerName;
           document.getElementById("ending-text").innerHTML = "<span class='text-warning'>封存失敗。第五位研究員已提前登錄。</span>";
           document.getElementById("btn-restart").style.display = "block";
+          this.showEndingRank();
           Engine.setStage("screen-gameover");
         }, 800);
       },
@@ -1641,7 +3706,255 @@
           Engine.addFear(.42);
           document.getElementById("ending-text").innerHTML = "<span class='glitch-text'>請確認畫面後方。</span>";
           document.getElementById("btn-restart").style.display = "block";
+          this.showEndingRank();
         }, 5200);
+      },
+
+      getEndingData() {
+        // v38：結局資料集中產生，並快取，避免畫面與下載證明卡的封存編號不同。
+        if (this.endingData) return this.endingData;
+
+        const threat = Math.round(Engine.fear * 100);
+        const seconds = this.startTime ? Math.max(1, Math.round((Date.now() - this.startTime) / 1000)) : 0;
+        const safeName = (this.playerName || "觀測者").replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "").slice(0, 8) || "OBSERVER";
+
+        let ending = "";
+        let rank = "";
+        let desc = "";
+        let theme = "end-low";
+        let visualTitle = "";
+        let visualCode = "";
+        let stamp = "SEALED";
+
+        if (this.hearts <= 0) {
+          ending = "被封存者";
+          rank = "X";
+          theme = "end-specimen";
+          stamp = "SPECIMEN";
+          visualTitle = safeName + " 已被列入標本";
+          visualCode = "SPECIMEN / LAYER-07 / 1931";
+          desc = "你不是研究員。你是這次被保存下來的標本。";
+        } else if (this.hintCount >= 3) {
+          ending = "被監視的研究員";
+          rank = "W";
+          theme = "end-watched";
+          stamp = "WATCHED";
+          visualTitle = "系統正在學習你";
+          visualCode = "OBSERVER TRACE / HINT LOGGED";
+          desc = "你過度要求系統破譯。第七層已取得你的思考路徑。";
+        } else if (this.hearts >= 3 && this.hintCount === 0 && this.mistakeTotal === 0) {
+          ending = "完整封存";
+          rank = "S";
+          theme = "end-perfect";
+          stamp = "CERTIFIED";
+          visualTitle = "完整封存完成";
+          visualCode = "CLEARANCE-S / ARCHIVE-1931";
+          desc = "零錯誤、零提示。你沒有被第七層校正，系統暫時承認你的觀測權限。";
+        } else if (this.hearts >= 2 && this.mistakeTotal <= 1) {
+          ending = "低污染通關";
+          rank = "A";
+          theme = "end-low";
+          stamp = "SEALED";
+          visualTitle = "低污染封存";
+          visualCode = "STABLE / MINOR TRACE";
+          desc = "標本成功復原，但封存箱記錄到一次不穩定反應。";
+        } else {
+          ending = "高污染通關";
+          rank = "B";
+          theme = "end-high";
+          stamp = "CONTAMINATED";
+          visualTitle = safeName + " 的名字正在滲入檔案";
+          visualCode = "CONTAMINATION-B / NAME TRACE";
+          desc = "你打開了箱子，但研究員登錄表已開始覆寫你的代號。";
+        }
+
+        this.archiveCode = "ARCHIVE-1931-" + safeName.toUpperCase() + "-" + rank + "-" + String(Math.floor(Math.random() * 900 + 100));
+
+        this.endingData = {
+          name: this.playerName,
+          safeName,
+          ending,
+          rank,
+          theme,
+          visualTitle,
+          visualCode,
+          stamp,
+          desc,
+          threat,
+          mistakes: this.mistakeTotal,
+          wrongBone: this.wrongBoneCount,
+          wrongPin: this.wrongPinCount,
+          orderMistakes: this.orderMistakes,
+          boxAttempts: this.boxAttempts,
+          hints: this.hintCount,
+          seconds,
+          code: this.archiveCode
+        };
+
+        return this.endingData;
+      },
+
+      renderEndingVisual(data) {
+        const visual = document.getElementById("ending-visual");
+        const title = document.getElementById("ending-visual-title");
+        const code = document.getElementById("ending-visual-code");
+        const desc = document.getElementById("ending-visual-desc");
+        const stamp = document.getElementById("ending-stamp");
+        if (!visual || !title || !code || !desc || !stamp) return;
+
+        visual.className = "ending-visual show " + data.theme;
+        title.textContent = data.visualTitle;
+        code.textContent = data.visualCode + " / " + data.code;
+        desc.textContent = data.desc;
+        stamp.textContent = data.stamp;
+
+        if (data.theme === "end-high" || data.theme === "end-specimen") {
+          Engine.play("glitch");
+          Engine.spawnBlood(window.innerWidth * .5, window.innerHeight * .55, 18);
+        } else if (data.theme === "end-watched") {
+          Engine.play("whisper");
+        } else {
+          Engine.play("correct");
+        }
+      },
+
+      showEndingRank() {
+        const data = this.getEndingData();
+        const rank = document.getElementById("ending-rank");
+        const card = document.getElementById("archive-card");
+        this.renderEndingVisual(data);
+
+        if (rank) {
+          rank.innerHTML = `
+            <div class="ending-type">
+              <span class="text-warning">結局：${data.ending} / 評級 ${data.rank}</span><br>
+              ${data.desc}
+            </div>
+          `;
+          rank.style.display = "block";
+        }
+
+        document.getElementById("archive-code").textContent = data.code;
+        document.getElementById("archive-name").textContent = data.name;
+        document.getElementById("archive-ending").textContent = data.ending + " / " + data.rank;
+        document.getElementById("archive-threat").textContent = data.threat + "%";
+        document.getElementById("archive-mistakes").textContent = `${data.mistakes} 次（骨頭 ${data.wrongBone} / 排序 ${data.orderMistakes} / 密碼 ${data.wrongPin}）`;
+        document.getElementById("archive-hints").textContent = data.hints + " 次";
+
+        if (card) {
+          card.classList.remove("end-perfect", "end-low", "end-high", "end-watched", "end-specimen");
+          card.classList.add("show", data.theme);
+          const seal = card.querySelector(".archive-seal");
+          if (seal) seal.textContent = data.stamp;
+        }
+        document.getElementById("btn-save-archive").style.display = "block";
+      },
+
+      downloadArchiveCard() {
+        const data = this.getEndingData();
+        const canvas = document.createElement("canvas");
+        const w = 900;
+        const h = 1200;
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "#050202";
+        ctx.fillRect(0, 0, w, h);
+
+        const grad = ctx.createRadialGradient(w/2, 80, 10, w/2, 180, 760);
+        const endingGlow = data.theme === "end-perfect" ? "rgba(210,190,150,.42)" : data.theme === "end-watched" ? "rgba(100,125,150,.46)" : "rgba(140,0,0,.55)";
+        grad.addColorStop(0, endingGlow);
+        grad.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = "rgba(191,164,116,.65)";
+        ctx.lineWidth = 6;
+        ctx.strokeRect(54, 54, w - 108, h - 108);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(78, 78, w - 156, h - 156);
+
+        ctx.fillStyle = "#eadcc2";
+        ctx.textAlign = "center";
+        ctx.font = "bold 48px serif";
+        ctx.fillText("第五位研究員", w/2, 150);
+
+        ctx.fillStyle = "#bfa474";
+        ctx.font = "24px serif";
+        ctx.fillText("ZUOZHEN ARCHIVE / CASE 1931", w/2, 194);
+        ctx.fillStyle = "rgba(234,220,196,.78)";
+        ctx.font = "22px serif";
+        ctx.fillText(data.stamp + " / " + data.ending, w/2, 232);
+
+        ctx.strokeStyle = "rgba(181,23,23,.75)";
+        ctx.beginPath();
+        ctx.arc(w/2, 315, 96, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = "#d02a2a";
+        ctx.font = "bold 34px serif";
+        ctx.fillText("SEALED", w/2, 326);
+
+        const rows = [
+          ["封存編號", data.code],
+          ["研究員代號", data.name],
+          ["結局類型", data.ending + " / 評級 " + data.rank],
+          ["污染程度", data.threat + "%"],
+          ["錯誤紀錄", data.mistakes + " 次"],
+          ["排序錯誤", data.orderMistakes + " 次"],
+          ["封存箱反應", data.boxAttempts + " 次"],
+          ["提示使用", data.hints + " 次"],
+          ["完成時間", data.seconds + " 秒"]
+        ];
+
+        ctx.textAlign = "left";
+        ctx.font = "26px serif";
+        let y = 480;
+        rows.forEach(([label, value]) => {
+          ctx.fillStyle = "rgba(191,164,116,.82)";
+          ctx.fillText(label, 120, y);
+          ctx.fillStyle = "#eadcc2";
+          ctx.fillText(value, 330, y);
+          ctx.strokeStyle = "rgba(255,255,255,.12)";
+          ctx.beginPath();
+          ctx.moveTo(120, y + 20);
+          ctx.lineTo(780, y + 20);
+          ctx.stroke();
+          y += 78;
+        });
+
+        ctx.textAlign = "center";
+        ctx.fillStyle = "rgba(234,220,196,.78)";
+        ctx.font = "24px serif";
+        const desc = data.desc;
+        const lines = [];
+        let line = "";
+        desc.split("").forEach(ch => {
+          if ((line + ch).length > 22) {
+            lines.push(line);
+            line = ch;
+          } else {
+            line += ch;
+          }
+        });
+        if (line) lines.push(line);
+
+        y = 990;
+        lines.slice(0, 3).forEach(l => {
+          ctx.fillText(l, w/2, y);
+          y += 38;
+        });
+
+        ctx.fillStyle = "rgba(181,23,23,.72)";
+        ctx.font = "20px serif";
+        ctx.fillText("此影像不代表你離開第七層，只代表你被成功命名。", w/2, 1130);
+
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = "archive-1931-fifth-researcher.png";
+        a.click();
+        Engine.toast("封存證明卡已產生。");
       },
 
       async openCamera() {
