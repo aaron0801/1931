@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>第五位研究員</title>
+  <style>
+    :root {
+      --bg: #100f0d;
+      --panel: #1a1713;
+      --bone: #f0e4cf;
+      --paper: #c8b894;
+      --red: #9b2525;
+      --muted: #8f8067;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--bone);
+      font-family: "Noto Serif TC", "Microsoft JhengHei", "PingFang TC", serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(155,37,37,.18), transparent 30%),
+        radial-gradient(circle at 80% 75%, rgba(0,0,0,.72), transparent 40%),
+        linear-gradient(180deg, #14110f, #050505);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 22px 18px 42px;
+    }
+
+    .screen {
+      display: none;
+      animation: fade .35s ease both;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .top-proof {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      color: var(--red);
+      text-align: center;
+      font-size: 30px;
+      letter-spacing: 4px;
+      margin: 12px 0 8px;
+      text-shadow: 0 0 12px rgba(155,37,37,.65);
+    }
+
+    h2 {
+      color: var(--paper);
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(200,184,148,.35);
+    }
+
+    .card {
+      background: rgba(26,23,19,.96);
+      border: 1px solid rgba(200,184,148,.75);
+      box-shadow: inset 0 0 24px rgba(0,0,0,.7), 0 8px 30px rgba(0,0,0,.35);
+      padding: 18px;
+      margin: 18px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 15%, transparent 35%, rgba(0,0,0,.65) 100%);
+      pointer-events: none;
+    }
+
+    p, .card-content {
+      position: relative;
+      z-index: 1;
+      color: var(--bone);
+      line-height: 1.75;
+      font-size: 16px;
+      text-align: justify;
+    }
+
+    .warn {
+      color: var(--red);
+      font-weight: 700;
+      border-left: 3px solid var(--red);
+      padding-left: 10px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    .btn {
+      width: 100%;
+      border: 1px solid var(--paper);
+      background: #211b14;
+      color: var(--paper);
+      padding: 13px 16px;
+      min-height: 48px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      font-family: inherit;
+      margin-top: 12px;
+      border-radius: 0;
+    }
+
+    .btn:active {
+      background: var(--red);
+      color: var(--bone);
+      box-shadow: 0 0 16px rgba(155,37,37,.55);
+    }
+
+    .btn:disabled {
+      opacity: .35;
+    }
+
+    .status {
+      border: 1px solid rgba(155,37,37,.85);
+      background: rgba(155,37,37,.14);
+      color: var(--bone);
+      min-height: 42px;
+      padding: 9px;
+      margin-bottom: 14px;
+      text-align: center;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .skeleton {
+      position: relative;
+      height: 320px;
+      border: 1px dashed rgba(200,184,148,.75);
+      background: rgba(0,0,0,.45);
+      margin-bottom: 14px;
+    }
+
+    .slot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      border: 1px dashed rgba(240,228,207,.55);
+      color: rgba(240,228,207,.55);
+      background: rgba(0,0,0,.45);
+      min-width: 48px;
+      min-height: 30px;
+      padding: 5px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .slot.filled {
+      border-style: solid;
+      color: var(--bone);
+      background: rgba(200,184,148,.16);
+      box-shadow: inset 0 0 8px rgba(240,228,207,.18);
+      font-weight: 700;
+    }
+
+    #slot-skull { top: 15%; left: 50%; }
+    #slot-neck { top: 28%; left: 50%; }
+    #slot-chest { top: 43%; left: 50%; min-width: 60px; min-height: 44px; }
+    #slot-leftWing { top: 38%; left: 24%; }
+    #slot-rightWing { top: 38%; left: 76%; }
+    #slot-pelvis { top: 62%; left: 50%; min-width: 60px; min-height: 36px; }
+    #slot-leftLeg { top: 78%; left: 34%; min-height: 40px; }
+    #slot-rightLeg { top: 78%; left: 66%; min-height: 40px; }
+    #slot-tail { top: 91%; left: 50%; }
+
+    .bone-pool {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(200,184,148,.25);
+    }
+
+    .bone {
+      border: 1px solid rgba(240,228,207,.52);
+      color: var(--bone);
+      background: #1d1914;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 13px;
+      min-height: 42px;
+      cursor: pointer;
+    }
+
+    .bone.selected {
+      border-color: var(--red);
+      background: #351212;
+      box-shadow: 0 0 12px rgba(155,37,37,.72);
+    }
+
+    .bone.used {
+      opacity: .28;
+      pointer-events: none;
+    }
+
+    .clues {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .clue {
+      min-height: 90px;
+      border: 1px solid var(--paper);
+      background: #191510;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--paper);
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .clue.revealed {
+      color: var(--red);
+      background: #251b17;
+      font-size: 34px;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(155,37,37,.5);
+    }
+
+    .hint {
+      border: 1px solid rgba(200,184,148,.28);
+      background: rgba(0,0,0,.35);
+      min-height: 48px;
+      padding: 12px;
+      color: var(--paper);
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .box-art {
+      width: 170px;
+      height: 130px;
+      margin: 24px auto;
+      background: linear-gradient(135deg, #30221d, #0d0a0a);
+      border: 3px solid #49352b;
+      box-shadow: inset 0 0 24px rgba(0,0,0,.85), 0 10px 32px rgba(0,0,0,.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #7e6b5f;
+      font-size: 13px;
+      text-align: center;
+      position: relative;
+    }
+
+    .box-art::after {
+      content: "";
+      width: 34px;
+      height: 34px;
+      border: 2px solid #594238;
+      background: #090707;
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pin {
+      width: 168px;
+      display: block;
+      margin: 0 auto;
+      background: #050505;
+      border: 1px solid var(--paper);
+      color: var(--bone);
+      text-align: center;
+      font-size: 28px;
+      letter-spacing: 7px;
+      padding: 8px;
+      outline: none;
+      font-family: monospace;
+    }
+
+    .registry {
+      list-style: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .registry li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(240,228,207,.18);
+      padding: 9px 0;
+      letter-spacing: 1px;
+    }
+
+    .check-list {
+      min-height: 150px;
+      margin: 20px 0;
+    }
+
+    .check-line {
+      display: flex;
+      justify-content: space-between;
+      color: var(--paper);
+      opacity: 0;
+      transition: opacity .3s ease;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .check-line.show {
+      opacity: 1;
+    }
+
+    .mirror {
+      width: 100%;
+      height: 140px;
+      border: 1px solid rgba(240,228,207,.2);
+      background: linear-gradient(135deg, #030303, #141414, #050505);
+      box-shadow: inset 0 0 35px #000, 0 0 20px rgba(0,0,0,.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mirror::before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(30deg, transparent 42%, rgba(255,255,255,.045) 50%, transparent 58%);
+      animation: shimmer 7s linear infinite;
+    }
+
+    .mirror span {
+      white-space: pre-line;
+      text-align: center;
+      color: #6b5d51;
+      letter-spacing: 2px;
+      font-size: 14px;
+      z-index: 1;
+    }
+
+    .small-red {
+      color: #421010;
+      text-align: center;
+      letter-spacing: 5px;
+      font-weight: 700;
+      margin-top: 16px;
+      min-height: 22px;
+    }
+
+    .glitch {
+      position: fixed;
+      right: 10px;
+      top: 10px;
+      color: var(--red);
+      font-size: 12px;
+      opacity: 0;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .glitch.on {
+      animation: glitch .45s ease;
+    }
+
+    .flash {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(155,37,37,.25);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .shake {
+      animation: shake .3s both;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      from { transform: translate(-35%, -35%); }
+      to { transform: translate(35%, 35%); }
+    }
+
+    @keyframes glitch {
+      0%, 100% { opacity: 0; }
+      25% { opacity: .8; }
+      50% { opacity: .15; }
+      75% { opacity: .9; }
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(3px); }
+      30%, 50%, 70% { transform: translateX(-5px); }
+      40%, 60% { transform: translateX(5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="glitch" id="glitch">第五位已接觸</div>
+  <div class="flash" id="flash"></div>
+
+  <main class="app" id="app">
+    <section class="screen active" id="s1">
+      <div class="top-proof">SYSTEM ONLINE / 如果你看見這行，網頁已成功開啟</div>
+      <h1>《第五位研究員》</h1>
+      <h2>第七層標本復原程序</h2>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="warn">警告：</div>
+          若發現九塊骨頭，請勿拼湊。<br>
+          若聽見箱中有人敲門，請勿回應。<br>
+          若看見第五位研究員，請立刻停止操作。<br><br>
+          本程序將復原菜寮溪第七層標本。開始後，系統將記錄你的觀看行為。
+        </div>
+      </div>
+
+      <button class="btn" onclick="go('s2')">開始復原</button>
+    </section>
+
+    <section class="screen" id="s2">
+      <h1>第七層標本復原板</h1>
+      <h2>SPECIMEN RECOVERY</h2>
+
+      <div class="status" id="status">等待選取化石組件...</div>
+
+      <div class="skeleton">
+        <div class="slot" id="slot-skull" onclick="place('skull')">頭骨</div>
+        <div class="slot" id="slot-neck" onclick="place('neck')">頸椎</div>
+        <div class="slot" id="slot-chest" onclick="place('chest')">胸骨</div>
+        <div class="slot" id="slot-leftWing" onclick="place('leftWing')">左翼骨</div>
+        <div class="slot" id="slot-rightWing" onclick="place('rightWing')">右翼骨</div>
+        <div class="slot" id="slot-pelvis" onclick="place('pelvis')">骨盆</div>
+        <div class="slot" id="slot-leftLeg" onclick="place('leftLeg')">左腿骨</div>
+        <div class="slot" id="slot-rightLeg" onclick="place('rightLeg')">右腿骨</div>
+        <div class="slot" id="slot-tail" onclick="place('tail')">尾端碎骨</div>
+      </div>
+
+      <div class="bone-pool" id="pool"></div>
+
+      <button class="btn" id="to3" disabled onclick="go('s3')">檢查骨頭背面</button>
+    </section>
+
+    <section class="screen" id="s3">
+      <h1>檢測到異常刻痕</h1>
+      <h2>ANOMALOUS MARKINGS</h2>
+
+      <div class="card">
+        <div class="card-content">
+          並非所有骨頭都有符號。<br>
+          <span style="color:var(--red);font-weight:700;">只有四塊骨頭記得密碼。</span><br>
+          請點擊骨頭，查看背面的刻痕。
+        </div>
+      </div>
+
+      <div class="clues">
+        <div class="clue" data-value="Ⅰ" onclick="reveal(this)">頭骨</div>
+        <div class="clue" data-value="Ⅸ" onclick="reveal(this)">胸骨</div>
+        <div class="clue" data-value="Ⅲ" onclick="reveal(this)">骨盆</div>
+        <div class="clue" data-value="Ⅰ" onclick="reveal(this)">右腿骨</div>
+      </div>
+
+      <div class="hint" id="hint">監測到骨化刻紋痕跡...</div>
+      <button class="btn" onclick="hint()">取得提示</button>
+      <button class="btn" id="to4" disabled onclick="go('s4')">輸入封存箱密碼</button>
+    </section>
+
+    <section class="screen" id="s4">
+      <h1>百寶封存箱</h1>
+      <h2>CONTAINMENT BOX</h2>
+
+      <div class="box-art">缺一塊，<br>就還能活。</div>
+
+      <p style="text-align:center;color:var(--paper);">請輸入四位數密碼。</p>
+      <input class="pin" id="pin" type="tel" inputmode="numeric" maxlength="4" placeholder="••••" oninput="checkPin(this)" />
+      <div class="status" id="pinStatus" style="margin-top:14px;min-height:58px;"></div>
+      <button class="btn" id="to5" disabled onclick="go('s5')">查看登錄結果</button>
+    </section>
+
+    <section class="screen" id="s5">
+      <h1>研究員登錄表</h1>
+      <h2>RESEARCHER LOG</h2>
+
+      <div class="card">
+        <ul class="registry">
+          <li><span>第一位：海哥</span><span>✓</span></li>
+          <li><span>第二位：叔叔</span><span>✓</span></li>
+          <li><span>第三位：惹男</span><span>✓</span></li>
+          <li><span>第四位：南宇</span><span>✓</span></li>
+          <li><span>第五位：＿＿＿＿</span><span style="color:var(--red);">●</span></li>
+        </ul>
+      </div>
+
+      <div class="check-list" id="checks"></div>
+      <p id="finalText" style="opacity:0;text-align:center;color:var(--red);transition:.4s;">第五位研究員仍在觀看。</p>
+
+      <div class="mirror"><span id="mirrorText"></span></div>
+      <div class="small-red" id="bottomWarn">不要回頭。</div>
+    </section>
+  </main>
+
+  <script>
+    const bones = [
+      ["skull", "頭骨"], ["neck", "頸椎"], ["chest", "胸骨"],
+      ["leftWing", "左翼骨"], ["rightWing", "右翼骨"], ["pelvis", "骨盆"],
+      ["leftLeg", "左腿骨"], ["rightLeg", "右腿骨"], ["tail", "尾端碎骨"]
+    ];
+
+    const hints = [
+      "答案藏在骨頭背後。",
+      "先讓符號變成數字，再讓數字回到身體。",
+      "從頭骨、胸骨、骨盆、腿骨的順序讀取。"
+    ];
+
+    const checks = [
+      "已閱讀封存通知",
+      "已看見九塊骨頭",
+      "已完成標本復原",
+      "已辨認羅馬數字",
+      "已解出封存密碼",
+      "已開啟百寶封存箱"
+    ];
+
+    let selected = null;
+    let placed = 0;
+    let hintIndex = 0;
+    let revealed = 0;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const pool = document.getElementById("pool");
+      bones.forEach(([id, name]) => {
+        const b = document.createElement("div");
+        b.className = "bone";
+        b.id = "bone-" + id;
+        b.textContent = name;
+        b.onclick = () => selectBone(id);
+        pool.appendChild(b);
+      });
+      setInterval(() => {
+        if (Math.random() > 0.65) {
+          const g = document.getElementById("glitch");
+          g.classList.add("on");
+          setTimeout(() => g.classList.remove("on"), 450);
+        }
+      }, 4200);
+    });
+
+    function go(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      window.scrollTo(0, 0);
+      if (id === "s5") runFinal();
+    }
+
+    function selectBone(id) {
+      document.querySelectorAll(".bone").forEach(b => b.classList.remove("selected"));
+      selected = id;
+      document.getElementById("bone-" + id).classList.add("selected");
+      const name = bones.find(x => x[0] === id)[1];
+      document.getElementById("status").innerHTML = `已選取【${name}】，請點選對應輪廓。`;
+    }
+
+    function place(id) {
+      if (!selected) {
+        document.getElementById("status").textContent = "請先點選下方的一塊骨頭化石。";
+        return;
+      }
+      if (selected === id) {
+        const name = bones.find(x => x[0] === id)[1];
+        const slot = document.getElementById("slot-" + id);
+        slot.textContent = name;
+        slot.classList.add("filled");
+        slot.onclick = null;
+
+        const bone = document.getElementById("bone-" + id);
+        bone.classList.remove("selected");
+        bone.classList.add("used");
+
+        selected = null;
+        placed++;
+        document.getElementById("status").textContent = "定位完成";
+
+        if (placed === 9) {
+          document.getElementById("status").textContent = "所有組件定位完成。復原板結構已鎖定。";
+          document.getElementById("to3").disabled = false;
+        }
+      } else {
+        document.getElementById("status").innerHTML = "位置錯誤。<br>第七層已記錄一次。";
+        shake();
+      }
+    }
+
+    function reveal(el) {
+      if (!el.classList.contains("revealed")) {
+        el.classList.add("revealed");
+        el.textContent = el.dataset.value;
+        revealed++;
+        if (revealed === 4) document.getElementById("to4").disabled = false;
+      }
+    }
+
+    function hint() {
+      if (hintIndex < hints.length) {
+        document.getElementById("hint").textContent = hints[hintIndex];
+        hintIndex++;
+      }
+    }
+
+    function checkPin(input) {
+      input.value = input.value.replace(/\D/g, "").slice(0, 4);
+      const status = document.getElementById("pinStatus");
+      if (input.value.length === 4) {
+        if (input.value === "1931") {
+          status.innerHTML = "密碼驗證成功。<br>封存箱已開啟。<br>請勿直視第五位研究員。";
+          status.style.color = "var(--paper)";
+          input.disabled = true;
+          document.getElementById("to5").disabled = false;
+        } else {
+          status.innerHTML = "密碼錯誤。<br>錯誤已記錄。<br>第五位研究員位置校正中。";
+          status.style.color = "var(--red)";
+          input.value = "";
+          shake();
+          flash();
+        }
+      }
+    }
+
+    function runFinal() {
+      const box = document.getElementById("checks");
+      const finalText = document.getElementById("finalText");
+      const mirror = document.getElementById("mirrorText");
+      const bottom = document.getElementById("bottomWarn");
+
+      box.innerHTML = "";
+      finalText.style.opacity = "0";
+      mirror.textContent = "";
+      bottom.textContent = "不要回頭。";
+
+      checks.forEach((text, i) => {
+        const row = document.createElement("div");
+        row.className = "check-line";
+        row.innerHTML = `<span>${text}</span><span style="color:var(--red);">...</span>`;
+        box.appendChild(row);
+        setTimeout(() => {
+          row.classList.add("show");
+          setTimeout(() => {
+            row.innerHTML = `<span>${text}</span><span>✓</span>`;
+          }, 300);
+        }, i * 800);
+      });
+
+      setTimeout(() => {
+        finalText.style.opacity = "1";
+        setTimeout(() => {
+          mirror.textContent = "第五位研究員\\n影像已捕捉……";
+        }, 1000);
+      }, checks.length * 800 + 500);
+
+      setTimeout(() => bottom.textContent = "不要關閉頁面。", 7200);
+      setTimeout(() => bottom.textContent = "不要回頭。", 10000);
+    }
+
+    function shake() {
+      const app = document.getElementById("app");
+      app.classList.remove("shake");
+      void app.offsetWidth;
+      app.classList.add("shake");
+      setTimeout(() => app.classList.remove("shake"), 400);
+    }
+
+    function flash() {
+      const f = document.getElementById("flash");
+      f.style.display = "block";
+      setTimeout(() => f.style.display = "none", 140);
+    }
+  </script>
+</body>
+</html>
