@@ -1,725 +1,514 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>第五位研究員</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>第五位研究員｜第七層標本復原程序</title>
   <style>
-    :root {
-      --bg: #100f0d;
-      --panel: #1a1713;
-      --bone: #f0e4cf;
-      --paper: #c8b894;
-      --red: #9b2525;
-      --muted: #8f8067;
+    :root{
+      --bg:#070706;--panel:#19150f;--bone:#eee1c9;--dim:#a99a7d;--paper:#c8b894;
+      --red:#9b2222;--red2:#5d0d0d;--line:rgba(238,225,201,.28);--line2:rgba(200,184,148,.72);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--bone);
-      font-family: "Noto Serif TC", "Microsoft JhengHei", "PingFang TC", serif;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(155,37,37,.18), transparent 30%),
-        radial-gradient(circle at 80% 75%, rgba(0,0,0,.72), transparent 40%),
-        linear-gradient(180deg, #14110f, #050505);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .app {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 22px 18px 42px;
-    }
-
-    .screen {
-      display: none;
-      animation: fade .35s ease both;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .top-proof {
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 1px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      color: var(--red);
-      text-align: center;
-      font-size: 30px;
-      letter-spacing: 4px;
-      margin: 12px 0 8px;
-      text-shadow: 0 0 12px rgba(155,37,37,.65);
-    }
-
-    h2 {
-      color: var(--paper);
-      text-align: center;
-      font-size: 15px;
-      letter-spacing: 2px;
-      margin-bottom: 24px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(200,184,148,.35);
-    }
-
-    .card {
-      background: rgba(26,23,19,.96);
-      border: 1px solid rgba(200,184,148,.75);
-      box-shadow: inset 0 0 24px rgba(0,0,0,.7), 0 8px 30px rgba(0,0,0,.35);
-      padding: 18px;
-      margin: 18px 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 80% 15%, transparent 35%, rgba(0,0,0,.65) 100%);
-      pointer-events: none;
-    }
-
-    p, .card-content {
-      position: relative;
-      z-index: 1;
-      color: var(--bone);
-      line-height: 1.75;
-      font-size: 16px;
-      text-align: justify;
-    }
-
-    .warn {
-      color: var(--red);
-      font-weight: 700;
-      border-left: 3px solid var(--red);
-      padding-left: 10px;
-      margin-bottom: 14px;
-      letter-spacing: 1px;
-    }
-
-    .btn {
-      width: 100%;
-      border: 1px solid var(--paper);
-      background: #211b14;
-      color: var(--paper);
-      padding: 13px 16px;
-      min-height: 48px;
-      font-size: 16px;
-      letter-spacing: 2px;
-      font-family: inherit;
-      margin-top: 12px;
-      border-radius: 0;
-    }
-
-    .btn:active {
-      background: var(--red);
-      color: var(--bone);
-      box-shadow: 0 0 16px rgba(155,37,37,.55);
-    }
-
-    .btn:disabled {
-      opacity: .35;
-    }
-
-    .status {
-      border: 1px solid rgba(155,37,37,.85);
-      background: rgba(155,37,37,.14);
-      color: var(--bone);
-      min-height: 42px;
-      padding: 9px;
-      margin-bottom: 14px;
-      text-align: center;
-      line-height: 1.55;
-      font-size: 14px;
-    }
-
-    .skeleton {
-      position: relative;
-      height: 320px;
-      border: 1px dashed rgba(200,184,148,.75);
-      background: rgba(0,0,0,.45);
-      margin-bottom: 14px;
-    }
-
-    .slot {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      border: 1px dashed rgba(240,228,207,.55);
-      color: rgba(240,228,207,.55);
-      background: rgba(0,0,0,.45);
-      min-width: 48px;
-      min-height: 30px;
-      padding: 5px;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .slot.filled {
-      border-style: solid;
-      color: var(--bone);
-      background: rgba(200,184,148,.16);
-      box-shadow: inset 0 0 8px rgba(240,228,207,.18);
-      font-weight: 700;
-    }
-
-    #slot-skull { top: 15%; left: 50%; }
-    #slot-neck { top: 28%; left: 50%; }
-    #slot-chest { top: 43%; left: 50%; min-width: 60px; min-height: 44px; }
-    #slot-leftWing { top: 38%; left: 24%; }
-    #slot-rightWing { top: 38%; left: 76%; }
-    #slot-pelvis { top: 62%; left: 50%; min-width: 60px; min-height: 36px; }
-    #slot-leftLeg { top: 78%; left: 34%; min-height: 40px; }
-    #slot-rightLeg { top: 78%; left: 66%; min-height: 40px; }
-    #slot-tail { top: 91%; left: 50%; }
-
-    .bone-pool {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      padding: 10px;
-      background: rgba(0,0,0,.45);
-      border: 1px solid rgba(200,184,148,.25);
-    }
-
-    .bone {
-      border: 1px solid rgba(240,228,207,.52);
-      color: var(--bone);
-      background: #1d1914;
-      padding: 10px 4px;
-      text-align: center;
-      font-size: 13px;
-      min-height: 42px;
-      cursor: pointer;
-    }
-
-    .bone.selected {
-      border-color: var(--red);
-      background: #351212;
-      box-shadow: 0 0 12px rgba(155,37,37,.72);
-    }
-
-    .bone.used {
-      opacity: .28;
-      pointer-events: none;
-    }
-
-    .clues {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin: 18px 0;
-    }
-
-    .clue {
-      min-height: 90px;
-      border: 1px solid var(--paper);
-      background: #191510;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--paper);
-      font-size: 17px;
-      cursor: pointer;
-    }
-
-    .clue.revealed {
-      color: var(--red);
-      background: #251b17;
-      font-size: 34px;
-      font-weight: 700;
-      text-shadow: 0 0 8px rgba(155,37,37,.5);
-    }
-
-    .hint {
-      border: 1px solid rgba(200,184,148,.28);
-      background: rgba(0,0,0,.35);
-      min-height: 48px;
-      padding: 12px;
-      color: var(--paper);
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.6;
-      font-style: italic;
-    }
-
-    .box-art {
-      width: 170px;
-      height: 130px;
-      margin: 24px auto;
-      background: linear-gradient(135deg, #30221d, #0d0a0a);
-      border: 3px solid #49352b;
-      box-shadow: inset 0 0 24px rgba(0,0,0,.85), 0 10px 32px rgba(0,0,0,.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #7e6b5f;
-      font-size: 13px;
-      text-align: center;
-      position: relative;
-    }
-
-    .box-art::after {
-      content: "";
-      width: 34px;
-      height: 34px;
-      border: 2px solid #594238;
-      background: #090707;
-      position: absolute;
-      bottom: 26px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .pin {
-      width: 168px;
-      display: block;
-      margin: 0 auto;
-      background: #050505;
-      border: 1px solid var(--paper);
-      color: var(--bone);
-      text-align: center;
-      font-size: 28px;
-      letter-spacing: 7px;
-      padding: 8px;
-      outline: none;
-      font-family: monospace;
-    }
-
-    .registry {
-      list-style: none;
-      position: relative;
-      z-index: 2;
-    }
-
-    .registry li {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px dashed rgba(240,228,207,.18);
-      padding: 9px 0;
-      letter-spacing: 1px;
-    }
-
-    .check-list {
-      min-height: 150px;
-      margin: 20px 0;
-    }
-
-    .check-line {
-      display: flex;
-      justify-content: space-between;
-      color: var(--paper);
-      opacity: 0;
-      transition: opacity .3s ease;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .check-line.show {
-      opacity: 1;
-    }
-
-    .mirror {
-      width: 100%;
-      height: 140px;
-      border: 1px solid rgba(240,228,207,.2);
-      background: linear-gradient(135deg, #030303, #141414, #050505);
-      box-shadow: inset 0 0 35px #000, 0 0 20px rgba(0,0,0,.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 18px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .mirror::before {
-      content: "";
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(30deg, transparent 42%, rgba(255,255,255,.045) 50%, transparent 58%);
-      animation: shimmer 7s linear infinite;
-    }
-
-    .mirror span {
-      white-space: pre-line;
-      text-align: center;
-      color: #6b5d51;
-      letter-spacing: 2px;
-      font-size: 14px;
-      z-index: 1;
-    }
-
-    .small-red {
-      color: #421010;
-      text-align: center;
-      letter-spacing: 5px;
-      font-weight: 700;
-      margin-top: 16px;
-      min-height: 22px;
-    }
-
-    .glitch {
-      position: fixed;
-      right: 10px;
-      top: 10px;
-      color: var(--red);
-      font-size: 12px;
-      opacity: 0;
-      z-index: 9;
-      pointer-events: none;
-    }
-
-    .glitch.on {
-      animation: glitch .45s ease;
-    }
-
-    .flash {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(155,37,37,.25);
-      z-index: 8;
-      pointer-events: none;
-    }
-
-    .shake {
-      animation: shake .3s both;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes shimmer {
-      from { transform: translate(-35%, -35%); }
-      to { transform: translate(35%, 35%); }
-    }
-
-    @keyframes glitch {
-      0%, 100% { opacity: 0; }
-      25% { opacity: .8; }
-      50% { opacity: .15; }
-      75% { opacity: .9; }
-    }
-
-    @keyframes shake {
-      10%, 90% { transform: translateX(-2px); }
-      20%, 80% { transform: translateX(3px); }
-      30%, 50%, 70% { transform: translateX(-5px); }
-      40%, 60% { transform: translateX(5px); }
-    }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{width:100%;min-height:100%;background:var(--bg);color:var(--bone);font-family:"Noto Serif TC","Microsoft JhengHei","PingFang TC",serif;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 12% 8%,rgba(155,34,34,.2),transparent 28%),radial-gradient(circle at 82% 72%,rgba(0,0,0,.9),transparent 44%),linear-gradient(180deg,#15110d 0%,#050505 72%,#000 100%);z-index:0;pointer-events:none}
+    body::after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:18px 18px;opacity:.24;z-index:0;pointer-events:none;mix-blend-mode:overlay}
+    .app{position:relative;z-index:1;width:100%;max-width:430px;min-height:100vh;margin:0 auto;padding:16px 18px 48px}
+    .screen{display:none;animation:screenIn .38s ease both}.screen.active{display:block}
+    .hud{position:sticky;top:0;z-index:10;display:none;justify-content:space-between;gap:8px;align-items:center;padding:9px 10px;margin:-2px -4px 12px;background:rgba(8,7,6,.88);border:1px solid rgba(200,184,148,.22);backdrop-filter:blur(8px)}
+    .hud.show{display:flex}.hud-label{color:var(--dim);font-size:11px;letter-spacing:1px;line-height:1.4}.hearts{display:flex;gap:5px;font-size:18px;color:var(--red);text-shadow:0 0 8px rgba(155,34,34,.65)}.hearts .lost{color:#2d2520;text-shadow:none}
+    .timer{color:var(--paper);font-size:13px;line-height:1.4;text-align:right}.timer.danger{color:var(--red);animation:pulseText .8s infinite alternate}
+    .system-line{color:var(--dim);text-align:center;font-size:12px;letter-spacing:1px;margin-bottom:10px;opacity:.85}
+    h1{color:var(--red);text-align:center;font-size:29px;letter-spacing:4px;margin:10px 0 8px;text-shadow:0 0 16px rgba(155,34,34,.62);line-height:1.25}
+    h2{color:var(--paper);text-align:center;font-size:14px;letter-spacing:2px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(200,184,148,.36);font-weight:400}
+    .scene-image{width:100%;margin:12px 0 18px;border:1px solid rgba(200,184,148,.58);background:#050505;box-shadow:inset 0 0 28px rgba(0,0,0,.9),0 10px 28px rgba(0,0,0,.58);overflow:hidden;position:relative;min-height:205px;display:flex;align-items:center;justify-content:center}
+    .scene-image img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover;filter:brightness(.68) contrast(1.18) saturate(.72)}
+    .scene-image::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,0,0,0) 34%,rgba(0,0,0,.76) 100%),linear-gradient(180deg,rgba(155,34,34,.08),rgba(0,0,0,.3));pointer-events:none}
+    .image-caption{position:absolute;left:10px;bottom:8px;z-index:2;font-size:11px;color:rgba(238,225,201,.78);letter-spacing:1px;text-shadow:0 0 7px #000}
+    .image-fallback{position:absolute;z-index:1;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(200,184,148,.55);font-size:13px;letter-spacing:1px;background:radial-gradient(circle at 50% 35%,rgba(155,34,34,.15),transparent 34%),linear-gradient(135deg,#15110d,#030303);text-align:center;line-height:1.7;padding:20px}
+    .card{position:relative;background:radial-gradient(circle at 88% 12%,rgba(0,0,0,.1),rgba(0,0,0,.65) 72%),linear-gradient(135deg,rgba(31,26,18,.98),rgba(12,10,8,.98));border:1px solid var(--line2);padding:17px;margin:16px 0;box-shadow:inset 0 0 24px rgba(0,0,0,.84),0 10px 28px rgba(0,0,0,.48);overflow:hidden}
+    .card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 18%,rgba(200,184,148,.05),transparent 28%),linear-gradient(90deg,transparent,rgba(155,34,34,.035),transparent);pointer-events:none}
+    .card-content{position:relative;z-index:1;font-size:15.5px;line-height:1.78;color:var(--bone);text-align:justify}
+    .warning-title{color:var(--red);font-weight:700;border-left:3px solid var(--red);padding-left:10px;margin-bottom:12px;letter-spacing:1px}.small{font-size:13px;color:var(--dim);line-height:1.6}
+    .btn{width:100%;min-height:48px;border:1px solid var(--paper);background:linear-gradient(180deg,#211b14,#14100c);color:var(--paper);font-family:inherit;font-size:16px;letter-spacing:2px;padding:12px 16px;margin-top:11px;cursor:pointer;border-radius:0;box-shadow:0 0 0 rgba(155,34,34,0)}
+    .btn.secondary{border-color:rgba(200,184,148,.42);color:var(--dim);background:rgba(0,0,0,.28);font-size:14px}.btn:active{background:var(--red2);color:var(--bone);box-shadow:0 0 18px rgba(155,34,34,.55);transform:translateY(1px)}.btn:disabled{opacity:.35;color:#6e6252;border-color:#5b4f41;cursor:not-allowed}
+    .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.diff{border:1px solid rgba(200,184,148,.46);background:rgba(0,0,0,.32);padding:12px;text-align:left;cursor:pointer}.diff.selected{border-color:var(--red);background:rgba(155,34,34,.18);box-shadow:0 0 14px rgba(155,34,34,.36)}.diff b{display:block;color:var(--paper);font-size:15px;margin-bottom:5px}.diff span{display:block;color:var(--dim);font-size:12px;line-height:1.55}
+    .status{min-height:44px;padding:9px 10px;margin:12px 0 14px;border:1px solid rgba(155,34,34,.9);background:rgba(155,34,34,.13);color:var(--bone);text-align:center;line-height:1.55;font-size:14px}
+    .progress{height:7px;border:1px solid rgba(200,184,148,.36);background:rgba(0,0,0,.42);margin:12px 0 18px;overflow:hidden}.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--red2),var(--red),var(--paper));transition:width .25s ease}
+    .skeleton{position:relative;height:330px;border:1px dashed rgba(200,184,148,.72);background:radial-gradient(circle at 50% 36%,rgba(238,225,201,.04),transparent 26%),rgba(0,0,0,.52);margin-bottom:14px;overflow:hidden}
+    .skeleton::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(238,225,201,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(238,225,201,.025) 1px,transparent 1px);background-size:22px 22px;opacity:.55;pointer-events:none}
+    .skeleton-line{position:absolute;inset:0;pointer-events:none;opacity:.16}
+    .slot{position:absolute;transform:translate(-50%,-50%);min-width:50px;min-height:30px;padding:5px;border:1px dashed rgba(238,225,201,.46);background:rgba(10,9,8,.74);color:rgba(238,225,201,.45);font-size:12px;line-height:1.2;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:.2s ease;z-index:2}
+    .slot.filled{color:var(--bone);border-style:solid;border-color:var(--paper);background:rgba(200,184,148,.16);box-shadow:inset 0 0 10px rgba(238,225,201,.16),0 0 9px rgba(200,184,148,.12);font-weight:700}
+    #slot-skull{top:14%;left:50%;width:48px;height:38px;border-radius:44% 44% 52% 52%}#slot-neck{top:27%;left:50%;width:38px;height:28px}#slot-chest{top:43%;left:50%;width:60px;height:48px}#slot-leftWing{top:38%;left:24%;width:56px;height:32px;transform:translate(-50%,-50%) rotate(-13deg)}#slot-rightWing{top:38%;left:76%;width:56px;height:32px;transform:translate(-50%,-50%) rotate(13deg)}#slot-pelvis{top:62%;left:50%;width:62px;height:38px}#slot-leftLeg{top:79%;left:34%;width:44px;height:42px}#slot-rightLeg{top:79%;left:66%;width:44px;height:42px}#slot-tail{top:92%;left:50%;width:50px;height:27px}
+    .bone-pool{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border:1px solid rgba(200,184,148,.28);background:rgba(0,0,0,.48)}.bone{min-height:44px;padding:9px 4px;border:1px solid rgba(238,225,201,.45);background:#1c1711;color:var(--bone);font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:.18s ease}.bone.selected{border-color:var(--red);background:#351111;box-shadow:0 0 14px rgba(155,34,34,.75);color:#fff0df}.bone.used{opacity:.25;pointer-events:none;border-style:dashed;background:#050505}
+    .log{border-left:2px solid rgba(155,34,34,.75);padding:10px 12px;background:rgba(0,0,0,.28);color:var(--dim);font-size:13px;line-height:1.65;margin-top:12px;min-height:54px}
+    .clue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:18px 0}.clue-card{height:98px;perspective:700px;cursor:pointer}.clue-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s ease}.clue-card.flipped .clue-inner{transform:rotateY(180deg)}.clue-front,.clue-back{position:absolute;inset:0;border:1px solid var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;justify-content:center;align-items:center;text-align:center}.clue-front{background:#17130f;color:var(--paper);font-size:16px}.clue-front::after{content:"";position:absolute;width:32px;height:7px;border-radius:999px;background:rgba(238,225,201,.1);bottom:18px}.clue-back{transform:rotateY(180deg);background:#241914;color:var(--red);font-size:36px;font-weight:800;text-shadow:0 0 8px rgba(155,34,34,.6)}
+    .hint-box{min-height:55px;padding:12px;border:1px solid rgba(200,184,148,.28);background:rgba(0,0,0,.34);color:var(--paper);text-align:center;font-size:14px;line-height:1.65;font-style:italic}.code-preview{display:none;margin-top:14px;border:1px solid rgba(155,34,34,.6);background:rgba(155,34,34,.08);color:var(--bone);padding:12px;text-align:center;line-height:1.7;font-size:14px}
+    .box-art{width:178px;height:138px;margin:22px auto 18px;background:linear-gradient(135deg,#33231d 0%,#130e0b 56%,#070505 100%);border:3px solid #49362e;position:relative;box-shadow:inset 0 0 25px rgba(0,0,0,.92),0 12px 35px rgba(0,0,0,.62);display:flex;align-items:flex-start;justify-content:center;padding-top:16px;color:#7f6b5c;font-size:13px;line-height:1.55;text-align:center}.box-art::before{content:"";position:absolute;top:0;bottom:0;left:27%;right:27%;border-left:2px solid #1d1410;border-right:2px solid #1d1410;background:rgba(0,0,0,.18)}.box-art::after{content:"";position:absolute;bottom:28px;width:38px;height:34px;border:2px solid #60483d;background:#080606;box-shadow:0 0 9px rgba(0,0,0,.8)}
+    .pin{width:176px;display:block;margin:0 auto;padding:9px 7px;background:#040404;border:1px solid var(--paper);color:var(--bone);font-family:monospace,serif;font-size:27px;text-align:center;letter-spacing:7px;outline:none;border-radius:0}.pin:focus{border-color:var(--red);box-shadow:0 0 14px rgba(155,34,34,.55)}
+    .registry{list-style:none;position:relative;z-index:2;margin:2px 0}.registry li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed rgba(238,225,201,.16);font-size:15px;letter-spacing:1px}.check-list{min-height:170px;margin:18px 0 10px}.check-row{display:flex;justify-content:space-between;gap:12px;color:var(--paper);font-size:14px;margin-bottom:8px;opacity:0;transform:translateY(4px);transition:opacity .25s ease,transform .25s ease}.check-row.show{opacity:1;transform:translateY(0)}
+    .final-text{opacity:0;transition:opacity .45s ease;color:var(--red);text-align:center;font-size:14px;line-height:1.7;margin:10px 0 6px}.mirror{width:100%;height:145px;margin-top:16px;border:1px solid rgba(238,225,201,.18);background:linear-gradient(135deg,#030303,#141414,#050505);box-shadow:inset 0 0 38px #000,0 0 22px rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.mirror::before{content:"";position:absolute;width:220%;height:220%;background:linear-gradient(30deg,transparent 42%,rgba(255,255,255,.045) 50%,transparent 58%);animation:mirrorSweep 7s linear infinite}.mirror::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,transparent 12%,rgba(0,0,0,.72) 66%);pointer-events:none}.mirror span{position:relative;z-index:1;white-space:pre-line;text-align:center;color:#726557;letter-spacing:2px;font-size:14px;line-height:1.85;animation:pulseText 2.8s infinite alternate}.bottom-warning{min-height:24px;text-align:center;margin-top:16px;color:#481010;letter-spacing:5px;font-weight:800;font-size:13px}
+    .glitch{position:fixed;top:10px;right:10px;z-index:8;opacity:0;color:var(--red);font-size:12px;letter-spacing:1px;pointer-events:none}.glitch.on{animation:glitchFlash .42s ease}.flash{display:none;position:fixed;inset:0;z-index:7;background:rgba(155,34,34,.25);pointer-events:none}.shake{animation:shake .32s cubic-bezier(.36,.07,.19,.97) both}.error-panel{padding:20px;color:var(--bone);font-family:monospace;line-height:1.6}.error-panel h3{color:var(--red);margin-bottom:12px}
+    @keyframes screenIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}@keyframes mirrorSweep{from{transform:translate(-36%,-36%)}to{transform:translate(36%,36%)}}@keyframes pulseText{from{opacity:.42;text-shadow:none}to{opacity:.88;text-shadow:0 0 9px rgba(200,184,148,.22)}}@keyframes glitchFlash{0%{opacity:0;transform:translateX(0)}22%{opacity:.75;transform:translateX(-2px)}46%{opacity:.15;transform:translateX(2px)}68%{opacity:.9;transform:translateX(-1px)}100%{opacity:0;transform:translateX(0)}}@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(3px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
   </style>
 </head>
+
 <body>
   <div class="glitch" id="glitch">第五位已接觸</div>
   <div class="flash" id="flash"></div>
 
   <main class="app" id="app">
-    <section class="screen active" id="s1">
-      <div class="top-proof">SYSTEM ONLINE / 如果你看見這行，網頁已成功開啟</div>
+    <div class="hud" id="hud">
+      <div>
+        <div class="hud-label" id="difficultyLabel">難度：未選擇</div>
+        <div class="small" id="mistakeText">錯誤：0</div>
+      </div>
+      <div>
+        <div class="hearts" id="hearts"></div>
+        <div class="timer" id="timer">--:--</div>
+      </div>
+    </div>
+
+    <section class="screen active" id="screen1">
+      <div class="system-line">SYSTEM ONLINE / 網頁已成功開啟</div>
       <h1>《第五位研究員》</h1>
       <h2>第七層標本復原程序</h2>
 
+      <div class="scene-image">
+        <div class="image-fallback">圖片位置：images/cover.jpg<br>封存檔案 / 地下研究站</div>
+        <img src="images/cover.jpg" alt="第五位研究員封存檔案" onerror="this.style.display='none'">
+        <div class="image-caption">ARCHIVE PHOTO / SEALED RECORD</div>
+      </div>
+
       <div class="card">
         <div class="card-content">
-          <div class="warn">警告：</div>
+          <div class="warning-title">封存警告</div>
           若發現九塊骨頭，請勿拼湊。<br>
           若聽見箱中有人敲門，請勿回應。<br>
           若看見第五位研究員，請立刻停止操作。<br><br>
-          本程序將復原菜寮溪第七層標本。開始後，系統將記錄你的觀看行為。
+          請選擇難度。開始後系統將啟動音效、生命值與錯誤紀錄。
         </div>
       </div>
 
-      <button class="btn" onclick="go('s2')">開始復原</button>
+      <div class="difficulty-grid">
+        <div class="diff selected" data-level="easy" onclick="selectDifficulty('easy', this)">
+          <b>普通</b><span>5 顆心 / 無倒數 / 適合展示。</span>
+        </div>
+        <div class="diff" data-level="normal" onclick="selectDifficulty('normal', this)">
+          <b>封存</b><span>3 顆心 / 4 分鐘 / 標準體驗。</span>
+        </div>
+        <div class="diff" data-level="hard" onclick="selectDifficulty('hard', this)">
+          <b>第七層</b><span>2 顆心 / 2 分鐘 / 錯一步就逼近登錄。</span>
+        </div>
+        <div class="diff" data-level="nightmare" onclick="selectDifficulty('nightmare', this)">
+          <b>第五位</b><span>1 顆心 / 90 秒 / 只給一次提示。</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="startProgram()">開始復原</button>
+      <button class="btn secondary" onclick="toggleSound()">音效：<span id="soundLabel">開啟</span></button>
     </section>
 
-    <section class="screen" id="s2">
+    <section class="screen" id="screen2">
       <h1>第七層標本復原板</h1>
-      <h2>SPECIMEN RECOVERY</h2>
+      <h2>SPECIMEN RECOVERY / 骨架定位</h2>
 
-      <div class="status" id="status">等待選取化石組件...</div>
+      <div class="scene-image">
+        <div class="image-fallback">圖片位置：images/fossil-board.jpg<br>九塊骨頭復原板</div>
+        <img src="images/fossil-board.jpg" alt="第七層化石復原板" onerror="this.style.display='none'">
+        <div class="image-caption">SPECIMEN BOARD / NINE PIECES</div>
+      </div>
+
+      <div class="status" id="stage2Status">等待選取化石組件...</div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 
       <div class="skeleton">
-        <div class="slot" id="slot-skull" onclick="place('skull')">頭骨</div>
-        <div class="slot" id="slot-neck" onclick="place('neck')">頸椎</div>
-        <div class="slot" id="slot-chest" onclick="place('chest')">胸骨</div>
-        <div class="slot" id="slot-leftWing" onclick="place('leftWing')">左翼骨</div>
-        <div class="slot" id="slot-rightWing" onclick="place('rightWing')">右翼骨</div>
-        <div class="slot" id="slot-pelvis" onclick="place('pelvis')">骨盆</div>
-        <div class="slot" id="slot-leftLeg" onclick="place('leftLeg')">左腿骨</div>
-        <div class="slot" id="slot-rightLeg" onclick="place('rightLeg')">右腿骨</div>
-        <div class="slot" id="slot-tail" onclick="place('tail')">尾端碎骨</div>
+        <svg class="skeleton-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M50,9 Q41,20 50,30 Q59,20 50,9 M50,30 L50,55 M24,38 L50,44 L76,38 M50,55 L50,70 M50,70 L34,86 M50,70 L66,86 M50,70 L50,94"
+                stroke="#eee1c9" stroke-width="0.8" fill="none" stroke-dasharray="2,2"/>
+        </svg>
+        <div class="slot" id="slot-skull" onclick="placeBone('skull')">頭骨</div>
+        <div class="slot" id="slot-neck" onclick="placeBone('neck')">頸椎</div>
+        <div class="slot" id="slot-chest" onclick="placeBone('chest')">胸骨</div>
+        <div class="slot" id="slot-leftWing" onclick="placeBone('leftWing')">左翼骨</div>
+        <div class="slot" id="slot-rightWing" onclick="placeBone('rightWing')">右翼骨</div>
+        <div class="slot" id="slot-pelvis" onclick="placeBone('pelvis')">骨盆</div>
+        <div class="slot" id="slot-leftLeg" onclick="placeBone('leftLeg')">左腿骨</div>
+        <div class="slot" id="slot-rightLeg" onclick="placeBone('rightLeg')">右腿骨</div>
+        <div class="slot" id="slot-tail" onclick="placeBone('tail')">尾端碎骨</div>
       </div>
 
-      <div class="bone-pool" id="pool"></div>
+      <div class="bone-pool" id="bonePool"></div>
 
-      <button class="btn" id="to3" disabled onclick="go('s3')">檢查骨頭背面</button>
+      <div class="log" id="stage2Log">
+        復原規則：點選下方骨頭，再點選上方對應位置。<br>
+        拼錯會扣一顆心。
+      </div>
+
+      <button class="btn" id="toScreen3" disabled onclick="goTo('screen3')">檢查骨頭背面</button>
     </section>
 
-    <section class="screen" id="s3">
+    <section class="screen" id="screen3">
       <h1>檢測到異常刻痕</h1>
-      <h2>ANOMALOUS MARKINGS</h2>
+      <h2>ANOMALOUS MARKINGS / 密碼線索</h2>
 
-      <div class="card">
-        <div class="card-content">
-          並非所有骨頭都有符號。<br>
-          <span style="color:var(--red);font-weight:700;">只有四塊骨頭記得密碼。</span><br>
-          請點擊骨頭，查看背面的刻痕。
-        </div>
+      <div class="scene-image">
+        <div class="image-fallback">圖片位置：images/bone-markings.jpg<br>骨頭背面刻痕</div>
+        <img src="images/bone-markings.jpg" alt="骨頭背面羅馬數字刻痕" onerror="this.style.display='none'">
+        <div class="image-caption">MARKINGS FOUND / DO NOT READ ALOUD</div>
       </div>
 
-      <div class="clues">
-        <div class="clue" data-value="Ⅰ" onclick="reveal(this)">頭骨</div>
-        <div class="clue" data-value="Ⅸ" onclick="reveal(this)">胸骨</div>
-        <div class="clue" data-value="Ⅲ" onclick="reveal(this)">骨盆</div>
-        <div class="clue" data-value="Ⅰ" onclick="reveal(this)">右腿骨</div>
+      <div class="card"><div class="card-content">
+        四塊骨頭背面有符號。你可以反覆翻面確認。<br>
+        請依照身體由上到下的順序讀取。
+      </div></div>
+
+      <div class="clue-grid">
+        <div class="clue-card" onclick="toggleClue(this,'頭骨')"><div class="clue-inner"><div class="clue-front">頭骨</div><div class="clue-back">Ⅰ</div></div></div>
+        <div class="clue-card" onclick="toggleClue(this,'胸骨')"><div class="clue-inner"><div class="clue-front">胸骨</div><div class="clue-back">Ⅸ</div></div></div>
+        <div class="clue-card" onclick="toggleClue(this,'骨盆')"><div class="clue-inner"><div class="clue-front">骨盆</div><div class="clue-back">Ⅲ</div></div></div>
+        <div class="clue-card" onclick="toggleClue(this,'右腿骨')"><div class="clue-inner"><div class="clue-front">右腿骨</div><div class="clue-back">Ⅰ</div></div></div>
       </div>
 
-      <div class="hint" id="hint">監測到骨化刻紋痕跡...</div>
-      <button class="btn" onclick="hint()">取得提示</button>
-      <button class="btn" id="to4" disabled onclick="go('s4')">輸入封存箱密碼</button>
+      <div class="hint-box" id="hintBox">監測到骨化刻紋痕跡...</div>
+      <button class="btn" id="hintButton" onclick="showHint()">取得提示</button>
+
+      <div class="code-preview" id="codePreview">
+        頭骨 → 胸骨 → 骨盆 → 右腿骨<br>
+        Ⅰ → Ⅸ → Ⅲ → Ⅰ<br>
+        <span style="color:var(--red);font-weight:700;">密碼仍需自行輸入。</span>
+      </div>
+
+      <button class="btn" id="toScreen4" disabled onclick="goTo('screen4')">輸入封存箱密碼</button>
+      <button class="btn secondary" onclick="goTo('screen2')">返回復原板</button>
     </section>
 
-    <section class="screen" id="s4">
+    <section class="screen" id="screen4">
       <h1>百寶封存箱</h1>
-      <h2>CONTAINMENT BOX</h2>
+      <h2>CONTAINMENT BOX / 四位數驗證</h2>
+
+      <div class="scene-image">
+        <div class="image-fallback">圖片位置：images/sealed-box.jpg<br>百寶封存箱</div>
+        <img src="images/sealed-box.jpg" alt="百寶封存箱" onerror="this.style.display='none'">
+        <div class="image-caption">CONTAINMENT BOX / LOCKED</div>
+      </div>
 
       <div class="box-art">缺一塊，<br>就還能活。</div>
 
-      <p style="text-align:center;color:var(--paper);">請輸入四位數密碼。</p>
-      <input class="pin" id="pin" type="tel" inputmode="numeric" maxlength="4" placeholder="••••" oninput="checkPin(this)" />
-      <div class="status" id="pinStatus" style="margin-top:14px;min-height:58px;"></div>
-      <button class="btn" id="to5" disabled onclick="go('s5')">查看登錄結果</button>
+      <div class="card"><div class="card-content">
+        箱內傳出很輕的敲擊聲。<br>
+        不是從箱子裡面。是從你握著手機的那一側。
+      </div></div>
+
+      <p style="text-align:center;color:var(--paper);line-height:1.7;margin-bottom:10px;">請輸入四位數密碼。</p>
+      <input class="pin" id="passwordInput" type="tel" inputmode="numeric" maxlength="4" placeholder="••••" oninput="checkPassword(this)">
+      <div class="status" id="passwordStatus" style="min-height:62px;"></div>
+      <button class="btn" id="toScreen5" disabled onclick="goTo('screen5')">查看登錄結果</button>
+      <button class="btn secondary" onclick="returnToClues()">返回上一頁重新查看骨頭</button>
     </section>
 
-    <section class="screen" id="s5">
+    <section class="screen" id="screen5">
       <h1>研究員登錄表</h1>
-      <h2>RESEARCHER LOG</h2>
+      <h2>RESEARCHER LOG / 標本觀測者</h2>
 
-      <div class="card">
-        <ul class="registry">
-          <li><span>第一位：海哥</span><span>✓</span></li>
-          <li><span>第二位：叔叔</span><span>✓</span></li>
-          <li><span>第三位：惹男</span><span>✓</span></li>
-          <li><span>第四位：南宇</span><span>✓</span></li>
-          <li><span>第五位：＿＿＿＿</span><span style="color:var(--red);">●</span></li>
-        </ul>
+      <div class="scene-image">
+        <div class="image-fallback">圖片位置：images/final-mirror.jpg<br>黑色鏡面與登錄表</div>
+        <img src="images/final-mirror.jpg" alt="第五位研究員黑色鏡面" onerror="this.style.display='none'">
+        <div class="image-caption">OBSERVER IMAGE / CAPTURING</div>
       </div>
 
-      <div class="check-list" id="checks"></div>
-      <p id="finalText" style="opacity:0;text-align:center;color:var(--red);transition:.4s;">第五位研究員仍在觀看。</p>
+      <div class="card"><ul class="registry">
+        <li><span>第一位：海哥</span><span style="color:var(--paper)">✓</span></li>
+        <li><span>第二位：叔叔</span><span style="color:var(--paper)">✓</span></li>
+        <li><span>第三位：惹男</span><span style="color:var(--paper)">✓</span></li>
+        <li><span>第四位：南宇</span><span style="color:var(--paper)">✓</span></li>
+        <li><span>第五位：＿＿＿＿</span><span style="color:var(--red)">●</span></li>
+      </ul></div>
 
+      <div class="check-list" id="checkList"></div>
+      <div class="final-text" id="finalText">第五位研究員仍在觀看。<br>請勿替他命名。</div>
       <div class="mirror"><span id="mirrorText"></span></div>
-      <div class="small-red" id="bottomWarn">不要回頭。</div>
+      <div class="bottom-warning" id="bottomWarning">不要回頭。</div>
+      <button class="btn secondary" onclick="restartGame()">重新封存</button>
+    </section>
+
+    <section class="screen" id="screenGameOver">
+      <h1>封存失敗</h1>
+      <h2>THE SEVENTH LAYER HAS RECORDED YOU</h2>
+
+      <div class="scene-image">
+        <div class="image-fallback">錯誤過多。<br>第七層已取得觀測者位置。</div>
+        <img src="images/game-over.jpg" alt="封存失敗" onerror="this.style.display='none'">
+        <div class="image-caption">RECOVERY FAILED / POSITION FIXED</div>
+      </div>
+
+      <div class="card"><div class="card-content">
+        <div class="warning-title">心跳訊號中斷</div>
+        骨架沒有復原完成，但第九個位置已經被記錄。<br><br>
+        <span class="small">你可以重新開始，但第七層不會忘記你第一次錯在哪裡。</span>
+      </div></div>
+
+      <button class="btn" onclick="restartGame()">重新開始</button>
     </section>
   </main>
 
   <script>
-    const bones = [
-      ["skull", "頭骨"], ["neck", "頸椎"], ["chest", "胸骨"],
-      ["leftWing", "左翼骨"], ["rightWing", "右翼骨"], ["pelvis", "骨盆"],
-      ["leftLeg", "左腿骨"], ["rightLeg", "右腿骨"], ["tail", "尾端碎骨"]
+    window.onerror=function(message,source,lineno){
+      document.body.innerHTML='<div class="error-panel"><h3>網頁發生錯誤</h3><p>錯誤內容：'+message+'</p><p>位置：第 '+lineno+' 行</p><p>請截圖給我修。</p></div>';
+      return true;
+    };
+
+    const difficulties={
+      easy:{name:"普通",hearts:5,time:0,hints:4},
+      normal:{name:"封存",hearts:3,time:240,hints:4},
+      hard:{name:"第七層",hearts:2,time:120,hints:3},
+      nightmare:{name:"第五位",hearts:1,time:90,hints:1}
+    };
+
+    const boneData=[
+      {id:"skull",name:"頭骨",log:"頭骨定位完成。眼窩內部有不屬於鳥類的凹痕。"},
+      {id:"neck",name:"頸椎",log:"頸椎定位完成。彎曲角度不符合一般雞骨。"},
+      {id:"chest",name:"胸骨",log:"胸骨定位完成。中央出現像呼吸留下的裂紋。"},
+      {id:"leftWing",name:"左翼骨",log:"左翼骨定位完成。羽翼位置出現人類指節般的分叉。"},
+      {id:"rightWing",name:"右翼骨",log:"右翼骨定位完成。標本右側溫度下降。"},
+      {id:"pelvis",name:"骨盆",log:"骨盆定位完成。形狀接近人類站立時的承重結構。"},
+      {id:"leftLeg",name:"左腿骨",log:"左腿骨定位完成。地層紀錄出現新的足跡。"},
+      {id:"rightLeg",name:"右腿骨",log:"右腿骨定位完成。背面似乎刻著某種記號。"},
+      {id:"tail",name:"尾端碎骨",log:"尾端碎骨定位完成。第九格仍然不像骨頭，比較像一個位置。"}
     ];
 
-    const hints = [
-      "答案藏在骨頭背後。",
-      "先讓符號變成數字，再讓數字回到身體。",
-      "從頭骨、胸骨、骨盆、腿骨的順序讀取。"
+    const hints=[
+      "提示一：答案藏在骨頭背後，但不是所有骨頭都會說話。",
+      "提示二：先讓符號成為數字，再讓數字回到身體。",
+      "提示三：從思考之處開始，經過呼吸與站立之處，最後抵達行走之處。",
+      "最終提示：頭骨、胸骨、骨盆、右腿骨。"
     ];
 
-    const checks = [
-      "已閱讀封存通知",
-      "已看見九塊骨頭",
-      "已完成標本復原",
-      "已辨認羅馬數字",
-      "已解出封存密碼",
-      "已開啟百寶封存箱"
-    ];
+    const checks=["已閱讀封存通知","已看見九塊骨頭","已完成標本復原","已辨認羅馬數字","已解出封存密碼","已開啟百寶封存箱","已被第七層記錄為觀測者"];
 
-    let selected = null;
-    let placed = 0;
-    let hintIndex = 0;
-    let revealed = 0;
+    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null;
+    const flippedMap={};
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const pool = document.getElementById("pool");
-      bones.forEach(([id, name]) => {
-        const b = document.createElement("div");
-        b.className = "bone";
-        b.id = "bone-" + id;
-        b.textContent = name;
-        b.onclick = () => selectBone(id);
-        pool.appendChild(b);
+    window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));startGlitch();});
+
+    function selectDifficulty(level,el){
+      difficulty=level;
+      document.querySelectorAll(".diff").forEach(d=>d.classList.remove("selected"));
+      if(el)el.classList.add("selected");
+    }
+
+    function toggleSound(){
+      soundOn=!soundOn;
+      document.getElementById("soundLabel").textContent=soundOn?"開啟":"關閉";
+      if(soundOn) playTone("click");
+    }
+
+    function startProgram(){
+      const cfg=difficulties[difficulty];
+      hearts=cfg.hearts; remainingTime=cfg.time; mistakeCount=0;
+      document.getElementById("hud").classList.add("show");
+      document.getElementById("difficultyLabel").textContent="難度："+cfg.name;
+      updateHearts(); updateTimer();
+      startTimer();
+      initAudio();
+      playTone("start");
+      goTo("screen2");
+    }
+
+    function goTo(id){
+      document.querySelectorAll(".screen").forEach(sec=>sec.classList.remove("active"));
+      const target=document.getElementById(id);
+      if(target){target.classList.add("active");window.scrollTo(0,0);}
+      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();}
+      else{document.getElementById("hud").classList.add("show");}
+      if(id==="screen5"){stopTimer();runEnding();}
+      if(id==="screenGameOver"){stopTimer();playTone("gameover");}
+    }
+
+    function initBones(){
+      const pool=document.getElementById("bonePool"); pool.innerHTML="";
+      boneData.forEach(bone=>{
+        const div=document.createElement("div");
+        div.className="bone"; div.id="bone-"+bone.id; div.textContent=bone.name;
+        div.onclick=function(){selectBone(bone.id);};
+        pool.appendChild(div);
       });
-      setInterval(() => {
-        if (Math.random() > 0.65) {
-          const g = document.getElementById("glitch");
-          g.classList.add("on");
-          setTimeout(() => g.classList.remove("on"), 450);
+    }
+
+    function selectBone(id){
+      document.querySelectorAll(".bone").forEach(el=>el.classList.remove("selected"));
+      selectedBone=id;
+      document.getElementById("bone-"+id).classList.add("selected");
+      const bone=boneData.find(item=>item.id===id);
+      document.getElementById("stage2Status").innerHTML="已選取【"+bone.name+"】。<br>請點選上方對應輪廓位置。";
+      playTone("click"); vibrate(18);
+    }
+
+    function placeBone(slotId){
+      if(!selectedBone){document.getElementById("stage2Status").textContent="請先點選下方的一塊骨頭化石。";return;}
+      if(selectedBone===slotId){
+        const bone=boneData.find(item=>item.id===slotId);
+        const slot=document.getElementById("slot-"+slotId);
+        slot.textContent=bone.name; slot.classList.add("filled"); slot.onclick=null;
+        const boneEl=document.getElementById("bone-"+slotId);
+        boneEl.classList.remove("selected"); boneEl.classList.add("used");
+        selectedBone=null; placedCount++;
+        document.getElementById("stage2Status").textContent="定位完成";
+        document.getElementById("stage2Log").innerHTML=bone.log;
+        updateProgress(); playTone("correct"); vibrate(26);
+        if(placedCount===boneData.length){
+          document.getElementById("stage2Status").innerHTML="所有組件定位完成。<br>復原板結構已鎖定。";
+          document.getElementById("stage2Log").innerHTML="九塊骨頭已歸位。標本沒有變完整，反而像空出了一個能容納人的位置。";
+          document.getElementById("toScreen3").disabled=false;
         }
-      }, 4200);
-    });
-
-    function go(id) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      window.scrollTo(0, 0);
-      if (id === "s5") runFinal();
-    }
-
-    function selectBone(id) {
-      document.querySelectorAll(".bone").forEach(b => b.classList.remove("selected"));
-      selected = id;
-      document.getElementById("bone-" + id).classList.add("selected");
-      const name = bones.find(x => x[0] === id)[1];
-      document.getElementById("status").innerHTML = `已選取【${name}】，請點選對應輪廓。`;
-    }
-
-    function place(id) {
-      if (!selected) {
-        document.getElementById("status").textContent = "請先點選下方的一塊骨頭化石。";
-        return;
+      }else{
+        document.getElementById("stage2Status").innerHTML="位置錯誤。<br>扣除一顆心。";
+        loseHeart("錯誤紀錄：骨頭位置錯誤。");
+        document.getElementById("stage2Log").innerHTML="錯誤紀錄 #"+mistakeCount+"：它剛剛知道你點了哪裡。";
       }
-      if (selected === id) {
-        const name = bones.find(x => x[0] === id)[1];
-        const slot = document.getElementById("slot-" + id);
-        slot.textContent = name;
-        slot.classList.add("filled");
-        slot.onclick = null;
+    }
 
-        const bone = document.getElementById("bone-" + id);
-        bone.classList.remove("selected");
-        bone.classList.add("used");
+    function updateProgress(){
+      document.getElementById("progressBar").style.width=Math.round((placedCount/boneData.length)*100)+"%";
+    }
 
-        selected = null;
-        placed++;
-        document.getElementById("status").textContent = "定位完成";
-
-        if (placed === 9) {
-          document.getElementById("status").textContent = "所有組件定位完成。復原板結構已鎖定。";
-          document.getElementById("to3").disabled = false;
+    function toggleClue(card,key){
+      card.classList.toggle("flipped");
+      if(!flippedMap[key]){
+        flippedMap[key]=true; flippedCount++; playTone("flip"); vibrate(22);
+        if(flippedCount===4){
+          document.getElementById("toScreen4").disabled=false;
+          document.getElementById("codePreview").style.display="block";
+          document.getElementById("hintBox").innerHTML="四個符號都已出現。<br>你可以再點一次骨頭，把它翻回正面確認位置。";
         }
-      } else {
-        document.getElementById("status").innerHTML = "位置錯誤。<br>第七層已記錄一次。";
-        shake();
+      }else{playTone("click");}
+    }
+
+    function showHint(){
+      const maxHints=difficulties[difficulty].hints;
+      const box=document.getElementById("hintBox");
+      if(hintIndex<maxHints && hintIndex<hints.length){
+        box.textContent=hints[hintIndex]; hintIndex++; playTone("hint"); vibrate(18);
+      }
+      if(hintIndex>=maxHints || hintIndex>=hints.length){
+        document.getElementById("hintButton").disabled=true;
+        if(maxHints===1) box.textContent=box.textContent+"（第五位難度只允許一次提示）";
       }
     }
 
-    function reveal(el) {
-      if (!el.classList.contains("revealed")) {
-        el.classList.add("revealed");
-        el.textContent = el.dataset.value;
-        revealed++;
-        if (revealed === 4) document.getElementById("to4").disabled = false;
-      }
-    }
-
-    function hint() {
-      if (hintIndex < hints.length) {
-        document.getElementById("hint").textContent = hints[hintIndex];
-        hintIndex++;
-      }
-    }
-
-    function checkPin(input) {
-      input.value = input.value.replace(/\D/g, "").slice(0, 4);
-      const status = document.getElementById("pinStatus");
-      if (input.value.length === 4) {
-        if (input.value === "1931") {
-          status.innerHTML = "密碼驗證成功。<br>封存箱已開啟。<br>請勿直視第五位研究員。";
-          status.style.color = "var(--paper)";
-          input.disabled = true;
-          document.getElementById("to5").disabled = false;
-        } else {
-          status.innerHTML = "密碼錯誤。<br>錯誤已記錄。<br>第五位研究員位置校正中。";
-          status.style.color = "var(--red)";
-          input.value = "";
-          shake();
-          flash();
+    function checkPassword(input){
+      input.value=input.value.replace(/\D/g,"").slice(0,4);
+      const status=document.getElementById("passwordStatus"), next=document.getElementById("toScreen5");
+      if(input.value.length===4){
+        if(input.value==="1931"){
+          status.style.color="var(--paper)";
+          status.innerHTML="密碼驗證成功。<br>封存箱已開啟。<br>請勿直視第五位研究員。";
+          input.disabled=true; next.disabled=false;
+          playTone("unlock"); vibrate([40,60,40]);
+          setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}),180);
+        }else{
+          status.style.color="var(--red)";
+          status.innerHTML="密碼錯誤。<br>扣除一顆心。<br>第五位研究員位置校正中。";
+          input.value="";
+          loseHeart("密碼錯誤。");
         }
-      }
+      }else status.textContent="";
     }
 
-    function runFinal() {
-      const box = document.getElementById("checks");
-      const finalText = document.getElementById("finalText");
-      const mirror = document.getElementById("mirrorText");
-      const bottom = document.getElementById("bottomWarn");
+    function returnToClues(){document.getElementById("passwordInput").blur();goTo("screen3");}
 
-      box.innerHTML = "";
-      finalText.style.opacity = "0";
-      mirror.textContent = "";
-      bottom.textContent = "不要回頭。";
+    function loseHeart(reason){
+      mistakeCount++; hearts--; updateHearts(); shake(); flash(); playTone("wrong"); vibrate([50,60,50]);
+      if(hearts<=0){setTimeout(()=>goTo("screenGameOver"),280);}
+    }
 
-      checks.forEach((text, i) => {
-        const row = document.createElement("div");
-        row.className = "check-line";
-        row.innerHTML = `<span>${text}</span><span style="color:var(--red);">...</span>`;
-        box.appendChild(row);
-        setTimeout(() => {
-          row.classList.add("show");
-          setTimeout(() => {
-            row.innerHTML = `<span>${text}</span><span>✓</span>`;
-          }, 300);
-        }, i * 800);
+    function updateHearts(){
+      const heartBox=document.getElementById("hearts"), mistakeText=document.getElementById("mistakeText");
+      heartBox.innerHTML="";
+      const max=difficulties[difficulty].hearts || 5;
+      for(let i=1;i<=max;i++){const span=document.createElement("span");span.textContent="♥";if(i>hearts)span.className="lost";heartBox.appendChild(span);}
+      mistakeText.textContent="錯誤："+mistakeCount;
+    }
+
+    function startTimer(){
+      stopTimer();
+      if(!remainingTime){document.getElementById("timer").textContent="無倒數";return;}
+      timerId=setInterval(function(){
+        remainingTime--; updateTimer();
+        if(remainingTime===30) playTone("warning");
+        if(remainingTime<=0){goTo("screenGameOver");}
+      },1000);
+    }
+
+    function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;}}
+
+    function updateTimer(){
+      const el=document.getElementById("timer");
+      if(!remainingTime){el.textContent="無倒數";el.classList.remove("danger");return;}
+      const m=String(Math.floor(remainingTime/60)).padStart(2,"0");
+      const s=String(remainingTime%60).padStart(2,"0");
+      el.textContent=m+":"+s;
+      if(remainingTime<=30)el.classList.add("danger");else el.classList.remove("danger");
+    }
+
+    function runEnding(){
+      const list=document.getElementById("checkList"), finalText=document.getElementById("finalText"), mirrorText=document.getElementById("mirrorText"), bottom=document.getElementById("bottomWarning");
+      list.innerHTML=""; finalText.style.opacity="0"; mirrorText.textContent=""; bottom.textContent="不要回頭。";
+      checks.forEach(function(text,index){
+        const row=document.createElement("div");
+        row.className="check-row"; row.innerHTML="<span>"+text+"</span><span style='color:var(--red);'>...</span>";
+        list.appendChild(row);
+        setTimeout(function(){row.classList.add("show");setTimeout(function(){row.innerHTML="<span>"+text+"</span><span style='color:var(--bone);'>✓</span>";playTone("tick");},260);},index*720);
       });
-
-      setTimeout(() => {
-        finalText.style.opacity = "1";
-        setTimeout(() => {
-          mirror.textContent = "第五位研究員\\n影像已捕捉……";
-        }, 1000);
-      }, checks.length * 800 + 500);
-
-      setTimeout(() => bottom.textContent = "不要關閉頁面。", 7200);
-      setTimeout(() => bottom.textContent = "不要回頭。", 10000);
+      const wait=checks.length*720+360;
+      setTimeout(function(){finalText.style.opacity="1";playTone("warning");vibrate([40,50,40]);},wait);
+      setTimeout(function(){mirrorText.textContent="第五位研究員\n影像已捕捉……\n請勿替他命名。";playTone("whisper");},wait+1100);
+      setTimeout(function(){bottom.textContent="不要關閉頁面。";},wait+3300);
+      setTimeout(function(){bottom.textContent="不要回頭。";},wait+6100);
     }
 
-    function shake() {
-      const app = document.getElementById("app");
-      app.classList.remove("shake");
-      void app.offsetWidth;
-      app.classList.add("shake");
-      setTimeout(() => app.classList.remove("shake"), 400);
+    function restartGame(){location.reload();}
+
+    function shake(){const app=document.getElementById("app");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),360);}
+    function flash(){const f=document.getElementById("flash");f.style.display="block";setTimeout(()=>f.style.display="none",150);}
+    function startGlitch(){setInterval(function(){if(Math.random()>.62){const g=document.getElementById("glitch");g.classList.add("on");setTimeout(()=>g.classList.remove("on"),430);}},4200);}
+    function vibrate(pattern){if(navigator.vibrate)navigator.vibrate(pattern);}
+
+    function initAudio(){
+      if(!soundOn) return;
+      if(!audioCtx){
+        const AC=window.AudioContext||window.webkitAudioContext;
+        if(AC) audioCtx=new AC();
+      }
+      if(audioCtx && audioCtx.state==="suspended") audioCtx.resume();
     }
 
-    function flash() {
-      const f = document.getElementById("flash");
-      f.style.display = "block";
-      setTimeout(() => f.style.display = "none", 140);
+    function playTone(type){
+      if(!soundOn) return;
+      initAudio();
+      if(!audioCtx) return;
+      const now=audioCtx.currentTime;
+      const gain=audioCtx.createGain();
+      gain.connect(audioCtx.destination);
+      gain.gain.setValueAtTime(0.0001,now);
+
+      const osc=audioCtx.createOscillator();
+      osc.connect(gain);
+
+      if(type==="click"){osc.type="sine";osc.frequency.setValueAtTime(180,now);gain.gain.exponentialRampToValueAtTime(.06,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.12);}
+      else if(type==="correct"){osc.type="triangle";osc.frequency.setValueAtTime(240,now);osc.frequency.exponentialRampToValueAtTime(390,now+.18);gain.gain.exponentialRampToValueAtTime(.08,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.25);}
+      else if(type==="wrong"){osc.type="sawtooth";osc.frequency.setValueAtTime(90,now);osc.frequency.exponentialRampToValueAtTime(45,now+.28);gain.gain.exponentialRampToValueAtTime(.12,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.38);}
+      else if(type==="flip"){osc.type="triangle";osc.frequency.setValueAtTime(130,now);osc.frequency.exponentialRampToValueAtTime(210,now+.22);gain.gain.exponentialRampToValueAtTime(.055,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.25);}
+      else if(type==="hint"){osc.type="sine";osc.frequency.setValueAtTime(320,now);gain.gain.exponentialRampToValueAtTime(.055,now+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+.22);}
+      else if(type==="unlock"){osc.type="triangle";osc.frequency.setValueAtTime(180,now);osc.frequency.exponentialRampToValueAtTime(520,now+.35);gain.gain.exponentialRampToValueAtTime(.10,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.55);}
+      else if(type==="warning"){osc.type="square";osc.frequency.setValueAtTime(70,now);gain.gain.exponentialRampToValueAtTime(.10,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.35);}
+      else if(type==="gameover"){osc.type="sawtooth";osc.frequency.setValueAtTime(110,now);osc.frequency.exponentialRampToValueAtTime(30,now+.8);gain.gain.exponentialRampToValueAtTime(.15,now+.04);gain.gain.exponentialRampToValueAtTime(.0001,now+1);}
+      else if(type==="start"){osc.type="sine";osc.frequency.setValueAtTime(100,now);osc.frequency.exponentialRampToValueAtTime(180,now+.4);gain.gain.exponentialRampToValueAtTime(.08,now+.03);gain.gain.exponentialRampToValueAtTime(.0001,now+.55);}
+      else if(type==="tick"){osc.type="sine";osc.frequency.setValueAtTime(420,now);gain.gain.exponentialRampToValueAtTime(.04,now+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+.08);}
+      else if(type==="whisper"){osc.type="sine";osc.frequency.setValueAtTime(55,now);gain.gain.exponentialRampToValueAtTime(.09,now+.04);gain.gain.exponentialRampToValueAtTime(.0001,now+1.2);}
+      osc.start(now);
+      osc.stop(now+1.3);
     }
   </script>
 </body>
