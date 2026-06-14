@@ -1365,10 +1365,202 @@
       100% { opacity: 0; transform: translateY(20px) scale(1.08); }
     }
 
+
+    /* =========================================================
+       v18：極限升級版
+       這一段負責：
+       1. 程式生成流動血液，不需要圖片
+       2. 素材檢查面板
+       3. 展示模式切換
+       4. 血字、震動、壓迫暗角等恐怖效果
+       ========================================================= */
+
+    .procedural-blood-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+      opacity: .62;
+      mix-blend-mode: screen;
+      filter: blur(.2px) contrast(1.1);
+    }
+
+    .asset-status-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid rgba(155,34,34,.45);
+      background: rgba(0,0,0,.55);
+      box-shadow: inset 0 0 20px rgba(0,0,0,.75);
+      color: rgba(238,225,201,.86);
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .asset-status-panel.show {
+      display: block;
+      animation: screenIn .35s ease both;
+    }
+
+    .asset-status-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .asset-status-panel th,
+    .asset-status-panel td {
+      border-bottom: 1px solid rgba(200,184,148,.18);
+      padding: 6px 4px;
+      vertical-align: top;
+    }
+
+    .asset-ok {
+      color: #c8e6c9;
+      text-shadow: 0 0 8px rgba(88,180,120,.45);
+    }
+
+    .asset-missing {
+      color: #e7b9b9;
+      text-shadow: 0 0 8px rgba(155,34,34,.45);
+    }
+
+    .asset-checking {
+      color: #e4d1a5;
+    }
+
+    .presentation-mode .asset-tag,
+    .presentation-mode .asset-guide,
+    .presentation-mode .asset-status-panel,
+    .presentation-mode .production-guide-btn,
+    .presentation-mode .custom-audio-note {
+      display: none !important;
+    }
+
+    .mode-indicator {
+      display: inline-block;
+      margin-top: 6px;
+      color: rgba(238,225,201,.72);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .blood-word-cloud {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .blood-word {
+      position: absolute;
+      color: rgba(160, 0, 0, .86);
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 8px rgba(120,0,0,.9),
+        0 0 18px rgba(0,0,0,.9);
+      opacity: 0;
+      white-space: nowrap;
+      animation: bloodWordDrift 2.2s ease both;
+    }
+
+    .panic-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 29;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(circle at center, transparent 0 38%, rgba(100,0,0,.2) 58%, rgba(0,0,0,.86) 100%);
+    }
+
+    .panic-vignette.show {
+      animation: panicPulse 1.2s ease both;
+    }
+
+    .interface-tremor {
+      animation: interfaceTremor .36s linear both;
+    }
+
+    .fatal-button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fatal-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(155,34,34,.24), transparent);
+      transform: translateX(-120%);
+      animation: fatalSweep 4s infinite;
+    }
+
+    @keyframes bloodWordDrift {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(.8) skewX(0deg);
+        filter: blur(2px);
+      }
+      18% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1.05) skewX(-6deg);
+        filter: blur(0);
+      }
+      62% {
+        opacity: .85;
+        transform: translateY(16px) scale(1) skewX(4deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(44px) scale(1.2) skewX(-10deg);
+        filter: blur(5px);
+      }
+    }
+
+    @keyframes panicPulse {
+      0% { opacity: 0; }
+      22% { opacity: .92; }
+      44% { opacity: .18; }
+      68% { opacity: .76; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes interfaceTremor {
+      0%,100% { transform: translate(0,0); }
+      15% { transform: translate(-3px,2px); }
+      30% { transform: translate(4px,-2px); }
+      45% { transform: translate(-4px,-1px); }
+      60% { transform: translate(2px,3px); }
+      75% { transform: translate(-2px,-3px); }
+    }
+
+    @keyframes fatalSweep {
+      0% { transform: translateX(-120%); }
+      18% { transform: translateX(120%); }
+      100% { transform: translateX(120%); }
+    }
+
   </style>
 </head>
 
 <body>
+
+  <!-- v18 程式生成血液：不用額外圖片，也能讓背景一直有不規則流動感 -->
+  <canvas id="bloodCanvas" class="procedural-blood-canvas"></canvas>
+
+  <!-- v18 恐怖暗角：錯誤、黑屏、鬼影出現時會短暫壓暗畫面 -->
+  <div class="panic-vignette" id="panicVignette"></div>
+
+  <!-- v18 血字雲：隨機顯示玩家代號、第五位、不要回頭等文字 -->
+  <div class="blood-word-cloud" id="bloodWordCloud"></div>
+
   <!-- v17 無圖片恐怖背景：不用外部圖片，靠 CSS 製造血霧、走廊陰影、薄鬼影 -->
   <div class="shadow-hallway"></div>
   <div class="no-image-horror-fog"></div>
@@ -1739,6 +1931,22 @@
     =========================================================
   -->
 
+
+  <!--
+    =========================================================
+    v18 中文製作備註
+    =========================================================
+    1. 圖片素材請放在 images 資料夾。
+    2. 骨頭圖片請放在 images/bones 資料夾。
+    3. 音效素材請放在 sounds 資料夾。
+    4. 如果你有放自己的音效，網頁會優先播放你的音效。
+    5. 如果音效不存在或讀取失敗，才會使用內建 Web Audio 備用音效。
+    6. checkAllAssets() 可以檢查圖片與音效是否放對位置。
+    7. initBloodCanvas() 負責程式生成流動血液背景。
+    8. startHorrorDirectorV18() 負責隨機恐怖事件。
+    =========================================================
+  -->
+
   <script>
     window.onerror=function(message,source,lineno){
       document.body.innerHTML='<div class="error-panel"><h3>網頁發生錯誤</h3><p>錯誤內容：'+message+'</p><p>位置：第 '+lineno+' 行</p><p>請截圖給我修。</p></div>';
@@ -1774,7 +1982,7 @@
 
     const checks=["已閱讀封存通知","已看見九塊骨頭","已完成標本復原","已辨認羅馬數字","已解出封存密碼","已開啟百寶封存箱","已被第七層記錄為觀測者"];
 
-    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=4.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null,mainMusicStarted=false,voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={};
+    let difficulty="easy",hearts=5,mistakeCount=0,selectedBone=null,placedCount=0,hintIndex=0,flippedCount=0,remainingTime=0,timerId=null,soundOn=true,audioCtx=null,contamination=0,cameraStream=null,ambientGain=null,ambientNodes=[],heartbeatId=null,randomScareId=null,volumeMode="extreme",volumeBoost=4.2,playerName="正在使用此裝置的人",midCaptureTaken=false,midCaptureData=null,passwordMistakeCount=0,nameFlashId=null,mainMusicStarted=false,voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={},horrorDirectorV18Id=null,bloodCanvasReady=false,presentationMode=false,builtInAmbientNodes=[],builtInAmbientTimer=null;
     const flippedMap={};
 
     window.addEventListener("DOMContentLoaded",function(){initBones();selectDifficulty("easy",document.querySelector(".diff.selected"));startGlitch();});
@@ -1834,6 +2042,7 @@
       initAudio();
       setupCustomSounds();
       startCustomAmbient();
+      initBloodCanvas();
       mainMusicStarted=true;
       volumeMode="extreme";
       volumeBoost=4.2;
@@ -1923,7 +2132,7 @@
     }
 
     function startVoiceScares(){
-      stopVoiceScares();stopUltimateHorrorEvents();
+      stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();
       voiceScareId=setInterval(()=>{
         if(!mainMusicStarted || !soundOn) return;
 
@@ -1952,7 +2161,7 @@
     function stopVoiceScares(){
       if(voiceScareId){
         clearInterval(voiceScareId);
-        voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={};
+        voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={},horrorDirectorV18Id=null,bloodCanvasReady=false,presentationMode=false,builtInAmbientNodes=[],builtInAmbientTimer=null;
       }
     }
 
@@ -2001,6 +2210,434 @@
       setTimeout(()=>ghost.classList.remove("show"), 1200);
     }
 
+    /*
+      =========================================================
+      v18 素材總表
+      ---------------------------------------------------------
+      這裡列出所有建議放入的圖片與音效。
+      之後如果要增加新素材，優先在這裡新增。
+      type:
+      - image = 圖片
+      - audio = 音效
+      =========================================================
+    */
+    const ASSET_MANIFEST=[
+      {type:"image", key:"cover", label:"開場主視覺", path:"images/cover.jpg"},
+      {type:"image", key:"fossilBoard", label:"拼骨頭頁", path:"images/fossil-board.jpg"},
+      {type:"image", key:"boneMarkings", label:"羅馬數字線索頁", path:"images/bone-markings.jpg"},
+      {type:"image", key:"sealedBox", label:"密碼箱頁", path:"images/sealed-box.jpg"},
+      {type:"image", key:"finalMirror", label:"結尾鏡面頁", path:"images/final-mirror.jpg"},
+      {type:"image", key:"gameOver", label:"失敗頁", path:"images/game-over.jpg"},
+      {type:"audio", key:"ambient", label:"主背景聲場", path:"sounds/ambient.mp3"},
+      {type:"audio", key:"scream", label:"突然驚嚇 / 鬼影", path:"sounds/scream.mp3"},
+      {type:"audio", key:"knock", label:"箱子敲擊", path:"sounds/knock.mp3"},
+      {type:"audio", key:"scrape", label:"骨頭刮擦", path:"sounds/scrape.mp3"},
+      {type:"audio", key:"heartbeat", label:"心跳", path:"sounds/heartbeat.mp3"},
+      {type:"audio", key:"glitch", label:"雜訊異常", path:"sounds/glitch.mp3"},
+      {type:"audio", key:"boom", label:"低頻撞擊", path:"sounds/boom.mp3"},
+      {type:"audio", key:"whisper", label:"模糊低語", path:"sounds/whisper.mp3"},
+      {type:"audio", key:"breath", label:"反向呼吸", path:"sounds/breath.mp3"}
+    ];
+
+    /*
+      切換展示模式：
+      - 製作模式：會看到圖片與音效標籤，方便檢查。
+      - 展示模式：會隱藏素材標籤，看起來更像正式遊戲。
+    */
+    function togglePresentationMode(){
+      presentationMode=!presentationMode;
+      document.body.classList.toggle("presentation-mode", presentationMode);
+      const label=document.getElementById("modeIndicator");
+      if(label) label.textContent=presentationMode ? "目前：展示模式" : "目前：製作模式";
+      playTone("click");
+    }
+
+    /*
+      檢查所有素材是否存在：
+      會檢查 images 與 sounds 裡的檔案。
+      沒有素材也不會壞，只是會使用備用畫面或備用音效。
+    */
+    async function checkAllAssets(){
+      const panel=document.getElementById("assetStatusPanel");
+      if(!panel) return;
+
+      panel.classList.add("show");
+      panel.innerHTML='<strong>素材檢查：</strong><span class="asset-checking">檢查中……</span>';
+
+      const results=[];
+      for(const item of ASSET_MANIFEST){
+        const ok=await checkAsset(item.path, item.type);
+        results.push({...item, ok});
+      }
+
+      const rows=results.map(item=>{
+        const status=item.ok
+          ? '<span class="asset-ok">已讀取</span>'
+          : '<span class="asset-missing">未找到，會使用備用效果</span>';
+        return `<tr><td>${item.type}</td><td><code>${item.path}</code></td><td>${item.label}</td><td>${status}</td></tr>`;
+      }).join("");
+
+      const missing=results.filter(r=>!r.ok).length;
+      panel.innerHTML=`
+        <strong>素材檢查完成：</strong>${missing===0 ? "全部素材已讀取。" : "有 "+missing+" 個素材尚未上傳。"}<br>
+        <table>
+          <tr><th>類型</th><th>路徑</th><th>用途</th><th>狀態</th></tr>
+          ${rows}
+        </table>
+        <div class="asset-note">未上傳不會造成網頁壞掉；圖片會顯示文字佔位，音效會使用內建 Web Audio 備用音。</div>
+      `;
+      playTone(missing===0 ? "correct" : "warning");
+    }
+
+    function checkAsset(path, type){
+      return new Promise(resolve=>{
+        if(type==="image"){
+          const img=new Image();
+          let finished=false;
+          const done=ok=>{
+            if(finished) return;
+            finished=true;
+            resolve(ok);
+          };
+          img.onload=()=>done(true);
+          img.onerror=()=>done(false);
+          img.src=path+"?assetCheck="+Date.now();
+          setTimeout(()=>done(false), 3500);
+        }else{
+          const audio=new Audio();
+          let finished=false;
+          const done=ok=>{
+            if(finished) return;
+            finished=true;
+            resolve(ok);
+          };
+          audio.oncanplaythrough=()=>done(true);
+          audio.onerror=()=>done(false);
+          audio.preload="auto";
+          audio.src=path+"?assetCheck="+Date.now();
+          audio.load();
+          setTimeout(()=>done(false), 3500);
+        }
+      });
+    }
+
+    /*
+      程式生成血液背景：
+      不用任何圖片，直接用 canvas 畫出不規則血流。
+      污染值越高，血流速度與數量越明顯。
+    */
+    function initBloodCanvas(){
+      if(bloodCanvasReady) return;
+      const canvas=document.getElementById("bloodCanvas");
+      if(!canvas) return;
+      bloodCanvasReady=true;
+
+      const ctx=canvas.getContext("2d");
+      const drops=[];
+      let w=0,h=0;
+
+      function resize(){
+        const ratio=Math.min(2, window.devicePixelRatio || 1);
+        w=window.innerWidth;
+        h=window.innerHeight;
+        canvas.width=Math.floor(w*ratio);
+        canvas.height=Math.floor(h*ratio);
+        canvas.style.width=w+"px";
+        canvas.style.height=h+"px";
+        ctx.setTransform(ratio,0,0,ratio,0,0);
+      }
+
+      function spawn(){
+        const count=contamination>=80 ? 4 : contamination>=50 ? 3 : 2;
+        for(let i=0;i<count;i++){
+          drops.push({
+            x:Math.random()*w,
+            y:-Math.random()*h*.3,
+            len:80+Math.random()*260,
+            width:2+Math.random()*9,
+            speed:.35+Math.random()*1.15+(contamination*.01),
+            alpha:.05+Math.random()*.18,
+            wobble:Math.random()*Math.PI*2,
+            red:70+Math.random()*80
+          });
+        }
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        ctx.globalCompositeOperation="screen";
+
+        if(Math.random()<.18) spawn();
+
+        for(let i=drops.length-1;i>=0;i--){
+          const d=drops[i];
+          d.y+=d.speed;
+          d.x+=Math.sin(d.wobble+d.y*.015)*.25;
+          d.wobble+=.015;
+
+          const grad=ctx.createLinearGradient(d.x,d.y,d.x,d.y+d.len);
+          grad.addColorStop(0,`rgba(${d.red},0,0,${d.alpha})`);
+          grad.addColorStop(.45,`rgba(${Math.max(40,d.red-30)},0,0,${d.alpha*.85})`);
+          grad.addColorStop(1,"rgba(0,0,0,0)");
+          ctx.fillStyle=grad;
+
+          ctx.beginPath();
+          if(ctx.roundRect){
+            ctx.roundRect(d.x,d.y,d.width,d.len,d.width);
+          }else{
+            ctx.rect(d.x,d.y,d.width,d.len);
+          }
+          ctx.fill();
+
+          if(d.y>h+120) drops.splice(i,1);
+        }
+
+        ctx.globalCompositeOperation="source-over";
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener("resize", resize);
+      for(let i=0;i<24;i++) spawn();
+      draw();
+    }
+
+    /*
+      血字：
+      會把玩家代號或恐怖短句印在畫面上，短暫漂移後消失。
+    */
+    function spawnBloodWord(text){
+      const cloud=document.getElementById("bloodWordCloud");
+      if(!cloud) return;
+      const word=document.createElement("div");
+      word.className="blood-word";
+      word.textContent=text || "第五位";
+      word.style.left=(8+Math.random()*80)+"%";
+      word.style.top=(12+Math.random()*70)+"%";
+      word.style.fontSize=(11+Math.random()*9)+"px";
+      word.style.transform=`rotate(${(-8+Math.random()*16).toFixed(1)}deg)`;
+      cloud.appendChild(word);
+      setTimeout(()=>word.remove(), 2300);
+    }
+
+    function triggerPanicVignette(){
+      const el=document.getElementById("panicVignette");
+      if(!el) return;
+      el.classList.remove("show");
+      void el.offsetWidth;
+      el.classList.add("show");
+      setTimeout(()=>el.classList.remove("show"), 1250);
+    }
+
+    function tremorInterface(){
+      const app=document.getElementById("app");
+      if(!app) return;
+      app.classList.remove("interface-tremor");
+      void app.offsetWidth;
+      app.classList.add("interface-tremor");
+      setTimeout(()=>app.classList.remove("interface-tremor"), 420);
+    }
+
+    /*
+      內建備用音效：
+      如果 sounds 資料夾沒有放音效，這些函式會用 Web Audio 生成恐怖聲。
+      如果你有放自己的 mp3，會優先播放你的版本。
+    */
+    function playBuiltInFallback(key, fallbackType){
+      initAudio();
+      if(!audioCtx) return false;
+
+      if(key==="scream"){
+        builtInScream();
+      }else if(key==="knock"){
+        builtInKnock();
+      }else if(key==="scrape"){
+        builtInScrape();
+      }else if(key==="heartbeat"){
+        builtInHeartbeat();
+      }else if(key==="glitch"){
+        builtInGlitch();
+      }else if(key==="boom"){
+        builtInBoom();
+      }else if(key==="whisper"){
+        builtInWhisper();
+      }else if(key==="breath"){
+        builtInBreath();
+      }else if(key==="ambient"){
+        startBuiltInAmbientExtreme();
+      }else if(fallbackType){
+        playTone(fallbackType);
+      }
+      return true;
+    }
+
+    function builtInScream(){
+      playNoise(.36,.38,"highpass",1800,1.1);
+      playOsc(520,.28,.18,"sawtooth",null,190);
+      setTimeout(()=>playOsc(820,.18,.16,"square",null,260),80);
+      setTimeout(()=>playNoise(.42,.26,"bandpass",720,9),120);
+      setTimeout(()=>builtInBoom(),220);
+    }
+
+    function builtInKnock(){
+      [0,210,520].forEach((delay,idx)=>{
+        setTimeout(()=>{
+          playOsc(72,.16,.22,"sawtooth",null,42);
+          playNoise(.08,.18,"lowpass",180,1.1);
+          if(idx===2) playNoise(.2,.08,"bandpass",480,6);
+        },delay);
+      });
+    }
+
+    function builtInScrape(){
+      for(let i=0;i<5;i++){
+        setTimeout(()=>{
+          playNoise(.22,.12,"bandpass",1800+Math.random()*1200,9);
+          playOsc(90+Math.random()*40,.18,.05,"sawtooth",null,45);
+        },i*90);
+      }
+    }
+
+    function builtInHeartbeat(){
+      playOsc(54,.12,.17,"sine",null,42);
+      setTimeout(()=>playOsc(49,.16,.14,"sine",null,39),190);
+    }
+
+    function builtInGlitch(){
+      for(let i=0;i<6;i++){
+        setTimeout(()=>{
+          playNoise(.06,.16,"highpass",2200+Math.random()*1800,1.4);
+          if(Math.random()>.45) playOsc(260+Math.random()*600,.05,.06,"square",null,80+Math.random()*100);
+        },i*55);
+      }
+    }
+
+    function builtInBoom(){
+      playOsc(38,.6,.28,"sawtooth",null,17);
+      playNoise(.32,.22,"lowpass",130,.9);
+      setTimeout(()=>playNoise(.16,.12,"bandpass",360,5),110);
+    }
+
+    function builtInWhisper(){
+      playNoise(.85,.12,"bandpass",650,7);
+      playOsc(185,.72,.06,"triangle",null,115);
+      setTimeout(()=>playNoise(.35,.09,"highpass",2400,1.3),220);
+    }
+
+    function builtInBreath(){
+      playNoise(1.15,.1,"bandpass",360,4.6);
+      playOsc(58,1.05,.055,"sine",null,76);
+    }
+
+    function startBuiltInAmbientExtreme(){
+      if(!soundOn || !audioCtx || builtInAmbientNodes.length) return;
+
+      const gain=audioCtx.createGain();
+      gain.gain.value=0.0001;
+      gain.connect(audioCtx.destination);
+      gain.gain.exponentialRampToValueAtTime(0.028, audioCtx.currentTime+1.4);
+
+      const lowA=audioCtx.createOscillator();
+      lowA.type="sawtooth";
+      lowA.frequency.value=26;
+
+      const lowB=audioCtx.createOscillator();
+      lowB.type="triangle";
+      lowB.frequency.value=39;
+
+      const filter=audioCtx.createBiquadFilter();
+      filter.type="lowpass";
+      filter.frequency.value=210;
+      filter.Q.value=.8;
+
+      lowA.connect(filter);
+      lowB.connect(filter);
+      filter.connect(gain);
+
+      lowA.start();
+      lowB.start();
+
+      builtInAmbientNodes=[lowA,lowB,filter,gain];
+
+      builtInAmbientTimer=setInterval(()=>{
+        if(!soundOn || !audioCtx) return;
+        if(Math.random()>.55) builtInBreath();
+        if(Math.random()>.65) builtInKnock();
+        if(Math.random()>.72) builtInWhisper();
+      },4200);
+    }
+
+    function stopBuiltInAmbientExtreme(){
+      if(builtInAmbientTimer){
+        clearInterval(builtInAmbientTimer);
+        builtInAmbientTimer=null;
+      }
+
+      builtInAmbientNodes.forEach(node=>{
+        try{
+          if(node.stop) node.stop();
+          if(node.disconnect) node.disconnect();
+        }catch(e){}
+      });
+
+      builtInAmbientNodes=[];
+    }
+
+    /*
+      v18 恐怖導演：
+      根據污染值決定恐怖事件密度。
+      污染值越高，越常出現鬼影、血字、黑屏、震動。
+    */
+    function startHorrorDirectorV18(){
+      stopHorrorDirectorV18();
+      horrorDirectorV18Id=setInterval(()=>{
+        const hud=document.getElementById("hud");
+        if(!hud || !hud.classList.contains("show")) return;
+
+        const rate=contamination>=80 ? .88 : contamination>=50 ? .62 : .36;
+        if(Math.random()>rate) return;
+
+        const words=[
+          "第五位",
+          "不要回頭",
+          playerName && playerName!=="正在使用此裝置的人" ? playerName : "觀測者",
+          "封存失敗",
+          "影像仍在回傳",
+          "它站在後面"
+        ];
+
+        const event=Math.floor(Math.random()*7);
+
+        if(event===0){
+          spawnBloodWord(words[Math.floor(Math.random()*words.length)]);
+        }else if(event===1){
+          triggerPanicVignette();
+          tremorInterface();
+        }else if(event===2){
+          flashThinGhost();
+        }else if(event===3){
+          playCustomSound("whisper", "staticWhisper");
+          spawnBloodWord("聽見了嗎");
+        }else if(event===4){
+          playCustomSound("knock", "distantKnock");
+          spawnBloodWord("箱子在敲");
+        }else if(event===5){
+          staticBurst();
+          triggerScreenCrack();
+        }else{
+          flashPlayerName();
+        }
+      },4300);
+    }
+
+    function stopHorrorDirectorV18(){
+      if(horrorDirectorV18Id){
+        clearInterval(horrorDirectorV18Id);
+        horrorDirectorV18Id=null;
+      }
+    }
+
+
     async function startProgram(){
       const ageGate=document.getElementById("ageGate");
       if(ageGate && !ageGate.classList.contains("hidden")){
@@ -2038,7 +2675,7 @@
       }
 
       const cfg=difficulties[difficulty];
-      hearts=cfg.hearts; remainingTime=cfg.time; mistakeCount=0; passwordMistakeCount=0; contamination=0; placedHistory=[]; ritualChoice=null; ritualScore=0,customAudioReady=false,customSounds={}; updateContamination();
+      hearts=cfg.hearts; remainingTime=cfg.time; mistakeCount=0; passwordMistakeCount=0; contamination=0; placedHistory=[]; ritualChoice=null; ritualScore=0,customAudioReady=false,customSounds={},horrorDirectorV18Id=null,bloodCanvasReady=false,presentationMode=false,builtInAmbientNodes=[],builtInAmbientTimer=null; updateContamination();
       document.getElementById("hud").classList.add("show");
       document.getElementById("difficultyLabel").textContent="難度："+cfg.name+" / "+playerName;
       updateHearts(); updateTimer();
@@ -2046,6 +2683,7 @@
       startScaryAmbience();
       startNameFlashEvents();
       startUltimateHorrorEvents();
+      startHorrorDirectorV18();
       showTerror("聲音與影像已接入", playerName+" 已被第七層記錄");
       goTo("screen2");
     }
@@ -2054,11 +2692,11 @@
       document.querySelectorAll(".screen").forEach(sec=>sec.classList.remove("active"));
       const target=document.getElementById(id);
       if(target){target.classList.add("active");window.scrollTo(0,0);}
-      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();}
+      if(id==="screen1"){document.getElementById("hud").classList.remove("show");stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();}
       else{document.getElementById("hud").classList.add("show");}
       if(id==="screen4"){setTimeout(()=>captureMidGamePhoto("CONTAINMENT BOX ACCESS"), 900);}
       if(id==="screen5"){stopTimer();runEnding();}
-      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();runGameOverEnding();playTone("gameover");}
+      if(id==="screenGameOver"){stopTimer();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();runGameOverEnding();playTone("gameover");}
     }
 
     function shuffleArray(array){
@@ -2358,7 +2996,7 @@
     function stopNameFlashEvents(){
       if(nameFlashId){
         clearInterval(nameFlashId);
-        nameFlashId=null,mainMusicStarted=false,voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={};
+        nameFlashId=null,mainMusicStarted=false,voiceScareId=null,ultimateHorrorId=null,placedHistory=[],ritualChoice=null,ritualScore=0,customAudioReady=false,customSounds={},horrorDirectorV18Id=null,bloodCanvasReady=false,presentationMode=false,builtInAmbientNodes=[],builtInAmbientTimer=null;
       }
     }
 
@@ -2407,12 +3045,12 @@
     }
     function updateSealEvents(text){const el=document.getElementById("sealEvents");if(el)el.innerHTML="<strong>封存紀錄：</strong>"+text;}
     function showRitualBanner(text){const el=document.getElementById("ritualBanner");if(!el)return;el.innerHTML=text;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1700);}
-    function triggerBlackout(text){const el=document.getElementById("blackout");if(!el)return;el.innerHTML=text||"燈滅了。<br>不要動。";el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playCustomSound("boom", "blackoutHit");setTimeout(()=>el.classList.remove("show"),1400);}
+    function triggerBlackout(text){const el=document.getElementById("blackout");if(!el)return;el.innerHTML=text||"燈滅了。<br>不要動。";el.classList.remove("show");void el.offsetWidth;el.classList.add("show");triggerPanicVignette();tremorInterface();spawnBloodWord("燈滅了");playCustomSound("boom", "blackoutHit");setTimeout(()=>el.classList.remove("show"),1400);}
     function triggerCorpseFace(){const el=document.getElementById("corpseFace");if(!el)return;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playTone("megaJumpScare");setTimeout(()=>el.classList.remove("show"),650);}
     function triggerCurseScan(){const el=document.getElementById("curseScan");if(!el)return;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playTone("wallScratch");setTimeout(()=>el.classList.remove("show"),1900);}
     function triggerScreenCrack(){const el=document.getElementById("screenCrack");if(!el)return;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");playCustomSound("scrape", "boneCrack");setTimeout(()=>el.classList.remove("show"),900);}
     function startUltimateHorrorEvents(){
-      stopUltimateHorrorEvents();
+      stopUltimateHorrorEvents();stopHorrorDirectorV18();
       ultimateHorrorId=setInterval(()=>{
         const hud=document.getElementById("hud");
         if(!hud || !hud.classList.contains("show")) return;
@@ -2644,7 +3282,7 @@
         status.innerHTML="影像捕捉已停止。<br>但封存紀錄仍保留最後一次畫面。";
       }
     }
-    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();location.reload();}
+    function restartGame(){stopCameraCapture();stopScaryAmbience();stopNameFlashEvents();stopVoiceScares();stopUltimateHorrorEvents();stopHorrorDirectorV18();location.reload();}
 
     function shake(){const app=document.getElementById("app");app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");setTimeout(()=>app.classList.remove("shake"),360);}
     function flash(){const f=document.getElementById("flash");f.style.display="block";setTimeout(()=>f.style.display="none",150);}
@@ -2695,12 +3333,15 @@
     }
 
     function playCustomSound(key, fallbackType){
+      // 自備音效優先：
+      // 1. 如果 sounds 裡有對應 mp3，就播放你的版本。
+      // 2. 如果沒有，或手機瀏覽器讀取失敗，就改用內建備用音效。
       if(!soundOn) return false;
       setupCustomSounds();
 
       const base=customSounds[key];
       if(!base){
-        if(fallbackType) playTone(fallbackType);
+        playBuiltInFallback(key, fallbackType);
         return false;
       }
 
@@ -2708,29 +3349,42 @@
         const audio=base.cloneNode(true);
         audio.volume = key==="ambient" ? 0.42 : Math.min(1, 0.9);
         audio.play().catch(()=>{
-          if(fallbackType) playTone(fallbackType);
+          playBuiltInFallback(key, fallbackType);
         });
         return true;
       }catch(e){
-        if(fallbackType) playTone(fallbackType);
+        playBuiltInFallback(key, fallbackType);
         return false;
       }
     }
 
     function startCustomAmbient(){
+      // 背景音樂：
+      // 如果有 sounds/ambient.mp3，就播放你的背景聲場。
+      // 如果沒有，就啟動內建低頻恐怖聲場。
       if(!soundOn) return;
       setupCustomSounds();
       const a=customSounds.ambient;
-      if(!a) return;
+      if(!a){
+        playBuiltInFallback("ambient","");
+        return;
+      }
 
       try{
         a.volume=0.34;
         a.loop=true;
-        a.play().catch(()=>{});
-      }catch(e){}
+        a.play().catch(()=>{
+          playBuiltInFallback("ambient","");
+        });
+      }catch(e){
+        playBuiltInFallback("ambient","");
+      }
     }
 
     function stopCustomAmbient(){
+      // 停止自備背景音樂與內建背景聲場。
+      stopBuiltInAmbientExtreme();
+
       const a=customSounds && customSounds.ambient;
       if(!a) return;
       try{
