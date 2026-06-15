@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>第五位研究員｜第七層標本復原程序 v83 結尾收斂與解鎖檔案精簡版</title>
+  <title>第五位研究員｜第七層標本復原程序 v84 最終介面細修版</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>:root {
@@ -6397,6 +6397,155 @@
  .v83-end-summary .v83-row {
  font-size: 12px;
  }
+ }
+ body.screen-title-mode details[open].v69-setup-details,
+ body.screen-title-mode details[open].setup-details,
+ body.screen-title-mode details[open] {
+ max-height: 46px !important;
+ overflow: hidden !important;
+ }
+ body.screen-title-mode details[open].v69-setup-details > *:not(summary),
+ body.screen-title-mode details[open].setup-details > *:not(summary),
+ body.screen-title-mode details[open] > *:not(summary) {
+ display: none !important;
+ }
+ body.screen-title-mode details summary {
+ min-height: 42px !important;
+ display: flex !important;
+ align-items: center !important;
+ color: rgba(241,227,200,.74) !important;
+ }
+ body.screen-title-mode .warning,
+ body.screen-title-mode .warning-card,
+ body.screen-title-mode .experience-grid,
+ body.screen-title-mode .mode-grid,
+ body.screen-title-mode .camera-option,
+ body.screen-title-mode .sound-field,
+ body.screen-title-mode .option-grid {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .v82-asset-badge {
+ font-size: 0 !important;
+ }
+ body.screen-puzzle-mode.v82-board-image-missing .v82-asset-badge::before {
+ content: "標本底圖尚未載入，請上傳 images/reveal/full-fossil-board.png";
+ font-size: 11px !important;
+ }
+ body.screen-puzzle-mode .v82-asset-badge.v82-show-ok,
+ body.screen-puzzle-mode.v82-board-image-ready .v82-asset-badge {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .board-title,
+ body.screen-puzzle-mode .v63-board-title,
+ body.screen-puzzle-mode .full-board-title,
+ body.screen-puzzle-mode [data-dev-label="board-title"] {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board::before {
+ content: "標本復原區";
+ position: absolute;
+ left: 12px;
+ top: 10px;
+ z-index: 30;
+ color: rgba(241,227,200,.82);
+ font-size: 13px;
+ font-weight: 800;
+ letter-spacing: .10em;
+ pointer-events: none;
+ text-shadow: 0 0 10px rgba(0,0,0,.75);
+ }
+ body.screen-puzzle-mode .v72-board-guide {
+ display: none !important;
+ }
+ body.screen-puzzle-mode #v66-scan-btn {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .v73-top-puzzle-panel {
+ padding-bottom: 8px !important;
+ }
+ body.screen-clue-mode #screen-clue {
+ padding-bottom: max(170px, calc(env(safe-area-inset-bottom, 0px) + 140px)) !important;
+ }
+ body.screen-clue-mode .order-puzzle,
+ body.screen-clue-mode #order-puzzle {
+ margin-bottom: 24px !important;
+ }
+ body.screen-clue-mode .clue-back:not(.no-mark) {
+ font-size: 34px !important;
+ letter-spacing: .12em !important;
+ color: #ff4b42 !important;
+ text-shadow: 0 0 16px rgba(255,42,36,.36) !important;
+ }
+ body.screen-clue-mode .order-card,
+ body.screen-clue-mode .order-item,
+ body.screen-clue-mode [data-roman] {
+ color: rgba(255,238,222,.86) !important;
+ }
+ body.screen-box-mode .v67-ai-panel,
+ body.screen-box-mode #v67-ai-panel,
+ body.screen-box-mode .ai-panel,
+ body.screen-box-mode #ai-panel {
+ display: none !important;
+ }
+ body.screen-box-mode #screen-box {
+ padding-bottom: max(150px, calc(env(safe-area-inset-bottom, 0px) + 120px)) !important;
+ }
+ body.screen-box-mode #box-password,
+ body.screen-box-mode .password-dots,
+ body.screen-box-mode .box-password {
+ margin-top: 12px !important;
+ margin-bottom: 12px !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs,
+ body.screen-ending-mode .v82-ending-tabs,
+ body.screen-ending-mode #v81-ending-tabs,
+ body.screen-ending-mode #v82-ending-tabs {
+ background: rgba(10,2,2,.88) !important;
+ border-color: rgba(255,178,164,.18) !important;
+ box-shadow: 0 0 20px rgba(0,0,0,.42) !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs button,
+ body.screen-ending-mode .v82-ending-tabs button,
+ body.screen-ending-mode #v81-ending-tabs button,
+ body.screen-ending-mode #v82-ending-tabs button {
+ background: rgba(0,0,0,.38) !important;
+ color: rgba(241,227,200,.78) !important;
+ border: 1px solid rgba(255,178,164,.14) !important;
+ box-shadow: none !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs button.active,
+ body.screen-ending-mode .v82-ending-tabs button.active,
+ body.screen-ending-mode #v81-ending-tabs button.active,
+ body.screen-ending-mode #v82-ending-tabs button.active {
+ background: linear-gradient(135deg, rgba(145,20,20,.98), rgba(70,5,5,.98)) !important;
+ color: #fff0e7 !important;
+ border-color: rgba(255,178,164,.42) !important;
+ box-shadow: 0 0 18px rgba(200,40,34,.28) !important;
+ }
+ body.screen-ending-mode [data-v82-group="card"],
+ body.screen-ending-mode [data-v81-group="card"] {
+ min-height: auto !important;
+ }
+ body.screen-ending-mode .archive-card {
+ display: block !important;
+ }
+ body.screen-ending-mode #btn-save-archive,
+ body.screen-ending-mode #btn-restart {
+ position: relative !important;
+ z-index: 5 !important;
+ }
+ body.screen-ending-mode .v83-unlock-files {
+ margin-bottom: 40px !important;
+ }
+ @media(max-width: 430px) {
+ body.screen-clue-mode .clue-back:not(.no-mark) {
+ font-size: 30px !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs button,
+ body.screen-ending-mode .v82-ending-tabs button {
+ font-size: 11px !important;
+ min-height: 35px !important;
+ }
  }</style>
 </head>
 <body>
@@ -6524,9 +6673,9 @@
         <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
         <div class="v56-url-card">
           正式測試網址
-          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=83</code>
+          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=84</code>
           <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=83。</div>
+          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=84。</div>
         </div>
         <div class="v55-qa-panel">
           <div class="staff-subtitle">最終品質檢查</div>
@@ -6556,7 +6705,7 @@
         </div>
         <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
         <div class="staff-info-list" id="staffInfoList">
-          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v83</span></div>
+          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v84</span></div>
           <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
           <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
           <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -6736,7 +6885,7 @@
       <div class="v72-board-guide" id="v72-board-guide"><b>操作方式</b>：先點下方骨頭，再點上方亮起的封存區。紅色亮框就是建議下一塊。</div>
       <div class="game-board v63-mask-board" id="game-board">
         <div class="v63-board-image-layer" aria-hidden="true">
-          <img id="v63-board-img" class="v63-board-img" src="images/reveal/full-fossil-board.png" alt="完整雞骨化石復原底圖" loading="lazy" decoding="async" onerror="Game.v63HandleBoardImageError()">
+          <img id="v63-board-img" class="v63-board-img" src="images/reveal/full-fossil-board.png" alt="標本復原區" loading="lazy" decoding="async" onerror="Game.v63HandleBoardImageError()">
           <div class="v63-board-fallback" id="v63-board-fallback">
             標本影像尚未載入<br>
             封存檔案正在等待復原圖
@@ -6953,9 +7102,9 @@
       =========================================================
     */
     const APP_CONFIG = {
-      VERSION: "v83",
-      URL_VERSION: "83",
-      BUILD_TYPE: "結尾收斂與解鎖檔案精簡版",
+      VERSION: "v84",
+      URL_VERSION: "84",
+      BUILD_TYPE: "最終介面細修版",
       PLAYER_PIN: "1931",
       STAFF_PASSWORD: "1931",
       FORMAL_MODE_DEFAULT: true,
@@ -6975,7 +7124,7 @@
       V55_RARITY_ENABLED: true,
       V55_QA_PANEL_ENABLED: true,
       V56_ARCHIVE_ID_ENABLED: true,
-      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=83",
+      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=84",
       V57_MOBILE_SCROLL_FIX: true,
       V58_SAVE_FIX_ENABLED: true,
       V59_FULL_REVEAL_ENABLED: true,
@@ -6997,7 +7146,7 @@
       V64_COLLAPSE_PUZZLE_NOTES: true,
       V64_UNLOCK_FILES_ENABLED: true,
       V65_AUTOSAVE_ENABLED: true,
-      V65_SAVE_KEY: "fifthResearcher_v83_autosave",
+      V65_SAVE_KEY: "fifthResearcher_v84_autosave",
       V65_SAVE_MAX_AGE_MS: 43200000,
       V66_EXPERIENCE_OPTIMIZED: true,
       V66_MAX_HEARTS: 5,
@@ -7086,7 +7235,13 @@
       V83_HIDE_CAMERA_AT_END: true,
       V83_COMPACT_UNLOCK_FILES: true,
       V83_REMOVE_BACKSIDE_LANGUAGE_AT_END: true,
-      V83_FINAL_FIRST_SCREEN: true
+      V83_FINAL_FIRST_SCREEN: true,
+      V84_FINAL_UI_DETAIL_FIX: true,
+      V84_KEEP_ROMAN_DIFFICULTY: true,
+      V84_TITLE_SETTINGS_COLLAPSED: true,
+      V84_BOX_HIDE_AI: true,
+      V84_ENDING_TAB_DARK_STYLE: true,
+      V84_HIDE_DEV_LABELS: true
     };
     const SOUND_CONFIG = {
       ambient: "sounds/ambient.mp3",
@@ -8254,6 +8409,83 @@
         }
         Engine.toast?.("順序尚未正確，請重新排列。");
         return false;
+      },
+      v84CollapseTitleSettings() {
+        if (!document.body.classList.contains("screen-title-mode")) return;
+        document.querySelectorAll("#screen-title details").forEach(details => {
+          details.removeAttribute("open");
+        });
+      },
+      v84HidePuzzleDevLabels() {
+        const candidates = [...document.querySelectorAll("#screen-puzzle *")];
+        candidates.forEach(el => {
+          const text = (el.textContent || "").trim();
+          if (text === "標本復原區" || text === "標本復原區") {
+            el.style.display = "none";
+            el.dataset.devLabel = "board-title";
+          }
+        });
+      },
+      v84HideBoxAI() {
+        if (!document.body.classList.contains("screen-box-mode")) return;
+        document.querySelectorAll(".v67-ai-panel, #v67-ai-panel, .ai-panel, #ai-panel").forEach(el => {
+          el.style.display = "none";
+          el.setAttribute("aria-hidden", "true");
+        });
+      },
+      v84RefineEndingCardTab() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        const archive = document.getElementById("archive-card") || screen.querySelector(".archive-card");
+        const save = document.getElementById("btn-save-archive");
+        const restart = document.getElementById("btn-restart");
+        [archive, save, restart].forEach(el => {
+          if (!el) return;
+          el.dataset.v82Group = "card";
+          el.dataset.v81Group = "card";
+          el.classList.add("v81-ending-group");
+          el.classList.remove("v81-hidden");
+        });
+        const story = document.getElementById("v60-story-card") || document.getElementById("v83-unlock-files");
+        if (story) {
+          story.dataset.v82Group = "files";
+          story.dataset.v81Group = "files";
+          story.classList.add("v81-ending-group");
+        }
+        const tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) return;
+        const setTab = tab => {
+          tabs.querySelectorAll("button").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.tab === tab);
+          });
+          screen.querySelectorAll(".v81-ending-group").forEach(group => {
+            const groupName = group.dataset.v82Group || group.dataset.v81Group || "result";
+            group.classList.toggle("v81-hidden", groupName !== tab);
+          });
+        };
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            setTab(btn.dataset.tab);
+            try { tabs.scrollIntoView({behavior:"smooth", block:"start"}); } catch (err) {}
+          };
+        });
+        setTab("result");
+        this.v84RefineEndingCardTab?.();
+      },
+      v84AuditFinalDetails(targetId = "") {
+        if (targetId === "screen-title") {
+          setTimeout(() => this.v84CollapseTitleSettings(), 80);
+        }
+        if (targetId === "screen-puzzle") {
+          setTimeout(() => this.v84HidePuzzleDevLabels(), 120);
+        }
+        if (targetId === "screen-box") {
+          setTimeout(() => this.v84HideBoxAI(), 80);
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => this.v84RefineEndingCardTab(), 180);
+        }
       },
       v83HideEndingProcessUI() {
         const ids = [
@@ -9994,6 +10226,7 @@
         this.v65BindAutoSave();
         this.v81AuditLayout?.("screen-title");
         this.v82AuditFinalUI?.("screen-title");
+        this.v84AuditFinalDetails?.("screen-title");
         setTimeout(() => this.v76AuditButtons?.(), 350);
         setTimeout(() => this.v76AuditButtons?.(), 250);
         this.v75PrepareTitleLayout();
@@ -11156,6 +11389,7 @@
           if (targetId === "screen-puzzle") this.v75UpdateAIMicro?.();
           this.v81AuditLayout?.(targetId);
           this.v82AuditFinalUI?.(targetId);
+          this.v84AuditFinalDetails?.(targetId);
           Engine.setStage(targetId);
           setTimeout(() => this.v80AuditCurrentScreen?.(targetId), 160);
           this.v57EnsureScrollTop(targetId);
