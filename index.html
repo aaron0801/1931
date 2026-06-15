@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>第五位研究員｜第七層標本復原程序 v81 介面重排與底部遮擋修正版</title>
+  <title>第五位研究員｜第七層標本復原程序 v83 結尾收斂與解鎖檔案精簡版</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>:root {
@@ -6025,6 +6025,378 @@
  min-height: 56px !important;
  font-size: 15px !important;
  }
+ }
+ :root {
+ --v82-bottom-room: max(96px, calc(env(safe-area-inset-bottom, 0px) + 78px));
+ --v82-text-main: rgba(255, 238, 222, .94);
+ --v82-text-sub: rgba(241, 227, 200, .72);
+ --v82-border: rgba(255, 178, 164, .20);
+ --v82-red: rgba(180, 28, 28, .92);
+ }
+ body.v82-final-ui #app,
+ body.v82-final-ui .screen {
+ padding-bottom: var(--v82-bottom-room) !important;
+ }
+ body.v82-final-ui .stage-hud {
+ display: none !important;
+ opacity: 0 !important;
+ pointer-events: none !important;
+ visibility: hidden !important;
+ }
+ body.v82-final-ui .task-title,
+ body.v82-final-ui .mission-title,
+ body.v82-final-ui .status-title,
+ body.v82-final-ui h1,
+ body.v82-final-ui h2,
+ body.v82-final-ui h3 {
+ color: var(--v82-text-main) !important;
+ text-shadow: 0 0 14px rgba(180, 28, 28, .26) !important;
+ }
+ body.v82-final-ui p,
+ body.v82-final-ui .muted,
+ body.v82-final-ui .subtext,
+ body.v82-final-ui .desc {
+ color: var(--v82-text-sub) !important;
+ line-height: 1.7 !important;
+ }
+ body.v82-final-ui .btn,
+ body.v82-final-ui button {
+ touch-action: manipulation !important;
+ -webkit-tap-highlight-color: rgba(255,178,164,.18) !important;
+ }
+ body.screen-title-mode .v67-ai-panel,
+ body.screen-title-mode #v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-title-mode .v66-taskbar,
+ body.screen-title-mode #v66-taskbar {
+ display: none !important;
+ }
+ body.screen-title-mode .scene-box {
+ max-height: 138px !important;
+ opacity: .72 !important;
+ margin-top: 8px !important;
+ margin-bottom: 8px !important;
+ }
+ body.screen-title-mode .scene-box img {
+ max-height: 138px !important;
+ object-fit: cover !important;
+ }
+ body.screen-title-mode #player-name {
+ min-height: 54px !important;
+ font-size: 17px !important;
+ }
+ body.screen-title-mode button[onclick*="startGame"],
+ body.screen-title-mode .btn.primary,
+ body.screen-title-mode button.primary {
+ min-height: 60px !important;
+ font-size: 17px !important;
+ font-weight: 900 !important;
+ border-radius: 18px !important;
+ }
+ body.screen-title-mode .warning,
+ body.screen-title-mode .warning-card,
+ body.screen-title-mode .info-grid,
+ body.screen-title-mode .grid-info {
+ opacity: .64 !important;
+ }
+ body.screen-puzzle-mode #screen-puzzle {
+ padding-bottom: var(--v82-bottom-room) !important;
+ }
+ body.screen-puzzle-mode .v67-ai-panel,
+ body.screen-puzzle-mode #v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .v75-ai-micro {
+ display: block !important;
+ font-size: 12px !important;
+ color: rgba(241,227,200,.78) !important;
+ border-color: rgba(146,220,255,.18) !important;
+ }
+ body.screen-puzzle-mode #v74-place-now {
+ min-height: 60px !important;
+ font-size: 17px !important;
+ font-weight: 950 !important;
+ letter-spacing: .08em !important;
+ border-radius: 18px !important;
+ background: linear-gradient(135deg, rgba(145,20,20,.96), rgba(55,5,5,.98)) !important;
+ box-shadow: 0 0 32px rgba(210,48,36,.38) !important;
+ }
+ body.screen-puzzle-mode #bone-pool .bone-item {
+ min-height: 42px !important;
+ color: rgba(255,238,222,.86) !important;
+ border-color: rgba(255,178,164,.20) !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board {
+ max-height: min(330px, 44vh) !important;
+ margin-top: 8px !important;
+ margin-bottom: 14px !important;
+ }
+ body.screen-puzzle-mode .v72-board-guide {
+ font-size: 12px !important;
+ color: rgba(255,238,222,.82) !important;
+ }
+ .v82-asset-badge {
+ display: none;
+ margin: 8px 0;
+ padding: 8px 10px;
+ border: 1px solid rgba(255,178,164,.18);
+ border-radius: 999px;
+ background: rgba(0,0,0,.24);
+ color: rgba(241,227,200,.70);
+ font-size: 11px;
+ text-align: center;
+ }
+ body.v82-board-image-missing .v82-asset-badge {
+ display: block !important;
+ border-color: rgba(255,88,72,.42);
+ color: rgba(255,190,176,.92);
+ }
+ body.v82-board-image-ready .v82-asset-badge.v82-show-ok {
+ display: block !important;
+ border-color: rgba(120,220,160,.24);
+ color: rgba(180,245,205,.78);
+ }
+ body.screen-clue-mode #screen-clue {
+ padding-bottom: var(--v82-bottom-room) !important;
+ }
+ body.screen-clue-mode .v67-ai-panel,
+ body.screen-clue-mode #v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-clue-mode .clue-card {
+ border-color: rgba(255,238,222,.28) !important;
+ }
+ body.screen-clue-mode .clue-card.flipped {
+ border-color: rgba(255,178,164,.46) !important;
+ }
+ body.screen-ending-mode #screen-ending {
+ padding-bottom: calc(var(--v82-bottom-room) + 40px) !important;
+ }
+ body.screen-ending-mode .v67-ai-panel,
+ body.screen-ending-mode #v67-ai-panel {
+ display: none !important;
+ }
+ .v81-ending-tabs,
+ .v82-ending-tabs {
+ position: sticky !important;
+ top: 8px !important;
+ z-index: 80 !important;
+ display: grid !important;
+ grid-template-columns: repeat(3, 1fr) !important;
+ gap: 6px !important;
+ margin: 10px 0 14px !important;
+ padding: 6px !important;
+ border: 1px solid rgba(241,227,200,.14) !important;
+ border-radius: 999px !important;
+ background: rgba(5,2,2,.84) !important;
+ backdrop-filter: blur(10px) !important;
+ }
+ .v81-ending-tabs button,
+ .v82-ending-tabs button {
+ min-height: 36px !important;
+ border-radius: 999px !important;
+ font-size: 12px !important;
+ }
+ .v81-ending-tabs button.active,
+ .v82-ending-tabs button.active {
+ background: rgba(128,20,20,.86) !important;
+ color: #fff0e7 !important;
+ border-color: rgba(255,178,164,.38) !important;
+ }
+ @media(max-width:430px) {
+ body.screen-title-mode .scene-box,
+ body.screen-title-mode .scene-box img {
+ max-height: 124px !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board {
+ max-height: 315px !important;
+ }
+ }
+ body.screen-ending-mode #camera-frame,
+ body.screen-ending-mode .camera-frame,
+ body.screen-ending-mode #camera-video,
+ body.screen-ending-mode #fallback-img,
+ body.screen-ending-mode #photo-result,
+ body.screen-ending-mode #btn-open-camera,
+ body.screen-ending-mode #btn-take-photo,
+ body.screen-ending-mode #photo-download {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+ height: 0 !important;
+ min-height: 0 !important;
+ margin: 0 !important;
+ padding: 0 !important;
+ overflow: hidden !important;
+ pointer-events: none !important;
+ }
+ body.screen-ending-mode #screen-ending {
+ padding-bottom: calc(max(108px, env(safe-area-inset-bottom, 0px) + 86px)) !important;
+ }
+ body.screen-ending-mode #screen-ending h1 {
+ margin-top: 8px !important;
+ margin-bottom: 4px !important;
+ font-size: 26px !important;
+ letter-spacing: .12em !important;
+ }
+ body.screen-ending-mode #screen-ending h2 {
+ margin-bottom: 12px !important;
+ opacity: .68 !important;
+ font-size: 12px !important;
+ }
+ body.screen-ending-mode .registry-list {
+ display: none !important;
+ }
+ body.screen-ending-mode #ending-text {
+ margin: 10px 0 12px !important;
+ font-size: 15px !important;
+ color: rgba(241,227,200,.76) !important;
+ }
+ body.screen-ending-mode .ending-visual {
+ margin-top: 8px !important;
+ margin-bottom: 12px !important;
+ min-height: 190px !important;
+ border-color: rgba(255,178,164,.18) !important;
+ }
+ body.screen-ending-mode .ending-visual-title {
+ font-size: 20px !important;
+ line-height: 1.35 !important;
+ }
+ body.screen-ending-mode .ending-visual-desc {
+ max-width: 92% !important;
+ line-height: 1.55 !important;
+ color: rgba(241,227,200,.74) !important;
+ }
+ body.screen-ending-mode .ending-rank {
+ margin: 10px 0 12px !important;
+ padding: 12px !important;
+ border-radius: 16px !important;
+ }
+ body.screen-ending-mode #v67AiReport,
+ body.screen-ending-mode .v67-ai-report {
+ display: none !important;
+ }
+ body.screen-ending-mode #btn-save-archive,
+ body.screen-ending-mode #btn-restart {
+ display: block !important;
+ width: 100% !important;
+ min-height: 52px !important;
+ border-radius: 16px !important;
+ margin-top: 10px !important;
+ }
+ body.screen-ending-mode #btn-save-archive {
+ background: linear-gradient(135deg, rgba(150,24,20,.96), rgba(45,5,5,.98)) !important;
+ border-color: rgba(255,178,164,.46) !important;
+ box-shadow: 0 0 26px rgba(200,44,34,.28) !important;
+ }
+ body.screen-ending-mode .archive-card {
+ margin-top: 10px !important;
+ margin-bottom: 12px !important;
+ }
+ .v83-end-summary {
+ display: grid;
+ gap: 8px;
+ margin: 10px 0 12px;
+ padding: 12px;
+ border: 1px solid rgba(255,178,164,.16);
+ border-radius: 16px;
+ background:
+ radial-gradient(circle at 50% 0%, rgba(190,42,34,.16), transparent 55%),
+ rgba(0,0,0,.24);
+ }
+ .v83-end-summary .v83-row {
+ display: flex;
+ justify-content: space-between;
+ gap: 12px;
+ color: rgba(241,227,200,.72);
+ font-size: 13px;
+ line-height: 1.45;
+ border-bottom: 1px solid rgba(241,227,200,.07);
+ padding-bottom: 7px;
+ }
+ .v83-end-summary .v83-row:last-child {
+ border-bottom: 0;
+ padding-bottom: 0;
+ }
+ .v83-end-summary b {
+ color: #fff0e7;
+ font-weight: 850;
+ text-align: right;
+ }
+ .v83-unlock-files {
+ display: grid;
+ gap: 10px;
+ margin-top: 12px;
+ }
+ .v83-file-card {
+ border: 1px solid rgba(255,178,164,.16);
+ border-radius: 16px;
+ background: rgba(0,0,0,.22);
+ overflow: hidden;
+ }
+ .v83-file-card summary {
+ list-style: none;
+ cursor: pointer;
+ padding: 12px;
+ color: #fff0e7;
+ font-size: 14px;
+ font-weight: 850;
+ letter-spacing: .04em;
+ -webkit-tap-highlight-color: rgba(255,178,164,.18);
+ }
+ .v83-file-card summary::-webkit-details-marker {
+ display: none;
+ }
+ .v83-file-card summary span {
+ display: block;
+ margin-top: 6px;
+ color: rgba(241,227,200,.64);
+ font-size: 12px;
+ font-weight: 500;
+ letter-spacing: 0;
+ line-height: 1.55;
+ }
+ .v83-file-card .v83-file-body {
+ padding: 0 12px 12px;
+ color: rgba(241,227,200,.74);
+ font-size: 12px;
+ line-height: 1.75;
+ }
+ .v83-file-card[open] {
+ border-color: rgba(255,178,164,.34);
+ box-shadow: 0 0 18px rgba(190,42,34,.16);
+ }
+ .v83-file-index {
+ display: inline-flex;
+ margin-right: 6px;
+ color: #ffb2a4;
+ font-size: 11px;
+ letter-spacing: .08em;
+ }
+ body.screen-ending-mode .v64-unlock-files {
+ margin-top: 10px !important;
+ }
+ body.screen-ending-mode .v64-unlock-files > h3 {
+ margin-bottom: 8px !important;
+ }
+ body.screen-ending-mode .v64-unlock-files .v64-unlock-card {
+ display: none !important;
+ }
+ body.screen-ending-mode .v83-hide-at-ending,
+ body.screen-ending-mode [data-ending-hide="true"] {
+ display: none !important;
+ }
+ @media(max-width:430px) {
+ body.screen-ending-mode .ending-visual {
+ min-height: 170px !important;
+ }
+ body.screen-ending-mode #screen-ending h1 {
+ font-size: 23px !important;
+ }
+ .v83-end-summary .v83-row {
+ font-size: 12px;
+ }
  }</style>
 </head>
 <body>
@@ -6152,9 +6524,9 @@
         <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
         <div class="v56-url-card">
           正式測試網址
-          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=81</code>
+          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=83</code>
           <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=81。</div>
+          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=83。</div>
         </div>
         <div class="v55-qa-panel">
           <div class="staff-subtitle">最終品質檢查</div>
@@ -6184,7 +6556,7 @@
         </div>
         <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
         <div class="staff-info-list" id="staffInfoList">
-          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v81</span></div>
+          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v83</span></div>
           <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
           <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
           <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -6581,9 +6953,9 @@
       =========================================================
     */
     const APP_CONFIG = {
-      VERSION: "v81",
-      URL_VERSION: "81",
-      BUILD_TYPE: "介面重排與底部遮擋修正版",
+      VERSION: "v83",
+      URL_VERSION: "83",
+      BUILD_TYPE: "結尾收斂與解鎖檔案精簡版",
       PLAYER_PIN: "1931",
       STAFF_PASSWORD: "1931",
       FORMAL_MODE_DEFAULT: true,
@@ -6603,7 +6975,7 @@
       V55_RARITY_ENABLED: true,
       V55_QA_PANEL_ENABLED: true,
       V56_ARCHIVE_ID_ENABLED: true,
-      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=81",
+      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=83",
       V57_MOBILE_SCROLL_FIX: true,
       V58_SAVE_FIX_ENABLED: true,
       V59_FULL_REVEAL_ENABLED: true,
@@ -6625,7 +6997,7 @@
       V64_COLLAPSE_PUZZLE_NOTES: true,
       V64_UNLOCK_FILES_ENABLED: true,
       V65_AUTOSAVE_ENABLED: true,
-      V65_SAVE_KEY: "fifthResearcher_v81_autosave",
+      V65_SAVE_KEY: "fifthResearcher_v83_autosave",
       V65_SAVE_MAX_AGE_MS: 43200000,
       V66_EXPERIENCE_OPTIMIZED: true,
       V66_MAX_HEARTS: 5,
@@ -6703,7 +7075,18 @@
       V81_HIDE_BOTTOM_HUD_MOBILE: true,
       V81_COMPACT_AI: true,
       V81_ENDING_TABS: true,
-      V81_FAST_PUZZLE_LAYOUT: true
+      V81_FAST_PUZZLE_LAYOUT: true,
+      V82_FINAL_SHOWCASE_BUILD: true,
+      V82_ASSET_STATUS_BADGE: true,
+      V82_RESTART_QUERY_RESET: true,
+      V82_ENDING_TAB_REPAIR: true,
+      V82_READABILITY_BOOST: true,
+      V82_HIDE_AI_EXCEPT_NEEDED: true,
+      V83_ENDING_CLOSURE_REFINEMENT: true,
+      V83_HIDE_CAMERA_AT_END: true,
+      V83_COMPACT_UNLOCK_FILES: true,
+      V83_REMOVE_BACKSIDE_LANGUAGE_AT_END: true,
+      V83_FINAL_FIRST_SCREEN: true
     };
     const SOUND_CONFIG = {
       ambient: "sounds/ambient.mp3",
@@ -7872,6 +8255,273 @@
         Engine.toast?.("順序尚未正確，請重新排列。");
         return false;
       },
+      v83HideEndingProcessUI() {
+        const ids = [
+          "camera-frame",
+          "camera-video",
+          "photo-canvas",
+          "photo-result",
+          "fallback-img",
+          "btn-open-camera",
+          "btn-take-photo",
+          "photo-download"
+        ];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.style.display = "none";
+          el.style.visibility = "hidden";
+          el.style.height = "0";
+          el.style.margin = "0";
+          el.style.padding = "0";
+          el.setAttribute("aria-hidden", "true");
+        });
+        const endingText = document.getElementById("ending-text");
+        if (endingText) {
+          endingText.innerHTML = "<span class='text-warning'>封存程序完成。請保存證明卡或交給下一位玩家。</span>";
+        }
+      },
+      v83BuildEndSummary(data = null) {
+        const ending = data || this.getEndingData?.();
+        const visual = document.getElementById("ending-visual");
+        if (!ending || !visual) return;
+        let box = document.getElementById("v83-end-summary");
+        if (!box) {
+          box = document.createElement("div");
+          box.className = "v83-end-summary";
+          box.id = "v83-end-summary";
+          visual.parentNode.insertBefore(box, visual.nextSibling);
+        }
+        box.innerHTML = `
+          <div class="v83-row"><span>封存結果</span><b>${ending.ending || "封存完成"}</b></div>
+          <div class="v83-row"><span>評級</span><b>${ending.rank || "-"}</b></div>
+          <div class="v83-row"><span>研究員代號</span><b>${ending.name || this.playerName || "觀測者"}</b></div>
+          <div class="v83-row"><span>錯誤紀錄</span><b>${ending.mistakes || 0} 次</b></div>
+          <div class="v83-row"><span>AI 掃描</span><b>${ending.scanUses || 0} 次</b></div>
+        `;
+      },
+      v83CompactUnlockFiles() {
+        const story = document.getElementById("v60-story-card");
+        if (!story) return;
+        story.classList.add("v64-unlock-files");
+        const title = story.querySelector("h3");
+        if (title) title.textContent = "解鎖檔案";
+        let wrap = document.getElementById("v83-unlock-files");
+        if (!wrap) {
+          wrap = document.createElement("div");
+          wrap.className = "v83-unlock-files";
+          wrap.id = "v83-unlock-files";
+          story.appendChild(wrap);
+        }
+        wrap.innerHTML = `
+          <details class="v83-file-card">
+            <summary><span class="v83-file-index">FILE 01</span>1931：封存起點
+              <span>1931 是左鎮化石記憶被打開的年份，也是本作封存編號的來源。</span>
+            </summary>
+            <div class="v83-file-body">
+              1931 代表左鎮化石故事的起點。作品把這個年份轉化成封存系統的核心密碼，讓玩家在解謎後理解：檔案不是單純資料，而是地方記憶被重新打開的入口。
+            </div>
+          </details>
+          <details class="v83-file-card">
+            <summary><span class="v83-file-index">FILE 02</span>化石形成條件
+              <span>化石需要掩埋、時間、壓力與礦物質滲入，才可能保存生命痕跡。</span>
+            </summary>
+            <div class="v83-file-body">
+              遺骸不會直接變成化石。它需要被快速掩埋，經過長時間壓力與礦物質滲入，才有機會把原本的生命痕跡轉化成地層中的紀錄。
+            </div>
+          </details>
+          <details class="v83-file-card">
+            <summary><span class="v83-file-index">FILE 03</span>真正任務
+              <span>玩家復原的不是普通雞骨，而是把化石知識轉成互動體驗。</span>
+            </summary>
+            <div class="v83-file-body">
+              黑暗研究室只是包裝。真正被保存的是左鎮化石的地方知識、歷史記憶與學習經驗。玩家完成的不是恐怖任務，而是一場化石教育轉譯。
+            </div>
+          </details>
+        `;
+      },
+      v83RefineEndingTabs() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        const tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) return;
+        const groupOf = el => {
+          const id = el.id || "";
+          const cls = el.className || "";
+          const text = (el.textContent || "").trim();
+          if (id === "archive-card" || id === "btn-save-archive" || id === "btn-restart" || /封存證明卡|保存封存|下一位玩家|重新開始|封存編號/.test(text)) {
+            return "card";
+          }
+          if (id === "v60-story-card" || /解鎖檔案|FILE 01|FILE 02|FILE 03|1931|化石形成|真正任務/.test(text)) {
+            return "files";
+          }
+          return "result";
+        };
+        [...screen.children].forEach(el => {
+          if (["v82-ending-tabs", "v81-ending-tabs"].includes(el.id)) return;
+          const group = groupOf(el);
+          el.dataset.v82Group = group;
+          el.dataset.v81Group = group;
+          el.classList.add("v81-ending-group");
+        });
+        const setTab = tab => {
+          tabs.querySelectorAll("button").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.tab === tab);
+          });
+          screen.querySelectorAll(".v81-ending-group").forEach(group => {
+            group.classList.toggle("v81-hidden", (group.dataset.v82Group || group.dataset.v81Group) !== tab);
+          });
+        };
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            setTab(btn.dataset.tab);
+          };
+        });
+        setTab("result");
+      },
+      v83FinalizeEnding(data = null) {
+        const ending = data || this.getEndingData?.();
+        this.v83HideEndingProcessUI();
+        this.v83BuildEndSummary(ending);
+        this.v83CompactUnlockFiles();
+        this.v82PrepareEndingTabs?.();
+        this.v83RefineEndingTabs();
+      },
+      v82HandleRestartQuery() {
+        try {
+          const params = new URLSearchParams(location.search);
+          const shouldRestart = params.get("restart") === "1" || params.get("reset") === "1";
+          if (!shouldRestart || this.v82RestartHandled) return;
+          this.v82RestartHandled = true;
+          const keys = [
+            APP_CONFIG.V65_SAVE_KEY,
+            APP_CONFIG.V70_SAVE_KEY_BACKUP,
+            "fifthResearcher_v81_autosave",
+            "fifthResearcher_v80_autosave",
+            "fifthResearcher_v79_autosave",
+            "fifthResearcher_v78_autosave",
+            "fifthResearcher_v77_autosave",
+            "fifthResearcher_v76_autosave"
+          ].filter(Boolean);
+          keys.forEach(k => {
+            localStorage.removeItem(k);
+            sessionStorage.removeItem(k);
+          });
+          history.replaceState(null, "", location.pathname + "?v=" + APP_CONFIG.URL_VERSION);
+          this.addStaffLog?.("展場重置完成。");
+        } catch (err) {
+          this.addStaffLog?.("展場重置失敗：" + err.message, true);
+        }
+      },
+      v82InsertAssetBadge() {
+        if (document.getElementById("v82-asset-badge")) return;
+        const board = document.getElementById("game-board") || document.querySelector(".game-board");
+        if (!board || !board.parentNode) return;
+        const badge = document.createElement("div");
+        badge.className = "v82-asset-badge";
+        badge.id = "v82-asset-badge";
+        badge.textContent = "完整標本圖載入狀態檢查中";
+        board.parentNode.insertBefore(badge, board);
+      },
+      v82CheckBoardAsset() {
+        this.v82InsertAssetBadge();
+        const img = document.getElementById("v63-board-img");
+        const badge = document.getElementById("v82-asset-badge");
+        if (!img) return;
+        const ok = () => {
+          document.body.classList.remove("v82-board-image-missing", "v75-board-image-missing", "v73-board-image-missing", "v72-board-image-missing");
+          document.body.classList.add("v82-board-image-ready");
+          if (badge) {
+            badge.classList.remove("v82-show-ok");
+            badge.textContent = "完整標本圖已載入";
+          }
+        };
+        const missing = () => {
+          document.body.classList.remove("v82-board-image-ready");
+          document.body.classList.add("v82-board-image-missing", "v75-board-image-missing");
+          if (badge) {
+            badge.textContent = "缺少完整標本圖：images/reveal/full-fossil-board.png";
+          }
+          this.addStaffLog?.("缺少完整標本圖：images/reveal/full-fossil-board.png", true);
+        };
+        img.onload = ok;
+        img.onerror = missing;
+        if (img.complete) {
+          if (img.naturalWidth > 0) ok();
+          else missing();
+        }
+      },
+      v82PrepareEndingTabs() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        let tabs = document.getElementById("v81-ending-tabs") || document.getElementById("v82-ending-tabs");
+        if (!tabs) {
+          tabs = document.createElement("div");
+          tabs.className = "v82-ending-tabs";
+          tabs.id = "v82-ending-tabs";
+          tabs.innerHTML = `
+            <button type="button" data-tab="result" class="active">結果</button>
+            <button type="button" data-tab="card">證明卡</button>
+            <button type="button" data-tab="files">解鎖檔案</button>
+          `;
+          const anchor = screen.querySelector(".result-card, .ending-section, .card") || screen.firstElementChild;
+          if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(tabs, anchor);
+          else screen.insertBefore(tabs, screen.firstChild);
+        }
+        const children = [...screen.children].filter(el => !["v81-ending-tabs","v82-ending-tabs"].includes(el.id));
+        children.forEach(el => {
+          const text = (el.textContent || "").trim();
+          let group = "result";
+          if (/證明卡|封存編號|保存封存|重新開始|下一位玩家/.test(text)) {
+            group = "card";
+          }
+          if (/解鎖檔案|1931|化石形成|真正任務|FILE 0/.test(text)) {
+            group = "files";
+          }
+          if (/AI 封存分析|操作穩定度|錯誤風險|掃描依賴|教育解鎖/.test(text)) {
+            group = "result";
+          }
+          el.dataset.v81Group = group;
+          el.dataset.v82Group = group;
+          el.classList.add("v81-ending-group");
+        });
+        const setTab = tab => {
+          tabs.querySelectorAll("button").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.tab === tab);
+          });
+          screen.querySelectorAll(".v81-ending-group").forEach(group => {
+            const visible = (group.dataset.v82Group || group.dataset.v81Group) === tab;
+            group.classList.toggle("v81-hidden", !visible);
+          });
+        };
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            setTab(btn.dataset.tab);
+            try { tabs.scrollIntoView({behavior:"smooth", block:"start"}); } catch (err) {}
+          };
+        });
+        setTab("result");
+      },
+      v82AuditFinalUI(targetId = "") {
+        document.body.classList.add("v82-final-ui");
+        if (targetId === "screen-title") {
+          document.body.classList.add("screen-title-mode");
+        }
+        if (targetId === "screen-puzzle") {
+          this.v82CheckBoardAsset();
+          this.v76AuditButtons?.();
+          this.v75UpdateAIMicro?.();
+        }
+        if (targetId === "screen-clue") {
+          this.v78RepairClueScreen?.();
+          this.v79RefreshClueFaces?.();
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => this.v82PrepareEndingTabs(), 140);
+        }
+      },
       v81SetScreenMode(targetId = "") {
         document.body.classList.add("v81-mobile-ui");
         const modes = [
@@ -7942,7 +8592,7 @@
           this.v79RefreshClueFaces?.();
         }
         if (targetId === "screen-ending") {
-          setTimeout(() => this.v81PrepareEndingTabs(), 120);
+          setTimeout(() => this.v82PrepareEndingTabs(), 120);
         }
       },
       v80ScrollToElement(el) {
@@ -8975,7 +9625,13 @@
         const story = document.getElementById("v60-story-card");
         if (story) story.style.display = "block";
         const restart = document.getElementById("btn-restart");
-        if (restart) restart.textContent = "重新開始 / 下一位玩家";
+        if (restart) {
+          restart.textContent = "重新開始 / 下一位玩家";
+          restart.style.display = "block";
+        }
+        const save = document.getElementById("btn-save-archive");
+        if (save) save.style.display = "block";
+        this.v83FinalizeEnding?.(this.getEndingData?.());
       },
       v65GetCurrentScreenId() {
         const active = document.querySelector(".screen.active");
@@ -9334,8 +9990,10 @@
         this.v67Init();
         this.v68Init();
         this.v71BindAIFix();
+        this.v82HandleRestartQuery?.();
         this.v65BindAutoSave();
         this.v81AuditLayout?.("screen-title");
+        this.v82AuditFinalUI?.("screen-title");
         setTimeout(() => this.v76AuditButtons?.(), 350);
         setTimeout(() => this.v76AuditButtons?.(), 250);
         this.v75PrepareTitleLayout();
@@ -10497,6 +11155,7 @@
           if (targetId === "screen-title") this.v75PrepareTitleLayout?.();
           if (targetId === "screen-puzzle") this.v75UpdateAIMicro?.();
           this.v81AuditLayout?.(targetId);
+          this.v82AuditFinalUI?.(targetId);
           Engine.setStage(targetId);
           setTimeout(() => this.v80AuditCurrentScreen?.(targetId), 160);
           this.v57EnsureScrollTop(targetId);
@@ -11232,30 +11891,23 @@
       },
       async startEnding() {
         this.switchScreen("screen-ending");
-        document.getElementById("hud").classList.remove("active");
-        document.getElementById("final-name").textContent = this.playerName;
-        const wantsCamera = document.getElementById("camera-consent").checked;
-        document.getElementById("camera-frame").classList.add("show");
-        if (wantsCamera) {
-          document.getElementById("btn-open-camera").style.display = "block";
-        } else {
-          document.getElementById("fallback-img").style.display = "block";
-        }
-        setTimeout(() => {
-          Engine.play("knock");
-          document.getElementById("ending-text").textContent = "系統正在建檔...";
-        }, 1200);
-        setTimeout(() => {
-          Engine.impact("glitch");
-          document.getElementById("ending-text").innerHTML = "<span class='text-warning'>偵測到兩名研究員。</span>";
-        }, 3200);
-        setTimeout(() => {
-          Engine.addFear(.42);
-          document.getElementById("ending-text").innerHTML = "<span class='glitch-text'>請確認畫面後方。</span>";
-          document.getElementById("btn-restart").style.display = "block";
-          this.showEndingRank();
-          this.v64PrepareExhibitionEnding();
-        }, 5200);
+        const hud = document.getElementById("hud");
+        if (hud) hud.classList.remove("active");
+        const finalName = document.getElementById("final-name");
+        if (finalName) finalName.textContent = this.playerName;
+        const frame = document.getElementById("camera-frame");
+        if (frame) frame.classList.remove("show");
+        const text = document.getElementById("ending-text");
+        if (text) text.innerHTML = "<span class='text-warning'>封存程序完成。</span>";
+        Engine.play?.("correct");
+        this.showEndingRank();
+        this.v64PrepareExhibitionEnding();
+        this.v83FinalizeEnding?.(this.getEndingData());
+        const restart = document.getElementById("btn-restart");
+        if (restart) restart.style.display = "block";
+        const save = document.getElementById("btn-save-archive");
+        if (save) save.style.display = "block";
+        this.v65ScheduleSave?.();
       },
       getEndingData() {
         // v66：結局依錯誤紀錄、提示、穩定度與緊急封存狀態判定。
@@ -11407,6 +12059,7 @@
           if (seal) seal.textContent = data.stamp;
         }
         document.getElementById("btn-save-archive").style.display = "block";
+        this.v83FinalizeEnding?.(data);
         this.v65ScheduleSave();
       },
       downloadArchiveCard() {
