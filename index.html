@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>第五位研究員｜第七層標本復原程序 v71 AI助理強制收合修正版</title>
+<title>第五位研究員｜第七層標本復原程序 v72 拼圖介面整理與骨頭操作修正版</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>:root {
@@ -5239,9 +5239,9 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
 <div class="v56-url-card">
 正式測試網址
-<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=71</code>
+<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=72</code>
 <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=71。</div>
+<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=72。</div>
 </div>
 <div class="v55-qa-panel">
 <div class="staff-subtitle">最終品質檢查</div>
@@ -5271,7 +5271,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
 <div class="staff-info-list" id="staffInfoList">
-<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v71</span></div>
+<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v72</span></div>
 <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
 <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
 <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -5447,6 +5447,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div><b>遮罩系統</b>：拼對骨頭後會揭開黑色遮罩，底圖不會移動。</div>
 </div>
 </details>
+<div class="v72-board-guide" id="v72-board-guide"><b>操作方式</b>：先點下方骨頭，再點上方亮起的封存區。紅色亮框就是建議下一塊。</div>
 <div class="game-board v63-mask-board" id="game-board">
 <div class="v63-board-image-layer" aria-hidden="true">
 <img id="v63-board-img" class="v63-board-img" src="images/reveal/full-fossil-board.png" alt="完整雞骨化石復原底圖" loading="lazy" decoding="async" onerror="Game.v63HandleBoardImageError()">
@@ -5664,9 +5665,9 @@ v44 集中資料設定
 =========================================================
 */
 const APP_CONFIG = {
-VERSION: "v71",
-URL_VERSION: "71",
-BUILD_TYPE: "AI助理強制收合修正版",
+VERSION: "v72",
+URL_VERSION: "72",
+BUILD_TYPE: "拼圖介面整理與骨頭操作修正版",
 PLAYER_PIN: "1931",
 STAFF_PASSWORD: "1931",
 FORMAL_MODE_DEFAULT: true,
@@ -5686,7 +5687,7 @@ V54_SHARE_TEXT_ENABLED: true,
 V55_RARITY_ENABLED: true,
 V55_QA_PANEL_ENABLED: true,
 V56_ARCHIVE_ID_ENABLED: true,
-V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=71",
+V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=72",
 V57_MOBILE_SCROLL_FIX: true,
 V58_SAVE_FIX_ENABLED: true,
 V59_FULL_REVEAL_ENABLED: true,
@@ -5708,7 +5709,7 @@ V64_EXHIBITION_MODE: true,
 V64_COLLAPSE_PUZZLE_NOTES: true,
 V64_UNLOCK_FILES_ENABLED: true,
 V65_AUTOSAVE_ENABLED: true,
-V65_SAVE_KEY: "fifthResearcher_v71_autosave",
+V65_SAVE_KEY: "fifthResearcher_v72_autosave",
 V65_SAVE_MAX_AGE_MS: 43200000,
 V66_EXPERIENCE_OPTIMIZED: true,
 V66_MAX_HEARTS: 5,
@@ -5748,7 +5749,11 @@ V70_SAVE_KEY_BACKUP: "fifthResearcher_v70_session_backup",
 V70_RESTORE_MIN_PROGRESS: true,
 V70_FORCE_CLEAN_START_ONLY_WITH_RESTART: true,
 V71_AI_FORCE_COLLAPSE_FIX: true,
-V71_AI_ALWAYS_START_COLLAPSED: true
+V71_AI_ALWAYS_START_COLLAPSED: true,
+V72_PUZZLE_LAYOUT_FIX: true,
+V72_COMPACT_BONE_POOL: true,
+V72_HIDE_DUPLICATE_BOARD_LABELS: true,
+V72_SHOW_ASSET_NOTE_ONLY_ON_ERROR: true
 };
 const SOUND_CONFIG = {
 ambient: "sounds/ambient.mp3",
@@ -6611,6 +6616,7 @@ const img = document.getElementById("v63-board-img");
 const fallback = document.getElementById("v63-board-fallback");
 if (img) img.style.display = "none";
 if (fallback) fallback.style.display = "grid";
+document.body.classList.add("v72-board-image-missing");
 this.addStaffLog("v63 完整圖遮罩底圖缺檔：images/reveal/full-fossil-board.png", true);
 },
 v63InitMaskBoard() {
@@ -7082,6 +7088,7 @@ this.hearts = Math.min(APP_CONFIG.V66_MAX_HEARTS || 5, Math.max(0, this.hearts |
 this.v66RenderSequenceStrip();
 this.v66UpdateScanButton();
 this.v66UpdateSelectionUI();
+this.v72UpdatePuzzleMessage?.();
 this.v66UpdateTask();
 this.updateHUD();
 },
@@ -7131,6 +7138,7 @@ status.innerHTML = `目前選取：<b>${label}</b>。請點擊對應位置完成
 const slot = document.getElementById(`slot-${this.selectedBone}`);
 if (slot && !slot.classList.contains("filled")) slot.classList.add("v66-possible");
 }
+this.v72UpdatePuzzleMessage?.();
 },
 v66UpdateScanButton() {
 const btn = document.getElementById("v66-scan-btn");
@@ -7650,6 +7658,7 @@ this.v62EnableSmoothMode();
 Engine.init();
 this.renderBonePool();
 this.v63InitMaskBoard();
+this.v72BindBoardImageState();
 this.renderClueCards();
 this.updateBoneProgress();
 this.startDirector();
@@ -9096,25 +9105,36 @@ this.switchScreen("screen-clue");
 },
 renderBonePool() {
 const pool = document.getElementById("bone-pool");
+if (!pool) return;
 pool.innerHTML = "";
-const shuffled = [...this.bones].sort(() => Math.random() - .5);
-// v63：骨架 slot 只保留文字標籤，圖片固定在底圖，不塞進格子。
+const order = APP_CONFIG.V66_RESTORE_ORDER || ["chest","neck","skull","pelvis","leftWing","rightWing","leftLeg","rightLeg","tail"];
+const orderedBones = [...this.bones].sort((a, b) => {
+const ai = order.indexOf(a.id);
+const bi = order.indexOf(b.id);
+return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+});
 this.bones.forEach(b => {
 const slot = document.getElementById(`slot-${b.id}`);
-if (slot) this.addSlotLabel(slot, b.name);
+if (slot) {
+slot.innerHTML = "";
+this.addSlotLabel(slot, b.name);
+}
 });
-shuffled.forEach(b => {
-const div = document.createElement("div");
-div.className = "bone-item";
+orderedBones.forEach(b => {
+const div = document.createElement("button");
+div.type = "button";
+div.className = "bone-item v72-bone-chip";
 div.id = `item-${b.id}`;
-const visual = this.createBoneVisual(b);
+div.setAttribute("data-bone", b.id);
+div.setAttribute("aria-label", `選擇${b.name}`);
 const label = document.createElement("span");
 label.className = "bone-label";
 label.textContent = b.name;
-div.appendChild(visual);
 div.appendChild(label);
-// v66：點擊選取改由 pointerdown/endDrag 控制，避免手機 click 與 pointerdown 重複觸發。
-div.onclick = e => e.preventDefault();
+div.onclick = e => {
+e.preventDefault();
+this.selectBone(b.id, div);
+};
 div.addEventListener("pointerdown", e => this.startDrag(e, b, div), {passive:false});
 div.addEventListener("pointermove", e => this.moveDrag(e), {passive:false});
 div.addEventListener("pointerup", e => this.endDrag(e), {passive:false});
@@ -9123,6 +9143,7 @@ pool.appendChild(div);
 });
 this.v66RenderSequenceStrip();
 this.v66UpdateSelectionUI();
+this.v72UpdatePuzzleMessage();
 },
 selectBone(id, el, force = false) {
 if (!el || el.classList.contains("used")) return;
