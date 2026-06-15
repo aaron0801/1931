@@ -929,6 +929,74 @@
       margin: 12px 0;
     }
 
+
+    .bone-card.mystery span:last-child {
+      color: rgba(241,227,200,.32);
+      letter-spacing: .18em;
+    }
+    .bone-card.decoy {
+      border-color: rgba(255,74,66,.22);
+      background: rgba(45,4,4,.34);
+    }
+    .drop-zone.hidden-label span {
+      opacity: 0;
+    }
+    .drop-zone.code-label span {
+      color: rgba(241,227,200,.42);
+      font-size: 10px;
+      letter-spacing: .12em;
+    }
+    .drop-zone.scan-visible span {
+      opacity: 1 !important;
+      color: rgba(255,240,231,.86);
+      text-shadow: 0 0 10px rgba(255,74,66,.56);
+    }
+    .scan-control {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0 0;
+    }
+    .scan-count {
+      border: 1px solid rgba(255,178,164,.14);
+      border-radius: 999px;
+      padding: 0 12px;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      color: rgba(241,227,200,.60);
+      background: rgba(0,0,0,.26);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .decoy-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 20px;
+      padding: 0 8px;
+      border: 1px solid rgba(255,74,66,.28);
+      border-radius: 999px;
+      color: rgba(255,178,164,.70);
+      font-size: 10px;
+      letter-spacing: .12em;
+    }
+
+
+    @media (min-width: 520px) {
+      .bone-grid.more-cards {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .random-note {
+      color: rgba(241,227,200,.44);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-align: center;
+      margin-top: 6px;
+    }
+
   </style>
 </head>
 
@@ -943,13 +1011,13 @@
   <div class="app">
     <div class="frame">
       <div class="case-strip">
-        <span id="stage-label">CASE-1931 / SYSTEM BOOT</span>
+        <span id="stage-label">LEVEL 07 / SYSTEM BOOT</span>
         <i class="case-dot"></i>
       </div>
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.3</div>
+          <div class="kicker">FINAL BUILD 1.5</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -984,7 +1052,7 @@
 
       <section id="screen-home" class="screen">
         <div class="panel">
-          <div class="kicker">CASE-1931</div>
+          <div class="kicker">LEVEL 07 / ACCESS LOCKED</div>
           <h1>第五位研究員</h1>
           <h2>第七層標本復原程序</h2>
           <div class="hero" id="hero-cover">
@@ -1007,13 +1075,13 @@
           <h2>難度與聲音</h2>
           <div class="difficulty-grid">
             <button class="difficulty-card" data-difficulty="easy">
-              <b>初次觀測</b><br>生命不扣，污染 100% 才封存失敗，適合第一次體驗。
+              <b>初次觀測</b><br>顯示骨頭名稱與位置名稱，生命不扣，適合第一次體驗。
             </button>
             <button class="difficulty-card" data-difficulty="normal">
-              <b>正式封存</b><br>化石錯 3 次扣 1，排序與密碼錯誤會扣生命。
+              <b>正式封存</b><br>骨頭與標本位置改用隨機編號，加入 3 張干擾骨片。
             </button>
             <button class="difficulty-card" data-difficulty="hard">
-              <b>深層污染</b><br>高污染挑戰模式，錯幾次就可能封存失敗。
+              <b>深層污染</b><br>隱藏名稱，只看骨形判斷，加入 6 張干擾骨片。
             </button>
           </div>
           <button class="btn primary" id="sound-toggle">聲音：開</button>
@@ -1027,7 +1095,7 @@
           <h1>遊戲玩法</h1>
           <h2>四步驟完成封存</h2>
           <div class="step-grid">
-            <div class="step-card"><b>01 復原標本</b><br>先選下方骨片，再點標本板上的對應位置。</div>
+            <div class="step-card"><b>01 復原標本</b><br>先選下方骨片，再點標本板上的對應位置。不同難度會隱藏名稱或加入干擾骨片。</div>
             <div class="step-card"><b>02 判讀刻痕</b><br>翻看骨頭背面，找出 I / IX / III / I。</div>
             <div class="step-card"><b>03 開啟封存箱</b><br>依身體由上到下排列刻痕，破譯 1931。</div>
             <div class="step-card"><b>04 確認研究員</b><br>完成登錄，取得封存證明卡。</div>
@@ -1043,13 +1111,15 @@
         <div class="panel">
           <div class="kicker">ARCHIVE FILE</div>
           <h1>劇情檔案</h1>
-          <h2>CASE-1931</h2>
+          <h2>CASE-████</h2>
           <div class="hero" id="hero-story">
             <img data-src="images/ui/story-bg.png" alt="劇情背景">
           </div>
           <div class="task">
             四位研究員曾進入復原程序。<br>
             紀錄皆在標本完成前中斷。<br><br>
+            封存年份已被抹除。<br>
+            核心封存碼只能從標本背面的刻痕重新推回。<br><br>
             系統顯示：第五位研究員尚未登錄。<br>
             當你完成復原程序，系統將確認最後一位研究員。
           </div>
@@ -1075,8 +1145,12 @@
         <div id="status-puzzle" class="status"></div>
         <div class="task">
           <b>目前任務：復原雞骨化石標本</b><br>
-          先選下方骨片，再點標本板上的對應位置。
+          先選下方骨片，再點標本板上的對應位置。不同難度會隱藏名稱或加入干擾骨片。
           <div class="bar"><i id="puzzle-bar"></i></div>
+          <div class="scan-control">
+            <button class="btn" id="scan-btn">啟動標本掃描</button>
+            <div class="scan-count" id="scan-count">掃描：0 / 0</div>
+          </div>
         </div>
         <div class="panel">
           <h1 style="font-size:30px;">標本復原區</h1>
@@ -1117,7 +1191,7 @@
             <div class="order-picks" id="order-picks"></div>
           </div>
           <div class="year-reveal" id="year-reveal">
-            <div>封存年份已破譯</div>
+            <div>刻痕順序確認：I → IX → III → I<br>核心封存碼已復原</div>
             <b>1931</b>
           </div>
           <button class="btn primary" id="confirm-order-btn">確認順序</button>
@@ -1129,7 +1203,7 @@
 
       <section id="screen-box" class="screen">
         <div id="status-box" class="status"></div>
-        <div class="task"><b>目前任務：開啟百寶封存箱</b><br>輸入由刻痕破譯出的四位數封存密碼。</div>
+        <div class="task"><b>目前任務：開啟百寶封存箱</b><br>輸入由刻痕破譯出的四位數核心封存碼。</div>
         <div class="panel">
           <h1 style="font-size:30px;">百寶封存箱</h1>
           <div class="box-visual" id="box-visual">
@@ -1253,9 +1327,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_3_RESUME_GATE",
-      saveKey: "fifthResearcher_final_v1_3",
-      settingsKey: "fifthResearcher_final_v1_3_settings",
+      version: "FINAL_BUILD_1_5_RANDOMIZED_ADULT",
+      saveKey: "fifthResearcher_final_v1_5",
+      settingsKey: "fifthResearcher_final_v1_5_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1302,6 +1376,85 @@
       { id:"rightLeg", name:"右腿骨", className:"rightLeg", img:"images/bones/right-leg.png" },
       { id:"tail", name:"尾端骨", className:"tail", img:"images/bones/tail.png" }
     ];
+
+    const DECOY_BONES = [
+      { id:"decoyA", name:"未知碎骨 A", img:"images/bones/decoy-a.png" },
+      { id:"decoyB", name:"未知碎骨 B", img:"images/bones/decoy-b.png" },
+      { id:"decoyC", name:"錯誤標本碎片", img:"images/bones/decoy-c.png" },
+      { id:"decoyD", name:"異常翼骨碎片", img:"images/bones/decoy-d.png" },
+      { id:"decoyE", name:"非本標本骨片", img:"images/bones/decoy-e.png" },
+      { id:"decoyF", name:"污染碎骨", img:"images/bones/decoy-f.png" }
+    ];
+
+    function puzzleDisplayMode() {
+      if (state.difficulty === "easy") return { bone:"name", zone:"name", decoys:0, scans:99, scanCost:5 };
+      if (state.difficulty === "normal") return { bone:"code", zone:"code", decoys:3, scans:3, scanCost:8 };
+      return { bone:"hidden", zone:"hidden", decoys:6, scans:1, scanCost:20 };
+    }
+
+    function shuffleCopy(arr) {
+      const out = arr.slice();
+      for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    }
+
+    function ensureRandomLayouts(force = false) {
+      const mode = puzzleDisplayMode();
+      const correctBoneIds = BONES.map(b => b.id);
+      const decoyIds = DECOY_BONES.slice(0, mode.decoys).map(b => b.id);
+      const fullCardPool = correctBoneIds.concat(decoyIds);
+
+      if (force || !Array.isArray(state.puzzleCardOrder) || state.puzzleCardOrder.length !== fullCardPool.length || !fullCardPool.every(id => state.puzzleCardOrder.includes(id))) {
+        state.puzzleCardOrder = shuffleCopy(fullCardPool);
+      }
+
+      const clueIds = CLUES.map(c => c.id);
+      if (force || !Array.isArray(state.clueCardOrder) || state.clueCardOrder.length !== clueIds.length || !clueIds.every(id => state.clueCardOrder.includes(id))) {
+        state.clueCardOrder = shuffleCopy(clueIds);
+      }
+
+      if (force || !Array.isArray(state.orderPickOrder) || state.orderPickOrder.length !== CORRECT_ORDER.length || !CORRECT_ORDER.every(id => state.orderPickOrder.includes(id))) {
+        state.orderPickOrder = shuffleCopy(CORRECT_ORDER);
+      }
+
+      if (force || !state.codeMap || typeof state.codeMap !== "object" || !correctBoneIds.every(id => state.codeMap[id])) {
+        const nums = shuffleCopy(correctBoneIds.map((_, i) => String(i + 1).padStart(2, "0")));
+        state.codeMap = {};
+        correctBoneIds.forEach((id, index) => {
+          state.codeMap[id] = nums[index];
+        });
+      }
+    }
+
+
+
+    function boneCode(id) {
+      ensureRandomLayouts(false);
+      return state.codeMap && state.codeMap[id] ? "B-" + state.codeMap[id] : "B-??";
+    }
+
+    function zoneCode(id) {
+      ensureRandomLayouts(false);
+      return state.codeMap && state.codeMap[id] ? "Z-" + state.codeMap[id] : "Z-??";
+    }
+
+    function displayBoneLabel(bone) {
+      const mode = puzzleDisplayMode().bone;
+      if (mode === "name") return bone.name;
+      if (mode === "code") return boneCode(bone.id);
+      return "UNKNOWN";
+    }
+
+    function displayZoneLabel(bone) {
+      const mode = puzzleDisplayMode().zone;
+      if (mode === "name") return bone.name;
+      if (mode === "code") return zoneCode(bone.id);
+      return "";
+    }
+
 
     const CLUES = [
       { id:"skull", name:"頭骨", roman:"I", marked:true },
@@ -1368,6 +1521,11 @@
       selectedBone: "",
       placedBones: [],
       puzzleWrongStreak: 0,
+      scansUsed: 0,
+      puzzleCardOrder: [],
+      clueCardOrder: [],
+      orderPickOrder: [],
+      codeMap: {},
       flippedClues: [],
       foundMarks: [],
       order: [],
@@ -1445,6 +1603,7 @@
         if (!CONFIG.screens.includes(merged.screen)) merged.screen = "screen-home";
         if (merged.dead) merged.screen = "screen-failure";
         state = merged;
+        ensureRandomLayouts(false);
         return true;
       } catch (e) {
         return false;
@@ -1510,6 +1669,7 @@
       pendingResumeState = null;
       clearGameProgress(true);
       state.screen = "screen-name";
+      ensureRandomLayouts(true);
       saveGame();
       showScreen("screen-name");
     }
@@ -1635,7 +1795,7 @@
         const img = new Image();
         img.onload = () => { assetStatus.images[src] = true; resolve(true); };
         img.onerror = () => { assetStatus.images[src] = false; resolve(false); };
-        img.src = src + "?v=final1_3";
+        img.src = src + "?v=final1_5";
       });
     }
 
@@ -1703,7 +1863,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_3";
+        img.src = src + "?v=final1_5";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -1724,6 +1884,7 @@
         tone("ok");
         toast("難度已設定：" + DIFFICULTIES[state.difficulty].label);
         updateSettingsUI();
+        renderPuzzle();
         updateStatusAll();
       })));
 
@@ -1736,6 +1897,7 @@
         toast(state.sound ? "聲音已開啟" : "聲音已關閉");
       }));
 
+      $("scan-btn").addEventListener("click", () => safeAction(useScan));
       $("to-order-btn").addEventListener("click", () => safeAction(() => showScreen("screen-order")));
       $("confirm-order-btn").addEventListener("click", () => safeAction(confirmOrder));
       $("reset-order-btn").addEventListener("click", () => safeAction(resetOrder));
@@ -1804,11 +1966,11 @@
       const map = {
         "screen-loading":"CASE-1931 / SYSTEM BOOT",
         "screen-resume":"CASE-1931 / 未完成紀錄",
-        "screen-home":"CASE-1931 / 主頁",
-        "screen-settings":"CASE-1931 / 遊戲設定",
-        "screen-how":"CASE-1931 / 遊戲玩法",
-        "screen-story":"CASE-1931 / 劇情檔案",
-        "screen-name":"CASE-1931 / 觀測者登入",
+        "screen-home":"LEVEL 07 / 主頁",
+        "screen-settings":"LEVEL 07 / 遊戲設定",
+        "screen-how":"LEVEL 07 / 遊戲玩法",
+        "screen-story":"CASE-████ / 劇情檔案",
+        "screen-name":"LEVEL 07 / 觀測者登入",
         "screen-puzzle":"PHASE 01 / 標本復原",
         "screen-clues":"PHASE 02 / 刻痕檢查",
         "screen-order":"PHASE 03 / 刻痕排序",
@@ -1823,6 +1985,7 @@
     function startGame() {
       if (state.dead) clearGameProgress(true);
       state.puzzleWrongStreak = 0;
+      ensureRandomLayouts(true);
       initAudio();
       state.player = $("player-name").value.trim() || "觀測者";
       state.screen = "screen-puzzle";
@@ -1952,6 +2115,7 @@
     }
 
     function renderAll() {
+      ensureRandomLayouts(false);
       renderPuzzle();
       renderClues();
       renderOrder();
@@ -1969,32 +2133,51 @@
     }
 
     function renderPuzzle() {
+      ensureRandomLayouts(false);
       const zones = $("drop-zones");
       const grid = $("bone-grid");
+      const mode = puzzleDisplayMode();
       zones.innerHTML = "";
       grid.innerHTML = "";
+      grid.classList.toggle("more-cards", state.puzzleCardOrder.length > 12);
 
       BONES.forEach(bone => {
         const zone = document.createElement("button");
         zone.className = "drop-zone " + bone.className;
+        if (mode.zone === "hidden") zone.classList.add("hidden-label");
+        if (mode.zone === "code") zone.classList.add("code-label");
         zone.dataset.target = bone.id;
-        zone.innerHTML = `<span>${bone.name}</span>`;
+        zone.innerHTML = `<span>${displayZoneLabel(bone)}</span>`;
         if (state.placedBones.includes(bone.id)) zone.classList.add("done");
         zone.addEventListener("click", () => safeAction(() => placeSelectedBone(bone.id)));
         zones.appendChild(zone);
+      });
 
+      const lookup = {};
+      BONES.forEach(b => lookup[b.id] = Object.assign({ decoy:false }, b));
+      DECOY_BONES.forEach(d => lookup[d.id] = Object.assign({ decoy:true }, d));
+      const cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
+
+      cards.forEach(item => {
         const card = document.createElement("button");
         card.className = "bone-card";
-        card.dataset.bone = bone.id;
-        if (state.selectedBone === bone.id) card.classList.add("active");
-        if (state.placedBones.includes(bone.id)) card.classList.add("used");
+        if (item.decoy) card.classList.add("decoy");
+        if (mode.bone === "hidden") card.classList.add("mystery");
+        card.dataset.bone = item.id;
+        if (state.selectedBone === item.id) card.classList.add("active");
+        if (!item.decoy && state.placedBones.includes(item.id)) card.classList.add("used");
+
+        const imgFallback = item.decoy
+          ? "<span class='decoy-mark'>FRAGMENT</span>"
+          : "<i class=&quot;fallback-bone&quot;></i>";
+
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${bone.img}?v=final1_3" alt="${bone.name}" onerror="this.remove(); this.parentNode.innerHTML='<i class=&quot;fallback-bone&quot;></i>'">
+            <img src="${item.img}?v=final1_5" alt="${item.name}" onerror="this.remove(); this.parentNode.innerHTML='${imgFallback}'">
           </span>
-          <span>${bone.name}</span>
+          <span>${item.decoy ? (mode.bone === "name" ? item.name : "UNKNOWN") : displayBoneLabel(item)}</span>
         `;
-        card.addEventListener("click", () => safeAction(() => selectBone(bone.id)));
+        card.addEventListener("click", () => safeAction(() => selectBone(item.id)));
         grid.appendChild(card);
       });
 
@@ -2003,11 +2186,24 @@
 
     function selectBone(id) {
       if (state.placedBones.includes(id)) return;
+
+      const decoy = DECOY_BONES.find(b => b.id === id);
+      if (decoy) {
+        state.selectedBone = "";
+        tone("error");
+        registerMistake("puzzle");
+        logTo("puzzle-log", "非本標本骨片。污染值上升。");
+        renderPuzzle();
+        saveGame();
+        return;
+      }
+
       state.selectedBone = id;
       tone("click");
       updatePuzzleUI();
       const bone = BONES.find(b => b.id === id);
-      logTo("puzzle-log", "已選擇 " + bone.name + "。請點標本板上的對應位置。");
+      const label = puzzleDisplayMode().bone === "name" ? bone.name : displayBoneLabel(bone);
+      logTo("puzzle-log", "已選擇 " + label + "。請點標本板上的對應位置。");
       saveGame();
     }
 
@@ -2050,8 +2246,15 @@
 
     function updatePuzzleUI() {
       const selected = BONES.find(b => b.id === state.selectedBone);
-      $("selected-label").textContent = selected ? "目前選擇：" + selected.name : "尚未選擇骨片";
+      $("selected-label").textContent = selected ? "目前選擇：" + displayBoneLabel(selected) : "尚未選擇骨片";
       $("puzzle-bar").style.width = (state.placedBones.length / BONES.length * 100) + "%";
+
+      const mode = puzzleDisplayMode();
+      const scanLimit = mode.scans;
+      const scanUsed = state.scansUsed || 0;
+      $("scan-count").textContent = scanLimit >= 90 ? `掃描：${scanUsed} / ∞` : `掃描：${scanUsed} / ${scanLimit}`;
+      $("scan-btn").disabled = scanLimit < 90 && scanUsed >= scanLimit;
+
       $$(".bone-card").forEach(card => {
         const id = card.dataset.bone;
         card.classList.toggle("active", state.selectedBone === id);
@@ -2065,10 +2268,44 @@
       updateStatusAll();
     }
 
+
+    function useScan() {
+      if (state.dead) return;
+      const mode = puzzleDisplayMode();
+      const limit = mode.scans;
+      state.scansUsed = state.scansUsed || 0;
+
+      if (limit < 90 && state.scansUsed >= limit) {
+        toast("掃描次數已耗盡。");
+        return;
+      }
+
+      state.scansUsed++;
+      state.hints++;
+      addPollution(mode.scanCost);
+      tone("glitch");
+
+      $$(".drop-zone").forEach(zone => zone.classList.add("scan-visible"));
+      $("fossil-board").classList.add("scanning");
+      logTo("puzzle-log", "標本掃描啟動。定位提示將短暫顯示。");
+
+      setTimeout(() => {
+        $$(".drop-zone").forEach(zone => zone.classList.remove("scan-visible"));
+        $("fossil-board").classList.remove("scanning");
+      }, state.difficulty === "hard" ? 2200 : 3200);
+
+      updatePuzzleUI();
+      saveGame();
+    }
+
     function renderClues() {
+      ensureRandomLayouts(false);
       const grid = $("clue-grid");
       grid.innerHTML = "";
-      CLUES.forEach(clue => {
+      const lookup = {};
+      CLUES.forEach(c => lookup[c.id] = c);
+
+      state.clueCardOrder.map(id => lookup[id]).filter(Boolean).forEach(clue => {
         const card = document.createElement("button");
         card.className = "clue-card";
         if (state.flippedClues.includes(clue.id)) card.classList.add("flipped");
@@ -2128,7 +2365,8 @@
         slots.appendChild(slot);
       }
 
-      CORRECT_ORDER.forEach(id => {
+      ensureRandomLayouts(false);
+      state.orderPickOrder.forEach(id => {
         const clue = CLUES.find(c => c.id === id);
         const pick = document.createElement("button");
         pick.className = "order-pick";
@@ -2165,7 +2403,7 @@
       if (state.order.join(",") === CORRECT_ORDER.join(",")) {
         state.orderSolved = true;
         tone("ok");
-        logTo("order-log", "封存年份已破譯：1931。");
+        logTo("order-log", "刻痕順序確認，核心封存碼已復原。");
       } else {
         registerMistake("order");
         tone("error");
@@ -2476,6 +2714,7 @@
       state.orderSolved = true;
       state.boxUnlocked = true;
       state.completedAt = new Date().toLocaleString("zh-TW");
+      ensureRandomLayouts(false);
       state.certNo = makeCertNo();
       saveGame();
       showScreen("screen-ending");
