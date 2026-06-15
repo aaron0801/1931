@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>第五位研究員｜第七層標本復原程序 v80 全面手機操作優化版</title>
+  <title>第五位研究員｜第七層標本復原程序 v81 介面重排與底部遮擋修正版</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>:root {
@@ -5819,6 +5819,212 @@
  #answer-slots {
  grid-template-columns: 1fr !important;
  }
+ }
+ :root {
+ --v81-safe-bottom: max(78px, calc(env(safe-area-inset-bottom, 0px) + 64px));
+ --v81-safe-top: max(8px, env(safe-area-inset-top, 0px));
+ }
+ body.v81-mobile-ui .stage-hud,
+ body.screen-title-mode .stage-hud,
+ body.screen-puzzle-mode .stage-hud,
+ body.screen-clue-mode .stage-hud,
+ body.screen-box-mode .stage-hud,
+ body.screen-ending-mode .stage-hud {
+ display: none !important;
+ visibility: hidden !important;
+ pointer-events: none !important;
+ opacity: 0 !important;
+ }
+ body.v81-mobile-ui #app {
+ padding-top: var(--v81-safe-top) !important;
+ padding-bottom: var(--v81-safe-bottom) !important;
+ }
+ .screen {
+ padding-bottom: var(--v81-safe-bottom) !important;
+ scroll-margin-top: 80px !important;
+ }
+ body.screen-title-mode #screen-title .v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-title-mode #screen-title .scene-box {
+ max-height: 168px !important;
+ margin: 10px 0 12px !important;
+ opacity: .88 !important;
+ }
+ body.screen-title-mode #screen-title .scene-box img {
+ max-height: 168px !important;
+ object-fit: cover !important;
+ }
+ body.screen-title-mode #screen-title #player-name {
+ min-height: 52px !important;
+ font-size: 16px !important;
+ margin-top: 8px !important;
+ }
+ body.screen-title-mode #screen-title button[onclick*="startGame"],
+ body.screen-title-mode #screen-title .btn.primary,
+ body.screen-title-mode #screen-title button.primary {
+ min-height: 58px !important;
+ font-size: 16px !important;
+ letter-spacing: .12em !important;
+ border-radius: 17px !important;
+ margin-top: 10px !important;
+ box-shadow: 0 0 26px rgba(200,40,34,.30) !important;
+ }
+ body.screen-title-mode #screen-title .v69-setup-details {
+ margin-top: 12px !important;
+ }
+ body.screen-title-mode #screen-title .warning,
+ body.screen-title-mode #screen-title .warning-card,
+ body.screen-title-mode #screen-title .info-grid,
+ body.screen-title-mode #screen-title .grid-info {
+ opacity: .78 !important;
+ }
+ body.screen-puzzle-mode .v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-puzzle-mode .v75-ai-micro {
+ margin: 6px 0 8px !important;
+ padding: 7px 10px !important;
+ border-radius: 999px !important;
+ font-size: 11px !important;
+ background: rgba(0,0,0,.28) !important;
+ }
+ body.screen-puzzle-mode .v73-top-puzzle-panel {
+ margin: 8px 0 10px !important;
+ padding: 10px !important;
+ border-radius: 16px !important;
+ position: relative !important;
+ z-index: 30 !important;
+ }
+ body.screen-puzzle-mode #v74-place-now {
+ min-height: 58px !important;
+ font-size: 16px !important;
+ font-weight: 900 !important;
+ border-radius: 17px !important;
+ margin-bottom: 8px !important;
+ box-shadow: 0 0 28px rgba(200,45,35,.36) !important;
+ }
+ body.screen-puzzle-mode #bone-pool {
+ grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+ gap: 7px !important;
+ }
+ body.screen-puzzle-mode #bone-pool .bone-item {
+ min-height: 40px !important;
+ font-size: 11px !important;
+ opacity: .82 !important;
+ }
+ body.screen-puzzle-mode #bone-pool .bone-item.v66-next,
+ body.screen-puzzle-mode #bone-pool .bone-item.v76-selected,
+ body.screen-puzzle-mode #bone-pool .bone-item.selected {
+ opacity: 1 !important;
+ }
+ body.screen-puzzle-mode .v66-puzzle-controls {
+ gap: 7px !important;
+ margin-top: 6px !important;
+ }
+ body.screen-puzzle-mode .v66-selection-status,
+ body.screen-puzzle-mode .v74-mobile-hint,
+ body.screen-puzzle-mode #puzzle-log {
+ display: none !important;
+ }
+ body.screen-puzzle-mode #v66-scan-btn {
+ min-height: 42px !important;
+ opacity: .90 !important;
+ font-size: 12px !important;
+ border-radius: 14px !important;
+ }
+ body.screen-puzzle-mode .v72-board-guide {
+ margin: 8px 0 !important;
+ padding: 8px 10px !important;
+ line-height: 1.5 !important;
+ font-size: 12px !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board {
+ margin-top: 8px !important;
+ max-height: min(360px, 46vh) !important;
+ border-radius: 16px !important;
+ background-color: rgba(0,0,0,.18) !important;
+ box-shadow:
+ inset 0 0 22px rgba(0,0,0,.55),
+ 0 0 0 1px rgba(255,178,164,.10) !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board .slot {
+ border-color: rgba(241,227,200,.14) !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-required,
+ body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-possible,
+ body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-scan-target {
+ border-width: 2.4px !important;
+ border-color: rgba(255,230,210,.96) !important;
+ box-shadow:
+ 0 0 26px rgba(255,72,62,.46),
+ inset 0 0 16px rgba(255,178,164,.10) !important;
+ }
+ body.screen-clue-mode #screen-clue {
+ padding-bottom: var(--v81-safe-bottom) !important;
+ }
+ body.screen-clue-mode #clue-grid {
+ margin-bottom: 18px !important;
+ }
+ body.screen-ending-mode #screen-ending {
+ padding-bottom: calc(var(--v81-safe-bottom) + 42px) !important;
+ }
+ body.screen-ending-mode .v67-ai-panel {
+ display: none !important;
+ }
+ body.screen-ending-mode .ending-section,
+ body.screen-ending-mode .result-card,
+ body.screen-ending-mode .archive-card,
+ body.screen-ending-mode .ai-report,
+ body.screen-ending-mode .knowledge-card {
+ scroll-margin-top: 76px !important;
+ }
+ .v81-ending-tabs {
+ position: sticky;
+ top: 8px;
+ z-index: 60;
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 6px;
+ margin: 10px 0 12px;
+ padding: 6px;
+ border: 1px solid rgba(241,227,200,.12);
+ border-radius: 999px;
+ background: rgba(5,2,2,.78);
+ backdrop-filter: blur(10px);
+ }
+ .v81-ending-tabs button {
+ min-height: 34px !important;
+ border-radius: 999px !important;
+ font-size: 11px !important;
+ padding: 6px 8px !important;
+ background: rgba(0,0,0,.28) !important;
+ border: 1px solid rgba(241,227,200,.10) !important;
+ color: rgba(241,227,200,.70) !important;
+ }
+ .v81-ending-tabs button.active {
+ background: rgba(112,18,18,.78) !important;
+ border-color: rgba(255,178,164,.36) !important;
+ color: #fff0e7 !important;
+ }
+ .v81-ending-group {
+ display: block !important;
+ }
+ .v81-ending-group.v81-hidden {
+ display: none !important;
+ }
+ @media (max-width: 430px) {
+ body.screen-title-mode #screen-title .scene-box,
+ body.screen-title-mode #screen-title .scene-box img {
+ max-height: 150px !important;
+ }
+ body.screen-puzzle-mode .game-board.v63-mask-board {
+ max-height: 340px !important;
+ }
+ body.screen-puzzle-mode #v74-place-now {
+ min-height: 56px !important;
+ font-size: 15px !important;
+ }
  }</style>
 </head>
 <body>
@@ -5946,9 +6152,9 @@
         <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
         <div class="v56-url-card">
           正式測試網址
-          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=80</code>
+          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=81</code>
           <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=80。</div>
+          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=81。</div>
         </div>
         <div class="v55-qa-panel">
           <div class="staff-subtitle">最終品質檢查</div>
@@ -5978,7 +6184,7 @@
         </div>
         <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
         <div class="staff-info-list" id="staffInfoList">
-          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v80</span></div>
+          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v81</span></div>
           <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
           <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
           <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -6375,9 +6581,9 @@
       =========================================================
     */
     const APP_CONFIG = {
-      VERSION: "v80",
-      URL_VERSION: "80",
-      BUILD_TYPE: "全面手機操作優化版",
+      VERSION: "v81",
+      URL_VERSION: "81",
+      BUILD_TYPE: "介面重排與底部遮擋修正版",
       PLAYER_PIN: "1931",
       STAFF_PASSWORD: "1931",
       FORMAL_MODE_DEFAULT: true,
@@ -6397,7 +6603,7 @@
       V55_RARITY_ENABLED: true,
       V55_QA_PANEL_ENABLED: true,
       V56_ARCHIVE_ID_ENABLED: true,
-      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=80",
+      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=81",
       V57_MOBILE_SCROLL_FIX: true,
       V58_SAVE_FIX_ENABLED: true,
       V59_FULL_REVEAL_ENABLED: true,
@@ -6419,7 +6625,7 @@
       V64_COLLAPSE_PUZZLE_NOTES: true,
       V64_UNLOCK_FILES_ENABLED: true,
       V65_AUTOSAVE_ENABLED: true,
-      V65_SAVE_KEY: "fifthResearcher_v80_autosave",
+      V65_SAVE_KEY: "fifthResearcher_v81_autosave",
       V65_SAVE_MAX_AGE_MS: 43200000,
       V66_EXPERIENCE_OPTIMIZED: true,
       V66_MAX_HEARTS: 5,
@@ -6492,7 +6698,12 @@
       V80_MOBILE_FLOW_POLISH: true,
       V80_ORDER_TAP_MODE: true,
       V80_BOX_FLOW_GUARD: true,
-      V80_AUTO_SCROLL_ACTIVE_SECTION: true
+      V80_AUTO_SCROLL_ACTIVE_SECTION: true,
+      V81_LAYOUT_REFINEMENT: true,
+      V81_HIDE_BOTTOM_HUD_MOBILE: true,
+      V81_COMPACT_AI: true,
+      V81_ENDING_TABS: true,
+      V81_FAST_PUZZLE_LAYOUT: true
     };
     const SOUND_CONFIG = {
       ambient: "sounds/ambient.mp3",
@@ -7661,6 +7872,79 @@
         Engine.toast?.("順序尚未正確，請重新排列。");
         return false;
       },
+      v81SetScreenMode(targetId = "") {
+        document.body.classList.add("v81-mobile-ui");
+        const modes = [
+          "screen-title-mode",
+          "screen-puzzle-mode",
+          "screen-clue-mode",
+          "screen-box-mode",
+          "screen-ending-mode",
+          "screen-gameover-mode"
+        ];
+        modes.forEach(m => document.body.classList.remove(m));
+        if (targetId) {
+          document.body.classList.add(targetId.replace("screen-", "screen-") + "-mode");
+        }
+        const hideHud = ["screen-title", "screen-puzzle", "screen-clue", "screen-box", "screen-ending"].includes(targetId);
+        document.body.classList.toggle("v81-hide-stage-hud", hideHud);
+      },
+      v81PrepareEndingTabs() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen || document.getElementById("v81-ending-tabs")) return;
+        const tabs = document.createElement("div");
+        tabs.className = "v81-ending-tabs";
+        tabs.id = "v81-ending-tabs";
+        tabs.innerHTML = `
+          <button type="button" data-tab="result" class="active">結果</button>
+          <button type="button" data-tab="card">證明卡</button>
+          <button type="button" data-tab="files">解鎖檔案</button>
+        `;
+        const firstCard = screen.querySelector(".result-card, .ending-section, .card") || screen.firstElementChild;
+        if (firstCard && firstCard.parentNode) {
+          firstCard.parentNode.insertBefore(tabs, firstCard);
+        } else {
+          screen.insertBefore(tabs, screen.firstChild);
+        }
+        const children = [...screen.children].filter(el => el.id !== "v81-ending-tabs");
+        children.forEach((el, idx) => {
+          if (idx <= 2) {
+            el.dataset.v81Group = "result";
+            el.classList.add("v81-ending-group");
+          } else if (idx <= 5) {
+            el.dataset.v81Group = "card";
+            el.classList.add("v81-ending-group", "v81-hidden");
+          } else {
+            el.dataset.v81Group = "files";
+            el.classList.add("v81-ending-group", "v81-hidden");
+          }
+        });
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            const tab = btn.dataset.tab;
+            tabs.querySelectorAll("button").forEach(b => b.classList.toggle("active", b === btn));
+            screen.querySelectorAll(".v81-ending-group").forEach(group => {
+              group.classList.toggle("v81-hidden", group.dataset.v81Group !== tab);
+            });
+            try { tabs.scrollIntoView({behavior:"smooth", block:"start"}); } catch (err) {}
+          };
+        });
+      },
+      v81AuditLayout(targetId = "") {
+        this.v81SetScreenMode(targetId);
+        if (targetId === "screen-puzzle") {
+          this.v76AuditButtons?.();
+          this.v75UpdateAIMicro?.();
+        }
+        if (targetId === "screen-clue") {
+          this.v78RepairClueScreen?.();
+          this.v79RefreshClueFaces?.();
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => this.v81PrepareEndingTabs(), 120);
+        }
+      },
       v80ScrollToElement(el) {
         if (!el || !APP_CONFIG.V80_AUTO_SCROLL_ACTIVE_SECTION) return;
         setTimeout(() => {
@@ -7890,7 +8174,7 @@
           title = document.createElement("div");
           title.className = "v73-pool-title";
           title.id = "v76-pool-title";
-          title.innerHTML = "<b>選擇骨頭</b><span>按大按鈕可直接復原下一塊</span>";
+          title.innerHTML = "<b>選擇骨頭</b><span>大按鈕＝直接復原</span>";
           panel.appendChild(title);
         }
         if (pool.parentElement !== panel) panel.appendChild(pool);
@@ -9002,6 +9286,7 @@
           this.v65RestoreClueState(state);
           this.v65RestoreBoxState(state);
           this.v65DirectShowScreen(screenId);
+          this.v81AuditLayout?.(screenId);
           if (screenId === "screen-ending") {
             this.v65RestoreEndingState(state);
           }
@@ -9050,6 +9335,7 @@
         this.v68Init();
         this.v71BindAIFix();
         this.v65BindAutoSave();
+        this.v81AuditLayout?.("screen-title");
         setTimeout(() => this.v76AuditButtons?.(), 350);
         setTimeout(() => this.v76AuditButtons?.(), 250);
         this.v75PrepareTitleLayout();
@@ -10210,6 +10496,7 @@
           this.v73SetScreenClass?.(targetId);
           if (targetId === "screen-title") this.v75PrepareTitleLayout?.();
           if (targetId === "screen-puzzle") this.v75UpdateAIMicro?.();
+          this.v81AuditLayout?.(targetId);
           Engine.setStage(targetId);
           setTimeout(() => this.v80AuditCurrentScreen?.(targetId), 160);
           this.v57EnsureScrollTop(targetId);
