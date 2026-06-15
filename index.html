@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>第五位研究員｜第七層標本復原程序 v85 強制介面修正版</title>
+  <title>第五位研究員｜第七層標本復原程序 v88 第二輪深度檢查與穩定修正版</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>:root {
@@ -6728,6 +6728,298 @@
  body.screen-title-mode #screen-title .scene-box img {
  max-height: 112px !important;
  }
+ }
+ body.screen-title-mode #screen-title .v85-settings-panel,
+ body.screen-title-mode #screen-title #v85-settings-panel {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+ max-height: 0 !important;
+ overflow: hidden !important;
+ }
+ body.screen-title-mode #screen-title .v85-settings-panel.show,
+ body.screen-title-mode #screen-title #v85-settings-panel.show {
+ display: grid !important;
+ visibility: visible !important;
+ opacity: 1 !important;
+ max-height: 220px !important;
+ overflow: visible !important;
+ gap: 8px !important;
+ margin: 10px 0 14px !important;
+ padding: 12px 14px !important;
+ border: 1px solid rgba(255,178,164,.18) !important;
+ border-radius: 16px !important;
+ background: rgba(0,0,0,.26) !important;
+ color: rgba(241,227,200,.76) !important;
+ font-size: 12px !important;
+ line-height: 1.7 !important;
+ }
+ body.screen-title-mode #screen-title .v85-title-hidden-source {
+ display: none !important;
+ }
+ body.screen-researcher-reveal-mode .stage-hud,
+ body.screen-researcher-reveal-mode .v67-ai-panel,
+ body.screen-researcher-reveal-mode #v67-ai-panel {
+ display: none !important;
+ }
+ #screen-researcher-reveal {
+ padding-bottom: max(110px, calc(env(safe-area-inset-bottom, 0px) + 86px)) !important;
+ }
+ .v86-reveal-card {
+ position: relative;
+ overflow: hidden;
+ margin: 18px 0;
+ padding: 22px 18px 20px;
+ border: 1px solid rgba(255,178,164,.20);
+ border-radius: 24px;
+ background:
+ radial-gradient(circle at 50% 0%, rgba(210,28,28,.22), transparent 34%),
+ radial-gradient(circle at 50% 45%, rgba(180,20,20,.16), transparent 46%),
+ rgba(5,1,1,.78);
+ box-shadow:
+ inset 0 0 34px rgba(0,0,0,.70),
+ 0 0 36px rgba(170,20,20,.20);
+ text-align: center;
+ min-height: 620px;
+ }
+ .v86-scanline {
+ position: absolute;
+ inset: 0;
+ background:
+ linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px);
+ background-size: 100% 4px;
+ opacity: .25;
+ pointer-events: none;
+ }
+ .v86-reveal-kicker {
+ color: rgba(255,178,164,.78);
+ font-size: 11px;
+ letter-spacing: .28em;
+ margin-bottom: 12px;
+ }
+ .v86-reveal-card h1 {
+ margin: 8px 0 10px;
+ color: #fff0e7;
+ font-size: 30px;
+ line-height: 1.25;
+ letter-spacing: .10em;
+ text-shadow: 0 0 22px rgba(210,45,36,.42);
+ }
+ .v86-reveal-sub {
+ margin: 0 auto 18px;
+ max-width: 520px;
+ color: rgba(241,227,200,.76);
+ font-size: 14px;
+ line-height: 1.75;
+ text-align: left;
+ }
+ .v86-photo-frame {
+ position: relative;
+ width: min(72vw, 300px);
+ aspect-ratio: 3 / 4;
+ margin: 18px auto;
+ border: 1px solid rgba(255,178,164,.28);
+ border-radius: 22px;
+ background:
+ radial-gradient(circle at 50% 28%, rgba(255,178,164,.16), transparent 28%),
+ linear-gradient(180deg, rgba(28,6,6,.96), rgba(0,0,0,.98));
+ box-shadow:
+ inset 0 0 30px rgba(0,0,0,.68),
+ 0 0 28px rgba(180,20,20,.24);
+ overflow: hidden;
+ }
+ .v86-photo-frame img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ display: none;
+ filter: contrast(1.05) saturate(.82) sepia(.12);
+ }
+ .v86-photo-frame.has-photo img {
+ display: block;
+ }
+ .v86-photo-frame.has-photo .v86-photo-placeholder {
+ display: none;
+ }
+ .v86-photo-placeholder {
+ position: absolute;
+ inset: 0;
+ display: grid;
+ place-content: center;
+ gap: 10px;
+ color: rgba(241,227,200,.76);
+ font-size: 16px;
+ letter-spacing: .10em;
+ }
+ .v86-photo-placeholder small {
+ display: block;
+ width: 72%;
+ margin: 0 auto;
+ color: rgba(241,227,200,.46);
+ font-size: 11px;
+ line-height: 1.55;
+ letter-spacing: 0;
+ }
+ .v86-face-dot {
+ width: 86px;
+ height: 86px;
+ margin: 0 auto;
+ border-radius: 999px;
+ background:
+ radial-gradient(circle at 50% 38%, rgba(255,178,164,.30), transparent 18%),
+ radial-gradient(circle at 50% 58%, rgba(180,20,20,.38), transparent 38%),
+ rgba(0,0,0,.42);
+ border: 1px solid rgba(255,178,164,.24);
+ box-shadow: 0 0 28px rgba(180,20,20,.22);
+ }
+ .v86-reveal-name {
+ display: flex;
+ justify-content: space-between;
+ gap: 14px;
+ margin: 16px 0 18px;
+ padding: 12px 14px;
+ border: 1px solid rgba(255,178,164,.16);
+ border-radius: 16px;
+ background: rgba(0,0,0,.24);
+ color: rgba(241,227,200,.68);
+ font-size: 13px;
+ }
+ .v86-reveal-name b {
+ color: #fff0e7;
+ text-align: right;
+ }
+ #screen-researcher-reveal .btn.primary {
+ width: 100%;
+ min-height: 56px;
+ border-radius: 17px;
+ background: linear-gradient(135deg, rgba(150,20,20,.98), rgba(48,4,4,.98)) !important;
+ }
+ body.screen-ending-mode .v81-ending-group.v81-hidden {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+ height: 0 !important;
+ min-height: 0 !important;
+ max-height: 0 !important;
+ margin: 0 !important;
+ padding: 0 !important;
+ overflow: hidden !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs,
+ body.screen-ending-mode .v82-ending-tabs,
+ body.screen-ending-mode #v81-ending-tabs,
+ body.screen-ending-mode #v82-ending-tabs {
+ background: rgba(8,1,1,.94) !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs button,
+ body.screen-ending-mode .v82-ending-tabs button,
+ body.screen-ending-mode #v81-ending-tabs button,
+ body.screen-ending-mode #v82-ending-tabs button {
+ background: rgba(20,4,4,.95) !important;
+ color: rgba(241,227,200,.82) !important;
+ -webkit-text-fill-color: rgba(241,227,200,.82) !important;
+ }
+ body.screen-ending-mode .v81-ending-tabs button.active,
+ body.screen-ending-mode .v82-ending-tabs button.active,
+ body.screen-ending-mode #v81-ending-tabs button.active,
+ body.screen-ending-mode #v82-ending-tabs button.active {
+ background: linear-gradient(135deg, rgba(160,20,20,.98), rgba(75,4,4,.98)) !important;
+ color: #fff0e7 !important;
+ -webkit-text-fill-color: #fff0e7 !important;
+ }
+ @media(max-width:430px) {
+ .v86-reveal-card {
+ min-height: 570px;
+ padding: 20px 16px 18px;
+ }
+ .v86-reveal-card h1 {
+ font-size: 26px;
+ }
+ .v86-photo-frame {
+ width: min(72vw, 270px);
+ }
+ }
+ #v87-reveal-video,
+ #v87-reveal-canvas {
+ position: absolute;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ display: none;
+ }
+ .v86-photo-frame.camera-live #v87-reveal-video {
+ display: block !important;
+ transform: scaleX(-1);
+ filter: contrast(1.05) saturate(.82) sepia(.10);
+ }
+ .v86-photo-frame.camera-live .v86-photo-placeholder,
+ .v86-photo-frame.camera-live #v86-researcher-photo {
+ display: none !important;
+ }
+ .v87-camera-controls {
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 8px;
+ margin: 12px 0 14px;
+ }
+ .v87-camera-controls .btn {
+ min-height: 44px !important;
+ font-size: 13px !important;
+ border-radius: 14px !important;
+ }
+ #v87-take-photo {
+ border-color: rgba(255,178,164,.42) !important;
+ background: rgba(115,18,18,.70) !important;
+ color: #fff0e7 !important;
+ }
+ body.screen-ending-mode .v87-force-hidden,
+ body.screen-ending-mode .v81-ending-group.v81-hidden {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+ height: 0 !important;
+ min-height: 0 !important;
+ max-height: 0 !important;
+ margin: 0 !important;
+ padding: 0 !important;
+ overflow: hidden !important;
+ }
+ body.screen-researcher-reveal-mode #hud {
+ display: none !important;
+ }
+ body.screen-researcher-reveal-mode #screen-researcher-reveal {
+ padding-bottom: max(130px, calc(env(safe-area-inset-bottom, 0px) + 104px)) !important;
+ }
+ #screen-researcher-reveal .v88-camera-note {
+ display: block;
+ margin-top: 6px;
+ color: rgba(241,227,200,.52);
+ font-size: 11px;
+ line-height: 1.55;
+ }
+ #screen-researcher-reveal .v87-camera-controls .btn[disabled] {
+ opacity: .45 !important;
+ pointer-events: none !important;
+ }
+ body.screen-ending-mode [data-v88-current-tab="false"],
+ body.screen-ending-mode .v87-force-hidden,
+ body.screen-ending-mode .v81-ending-group.v81-hidden {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+ height: 0 !important;
+ min-height: 0 !important;
+ max-height: 0 !important;
+ margin: 0 !important;
+ padding: 0 !important;
+ overflow: hidden !important;
+ }
+ body.screen-ending-mode #screen-ending {
+ padding-bottom: max(150px, calc(env(safe-area-inset-bottom, 0px) + 122px)) !important;
+ }
+ body.screen-title-mode #v85-settings-panel.show {
+ max-height: none !important;
  }</style>
 </head>
 <body>
@@ -6855,9 +7147,9 @@
         <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
         <div class="v56-url-card">
           正式測試網址
-          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=85</code>
+          <code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=88</code>
           <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=85。</div>
+          <div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=88。</div>
         </div>
         <div class="v55-qa-panel">
           <div class="staff-subtitle">最終品質檢查</div>
@@ -6887,7 +7179,7 @@
         </div>
         <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
         <div class="staff-info-list" id="staffInfoList">
-          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v85</span></div>
+          <div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v88</span></div>
           <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
           <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
           <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -7170,7 +7462,7 @@
       <button class="btn secondary" onclick="Game.showHint('pin')">要求密碼提示</button>
       <div class="hint-box" id="pin-hint-box"></div>
       <p id="pin-log" class="text-warning" style="text-align:center;margin-top:15px;height:22px;"></p>
-      <button class="btn" id="btn-to-ending" style="display:none;" onclick="Game.startEnding()">查看觀測結果</button>
+      <button class="btn" id="btn-to-ending" style="display:none;" onclick="Game.v87GoToResearcherReveal()">確認第五位研究員</button>
       <button class="btn secondary" onclick="Game.v78ProceedToClues()">返回上一頁</button>
     </section>
     <section class="screen" id="screen-ending">
@@ -7248,7 +7540,39 @@
         <div class="v60-archive-note">結論：供電中斷不是故障，而是封存系統重新啟動 1931 號檔案的異常反應。標本復原完成後，玩家才看見完整劇情。</div>
       </div>
 </section>
-  </main>
+    <section id="screen-researcher-reveal" class="screen">
+      <div class="section-header">
+        <div class="case-line">FINAL / 第五位研究員確認</div>
+      </div>
+      <div class="v86-reveal-card">
+        <div class="v86-scanline"></div>
+        <div class="v86-reveal-kicker">IDENTITY RESTORED</div>
+        <h1>第五位研究員就是你</h1>
+        <p class="v86-reveal-sub">封存箱已開啟。系統確認：最後一位研究員不是檔案中的人，而是完成復原程序的觀測者。</p>
+        <div class="v86-photo-frame">
+          <img id="v86-researcher-photo" alt="第五位研究員影像" />
+          <video id="v87-reveal-video" autoplay playsinline muted></video>
+          <canvas id="v87-reveal-canvas"></canvas>
+          <div id="v86-photo-placeholder" class="v86-photo-placeholder">
+            <div class="v86-face-dot"></div>
+            <div>觀測者影像</div>
+            <small>若未啟用相機，系統將以封存剪影代替。</small>
+          </div>
+        </div>
+        <div class="v87-camera-controls" id="v87-camera-controls">
+          <button class="btn secondary" type="button" id="v87-open-camera" onclick="Game.v87OpenRevealCamera()">拍攝研究員影像</button>
+          <button class="btn secondary" type="button" id="v87-take-photo" onclick="Game.v87TakeRevealPhoto()" style="display:none;">拍下影像</button>
+          <button class="btn secondary" type="button" id="v87-skip-photo" onclick="Game.v87SkipRevealPhoto()">使用觀測者剪影</button>
+          <small id="v88-camera-note" class="v88-camera-note">相機需使用 Safari / Chrome，且必須由玩家點按後才會啟動。</small>
+        </div>
+        <div class="v86-reveal-name">
+          <span>研究員代號</span>
+          <b id="v86-reveal-name">觀測者</b>
+        </div>
+        <button class="btn primary" onclick="Game.v86ProceedToEnding()">完成登錄 / 查看封存結果</button>
+      </div>
+    </section>
+</main>
   <div class="stage-hud" id="stageHud">
     <div class="stage-top">
       <span id="stage-code">ENTRY</span>
@@ -7284,9 +7608,9 @@
       =========================================================
     */
     const APP_CONFIG = {
-      VERSION: "v85",
-      URL_VERSION: "85",
-      BUILD_TYPE: "強制介面修正版",
+      VERSION: "v88",
+      URL_VERSION: "88",
+      BUILD_TYPE: "第二輪深度檢查與穩定修正版",
       PLAYER_PIN: "1931",
       STAFF_PASSWORD: "1931",
       FORMAL_MODE_DEFAULT: true,
@@ -7306,7 +7630,7 @@
       V55_RARITY_ENABLED: true,
       V55_QA_PANEL_ENABLED: true,
       V56_ARCHIVE_ID_ENABLED: true,
-      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=85",
+      V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=88",
       V57_MOBILE_SCROLL_FIX: true,
       V58_SAVE_FIX_ENABLED: true,
       V59_FULL_REVEAL_ENABLED: true,
@@ -7328,7 +7652,7 @@
       V64_COLLAPSE_PUZZLE_NOTES: true,
       V64_UNLOCK_FILES_ENABLED: true,
       V65_AUTOSAVE_ENABLED: true,
-      V65_SAVE_KEY: "fifthResearcher_v85_autosave",
+      V65_SAVE_KEY: "fifthResearcher_v88_autosave",
       V65_SAVE_MAX_AGE_MS: 43200000,
       V66_EXPERIENCE_OPTIMIZED: true,
       V66_MAX_HEARTS: 5,
@@ -7429,7 +7753,24 @@
       V85_BOX_NO_AI: true,
       V85_ENDING_CARD_GROUP_FORCE: true,
       V85_DARK_TABS_FORCE: true,
-      V85_KEEP_ROMAN_DIFFICULTY: true
+      V85_KEEP_ROMAN_DIFFICULTY: true,
+      V86_RESEARCHER_REVEAL: true,
+      V86_FIX_TITLE_SETTINGS_PANEL: true,
+      V86_STRICT_ENDING_TABS: true,
+      V86_REVEAL_AFTER_BOX: true,
+      V86_KEEP_ROMAN_DIFFICULTY: true,
+      V87_FULL_CODE_AUDIT_PATCH: true,
+      V87_BOX_BUTTON_REVEAL_ROUTE: true,
+      V87_REVEAL_CAMERA_CAPTURE: true,
+      V87_RESTORE_REVEAL_STATE: true,
+      V87_STRICT_END_TABS_FINAL: true,
+      V87_KEEP_ROMAN_DIFFICULTY: true,
+      V88_SECOND_PASS_AUDIT_FIX: true,
+      V88_REVEAL_SAVE_STATE: true,
+      V88_TAB_ROUTE_MEMORY: true,
+      V88_SAFARI_CAMERA_GUARD: true,
+      V88_FINAL_RESET_GUARD: true,
+      V88_KEEP_ROMAN_DIFFICULTY: true
     };
     const SOUND_CONFIG = {
       ambient: "sounds/ambient.mp3",
@@ -7788,7 +8129,8 @@
           "screen-puzzle": ["BONE TABLE", "骨骼復原台", "點選或拖曳下方骨頭，放入正確輪廓位置。"],
           "screen-clue": ["MARKING", "異常刻痕", "翻看骨頭背面，依身體由上到下讀取羅馬數字。"],
           "screen-box": ["SEALED BOX", "百寶封存箱", "輸入四位數密碼。錯誤會提高威脅值。"],
-          "screen-ending": ["REGISTER", "第五位研究員", "完成登錄。可選擇是否拍照保存影像。"],
+          "screen-researcher-reveal": ["IDENTITY", "第五位研究員確認", "封存箱已開啟，請確認最後一位研究員。"],
+          "screen-ending": ["REGISTER", "封存結果", "完成封存紀錄，可保存證明卡。"],
           "screen-gameover": ["FAILED", "封存失敗", "研究員資料已被第七層接管。"]
         };
         const s = stages[id] || stages["screen-title"];
@@ -8352,6 +8694,7 @@
           "screen-clue-mode",
           "screen-box-mode",
           "screen-ending-mode",
+          "screen-researcher-reveal-mode",
           "screen-gameover-mode"
         );
         if (targetId) document.body.classList.add(targetId.replace("screen-", "screen-") + "-mode");
@@ -8597,6 +8940,478 @@
         }
         Engine.toast?.("順序尚未正確，請重新排列。");
         return false;
+      },
+      resetGame() {
+        try {
+          const keys = [
+            APP_CONFIG.V65_SAVE_KEY,
+            APP_CONFIG.V70_SAVE_KEY_BACKUP,
+            "fifthResearcher_player_photo",
+            "fifthResearcher_reveal_state",
+            "fifthResearcher_ending_tab"
+          ].filter(Boolean);
+          keys.forEach(k => {
+            try { localStorage.removeItem(k); } catch (err) {}
+            try { sessionStorage.removeItem(k); } catch (err) {}
+          });
+        } catch (err) {}
+        const url = location.pathname + "?v=" + APP_CONFIG.URL_VERSION;
+        location.replace(url);
+      },
+      v88SaveRevealState() {
+        try {
+          const state = {
+            screen: "screen-researcher-reveal",
+            name: this.playerName || "",
+            hasPhoto: !!(localStorage.getItem("fifthResearcher_player_photo") || sessionStorage.getItem("fifthResearcher_player_photo")),
+            at: Date.now()
+          };
+          sessionStorage.setItem("fifthResearcher_reveal_state", JSON.stringify(state));
+        } catch (err) {}
+      },
+      v88CanUseCamera() {
+        return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+      },
+      v88GuardRevealCameraButtons() {
+        const open = document.getElementById("v87-open-camera");
+        if (!open) return;
+        if (!this.v88CanUseCamera()) {
+          open.disabled = true;
+          open.textContent = "此瀏覽器不支援相機";
+        }
+        let note = document.getElementById("v88-camera-note");
+        if (!note) {
+          note = document.createElement("small");
+          note.id = "v88-camera-note";
+          note.className = "v88-camera-note";
+          const controls = document.getElementById("v87-camera-controls");
+          if (controls) controls.appendChild(note);
+        }
+        note.textContent = "相機需使用 Safari / Chrome，且必須由玩家點按後才會啟動。";
+      },
+      v88FinalizeRevealScreen() {
+        this.v87PopulateResearcherReveal?.();
+        this.v88GuardRevealCameraButtons();
+        this.v88SaveRevealState();
+      },
+      v88RememberEndingTab(tab = "result") {
+        this.v88CurrentEndingTab = tab;
+        try { sessionStorage.setItem("fifthResearcher_ending_tab", tab); } catch (err) {}
+      },
+      v88GetEndingTab() {
+        try { return sessionStorage.getItem("fifthResearcher_ending_tab") || this.v88CurrentEndingTab || "result"; }
+        catch (err) { return this.v88CurrentEndingTab || "result"; }
+      },
+      v88EnforceEndingTab(tab = null) {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        const chosen = tab || this.v88GetEndingTab();
+        const tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) return;
+        tabs.querySelectorAll("button").forEach(btn => {
+          const active = btn.dataset.tab === chosen;
+          btn.classList.toggle("active", active);
+          btn.style.background = active
+            ? "linear-gradient(135deg, rgba(160,20,20,.98), rgba(75,4,4,.98))"
+            : "rgba(20,4,4,.95)";
+          btn.style.color = active ? "#fff0e7" : "rgba(241,227,200,.82)";
+          btn.style.webkitTextFillColor = btn.style.color;
+        });
+        screen.querySelectorAll(".v81-ending-group").forEach(group => {
+          const name = group.dataset.v82Group || group.dataset.v81Group || "result";
+          const show = name === chosen;
+          group.classList.toggle("v81-hidden", !show);
+          group.classList.toggle("v87-force-hidden", !show);
+          group.dataset.v88CurrentTab = show ? "true" : "false";
+          group.style.display = show ? "" : "none";
+          group.style.visibility = show ? "visible" : "hidden";
+        });
+      },
+      v88PatchEndingTabHandlers() {
+        const tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) return;
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            this.v88RememberEndingTab(btn.dataset.tab || "result");
+            this.v88EnforceEndingTab(btn.dataset.tab || "result");
+            try { tabs.scrollIntoView({behavior:"smooth", block:"start"}); } catch (err) {}
+          };
+        });
+        this.v88EnforceEndingTab(this.v88GetEndingTab());
+      },
+      v88StopRevealCamera() {
+        if (this.v87RevealStream) {
+          this.v87RevealStream.getTracks().forEach(t => t.stop());
+          this.v87RevealStream = null;
+        }
+        const video = document.getElementById("v87-reveal-video");
+        if (video) video.srcObject = null;
+      },
+      v88ResetForNextPlayer() {
+        this.v88StopRevealCamera();
+        try {
+          localStorage.removeItem("fifthResearcher_player_photo");
+          sessionStorage.removeItem("fifthResearcher_player_photo");
+          sessionStorage.removeItem("fifthResearcher_reveal_state");
+          sessionStorage.removeItem("fifthResearcher_ending_tab");
+        } catch (err) {}
+        this.resetGame?.();
+      },
+      v88AuditScreen(targetId = "") {
+        if (targetId === "screen-researcher-reveal") {
+          setTimeout(() => this.v88FinalizeRevealScreen(), 120);
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => {
+            this.v87StrictEndingTabs?.();
+            this.v88PatchEndingTabHandlers();
+          }, 320);
+        }
+        if (targetId !== "screen-researcher-reveal") {
+          setTimeout(() => this.v88StopRevealCamera(), 60);
+        }
+      },
+      v87GoToResearcherReveal() {
+        this.boxUnlocked = true;
+        this.v86ShowResearcherReveal?.();
+        this.v88SaveRevealState?.();
+      },
+      v87PopulateResearcherReveal() {
+        const name = document.getElementById("v86-reveal-name");
+        if (name) name.textContent = this.playerName || "觀測者";
+        const frame = document.querySelector(".v86-photo-frame");
+        const img = document.getElementById("v86-researcher-photo");
+        const src = this.v86GetPlayerPhoto?.() || "";
+        if (frame) frame.classList.remove("camera-live");
+        if (frame && img && src) {
+          img.src = src;
+          frame.classList.add("has-photo");
+        } else if (frame) {
+          frame.classList.remove("has-photo");
+        }
+        const open = document.getElementById("v87-open-camera");
+        const take = document.getElementById("v87-take-photo");
+        const skip = document.getElementById("v87-skip-photo");
+        if (open) open.style.display = src ? "none" : "block";
+        if (take) take.style.display = "none";
+        if (skip) skip.style.display = src ? "none" : "block";
+        this.v88GuardRevealCameraButtons?.();
+      },
+      async v87OpenRevealCamera() {
+        const frame = document.querySelector(".v86-photo-frame");
+        const video = document.getElementById("v87-reveal-video");
+        const open = document.getElementById("v87-open-camera");
+        const take = document.getElementById("v87-take-photo");
+        if (!video || !frame) return;
+        try {
+          this.v87RevealStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false
+          });
+          video.srcObject = this.v87RevealStream;
+          frame.classList.add("camera-live");
+          frame.classList.remove("has-photo");
+          if (open) open.style.display = "none";
+          if (take) take.style.display = "block";
+          Engine.play?.("camera");
+          Engine.toast?.("相機已啟動。");
+        } catch (err) {
+          Engine.toast?.("相機未啟用，保留觀測者剪影。");
+          this.v87SkipRevealPhoto();
+        }
+      },
+      v87TakeRevealPhoto() {
+        const frame = document.querySelector(".v86-photo-frame");
+        const video = document.getElementById("v87-reveal-video");
+        const canvas = document.getElementById("v87-reveal-canvas");
+        const img = document.getElementById("v86-researcher-photo");
+        const open = document.getElementById("v87-open-camera");
+        const take = document.getElementById("v87-take-photo");
+        const skip = document.getElementById("v87-skip-photo");
+        if (!video || !canvas || !img || !video.videoWidth) {
+          Engine.toast?.("影像尚未就緒。");
+          return;
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.save();
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+        ctx.fillStyle = "rgba(0,0,0,.28)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "rgba(180,20,20,.86)";
+        ctx.lineWidth = Math.max(4, canvas.width * .012);
+        ctx.strokeRect(canvas.width * .045, canvas.height * .045, canvas.width * .91, canvas.height * .91);
+        ctx.fillStyle = "rgba(255,238,222,.92)";
+        ctx.font = `${Math.floor(canvas.width * .045)}px serif`;
+        ctx.fillText("FIFTH RESEARCHER / " + (this.playerName || "OBSERVER"), canvas.width * .07, canvas.height * .92);
+        const data = canvas.toDataURL("image/png");
+        img.src = data;
+        try {
+          localStorage.setItem("fifthResearcher_player_photo", data);
+          sessionStorage.setItem("fifthResearcher_player_photo", data);
+        } catch (err) {}
+        if (frame) {
+          frame.classList.remove("camera-live");
+          frame.classList.add("has-photo");
+        }
+        if (this.v87RevealStream) {
+          this.v87RevealStream.getTracks().forEach(t => t.stop());
+          this.v87RevealStream = null;
+        }
+        if (open) open.style.display = "none";
+        if (take) take.style.display = "none";
+        if (skip) skip.style.display = "none";
+        Engine.impact?.("camera");
+        Engine.toast?.("第五位研究員影像已封存。");
+        this.v88SaveRevealState?.();
+        this.v65ScheduleSave?.();
+      },
+      v87SkipRevealPhoto() {
+        const frame = document.querySelector(".v86-photo-frame");
+        const video = document.getElementById("v87-reveal-video");
+        const open = document.getElementById("v87-open-camera");
+        const take = document.getElementById("v87-take-photo");
+        if (this.v87RevealStream) {
+          this.v87RevealStream.getTracks().forEach(t => t.stop());
+          this.v87RevealStream = null;
+        }
+        if (video) video.srcObject = null;
+        if (frame) frame.classList.remove("camera-live");
+        if (open) open.style.display = "block";
+        if (take) take.style.display = "none";
+        Engine.toast?.("已使用觀測者剪影。");
+      },
+      v87StrictEndingTabs() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        let tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) {
+          this.v82PrepareEndingTabs?.();
+          tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        }
+        if (!tabs) return;
+        const archive = document.getElementById("archive-card") || screen.querySelector(".archive-card");
+        const save = document.getElementById("btn-save-archive");
+        const restart = document.getElementById("btn-restart");
+        const files = document.getElementById("v60-story-card") || document.getElementById("v83-unlock-files");
+        [...screen.children].forEach(el => {
+          if (["v82-ending-tabs", "v81-ending-tabs"].includes(el.id)) return;
+          el.classList.add("v81-ending-group");
+          el.dataset.v82Group = "result";
+          el.dataset.v81Group = "result";
+        });
+        [archive, save, restart].forEach(el => {
+          if (!el) return;
+          el.classList.add("v81-ending-group");
+          el.dataset.v82Group = "card";
+          el.dataset.v81Group = "card";
+        });
+        if (files) {
+          files.classList.add("v81-ending-group");
+          files.dataset.v82Group = "files";
+          files.dataset.v81Group = "files";
+        }
+        const setTab = tab => {
+          tabs.querySelectorAll("button").forEach(btn => {
+            const active = btn.dataset.tab === tab;
+            btn.classList.toggle("active", active);
+            btn.style.background = active
+              ? "linear-gradient(135deg, rgba(160,20,20,.98), rgba(75,4,4,.98))"
+              : "rgba(20,4,4,.95)";
+            btn.style.color = active ? "#fff0e7" : "rgba(241,227,200,.82)";
+            btn.style.webkitTextFillColor = btn.style.color;
+          });
+          screen.querySelectorAll(".v81-ending-group").forEach(group => {
+            const name = group.dataset.v82Group || group.dataset.v81Group || "result";
+            const show = name === tab;
+            group.classList.toggle("v81-hidden", !show);
+            group.classList.toggle("v87-force-hidden", !show);
+            group.style.display = show ? "" : "none";
+            group.style.visibility = show ? "visible" : "hidden";
+          });
+          if (tab === "card") {
+            [archive, save, restart].forEach(el => {
+              if (!el) return;
+              el.classList.remove("v81-hidden", "v87-force-hidden");
+              el.style.display = "block";
+              el.style.visibility = "visible";
+            });
+          }
+        };
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            setTab(btn.dataset.tab);
+            try { tabs.scrollIntoView({behavior:"smooth", block:"start"}); } catch (err) {}
+          };
+        });
+        setTab(this.v88GetEndingTab?.() || "result");
+        this.v88PatchEndingTabHandlers?.();
+      },
+      v87AuditScreen(targetId = "") {
+        if (targetId === "screen-researcher-reveal") {
+          setTimeout(() => this.v87PopulateResearcherReveal(), 100);
+        }
+        if (targetId === "screen-box") {
+          const btn = document.getElementById("btn-to-ending");
+          if (btn) {
+            btn.onclick = e => {
+              e.preventDefault();
+              this.v87GoToResearcherReveal();
+            };
+            btn.textContent = "確認第五位研究員";
+          }
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => this.v87StrictEndingTabs(), 260);
+        }
+        if (targetId === "screen-title") {
+          setTimeout(() => this.v86RepairTitleSettings?.(), 180);
+        }
+      },
+      v86RepairTitleSettings() {
+        const screen = document.getElementById("screen-title");
+        if (!screen) return;
+        let toggle = document.getElementById("v85-settings-toggle");
+        let panel = document.getElementById("v85-settings-panel");
+        if (!toggle) {
+          const startBtn = [...screen.querySelectorAll("button")].find(btn => /接入系統|開始復原|開始/.test((btn.textContent || "").trim()));
+          if (!startBtn) return;
+          toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.id = "v85-settings-toggle";
+          toggle.className = "v85-settings-toggle";
+          toggle.textContent = "展開體驗設定";
+          startBtn.insertAdjacentElement("afterend", toggle);
+        }
+        if (!panel) {
+          panel = document.createElement("div");
+          panel.id = "v85-settings-panel";
+          panel.className = "v85-settings-panel";
+          toggle.insertAdjacentElement("afterend", panel);
+        }
+        panel.innerHTML = `
+          <div>建議戴耳機：低頻與敲擊聲會影響判斷。</div>
+          <div>保持直向：手機直向體驗最穩定。</div>
+          <div>遊戲時間：約 2–4 分鐘。</div>
+          <div>相機選用：不開相機也能完整遊玩；若開啟，結尾可顯示研究員影像。</div>
+          <div>體驗模式：標準挑戰 / 標準恐怖。</div>
+        `;
+        panel.classList.remove("show");
+        panel.style.display = "none";
+        toggle.textContent = "展開體驗設定";
+        toggle.onclick = e => {
+          e.preventDefault();
+          const show = !panel.classList.contains("show");
+          panel.classList.toggle("show", show);
+          panel.style.display = show ? "grid" : "none";
+          toggle.textContent = show ? "收合體驗設定" : "展開體驗設定";
+        };
+      },
+      v86GetPlayerPhoto() {
+        const candidates = [
+          document.getElementById("photo-result"),
+          document.getElementById("fallback-img"),
+          document.querySelector("#camera-frame img"),
+          document.querySelector("img[data-player-photo]")
+        ].filter(Boolean);
+        for (const img of candidates) {
+          const src = img.getAttribute("src");
+          if (src && src.length > 20 && !src.includes("cover") && !src.includes("sealed-box")) return src;
+        }
+        try {
+          return localStorage.getItem("fifthResearcher_player_photo") || sessionStorage.getItem("fifthResearcher_player_photo") || "";
+        } catch (err) {
+          return "";
+        }
+      },
+      v86ShowResearcherReveal() {
+        this.switchScreen("screen-researcher-reveal");
+        setTimeout(() => this.v87PopulateResearcherReveal?.(), 80);
+        Engine.play?.("glitch");
+        this.v65ScheduleSave?.();
+      },
+      v86ProceedToEnding() {
+        this.v88StopRevealCamera?.();
+        this.v88RememberEndingTab?.("result");
+        this.startEnding();
+      },
+      v86StrictEndingTabs() {
+        const screen = document.getElementById("screen-ending");
+        if (!screen) return;
+        let tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        if (!tabs) {
+          this.v82PrepareEndingTabs?.();
+          tabs = document.getElementById("v82-ending-tabs") || document.getElementById("v81-ending-tabs");
+        }
+        if (!tabs) return;
+        const archive = document.getElementById("archive-card") || screen.querySelector(".archive-card");
+        const save = document.getElementById("btn-save-archive");
+        const restart = document.getElementById("btn-restart");
+        const files = document.getElementById("v60-story-card") || document.getElementById("v83-unlock-files");
+        const direct = [...screen.children].filter(el => !["v82-ending-tabs", "v81-ending-tabs"].includes(el.id));
+        direct.forEach(el => {
+          el.classList.add("v81-ending-group");
+          el.dataset.v82Group = "result";
+          el.dataset.v81Group = "result";
+        });
+        [archive, save, restart].forEach(el => {
+          if (!el) return;
+          el.dataset.v82Group = "card";
+          el.dataset.v81Group = "card";
+          el.classList.add("v81-ending-group");
+        });
+        if (files) {
+          files.dataset.v82Group = "files";
+          files.dataset.v81Group = "files";
+          files.classList.add("v81-ending-group");
+        }
+        const setTab = tab => {
+          tabs.querySelectorAll("button").forEach(btn => {
+            const active = btn.dataset.tab === tab;
+            btn.classList.toggle("active", active);
+            btn.style.background = active
+              ? "linear-gradient(135deg, rgba(160,20,20,.98), rgba(75,4,4,.98))"
+              : "rgba(20,4,4,.95)";
+            btn.style.color = active ? "#fff0e7" : "rgba(241,227,200,.82)";
+            btn.style.webkitTextFillColor = btn.style.color;
+          });
+          screen.querySelectorAll(".v81-ending-group").forEach(group => {
+            const name = group.dataset.v82Group || group.dataset.v81Group || "result";
+            const show = name === tab;
+            group.classList.toggle("v81-hidden", !show);
+            group.style.display = show ? "" : "none";
+            group.style.visibility = show ? "visible" : "hidden";
+          });
+          if (tab === "card") {
+            [archive, save, restart].forEach(el => {
+              if (!el) return;
+              el.style.display = "block";
+              el.style.visibility = "visible";
+              el.classList.remove("v81-hidden");
+            });
+          }
+        };
+        tabs.querySelectorAll("button").forEach(btn => {
+          btn.onclick = e => {
+            e.preventDefault();
+            setTab(btn.dataset.tab);
+          };
+        });
+        setTab("result");
+      },
+      v86Audit(targetId = "") {
+        if (targetId === "screen-title") {
+          setTimeout(() => this.v86RepairTitleSettings(), 150);
+        }
+        if (targetId === "screen-ending") {
+          setTimeout(() => this.v86StrictEndingTabs(), 220);
+        }
       },
       v85BuildTitleSettingsToggle() {
         const screen = document.getElementById("screen-title");
@@ -10327,11 +11142,12 @@
         this.v50UpdateAudioUI();
         const hud = document.getElementById("hud");
         if (hud) {
-          const showHud = !["screen-title", "screen-ending"].includes(target.id);
+          const showHud = !["screen-title", "screen-ending", "screen-researcher-reveal"].includes(target.id);
           hud.classList.toggle("active", showHud);
         }
         if (target.id === "screen-box") this.updateBoxState();
         if (target.id === "screen-ending") this.v64PrepareExhibitionEnding();
+        if (target.id === "screen-researcher-reveal") this.v87PopulateResearcherReveal?.();
         window.scrollTo(0, 0);
       },
       v65ShowRestoreBadge() {
@@ -10421,7 +11237,14 @@
             input.disabled = true;
             input.classList.add("pin-ok");
           }
-          if (btn) btn.style.display = "block";
+          if (btn) {
+            btn.style.display = "block";
+            btn.textContent = "確認第五位研究員";
+            btn.onclick = e => {
+              e.preventDefault();
+              this.v87GoToResearcherReveal();
+            };
+          }
           if (log) {
             log.style.color = "var(--bone-light)";
             log.textContent = "驗證通過。封存箱開啟。";
@@ -10571,6 +11394,8 @@
         this.v82AuditFinalUI?.("screen-title");
         this.v84AuditFinalDetails?.("screen-title");
         this.v85AuditEverything?.("screen-title");
+        this.v86Audit?.("screen-title");
+        this.v87AuditScreen?.("screen-title");
         setTimeout(() => this.v76AuditButtons?.(), 350);
         setTimeout(() => this.v76AuditButtons?.(), 250);
         this.v75PrepareTitleLayout();
@@ -11735,6 +12560,9 @@
           this.v82AuditFinalUI?.(targetId);
           this.v84AuditFinalDetails?.(targetId);
           this.v85AuditEverything?.(targetId);
+          this.v86Audit?.(targetId);
+          this.v87AuditScreen?.(targetId);
+          this.v88AuditScreen?.(targetId);
           Engine.setStage(targetId);
           setTimeout(() => this.v80AuditCurrentScreen?.(targetId), 160);
           this.v57EnsureScrollTop(targetId);
@@ -12379,7 +13207,15 @@
             log.textContent = "驗證通過。封存箱開啟。";
             input.classList.add("pin-ok");
             input.disabled = true;
-            document.getElementById("btn-to-ending").style.display = "block";
+            const endBtn = document.getElementById("btn-to-ending");
+            if (endBtn) {
+              endBtn.style.display = "block";
+              endBtn.textContent = "確認第五位研究員";
+              endBtn.onclick = e => {
+                e.preventDefault();
+                this.v87GoToResearcherReveal();
+              };
+            }
             Engine.play("correct");
             this.v67RecordAI?.('correct', 'AI 確認：1931 封存年份通過，箱體開啟。');
             this.unlockBox();
@@ -12397,8 +13233,8 @@
             this.v50AudioBeat(true);
             this.v67RecordAI?.('wrong', 'AI 警告：密碼輸入錯誤，箱體回應異常敲擊。');
             this.loseHeart("密碼錯誤。箱內傳來敲擊聲，穩定度下降。");
-            this.v65ScheduleSave();
           }
+          this.v65ScheduleSave();
         }
       },
       updateHUD() {
