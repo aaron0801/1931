@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>第五位研究員｜第七層標本復原程序 v74 手機點按放置修正版</title>
+<title>第五位研究員｜第七層標本復原程序 v76 按鈕功能總修正版</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>:root {
@@ -5334,6 +5334,197 @@ font-size: 12px !important;
 min-height: 50px !important;
 font-size: 14px !important;
 }
+}
+body.screen-title-mode .stage-hud,
+body.screen-puzzle-mode .stage-hud {
+display: none !important;
+visibility: hidden !important;
+pointer-events: none !important;
+}
+body.screen-title-mode #app,
+body.screen-puzzle-mode #app {
+padding-bottom: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px)) !important;
+}
+#screen-title .v66-taskbar,
+#screen-title #v66-taskbar,
+body.screen-title-mode .v66-taskbar { display: none !important; }
+body.screen-title-mode .v67-ai-panel {
+margin: 8px auto 10px !important;
+opacity: .88;
+transform: scale(.98);
+transform-origin: top center;
+}
+body.screen-title-mode .v67-ai-panel .v67-ai-body { display: none !important; }
+#screen-title .scene-box {
+margin-top: 12px !important;
+max-height: 190px !important;
+overflow: hidden !important;
+border-radius: 16px !important;
+}
+#screen-title .scene-box img {
+max-height: 190px !important;
+object-fit: cover !important;
+}
+#screen-title #player-name {
+min-height: 52px !important;
+font-size: 16px !important;
+}
+#screen-title .btn.primary,
+#screen-title button.primary,
+#screen-title button[onclick*="startGame"] {
+min-height: 56px !important;
+font-size: 16px !important;
+letter-spacing: .12em !important;
+border-radius: 16px !important;
+box-shadow: 0 0 24px rgba(190,42,34,.28) !important;
+}
+#screen-title .v75-fast-start {
+display: grid !important;
+gap: 10px !important;
+margin: 12px 0 !important;
+}
+#screen-title .v69-setup-details {
+margin: 8px 0 12px !important;
+opacity: .92;
+}
+#screen-title .v69-setup-details > summary {
+min-height: 40px !important;
+padding: 10px 12px !important;
+font-size: 11px !important;
+}
+body.screen-puzzle-mode .v67-ai-panel { display: none !important; }
+.v75-ai-micro {
+display: none;
+margin: 8px 0 10px;
+border: 1px solid rgba(146,220,255,.14);
+border-radius: 999px;
+padding: 7px 10px;
+background: rgba(0,0,0,.22);
+color: rgba(241,227,200,.62);
+font-size: 11px;
+line-height: 1.4;
+letter-spacing: .04em;
+}
+body.screen-puzzle-mode .v75-ai-micro { display: block !important; }
+.v75-ai-micro b { color: #9ee6ff; font-weight: 800; }
+body.screen-puzzle-mode .v73-top-puzzle-panel {
+margin: 8px 0 10px !important;
+padding: 10px !important;
+}
+body.screen-puzzle-mode .v74-place-now,
+body.screen-puzzle-mode #v74-place-now {
+order: -1 !important;
+min-height: 56px !important;
+font-size: 16px !important;
+margin: 0 0 8px !important;
+border-radius: 16px !important;
+letter-spacing: .08em !important;
+}
+body.screen-puzzle-mode .v74-mobile-hint,
+body.screen-puzzle-mode .v66-selection-status { display: none !important; }
+body.screen-puzzle-mode #bone-pool {
+order: 2 !important;
+grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+gap: 7px !important;
+margin-bottom: 8px !important;
+}
+body.screen-puzzle-mode #bone-pool .bone-item {
+min-height: 42px !important;
+font-size: 11px !important;
+padding: 7px 4px !important;
+opacity: .86;
+}
+body.screen-puzzle-mode #v66-scan-btn {
+min-height: 42px !important;
+font-size: 12px !important;
+opacity: .92;
+}
+body.screen-puzzle-mode .v72-board-guide {
+margin: 6px 0 8px !important;
+padding: 8px 10px !important;
+font-size: 12px !important;
+line-height: 1.55 !important;
+}
+body.screen-puzzle-mode .game-board.v63-mask-board {
+margin-top: 6px !important;
+max-height: min(390px, 48vh) !important;
+}
+body.screen-puzzle-mode .game-board.v63-mask-board .slot .slot-label,
+body.screen-puzzle-mode .v63-mask-piece span { display: none !important; }
+body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-required,
+body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-possible,
+body.screen-puzzle-mode .game-board.v63-mask-board .slot.v66-scan-target {
+border-width: 2px !important;
+border-color: rgba(255,220,194,.90) !important;
+background: rgba(126,20,20,.18) !important;
+box-shadow: 0 0 22px rgba(255,76,62,.40), inset 0 0 16px rgba(0,0,0,.42) !important;
+}
+.asset-path-note.v64-asset-note, #puzzle-log { display: none !important; }
+body.v75-board-image-missing .asset-path-note.v64-asset-note { display: block !important; }
+#screen-puzzle #bone-pool,
+#screen-puzzle .v73-top-puzzle-panel,
+#screen-puzzle .v74-place-now,
+#screen-puzzle #v74-place-now {
+position: relative !important;
+z-index: 20 !important;
+pointer-events: auto !important;
+}
+#screen-puzzle #bone-pool .bone-item {
+pointer-events: auto !important;
+touch-action: manipulation !important;
+-webkit-tap-highlight-color: rgba(255,178,164,.20) !important;
+cursor: pointer !important;
+user-select: none !important;
+-webkit-user-select: none !important;
+opacity: 1 !important;
+}
+#screen-puzzle #bone-pool .bone-item.used,
+#screen-puzzle #bone-pool .bone-item.disabled {
+opacity: .32 !important;
+pointer-events: none !important;
+}
+#screen-puzzle #bone-pool .bone-item.v76-clickable {
+border-color: rgba(241,227,200,.24) !important;
+}
+#screen-puzzle #bone-pool .bone-item.v76-selected,
+#screen-puzzle #bone-pool .bone-item.selected,
+#screen-puzzle #bone-pool .bone-item.v74-ready {
+border-color: rgba(255,220,194,.95) !important;
+color: #fff !important;
+background: linear-gradient(135deg, rgba(150,28,22,.98), rgba(34,6,6,.98)) !important;
+box-shadow: 0 0 22px rgba(255,76,62,.36) !important;
+}
+#v76-button-status {
+margin: 8px 0 0;
+padding: 8px 10px;
+border: 1px solid rgba(241,227,200,.12);
+border-radius: 12px;
+background: rgba(0,0,0,.20);
+color: rgba(241,227,200,.66);
+font-size: 11px;
+line-height: 1.5;
+text-align: center;
+}
+#v76-button-status b {
+color: #ffb2a4;
+}
+#v74-place-now,
+.v74-place-now {
+pointer-events: auto !important;
+touch-action: manipulation !important;
+-webkit-tap-highlight-color: rgba(255,178,164,.22) !important;
+z-index: 30 !important;
+}
+body.screen-puzzle-mode .game-board.v63-mask-board {
+pointer-events: auto !important;
+}
+body.screen-puzzle-mode .game-board.v63-mask-board .slot {
+pointer-events: auto !important;
+touch-action: manipulation !important;
+}
+.v76-no-overlap-spacer {
+height: max(24px, env(safe-area-inset-bottom, 0px));
+pointer-events: none;
 }</style>
 </head>
 <body>
@@ -5461,9 +5652,9 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
 <div class="v56-url-card">
 正式測試網址
-<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=74</code>
+<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=76</code>
 <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=74。</div>
+<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=76。</div>
 </div>
 <div class="v55-qa-panel">
 <div class="staff-subtitle">最終品質檢查</div>
@@ -5493,7 +5684,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
 <div class="staff-info-list" id="staffInfoList">
-<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v74</span></div>
+<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v76</span></div>
 <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
 <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
 <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -5669,6 +5860,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div><b>遮罩系統</b>：拼對骨頭後會揭開黑色遮罩，底圖不會移動。</div>
 </div>
 </details>
+<div class="v75-ai-micro" id="v75-ai-micro"><b>AI</b>：等待復原狀態。</div>
 <div class="v72-board-guide" id="v72-board-guide"><b>操作方式</b>：先點下方骨頭，再點上方亮起的封存區。紅色亮框就是建議下一塊。</div>
 <div class="game-board v63-mask-board" id="game-board">
 <div class="v63-board-image-layer" aria-hidden="true">
@@ -5887,9 +6079,9 @@ v44 集中資料設定
 =========================================================
 */
 const APP_CONFIG = {
-VERSION: "v74",
-URL_VERSION: "74",
-BUILD_TYPE: "手機點按放置修正版",
+VERSION: "v76",
+URL_VERSION: "76",
+BUILD_TYPE: "按鈕功能總修正版",
 PLAYER_PIN: "1931",
 STAFF_PASSWORD: "1931",
 FORMAL_MODE_DEFAULT: true,
@@ -5909,7 +6101,7 @@ V54_SHARE_TEXT_ENABLED: true,
 V55_RARITY_ENABLED: true,
 V55_QA_PANEL_ENABLED: true,
 V56_ARCHIVE_ID_ENABLED: true,
-V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=74",
+V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=76",
 V57_MOBILE_SCROLL_FIX: true,
 V58_SAVE_FIX_ENABLED: true,
 V59_FULL_REVEAL_ENABLED: true,
@@ -5931,7 +6123,7 @@ V64_EXHIBITION_MODE: true,
 V64_COLLAPSE_PUZZLE_NOTES: true,
 V64_UNLOCK_FILES_ENABLED: true,
 V65_AUTOSAVE_ENABLED: true,
-V65_SAVE_KEY: "fifthResearcher_v74_autosave",
+V65_SAVE_KEY: "fifthResearcher_v76_autosave",
 V65_SAVE_MAX_AGE_MS: 43200000,
 V66_EXPERIENCE_OPTIMIZED: true,
 V66_MAX_HEARTS: 5,
@@ -5981,7 +6173,16 @@ V73_HIDE_STAGE_HUD_ON_PUZZLE: true,
 V73_FORCE_RENDER_BONES: true,
 V74_TAP_TO_PLACE_MODE: true,
 V74_DISABLE_DRAG_ON_MOBILE: true,
-V74_AUTO_PLACE_REQUIRED_BONE: true
+V74_AUTO_PLACE_REQUIRED_BONE: true,
+V75_EXHIBITION_UI: true,
+V75_HIDE_HUD_ON_TITLE_AND_PUZZLE: true,
+V75_AI_MICRO_MODE: true,
+V75_FAST_START_LAYOUT: true,
+V75_MAIN_ACTION_FIRST: true,
+V76_BUTTON_AUDIT_FIX: true,
+V76_BONE_BUTTON_CLICK_ONLY: true,
+V76_REPAIR_RUNTIME_METHODS: true,
+V76_FORCE_BIND_ALL_BUTTONS: true
 };
 const SOUND_CONFIG = {
 ambient: "sounds/ambient.mp3",
@@ -6844,7 +7045,7 @@ const img = document.getElementById("v63-board-img");
 const fallback = document.getElementById("v63-board-fallback");
 if (img) img.style.display = "none";
 if (fallback) fallback.style.display = "grid";
-document.body.classList.add("v73-board-image-missing");
+this.v75SetBoardImageState?.(true);
 this.addStaffLog("v63 完整圖遮罩底圖缺檔：images/reveal/full-fossil-board.png", true);
 },
 v63InitMaskBoard() {
@@ -6931,13 +7132,13 @@ placeBtn = document.createElement("button");
 placeBtn.type = "button";
 placeBtn.id = "v74-place-now";
 placeBtn.className = "v74-place-now";
-placeBtn.textContent = "選擇骨頭後放入亮框";
+placeBtn.textContent = "放入下一塊";
 placeBtn.onclick = () => this.v74PlaceSelectedBone();
 panel.appendChild(placeBtn);
 const hint = document.createElement("div");
 hint.className = "v74-mobile-hint";
 hint.id = "v74-mobile-hint";
-hint.textContent = "手機建議：不用拖曳，點骨頭 → 按放入亮框。";
+hint.textContent = "手機建議：按大按鈕即可復原下一塊。";
 panel.appendChild(hint);
 }
 if (controls.parentElement !== panel) panel.appendChild(controls);
@@ -6964,10 +7165,10 @@ v73BindBoardImageState() {
 const img = document.getElementById("v63-board-img");
 if (!img) return;
 const markLoaded = () => {
-document.body.classList.remove("v72-board-image-missing", "v73-board-image-missing");
+this.v75SetBoardImageState?.(false);
 };
 const markMissing = () => {
-document.body.classList.add("v73-board-image-missing");
+this.v75SetBoardImageState?.(true);
 };
 if (img.complete && img.naturalWidth > 0) markLoaded();
 img.addEventListener("load", markLoaded, {once:false});
@@ -7053,6 +7254,262 @@ help.className = "v69-board-help";
 help.id = "v69-board-help";
 help.innerHTML = "<b>操作方式</b>：先點下方骨頭卡，再點上方虛線封存區。標準挑戰會依序提示下一塊；簡單體驗可自由復原。";
 board.parentNode.insertBefore(help, board);
+},
+v76GetBoneLabelSafe(id) {
+return this.v66GetBoneLabel?.(id) || this.getBoneData?.(id)?.name || id || "";
+},
+v76GetNextBoneId() {
+const required = this.v66GetRequiredBoneId?.();
+if (required && !this.v65SolvedBones.includes(required)) return required;
+const order = APP_CONFIG.V66_RESTORE_ORDER || this.bones.map(b => b.id);
+return order.find(id => !this.v65SolvedBones.includes(id)) || this.bones.find(b => !this.v65SolvedBones.includes(b.id))?.id || null;
+},
+v76EnsureTopControls() {
+const screen = document.getElementById("screen-puzzle");
+const pool = document.getElementById("bone-pool");
+if (!screen || !pool) return;
+const guide = document.getElementById("v72-board-guide") || document.querySelector("#screen-puzzle .v72-board-guide") || document.getElementById("game-board");
+let panel = document.getElementById("v73-top-puzzle-panel");
+if (!panel) {
+panel = document.createElement("div");
+panel.className = "v73-top-puzzle-panel";
+panel.id = "v73-top-puzzle-panel";
+if (guide && guide.parentNode) guide.parentNode.insertBefore(panel, guide);
+else screen.insertBefore(panel, screen.firstChild);
+}
+let title = document.getElementById("v76-pool-title");
+if (!title) {
+title = document.createElement("div");
+title.className = "v73-pool-title";
+title.id = "v76-pool-title";
+title.innerHTML = "<b>選擇骨頭</b><span>按大按鈕可直接復原下一塊</span>";
+panel.appendChild(title);
+}
+if (pool.parentElement !== panel) panel.appendChild(pool);
+let main = document.getElementById("v74-place-now");
+if (!main) {
+main = document.createElement("button");
+main.type = "button";
+main.id = "v74-place-now";
+main.className = "v74-place-now";
+main.textContent = "放入下一塊";
+main.onclick = e => {
+e.preventDefault();
+e.stopPropagation();
+this.v76PlaceByMainButton();
+};
+panel.insertBefore(main, pool);
+} else {
+main.onclick = e => {
+e.preventDefault();
+e.stopPropagation();
+this.v76PlaceByMainButton();
+};
+if (main.parentElement !== panel) panel.insertBefore(main, pool);
+}
+let status = document.getElementById("v76-button-status");
+if (!status) {
+status = document.createElement("div");
+status.id = "v76-button-status";
+status.innerHTML = "按「放入下一塊」即可開始。";
+panel.appendChild(status);
+}
+const controls = document.querySelector("#screen-puzzle .v66-puzzle-controls");
+if (controls && controls.parentElement !== panel) panel.appendChild(controls);
+},
+v76SelectBoneButton(boneId) {
+if (!boneId) return;
+if (this.v65SolvedBones.includes(boneId)) {
+Engine.toast?.("這塊骨頭已完成。");
+return;
+}
+const required = this.v76GetNextBoneId();
+if (APP_CONFIG.V66_SEQUENCE_MODE && required && boneId !== required) {
+this.selectedBone = null;
+Engine.toast?.(`目前請先放：${this.v76GetBoneLabelSafe(required)}`);
+this.v67SetAI?.(`AI 判讀：目前建議先復原「${this.v76GetBoneLabelSafe(required)}」。`, "observe");
+this.v76UpdateAllButtons();
+return;
+}
+this.selectedBone = boneId;
+Engine.play?.("click");
+Engine.toast?.(`已選擇：${this.v76GetBoneLabelSafe(boneId)}`);
+this.v76UpdateAllButtons();
+},
+v76PlaceByMainButton() {
+const next = this.v76GetNextBoneId();
+const target = this.selectedBone || next;
+if (!target) {
+Engine.toast?.("標本已完成。");
+this.v76UpdateAllButtons();
+return;
+}
+if (this.v65SolvedBones.includes(target)) {
+this.selectedBone = null;
+this.v76UpdateAllButtons();
+return;
+}
+const required = this.v76GetNextBoneId();
+if (APP_CONFIG.V66_SEQUENCE_MODE && required && target !== required) {
+Engine.toast?.(`順序錯誤，請先放：${this.v76GetBoneLabelSafe(required)}`);
+this.selectedBone = null;
+this.v76UpdateAllButtons();
+return;
+}
+this.selectedBone = target;
+this.placeBone(target);
+this.selectedBone = null;
+this.v76UpdateAllButtons();
+},
+v76BindBoardSlots() {
+this.bones.forEach(b => {
+const slot = document.getElementById(`slot-${b.id}`);
+if (!slot || slot.dataset.v76Bound === "1") return;
+slot.dataset.v76Bound = "1";
+slot.addEventListener("click", e => {
+e.preventDefault();
+e.stopPropagation();
+const target = this.selectedBone || this.v76GetNextBoneId();
+if (!target) {
+Engine.toast?.("請先選擇骨頭。");
+return;
+}
+this.selectedBone = target;
+this.placeBone(b.id);
+this.selectedBone = null;
+this.v76UpdateAllButtons();
+}, {passive:false});
+});
+},
+v76UpdateButtonStatus() {
+const status = document.getElementById("v76-button-status");
+if (!status) return;
+const next = this.v76GetNextBoneId();
+const selected = this.selectedBone;
+if (this.placedBones >= this.bones.length || !next) {
+status.innerHTML = "<b>標本已完成</b>，請前往下一階段。";
+} else if (selected) {
+status.innerHTML = `目前選取：<b>${this.v76GetBoneLabelSafe(selected)}</b>。按上方大按鈕完成放置。`;
+} else {
+status.innerHTML = `建議下一塊：<b>${this.v76GetBoneLabelSafe(next)}</b>。可直接按大按鈕。`;
+}
+},
+v76UpdateMainButton() {
+const main = document.getElementById("v74-place-now");
+if (!main) return;
+const next = this.v76GetNextBoneId();
+const selected = this.selectedBone;
+const target = selected || next;
+if (this.placedBones >= this.bones.length || !target) {
+main.disabled = true;
+main.textContent = "標本已完成";
+return;
+}
+main.disabled = false;
+main.textContent = selected
+? `放入選取骨頭：${this.v76GetBoneLabelSafe(selected)}`
+: `放入下一塊：${this.v76GetBoneLabelSafe(next)}`;
+},
+v76UpdateBoneButtonClasses() {
+const next = this.v76GetNextBoneId();
+document.querySelectorAll("#bone-pool .bone-item").forEach(btn => {
+const id = btn.dataset.bone || btn.getAttribute("data-bone");
+const solved = this.v65SolvedBones.includes(id);
+btn.classList.toggle("used", solved);
+btn.classList.toggle("disabled", solved);
+btn.classList.toggle("selected", this.selectedBone === id);
+btn.classList.toggle("v76-selected", this.selectedBone === id);
+btn.classList.toggle("v66-next", !this.selectedBone && next === id);
+btn.disabled = solved;
+});
+},
+v76UpdateAllButtons() {
+this.v66UpdateSelectionUI?.();
+this.v76EnsureTopControls();
+this.v76UpdateMainButton();
+this.v76UpdateButtonStatus();
+this.v76UpdateBoneButtonClasses();
+this.v75UpdateAIMicro?.();
+},
+v76AuditButtons() {
+this.v76EnsureTopControls();
+this.v76BindBoardSlots();
+const pool = document.getElementById("bone-pool");
+if (!pool || !pool.querySelector(".bone-item")) {
+this.renderBonePool();
+} else {
+pool.querySelectorAll(".bone-item").forEach(btn => {
+const id = btn.dataset.bone || btn.getAttribute("data-bone");
+btn.onclick = e => {
+e.preventDefault();
+e.stopPropagation();
+this.v76SelectBoneButton(id);
+};
+});
+}
+const main = document.getElementById("v74-place-now");
+if (main) {
+main.onclick = e => {
+e.preventDefault();
+e.stopPropagation();
+this.v76PlaceByMainButton();
+};
+}
+this.v76UpdateAllButtons();
+},
+v74SelectBoneByTap(boneId) {
+this.v76SelectBoneButton(boneId);
+},
+v74PlaceSelectedBone() {
+this.v76PlaceByMainButton();
+},
+v74BindSlotTapPlacement() {
+this.v76BindBoardSlots();
+},
+v74UpdatePlaceButton() {
+this.v76UpdateMainButton();
+this.v76UpdateButtonStatus();
+this.v76UpdateBoneButtonClasses();
+},
+v75UpdateAIMicro() {
+const el = document.getElementById("v75-ai-micro");
+if (!el) return;
+const next = this.v66GetRequiredBoneId?.();
+const label = next ? this.v66GetBoneLabel(next) : "";
+if (this.placedBones >= this.bones.length) {
+el.innerHTML = "<b>AI</b>：標本復原完成，請前往刻痕線索。";
+} else if (label) {
+el.innerHTML = `<b>AI</b>：下一塊建議放入「${label}」。可直接按上方大按鈕。`;
+} else {
+el.innerHTML = "<b>AI</b>：選擇骨頭後，系統會標示建議放置區。";
+}
+},
+v75PrepareTitleLayout() {
+if (this.v75TitlePrepared) return;
+this.v75TitlePrepared = true;
+const title = document.getElementById("screen-title");
+if (!title) return;
+const input = document.getElementById("player-name");
+const startBtn = title.querySelector("button[onclick*='startGame'], .btn.primary, button.primary");
+const settings = document.getElementById("v69SetupDetails");
+const scene = title.querySelector(".scene-box");
+let fast = document.getElementById("v75-fast-start");
+if (!fast && (input || startBtn)) {
+fast = document.createElement("div");
+fast.className = "v75-fast-start";
+fast.id = "v75-fast-start";
+const anchor = scene || title.querySelector(".card") || title.firstElementChild;
+if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(fast, anchor);
+else title.insertBefore(fast, title.firstChild);
+if (input) fast.appendChild(input);
+if (startBtn) fast.appendChild(startBtn);
+if (settings) fast.appendChild(settings);
+}
+},
+v75SetBoardImageState(missing = false) {
+document.body.classList.toggle("v75-board-image-missing", !!missing);
+document.body.classList.toggle("v73-board-image-missing", !!missing);
+document.body.classList.toggle("v72-board-image-missing", !!missing);
 },
 v68Init() {
 this.v68SetDifficulty(this.v68Difficulty || "standard", true);
@@ -7986,6 +8443,9 @@ this.v67Init();
 this.v68Init();
 this.v71BindAIFix();
 this.v65BindAutoSave();
+setTimeout(() => this.v76AuditButtons?.(), 250);
+this.v75PrepareTitleLayout();
+this.v75UpdateAIMicro?.();
 setTimeout(() => this.v74InitTapMode?.(), 250);
 this.v65RestoreStateFromStorage();
 },
@@ -9124,6 +9584,7 @@ Engine.initAudio();
 document.getElementById("hud").classList.add("active");
 this.updateHUD();
 this.v66UpdateScanButton();
+this.v76UpdateAllButtons?.();
 this.v66UpdateTask("screen-puzzle");
 this.switchScreen("screen-puzzle");
 setTimeout(() => { this.v73EnsureBonePoolReady?.(); this.v74InitTapMode?.(); }, 160);
@@ -9139,6 +9600,8 @@ const change = () => {
 if (current) current.classList.remove("active");
 target.classList.add("active");
 this.v73SetScreenClass?.(targetId);
+if (targetId === "screen-title") this.v75PrepareTitleLayout?.();
+if (targetId === "screen-puzzle") this.v75UpdateAIMicro?.();
 Engine.setStage(targetId);
 this.v57EnsureScrollTop(targetId);
 this.v49UpdateMiniMap(targetId);
@@ -9431,32 +9894,32 @@ this.addSlotLabel(slot, b.name);
 }
 });
 orderedBones.forEach(b => {
-const div = document.createElement("button");
-div.type = "button";
-div.className = "bone-item v72-bone-chip";
-div.id = `item-${b.id}`;
-div.setAttribute("data-bone", b.id);
-div.setAttribute("aria-label", `選擇${b.name}`);
-div.style.touchAction = "manipulation";
+const btn = document.createElement("button");
+btn.type = "button";
+btn.className = "bone-item v72-bone-chip v76-clickable";
+btn.id = `item-${b.id}`;
+btn.dataset.bone = b.id;
+btn.setAttribute("data-bone", b.id);
+btn.setAttribute("aria-label", `選擇${b.name}`);
+btn.style.touchAction = "manipulation";
 const label = document.createElement("span");
 label.className = "bone-label";
 label.textContent = b.name;
-div.appendChild(label);
-const tap = e => {
+btn.appendChild(label);
+btn.onclick = e => {
 e.preventDefault();
 e.stopPropagation();
-this.v74SelectBoneByTap(b.id);
+this.v76SelectBoneButton(b.id);
 };
-div.addEventListener("click", tap, {passive:false});
-div.addEventListener("touchend", tap, {passive:false});
-div.addEventListener("pointerup", tap, {passive:false});
-pool.appendChild(div);
+pool.appendChild(btn);
 });
-this.v66RenderSequenceStrip();
-this.v66UpdateSelectionUI();
-this.v72UpdatePuzzleMessage();
-this.v73MovePuzzleControlsTop?.();
-this.v74UpdatePlaceButton?.();
+this.v76EnsureTopControls();
+this.v76BindBoardSlots();
+this.v66RenderSequenceStrip?.();
+this.v66UpdateSelectionUI?.();
+this.v76UpdateButtonStatus();
+this.v76UpdateMainButton();
+this.v75UpdateAIMicro?.();
 },
 selectBone(id, el, force = false) {
 if (!el || el.classList.contains("used")) return;
