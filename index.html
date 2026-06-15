@@ -843,6 +843,59 @@
       .stat { padding:7px 4px; }
       .stat b { font-size:12px; }
     }
+
+    .failure-panel {
+      min-height: 620px;
+      display: grid;
+      align-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .failure-panel::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(210,30,24,.28), transparent 28%),
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.78));
+      pointer-events: none;
+    }
+    .failure-panel > * {
+      position: relative;
+      z-index: 2;
+    }
+    .failure-title {
+      color: #ff3f38;
+      font-size: clamp(34px, 10vw, 62px);
+      letter-spacing: .14em;
+      text-shadow: 0 0 28px rgba(220,40,34,.46);
+    }
+    .failure-code {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      margin: 16px auto 12px;
+      padding: 0 14px;
+      border: 1px solid rgba(255,178,164,.24);
+      border-radius: 999px;
+      color: rgba(255,230,220,.80);
+      background: rgba(0,0,0,.34);
+      font-size: 12px;
+      letter-spacing: .16em;
+    }
+    .failure-reason {
+      color: rgba(241,227,200,.78);
+      line-height: 1.8;
+      font-size: 15px;
+      margin: 12px 0 18px;
+    }
+    .death-active .case-dot {
+      background: #ff2c25;
+      box-shadow: 0 0 26px rgba(255,44,37,.95);
+    }
+
   </style>
 </head>
 
@@ -863,7 +916,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.0</div>
+          <div class="kicker">FINAL BUILD 1.1</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1061,6 +1114,24 @@
         </div>
       </section>
 
+
+      <section id="screen-failure" class="screen">
+        <div id="status-failure" class="status"></div>
+        <div class="panel failure-panel">
+          <div class="kicker">CONTAINMENT FAILED</div>
+          <h1 class="failure-title">封存失敗</h1>
+          <div class="failure-code" id="failure-code">SIGNAL LOST</div>
+          <p class="failure-reason" id="failure-reason">
+            生命訊號已中斷。第七層封存系統判定研究員失聯。
+          </p>
+          <div class="btn-grid">
+            <button class="btn primary" id="failure-restart-btn">重新開始</button>
+            <button class="btn subtle" id="failure-home-btn">返回主頁</button>
+          </div>
+          <p class="small-note">此結果不會產生封存證明卡。請重新接入系統。</p>
+        </div>
+      </section>
+
       <section id="screen-ending" class="screen">
         <div class="tabs">
           <button class="tab-btn active" data-tab="result">結果</button>
@@ -1125,14 +1196,14 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_0",
-      saveKey: "fifthResearcher_final_v1",
-      settingsKey: "fifthResearcher_final_v1_settings",
+      version: "FINAL_BUILD_1_1_DEATH_FIX",
+      saveKey: "fifthResearcher_final_v1_1",
+      settingsKey: "fifthResearcher_final_v1_1_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
         "screen-loading","screen-home","screen-settings","screen-how","screen-story","screen-name",
-        "screen-puzzle","screen-clues","screen-order","screen-box","screen-reveal","screen-ending"
+        "screen-puzzle","screen-clues","screen-order","screen-box","screen-reveal","screen-failure","screen-ending"
       ],
       imageAssets: [
         "images/ui/title-main-visual.png",
@@ -1203,6 +1274,8 @@
       life: 3,
       pollution: 0,
       emergency: false,
+      dead: false,
+      failReason: "",
       mistakes: 0,
       hints: 0,
       selectedBone: "",
@@ -1278,6 +1351,7 @@
         const loaded = JSON.parse(raw);
         const merged = Object.assign(defaultState(), loaded);
         if (!CONFIG.screens.includes(merged.screen)) merged.screen = "screen-home";
+        if (merged.dead) merged.screen = "screen-failure";
         state = merged;
         return true;
       } catch (e) {
@@ -1398,7 +1472,7 @@
         const img = new Image();
         img.onload = () => { assetStatus.images[src] = true; resolve(true); };
         img.onerror = () => { assetStatus.images[src] = false; resolve(false); };
-        img.src = src + "?v=final1";
+        img.src = src + "?v=final1_1";
       });
     }
 
@@ -1448,7 +1522,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1";
+        img.src = src + "?v=final1_1";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -1499,6 +1573,8 @@
       $$(".tab-btn").forEach(btn => btn.addEventListener("click", () => safeAction(() => setTab(btn.dataset.tab))));
       $("save-card-btn").addEventListener("click", () => safeAction(saveCertificate));
       $("reset-game-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
+      $("failure-restart-btn").addEventListener("click", () => safeAction(() => resetGame(false)));
+      $("failure-home-btn").addEventListener("click", () => safeAction(() => { clearGameProgress(true); saveGame(); showScreen("screen-home"); }));
     }
 
     function runAction(action) {
@@ -1531,7 +1607,9 @@
       if (id === "screen-order") renderOrder();
       if (id === "screen-box") updateBoxUI();
       if (id === "screen-reveal") renderReveal();
+      if (id === "screen-failure") renderFailure();
       if (id === "screen-ending") renderEnding();
+      document.body.classList.toggle("death-active", id === "screen-failure");
 
       if (persist) saveGame();
       window.scrollTo(0,0);
@@ -1550,12 +1628,14 @@
         "screen-order":"PHASE 03 / 刻痕排序",
         "screen-box":"PHASE 04 / 封存箱",
         "screen-reveal":"FINAL / 身份確認",
+        "screen-failure":"FAILED / 封存失敗",
         "screen-ending":"FINAL / 封存結果"
       };
       $("stage-label").textContent = map[id] || "CASE-1931";
     }
 
     function startGame() {
+      if (state.dead) clearGameProgress(true);
       initAudio();
       state.player = $("player-name").value.trim() || "觀測者";
       state.screen = "screen-puzzle";
@@ -1580,7 +1660,7 @@
     }
 
     function updateStatusAll() {
-      ["status-puzzle","status-clues","status-order","status-box","status-reveal"].forEach(id => {
+      ["status-puzzle","status-clues","status-order","status-box","status-reveal","status-failure"].forEach(id => {
         const el = $(id);
         if (el) el.innerHTML = statusHTML();
       });
@@ -1599,6 +1679,9 @@
       tone("pollution");
       applyPollutionClass();
       updateStatusAll();
+      if (state.pollution >= 100) {
+        triggerFailure("污染值已達 100%。\n標本完全污染，封存程序強制中止。");
+      }
     }
 
     function loseLife(amount = 1) {
@@ -1609,14 +1692,37 @@
         document.querySelector(".frame").classList.add("shake");
         setTimeout(() => document.querySelector(".frame").classList.remove("shake"), 300);
       }
-      if (state.life === 0 && !state.emergency) {
+      if (state.life === 0 && !state.dead) {
         state.emergency = true;
-        toast("生命訊號歸零，已切換緊急封存模式。");
+        updateStatusAll();
+        triggerFailure("生命訊號已歸零。\n第七層封存系統判定研究員失聯。");
+        return;
       }
       updateStatusAll();
     }
 
+
+    function triggerFailure(reason = "生命訊號已中斷。") {
+      if (state.dead) return;
+      state.dead = true;
+      state.failReason = reason;
+      stopCamera();
+      stopEndingMusic();
+      tone("damage");
+      saveGame();
+      setTimeout(() => showScreen("screen-failure"), 180);
+    }
+
+    function renderFailure() {
+      updateStatusAll();
+      const reason = state.failReason || "第七層封存系統判定研究員失聯。";
+      const code = state.life <= 0 ? "SIGNAL LOST" : "POLLUTION MAX";
+      $("failure-code").textContent = code;
+      $("failure-reason").innerHTML = reason.replace(/\n/g, "<br>");
+    }
+
     function registerMistake(kind) {
+      if (state.dead) return;
       state.mistakes++;
       const d = difficulty();
 
@@ -1696,7 +1802,7 @@
         if (state.placedBones.includes(bone.id)) card.classList.add("used");
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${bone.img}?v=final1" alt="${bone.name}" onerror="this.remove(); this.parentNode.innerHTML='<i class=&quot;fallback-bone&quot;></i>'">
+            <img src="${bone.img}?v=final1_1" alt="${bone.name}" onerror="this.remove(); this.parentNode.innerHTML='<i class=&quot;fallback-bone&quot;></i>'">
           </span>
           <span>${bone.name}</span>
         `;
@@ -2004,6 +2110,10 @@
     }
 
     function finishGame() {
+      if (state.dead) {
+        showScreen("screen-failure");
+        return;
+      }
       if (!state.completedAt) state.completedAt = new Date().toLocaleString("zh-TW");
       if (!state.certNo) state.certNo = makeCertNo();
       saveGame();
@@ -2157,7 +2267,7 @@
       panel.innerHTML = `
         <b>STAFF MODE｜${CONFIG.version}</b><br>
         畫面：${state.screen}<br>
-        生命：${state.life}/3　污染：${state.pollution}%　難度：${difficulty().label}<br>
+        生命：${state.life}/3　污染：${state.pollution}%　難度：${difficulty().label}　死亡：${state.dead ? "是" : "否"}<br>
         聲音：${state.sound ? "開" : "關"}　相機支援：${assetStatus.camera ? "是" : "否"}　localStorage：${assetStatus.localStorage ? "正常" : "異常"}<br>
         低效能模式：${assetStatus.lowPerformance ? "啟用" : "未啟用"}　結尾音樂備援：${endingDrone ? "啟用" : "未啟用"}<br>
         缺少圖片：${missing.length ? missing.join(" / ") : "無或已使用備援"}<br>
