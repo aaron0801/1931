@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>第五位研究員｜第七層標本復原程序 v72 拼圖介面整理與骨頭操作修正版</title>
+<title>第五位研究員｜第七層標本復原程序 v73 骨頭選擇上移與底部遮擋修正版</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>:root {
@@ -5112,6 +5112,162 @@ font-size: 10px !important;
 letter-spacing: .06em !important;
 -webkit-appearance: none !important;
 appearance: none !important;
+}
+body.screen-puzzle-mode .stage-hud {
+display: none !important;
+visibility: hidden !important;
+pointer-events: none !important;
+}
+body.screen-puzzle-mode #app {
+padding-bottom: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px)) !important;
+}
+#screen-puzzle {
+padding-bottom: max(64px, calc(env(safe-area-inset-bottom, 0px) + 56px)) !important;
+}
+.v73-top-puzzle-panel {
+margin: 8px 0 12px !important;
+padding: 10px !important;
+border: 1px solid rgba(255,178,164,.16) !important;
+border-radius: 16px !important;
+background:
+linear-gradient(180deg, rgba(50,8,8,.36), rgba(0,0,0,.18)) !important;
+box-shadow: inset 0 0 18px rgba(0,0,0,.32) !important;
+}
+.v73-pool-title {
+display: flex;
+justify-content: space-between;
+gap: 10px;
+align-items: center;
+color: rgba(241,227,200,.74);
+font-size: 12px;
+letter-spacing: .08em;
+margin: 0 0 8px;
+}
+.v73-pool-title b {
+color: #ffb2a4;
+letter-spacing: .06em;
+}
+.v73-top-puzzle-panel #bone-pool,
+.v73-top-puzzle-panel .bone-pool,
+#screen-puzzle #bone-pool {
+display: grid !important;
+grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+gap: 8px !important;
+min-height: 0 !important;
+max-height: none !important;
+margin: 0 0 10px !important;
+padding: 0 !important;
+visibility: visible !important;
+opacity: 1 !important;
+}
+#screen-puzzle #bone-pool:empty::before {
+content: "骨頭選項載入中，請稍等或重新整理。";
+grid-column: 1 / -1;
+min-height: 42px;
+display: grid;
+place-items: center;
+border: 1px dashed rgba(241,227,200,.16);
+border-radius: 12px;
+color: rgba(241,227,200,.52);
+font-size: 12px;
+}
+#screen-puzzle #bone-pool .bone-item {
+min-height: 44px !important;
+padding: 8px 6px !important;
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+border-radius: 13px !important;
+background: linear-gradient(180deg, rgba(24,10,10,.96), rgba(8,4,4,.98)) !important;
+border: 1px solid rgba(241,227,200,.18) !important;
+color: rgba(241,227,200,.86) !important;
+font-size: 12px !important;
+line-height: 1.25 !important;
+letter-spacing: .05em !important;
+text-align: center !important;
+box-shadow: none !important;
+overflow: hidden !important;
+position: relative !important;
+z-index: 4 !important;
+}
+#screen-puzzle #bone-pool .bone-item .bone-art-frame,
+#screen-puzzle #bone-pool .bone-item img,
+#screen-puzzle #bone-pool .bone-item .v68-bone-fallback {
+display: none !important;
+}
+#screen-puzzle #bone-pool .bone-item .bone-label {
+display: block !important;
+width: 100% !important;
+color: inherit !important;
+}
+#screen-puzzle #bone-pool .bone-item.v66-next {
+border-color: rgba(255,178,164,.70) !important;
+color: #fff0e7 !important;
+background: linear-gradient(135deg, rgba(98,14,14,.96), rgba(18,5,5,.98)) !important;
+box-shadow: 0 0 16px rgba(191,47,47,.26) !important;
+}
+#screen-puzzle #bone-pool .bone-item.selected {
+border-color: rgba(255,220,194,.92) !important;
+color: #fff !important;
+background: linear-gradient(135deg, rgba(142,28,20,.96), rgba(36,7,7,.98)) !important;
+box-shadow: 0 0 20px rgba(191,47,47,.36) !important;
+}
+#screen-puzzle #bone-pool .bone-item.used {
+opacity: .25 !important;
+pointer-events: none !important;
+}
+.v73-top-puzzle-panel .v66-puzzle-controls {
+margin: 0 !important;
+display: grid !important;
+gap: 8px !important;
+}
+.v73-top-puzzle-panel .v66-selection-status {
+padding: 9px 10px !important;
+margin: 0 !important;
+min-height: auto !important;
+font-size: 12px !important;
+line-height: 1.45 !important;
+}
+.v73-top-puzzle-panel #v66-scan-btn {
+min-height: 44px !important;
+margin: 0 !important;
+font-size: 12px !important;
+}
+.game-board.v63-mask-board {
+margin-top: 8px !important;
+max-height: min(430px, 52vh) !important;
+aspect-ratio: 4 / 5 !important;
+overflow: hidden !important;
+}
+.asset-path-note.v64-asset-note {
+display: none !important;
+}
+body.v73-board-image-missing .asset-path-note.v64-asset-note,
+body.v72-board-image-missing .asset-path-note.v64-asset-note {
+display: block !important;
+}
+#puzzle-log {
+display: none !important;
+}
+.v72-board-guide {
+margin: 8px 0 8px !important;
+font-size: 12px !important;
+line-height: 1.55 !important;
+}
+@media (max-width:430px) {
+.v73-top-puzzle-panel #bone-pool,
+#screen-puzzle #bone-pool {
+grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+gap: 7px !important;
+}
+#screen-puzzle #bone-pool .bone-item {
+min-height: 41px !important;
+font-size: 11px !important;
+padding: 7px 4px !important;
+}
+.game-board.v63-mask-board {
+max-height: 405px !important;
+}
 }</style>
 </head>
 <body>
@@ -5239,9 +5395,9 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
 <div class="v56-url-card">
 正式測試網址
-<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=72</code>
+<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=73</code>
 <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=72。</div>
+<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=73。</div>
 </div>
 <div class="v55-qa-panel">
 <div class="staff-subtitle">最終品質檢查</div>
@@ -5271,7 +5427,7 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
 <div class="staff-info-list" id="staffInfoList">
-<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v72</span></div>
+<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v73</span></div>
 <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
 <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
 <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
@@ -5665,9 +5821,9 @@ v44 集中資料設定
 =========================================================
 */
 const APP_CONFIG = {
-VERSION: "v72",
-URL_VERSION: "72",
-BUILD_TYPE: "拼圖介面整理與骨頭操作修正版",
+VERSION: "v73",
+URL_VERSION: "73",
+BUILD_TYPE: "骨頭選擇上移與底部遮擋修正版",
 PLAYER_PIN: "1931",
 STAFF_PASSWORD: "1931",
 FORMAL_MODE_DEFAULT: true,
@@ -5687,7 +5843,7 @@ V54_SHARE_TEXT_ENABLED: true,
 V55_RARITY_ENABLED: true,
 V55_QA_PANEL_ENABLED: true,
 V56_ARCHIVE_ID_ENABLED: true,
-V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=72",
+V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=73",
 V57_MOBILE_SCROLL_FIX: true,
 V58_SAVE_FIX_ENABLED: true,
 V59_FULL_REVEAL_ENABLED: true,
@@ -5709,7 +5865,7 @@ V64_EXHIBITION_MODE: true,
 V64_COLLAPSE_PUZZLE_NOTES: true,
 V64_UNLOCK_FILES_ENABLED: true,
 V65_AUTOSAVE_ENABLED: true,
-V65_SAVE_KEY: "fifthResearcher_v72_autosave",
+V65_SAVE_KEY: "fifthResearcher_v73_autosave",
 V65_SAVE_MAX_AGE_MS: 43200000,
 V66_EXPERIENCE_OPTIMIZED: true,
 V66_MAX_HEARTS: 5,
@@ -5753,7 +5909,10 @@ V71_AI_ALWAYS_START_COLLAPSED: true,
 V72_PUZZLE_LAYOUT_FIX: true,
 V72_COMPACT_BONE_POOL: true,
 V72_HIDE_DUPLICATE_BOARD_LABELS: true,
-V72_SHOW_ASSET_NOTE_ONLY_ON_ERROR: true
+V72_SHOW_ASSET_NOTE_ONLY_ON_ERROR: true,
+V73_BONE_POOL_TOP_FIX: true,
+V73_HIDE_STAGE_HUD_ON_PUZZLE: true,
+V73_FORCE_RENDER_BONES: true
 };
 const SOUND_CONFIG = {
 ambient: "sounds/ambient.mp3",
@@ -6616,7 +6775,7 @@ const img = document.getElementById("v63-board-img");
 const fallback = document.getElementById("v63-board-fallback");
 if (img) img.style.display = "none";
 if (fallback) fallback.style.display = "grid";
-document.body.classList.add("v72-board-image-missing");
+document.body.classList.add("v73-board-image-missing");
 this.addStaffLog("v63 完整圖遮罩底圖缺檔：images/reveal/full-fossil-board.png", true);
 },
 v63InitMaskBoard() {
@@ -6667,6 +6826,67 @@ if (!APP_CONFIG.V63_MASK_REVEAL_ENABLED) return;
 this.bones.forEach(b => this.v63RevealPiece(b.id, b.name));
 const board = document.getElementById("game-board");
 if (board) board.classList.add("v63-complete");
+},
+v73SetScreenClass(targetId) {
+document.body.classList.remove(
+"screen-title-mode",
+"screen-puzzle-mode",
+"screen-clue-mode",
+"screen-box-mode",
+"screen-ending-mode",
+"screen-gameover-mode"
+);
+if (targetId) document.body.classList.add(targetId.replace("screen-", "screen-") + "-mode");
+},
+v73MovePuzzleControlsTop() {
+const screen = document.getElementById("screen-puzzle");
+const pool = document.getElementById("bone-pool");
+const controls = document.querySelector("#screen-puzzle .v66-puzzle-controls");
+const guide = document.getElementById("v72-board-guide");
+if (!screen || !pool || !controls || !guide) return;
+let panel = document.getElementById("v73-top-puzzle-panel");
+if (!panel) {
+panel = document.createElement("div");
+panel.className = "v73-top-puzzle-panel";
+panel.id = "v73-top-puzzle-panel";
+const title = document.createElement("div");
+title.className = "v73-pool-title";
+title.innerHTML = "<b>選擇骨頭</b><span>先點骨頭，再點上方亮框</span>";
+panel.appendChild(title);
+guide.parentNode.insertBefore(panel, guide);
+}
+if (pool.parentElement !== panel) panel.appendChild(pool);
+if (controls.parentElement !== panel) panel.appendChild(controls);
+},
+v73EnsureBonePoolReady() {
+this.v73MovePuzzleControlsTop();
+const pool = document.getElementById("bone-pool");
+if (!pool) return;
+if (!pool.children.length || !pool.querySelector(".bone-item")) {
+this.renderBonePool();
+}
+setTimeout(() => {
+const p = document.getElementById("bone-pool");
+if (p && (!p.children.length || !p.querySelector(".bone-item"))) {
+this.renderBonePool();
+}
+this.v73MovePuzzleControlsTop();
+this.v66UpdateSelectionUI?.();
+this.v72UpdatePuzzleMessage?.();
+}, 120);
+},
+v73BindBoardImageState() {
+const img = document.getElementById("v63-board-img");
+if (!img) return;
+const markLoaded = () => {
+document.body.classList.remove("v72-board-image-missing", "v73-board-image-missing");
+};
+const markMissing = () => {
+document.body.classList.add("v73-board-image-missing");
+};
+if (img.complete && img.naturalWidth > 0) markLoaded();
+img.addEventListener("load", markLoaded, {once:false});
+img.addEventListener("error", markMissing, {once:false});
 },
 v71GetAIParts() {
 const panel = document.getElementById("v67-ai-panel");
@@ -7659,6 +7879,7 @@ Engine.init();
 this.renderBonePool();
 this.v63InitMaskBoard();
 this.v72BindBoardImageState();
+this.v73BindBoardImageState();
 this.renderClueCards();
 this.updateBoneProgress();
 this.startDirector();
@@ -8818,6 +9039,7 @@ this.updateHUD();
 this.v66UpdateScanButton();
 this.v66UpdateTask("screen-puzzle");
 this.switchScreen("screen-puzzle");
+setTimeout(() => this.v73EnsureBonePoolReady?.(), 160);
 this.v65ScheduleSave();
 },
 switchScreen(targetId) {
@@ -8829,6 +9051,7 @@ if (!target) return;
 const change = () => {
 if (current) current.classList.remove("active");
 target.classList.add("active");
+this.v73SetScreenClass?.(targetId);
 Engine.setStage(targetId);
 this.v57EnsureScrollTop(targetId);
 this.v49UpdateMiniMap(targetId);
@@ -9144,6 +9367,7 @@ pool.appendChild(div);
 this.v66RenderSequenceStrip();
 this.v66UpdateSelectionUI();
 this.v72UpdatePuzzleMessage();
+this.v73MovePuzzleControlsTop?.();
 },
 selectBone(id, el, force = false) {
 if (!el || el.classList.contains("used")) return;
