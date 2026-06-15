@@ -896,6 +896,39 @@
       box-shadow: 0 0 26px rgba(255,44,37,.95);
     }
 
+
+    .resume-summary {
+      display: grid;
+      gap: 9px;
+      margin: 14px 0;
+    }
+    .resume-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 14px;
+      background: rgba(0,0,0,.24);
+      padding: 10px 12px;
+      color: rgba(241,227,200,.62);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .resume-line b {
+      color: var(--cream);
+      text-align: right;
+    }
+    .resume-warning {
+      border: 1px solid rgba(255,74,66,.28);
+      border-radius: 18px;
+      background: rgba(90,8,8,.28);
+      padding: 13px;
+      color: rgba(241,227,200,.78);
+      line-height: 1.75;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+
   </style>
 </head>
 
@@ -916,12 +949,36 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.1</div>
+          <div class="kicker">FINAL BUILD 1.3</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
           <div class="bar"><i id="loading-bar"></i></div>
           <div class="system-log" id="loading-log">SYSTEM：初始化。</div>
+        </div>
+      </section>
+
+
+      <section id="screen-resume" class="screen">
+        <div class="panel">
+          <div class="kicker">UNFINISHED RECORD</div>
+          <h1>偵測到未完成紀錄</h1>
+          <h2>請選擇本次接入方式</h2>
+
+          <div class="resume-warning">
+            系統偵測到此裝置保留了上一位觀測者的封存進度。<br>
+            如果是同一位玩家，請繼續進度；如果是下一位玩家，請重新開始。
+          </div>
+
+          <div class="resume-summary" id="resume-summary"></div>
+
+          <div class="btn-grid">
+            <button class="btn primary" id="resume-continue-btn">繼續上次進度</button>
+            <button class="btn danger" id="resume-new-btn">重新開始 / 下一位玩家</button>
+            <button class="btn subtle" id="resume-home-btn">清除紀錄並回主頁</button>
+          </div>
+
+          <p class="small-note">展場展示時，建議每位玩家開始前選擇「重新開始 / 下一位玩家」。</p>
         </div>
       </section>
 
@@ -950,13 +1007,13 @@
           <h2>難度與聲音</h2>
           <div class="difficulty-grid">
             <button class="difficulty-card" data-difficulty="easy">
-              <b>初次觀測</b><br>提示明確，錯誤懲罰較低，適合第一次體驗。
+              <b>初次觀測</b><br>生命不扣，污染 100% 才封存失敗，適合第一次體驗。
             </button>
             <button class="difficulty-card" data-difficulty="normal">
-              <b>正式封存</b><br>預設展示模式，提示適中，體驗完整。
+              <b>正式封存</b><br>化石錯 3 次扣 1，排序與密碼錯誤會扣生命。
             </button>
             <button class="difficulty-card" data-difficulty="hard">
-              <b>深層污染</b><br>提示模糊，錯誤懲罰較高，解謎感更強。
+              <b>深層污染</b><br>高污染挑戰模式，錯幾次就可能封存失敗。
             </button>
           </div>
           <button class="btn primary" id="sound-toggle">聲音：開</button>
@@ -1196,13 +1253,13 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_1_DEATH_FIX",
-      saveKey: "fifthResearcher_final_v1_1",
-      settingsKey: "fifthResearcher_final_v1_1_settings",
+      version: "FINAL_BUILD_1_3_RESUME_GATE",
+      saveKey: "fifthResearcher_final_v1_3",
+      settingsKey: "fifthResearcher_final_v1_3_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
-        "screen-loading","screen-home","screen-settings","screen-how","screen-story","screen-name",
+        "screen-loading","screen-resume","screen-home","screen-settings","screen-how","screen-story","screen-name",
         "screen-puzzle","screen-clues","screen-order","screen-box","screen-reveal","screen-failure","screen-ending"
       ],
       imageAssets: [
@@ -1261,9 +1318,39 @@
     const CORRECT_ORDER = ["skull", "chest", "pelvis", "rightLeg"];
 
     const DIFFICULTIES = {
-      easy: { label:"初次觀測", short:"簡單", puzzlePollution:3, orderPollution:8, pinPollution:10, hintPollution:3 },
-      normal: { label:"正式封存", short:"標準", puzzlePollution:5, orderPollution:10, pinPollution:12, hintPollution:5 },
-      hard: { label:"深層污染", short:"困難", puzzlePollution:8, orderPollution:15, pinPollution:18, hintPollution:8 }
+      easy: {
+        label:"初次觀測",
+        short:"簡單",
+        puzzlePollution:8,
+        orderPollution:12,
+        pinPollution:15,
+        hintPollution:5,
+        puzzleLifeEvery:0,
+        orderLifeLoss:0,
+        pinLifeLoss:0
+      },
+      normal: {
+        label:"正式封存",
+        short:"標準",
+        puzzlePollution:8,
+        orderPollution:18,
+        pinPollution:20,
+        hintPollution:6,
+        puzzleLifeEvery:3,
+        orderLifeLoss:1,
+        pinLifeLoss:1
+      },
+      hard: {
+        label:"深層污染",
+        short:"困難",
+        puzzlePollution:25,
+        orderPollution:45,
+        pinPollution:50,
+        hintPollution:20,
+        puzzleLifeEvery:2,
+        orderLifeLoss:1,
+        pinLifeLoss:1
+      }
     };
 
     const defaultState = () => ({
@@ -1298,6 +1385,7 @@
     let audioCtx = null;
     let mediaStream = null;
     let lastActionAt = 0;
+    let pendingResumeState = null;
     let endingDrone = null;
 
     const $ = id => document.getElementById(id);
@@ -1340,6 +1428,10 @@
     }
 
     function saveGame() {
+      if (state.screen === "screen-resume") {
+        updateStaffPanel();
+        return;
+      }
       try { localStorage.setItem(CONFIG.saveKey, JSON.stringify(state)); } catch (e) {}
       updateStaffPanel();
     }
@@ -1358,6 +1450,77 @@
         return false;
       }
     }
+    function hasMeaningfulProgress(s) {
+      if (!s) return false;
+      if (s.dead) return true;
+      if (s.completedAt || s.certNo) return true;
+      if (s.player && s.player !== "觀測者") return true;
+      if (s.screen && !["screen-loading","screen-home","screen-settings","screen-how","screen-story","screen-name"].includes(s.screen)) return true;
+      if ((s.placedBones || []).length > 0) return true;
+      if ((s.flippedClues || []).length > 0) return true;
+      if ((s.order || []).length > 0 || s.orderSolved || s.boxUnlocked) return true;
+      if (s.life < 3 || s.pollution > 0 || s.mistakes > 0 || s.hints > 0) return true;
+      return false;
+    }
+
+    function screenName(id) {
+      const names = {
+        "screen-home":"主頁",
+        "screen-settings":"遊戲設定",
+        "screen-how":"遊戲玩法",
+        "screen-story":"劇情檔案",
+        "screen-name":"輸入觀測代號",
+        "screen-puzzle":"化石復原",
+        "screen-clues":"刻痕翻面",
+        "screen-order":"刻痕排序",
+        "screen-box":"百寶封存箱",
+        "screen-reveal":"第五位研究員揭露",
+        "screen-failure":"封存失敗",
+        "screen-ending":"結尾頁"
+      };
+      return names[id] || "未知階段";
+    }
+
+    function renderResume() {
+      const s = pendingResumeState || state;
+      const diff = DIFFICULTIES[s.difficulty] || DIFFICULTIES.normal;
+      const rows = [
+        ["觀測代號", s.player || "觀測者"],
+        ["停留階段", screenName(s.dead ? "screen-failure" : s.screen)],
+        ["生命訊號", (s.life ?? 3) + " / 3"],
+        ["污染值", (s.pollution ?? 0) + "%"],
+        ["難度", diff.label],
+        ["錯誤 / 提示", (s.mistakes ?? 0) + " / " + (s.hints ?? 0)]
+      ];
+      $("resume-summary").innerHTML = rows.map(row => `<div class="resume-line"><span>${row[0]}</span><b>${row[1]}</b></div>`).join("");
+    }
+
+    function continueSavedProgress() {
+      if (!pendingResumeState) {
+        showScreen("screen-home");
+        return;
+      }
+      state = JSON.parse(JSON.stringify(pendingResumeState));
+      pendingResumeState = null;
+      const target = state.dead ? "screen-failure" : (CONFIG.screens.includes(state.screen) ? state.screen : "screen-home");
+      showScreen(target, true);
+    }
+
+    function startFreshPlayer() {
+      pendingResumeState = null;
+      clearGameProgress(true);
+      state.screen = "screen-name";
+      saveGame();
+      showScreen("screen-name");
+    }
+
+    function clearResumeAndHome() {
+      pendingResumeState = null;
+      clearGameProgress(true);
+      saveGame();
+      showScreen("screen-home");
+    }
+
 
     function clearGameProgress(keepSettings = true) {
       const keep = { difficulty: state.difficulty, sound: state.sound };
@@ -1472,7 +1635,7 @@
         const img = new Image();
         img.onload = () => { assetStatus.images[src] = true; resolve(true); };
         img.onerror = () => { assetStatus.images[src] = false; resolve(false); };
-        img.src = src + "?v=final1_1";
+        img.src = src + "?v=final1_3";
       });
     }
 
@@ -1499,7 +1662,23 @@
       if (assetStatus.lowPerformance) document.body.classList.add("low-performance");
 
       loadSettings();
-      if (!params.has("restart") && !params.has("reset")) loadGame();
+
+      const wasReset = params.has("restart") || params.has("reset");
+      const exhibitMode = params.has("exhibit");
+      let loadedExistingProgress = false;
+
+      if (!wasReset && !exhibitMode) {
+        loadedExistingProgress = loadGame();
+      }
+
+      if (exhibitMode) {
+        clearGameProgress(true);
+      }
+
+      const shouldAskResume = loadedExistingProgress && hasMeaningfulProgress(state);
+      if (shouldAskResume) {
+        pendingResumeState = JSON.parse(JSON.stringify(state));
+      }
 
       const loadTargets = CONFIG.imageAssets;
       for (let i = 0; i < loadTargets.length; i++) {
@@ -1516,13 +1695,15 @@
       setupImages();
       renderAll();
       bindEvents();
-      setTimeout(() => showScreen(state.screen === "screen-loading" ? "screen-home" : state.screen, false), 420);
+
+      const bootTarget = pendingResumeState ? "screen-resume" : (state.screen === "screen-loading" ? "screen-home" : state.screen);
+      setTimeout(() => showScreen(bootTarget, false), 420);
     }
 
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_1";
+        img.src = src + "?v=final1_3";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -1575,6 +1756,9 @@
       $("reset-game-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
       $("failure-restart-btn").addEventListener("click", () => safeAction(() => resetGame(false)));
       $("failure-home-btn").addEventListener("click", () => safeAction(() => { clearGameProgress(true); saveGame(); showScreen("screen-home"); }));
+      $("resume-continue-btn").addEventListener("click", () => safeAction(continueSavedProgress));
+      $("resume-new-btn").addEventListener("click", () => safeAction(startFreshPlayer));
+      $("resume-home-btn").addEventListener("click", () => safeAction(clearResumeAndHome));
     }
 
     function runAction(action) {
@@ -1602,6 +1786,7 @@
       setStage(id);
       applyPollutionClass();
       updateStatusAll();
+      if (id === "screen-resume") renderResume();
       if (id === "screen-puzzle") renderPuzzle();
       if (id === "screen-clues") renderClues();
       if (id === "screen-order") renderOrder();
@@ -1618,6 +1803,7 @@
     function setStage(id) {
       const map = {
         "screen-loading":"CASE-1931 / SYSTEM BOOT",
+        "screen-resume":"CASE-1931 / 未完成紀錄",
         "screen-home":"CASE-1931 / 主頁",
         "screen-settings":"CASE-1931 / 遊戲設定",
         "screen-how":"CASE-1931 / 遊戲玩法",
@@ -1636,6 +1822,7 @@
 
     function startGame() {
       if (state.dead) clearGameProgress(true);
+      state.puzzleWrongStreak = 0;
       initAudio();
       state.player = $("player-name").value.trim() || "觀測者";
       state.screen = "screen-puzzle";
@@ -1723,15 +1910,16 @@
 
     function registerMistake(kind) {
       if (state.dead) return;
+
       state.mistakes++;
       const d = difficulty();
 
       if (kind === "puzzle") {
         addPollution(d.puzzlePollution);
-        if (state.difficulty === "hard") loseLife(1);
-        if (state.difficulty === "normal") {
+
+        if (d.puzzleLifeEvery > 0) {
           state.puzzleWrongStreak++;
-          if (state.puzzleWrongStreak >= 2) {
+          if (state.puzzleWrongStreak >= d.puzzleLifeEvery) {
             loseLife(1);
             state.puzzleWrongStreak = 0;
           }
@@ -1740,12 +1928,12 @@
 
       if (kind === "order") {
         addPollution(d.orderPollution);
-        loseLife(1);
+        if (d.orderLifeLoss > 0) loseLife(d.orderLifeLoss);
       }
 
       if (kind === "pin") {
         addPollution(d.pinPollution);
-        loseLife(1);
+        if (d.pinLifeLoss > 0) loseLife(d.pinLifeLoss);
       }
 
       saveGame();
@@ -1802,7 +1990,7 @@
         if (state.placedBones.includes(bone.id)) card.classList.add("used");
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${bone.img}?v=final1_1" alt="${bone.name}" onerror="this.remove(); this.parentNode.innerHTML='<i class=&quot;fallback-bone&quot;></i>'">
+            <img src="${bone.img}?v=final1_3" alt="${bone.name}" onerror="this.remove(); this.parentNode.innerHTML='<i class=&quot;fallback-bone&quot;></i>'">
           </span>
           <span>${bone.name}</span>
         `;
@@ -2269,7 +2457,7 @@
         畫面：${state.screen}<br>
         生命：${state.life}/3　污染：${state.pollution}%　難度：${difficulty().label}　死亡：${state.dead ? "是" : "否"}<br>
         聲音：${state.sound ? "開" : "關"}　相機支援：${assetStatus.camera ? "是" : "否"}　localStorage：${assetStatus.localStorage ? "正常" : "異常"}<br>
-        低效能模式：${assetStatus.lowPerformance ? "啟用" : "未啟用"}　結尾音樂備援：${endingDrone ? "啟用" : "未啟用"}<br>
+        低效能模式：${assetStatus.lowPerformance ? "啟用" : "未啟用"}　結尾音樂備援：${endingDrone ? "啟用" : "未啟用"}　待選紀錄：${pendingResumeState ? "有" : "無"}<br>
         缺少圖片：${missing.length ? missing.join(" / ") : "無或已使用備援"}<br>
         <div class="staff-actions">
           <button onclick="resetGame(false)">清除進度</button>
