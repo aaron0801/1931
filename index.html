@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>第五位研究員｜第七層標本復原程序 v59 拼圖完成整圖顯示版</title>
+<title>第五位研究員｜第七層標本復原程序 v68 穩定修補與展示完成版</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>:root {
@@ -4077,6 +4077,1001 @@ max-height: 58vh;
 .v59-reveal-fallback {
 min-height: 300px;
 }
+}
+#screen-puzzle {
+scroll-behavior: auto !important;
+}
+#game-board,
+.game-board {
+position: relative !important;
+contain: layout paint;
+transform: translateZ(0);
+min-height: 438px !important;
+height: 438px !important;
+overflow: hidden !important;
+touch-action: none;
+}
+.drop-zone,
+.drop-slot,
+.bone-slot,
+[data-zone],
+[data-bone-slot] {
+position: absolute;
+box-sizing: border-box;
+transform: translateZ(0);
+backface-visibility: hidden;
+will-change: box-shadow, opacity, filter;
+}
+.drop-zone.filled,
+.drop-slot.filled,
+.bone-slot.filled,
+[data-zone].filled,
+[data-bone-slot].filled {
+animation: none !important;
+transform: translateZ(0) !important;
+}
+.bone-card,
+.bone-item,
+.bone-option,
+[data-bone] {
+touch-action: manipulation;
+-webkit-user-select: none;
+user-select: none;
+box-sizing: border-box;
+}
+.bone-bank,
+.bone-pool,
+#bone-bank,
+#bone-pool {
+min-height: 276px !important;
+overflow-anchor: none;
+contain: layout paint;
+}
+body.v60-placing {
+overflow-anchor: none;
+}
+body.v60-placing main#app {
+scroll-behavior: auto !important;
+}
+.v60-hard-note {
+margin: 10px 0 12px;
+padding: 10px 12px;
+border: 1px solid rgba(191,47,47,.24);
+border-radius: 12px;
+background: rgba(61,6,6,.28);
+color: rgba(241,227,200,.72);
+font-size: 11px;
+line-height: 1.65;
+}
+.v60-hard-note b {
+color: rgba(241,227,200,.92);
+letter-spacing: .08em;
+}
+.v60-story-card {
+margin-top: 14px;
+padding: 14px;
+border: 1px solid rgba(241,227,200,.14);
+border-radius: 16px;
+background:
+radial-gradient(circle at 50% 0%, rgba(143,18,18,.26), transparent 38%),
+rgba(8,4,4,.78);
+box-shadow: inset 0 0 22px rgba(0,0,0,.38);
+}
+.v60-story-card h3 {
+margin: 0 0 10px;
+color: #f1e3c8;
+font-size: 18px;
+letter-spacing: .12em;
+text-align: center;
+}
+.v60-story-card p {
+margin: 8px 0;
+color: rgba(232,220,196,.78);
+font-size: 12px;
+line-height: 1.8;
+}
+.v60-story-card .v60-year {
+display: inline-block;
+padding: 1px 7px;
+border: 1px solid rgba(191,47,47,.32);
+border-radius: 999px;
+color: #ffb2a4;
+background: rgba(100,10,10,.24);
+letter-spacing: .08em;
+}
+.v60-archive-note {
+margin-top: 10px;
+padding: 9px 10px;
+border-left: 2px solid rgba(191,47,47,.65);
+background: rgba(0,0,0,.24);
+color: rgba(191,164,116,.82);
+font-size: 11px;
+line-height: 1.7;
+}
+@media (max-width: 390px) {
+#game-board,
+.game-board {
+min-height: 410px !important;
+height: 410px !important;
+}
+.bone-bank,
+.bone-pool,
+#bone-bank,
+#bone-pool {
+min-height: 292px !important;
+}
+}
+#game-board.v60-hard-mode .drop-zone,
+#game-board.v60-hard-mode .drop-slot,
+#game-board.v60-hard-mode .bone-slot,
+#game-board.v60-hard-mode [data-zone],
+#game-board.v60-hard-mode [data-bone-slot] {
+opacity: var(--v60-slot-opacity, .46);
+}
+#game-board.v60-hard-mode .drop-zone.filled,
+#game-board.v60-hard-mode .drop-slot.filled,
+#game-board.v60-hard-mode .bone-slot.filled,
+#game-board.v60-hard-mode [data-zone].filled,
+#game-board.v60-hard-mode [data-bone-slot].filled {
+opacity: .95;
+}
+.v61-blackout-layer {
+position: fixed;
+inset: 0;
+z-index: 4200;
+display: none;
+align-items: center;
+justify-content: center;
+padding: max(22px, calc(env(safe-area-inset-top, 0px) + 18px)) 20px max(28px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+background:
+radial-gradient(circle at 50% 38%, rgba(120,0,0,.22), transparent 30%),
+linear-gradient(180deg, rgba(0,0,0,.98), rgba(5,0,0,.96));
+color: #f1e3c8;
+pointer-events: auto;
+user-select: none;
+-webkit-user-select: none;
+}
+.v61-blackout-layer.show {
+display: flex;
+animation: v61BlackoutIn .18s linear both;
+}
+.v61-blackout-layer.recovering {
+animation: v61BlackoutOut .48s ease both;
+}
+@keyframes v61BlackoutIn {
+from { opacity: 0; filter: brightness(1.8); }
+to { opacity: 1; filter: brightness(1); }
+}
+@keyframes v61BlackoutOut {
+from { opacity: 1; }
+to { opacity: 0; }
+}
+.v61-blackout-card {
+width: min(390px, calc(100vw - 34px));
+border: 1px solid rgba(191,47,47,.38);
+border-radius: 18px;
+padding: 18px 16px;
+background:
+linear-gradient(180deg, rgba(64,5,5,.35), rgba(0,0,0,.64)),
+rgba(7,3,3,.88);
+box-shadow:
+0 0 48px rgba(191,47,47,.22),
+inset 0 0 26px rgba(191,47,47,.14);
+text-align: center;
+}
+.v61-blackout-kicker {
+color: rgba(191,47,47,.95);
+font-size: 10px;
+letter-spacing: .28em;
+margin-bottom: 8px;
+text-transform: uppercase;
+}
+.v61-blackout-title {
+margin: 0 0 10px;
+color: #f1e3c8;
+font-size: 23px;
+letter-spacing: .14em;
+text-shadow: 0 0 18px rgba(191,47,47,.7);
+}
+.v61-blackout-msg {
+color: rgba(232,220,196,.78);
+font-size: 12px;
+line-height: 1.8;
+margin: 8px 0;
+}
+.v61-blackout-code {
+display: inline-block;
+margin-top: 10px;
+padding: 6px 10px;
+border: 1px solid rgba(191,47,47,.35);
+border-radius: 999px;
+color: #ffb2a4;
+background: rgba(100,0,0,.18);
+font-size: 11px;
+letter-spacing: .16em;
+}
+.v61-red-dot {
+width: 9px;
+height: 9px;
+border-radius: 999px;
+margin: 0 auto 10px;
+background: #ff2d2d;
+box-shadow: 0 0 18px rgba(255,45,45,.9);
+animation: v61RedPulse .52s infinite alternate;
+}
+@keyframes v61RedPulse {
+from { opacity: .32; transform: scale(.82); }
+to { opacity: 1; transform: scale(1.18); }
+}
+body.v61-power-off main#app {
+filter: brightness(.18) contrast(1.18) saturate(.45);
+pointer-events: none;
+}
+body.v61-error-flash main#app {
+animation: v61ErrorFlash .42s linear 2;
+}
+@keyframes v61ErrorFlash {
+0%, 100% { filter: none; }
+18% { filter: brightness(2.1) contrast(1.45) saturate(.2); }
+38% { filter: brightness(.22) contrast(1.3) saturate(.9); }
+68% { filter: brightness(1.3) contrast(1.12) saturate(1.25); }
+}
+body.v61-board-shake #game-board,
+body.v61-board-shake .game-board {
+animation: v61BoardShake .38s ease both;
+}
+@keyframes v61BoardShake {
+0%, 100% { transform: translateZ(0); }
+20% { transform: translate3d(-2px, 1px, 0); }
+40% { transform: translate3d(2px, -1px, 0); }
+60% { transform: translate3d(-1px, -2px, 0); }
+80% { transform: translate3d(1px, 1px, 0); }
+}
+.v61-event-note {
+margin: 10px 0;
+padding: 10px 12px;
+border-left: 2px solid rgba(191,47,47,.55);
+border-radius: 10px;
+background: rgba(15,5,5,.72);
+color: rgba(232,220,196,.72);
+font-size: 11px;
+line-height: 1.65;
+}
+.v61-event-note b {
+color: #ffb2a4;
+letter-spacing: .08em;
+}
+@media (max-width: 390px) {
+.v61-blackout-title {
+font-size: 20px;
+}
+.v61-blackout-card {
+padding: 16px 13px;
+}
+}
+html,
+body,
+main#app {
+scroll-behavior: auto !important;
+}
+body.v62-smooth-mode * {
+-webkit-tap-highlight-color: transparent;
+}
+body.v62-smooth-mode main#app {
+transform: translateZ(0);
+backface-visibility: hidden;
+}
+body.v62-smooth-mode .screen {
+contain: layout paint;
+}
+body.v62-smooth-mode #game-board,
+body.v62-smooth-mode .game-board {
+will-change: auto !important;
+transform: translateZ(0);
+contain: layout paint style;
+}
+body.v62-smooth-mode .bone-bank,
+body.v62-smooth-mode .bone-pool,
+body.v62-smooth-mode #bone-bank,
+body.v62-smooth-mode #bone-pool {
+contain: layout paint style;
+content-visibility: auto;
+contain-intrinsic-size: 300px;
+}
+body.v62-smooth-mode .v49-stage-frame,
+body.v62-smooth-mode .v51-fine-noise,
+body.v62-smooth-mode .v51-breath-layer,
+body.v62-smooth-mode .v49-vignette-pulse,
+body.v62-smooth-mode .v50-audio-pulse {
+animation-duration: 2.8s !important;
+opacity: .36 !important;
+}
+body.v62-smooth-mode .v50-audio-tension {
+opacity: .36 !important;
+transform: translateZ(0);
+}
+body.v62-smooth-mode .v49-mini-map {
+opacity: .42 !important;
+transform: translateZ(0);
+}
+body.v62-smooth-mode.v61-power-off main#app {
+filter: none !important;
+opacity: .22;
+pointer-events: none;
+}
+body.v62-smooth-mode.v61-error-flash main#app {
+animation: none !important;
+filter: none !important;
+}
+body.v62-smooth-mode.v61-error-flash::before {
+content: "";
+position: fixed;
+inset: 0;
+z-index: 4100;
+pointer-events: none;
+background:
+radial-gradient(circle at 50% 40%, rgba(255,45,45,.18), transparent 36%),
+rgba(120,0,0,.16);
+animation: v62ErrorOverlay .42s linear 2;
+}
+@keyframes v62ErrorOverlay {
+0%, 100% { opacity: 0; }
+30% { opacity: 1; }
+60% { opacity: .18; }
+}
+body.v62-smooth-mode.v61-board-shake #game-board,
+body.v62-smooth-mode.v61-board-shake .game-board {
+animation-duration: .24s !important;
+}
+body.v62-smooth-mode .v61-blackout-layer {
+backdrop-filter: none !important;
+-webkit-backdrop-filter: none !important;
+}
+body.v62-smooth-mode .v61-blackout-card {
+box-shadow:
+0 0 28px rgba(191,47,47,.16),
+inset 0 0 18px rgba(191,47,47,.10) !important;
+}
+body.v62-smooth-mode .v59-reveal-frame img {
+filter: none !important;
+}
+body.v62-smooth-mode .drop-zone,
+body.v62-smooth-mode .drop-slot,
+body.v62-smooth-mode .bone-slot,
+body.v62-smooth-mode [data-zone],
+body.v62-smooth-mode [data-bone-slot] {
+will-change: auto !important;
+}
+@media (max-height: 720px), (max-width: 390px) {
+body.v62-smooth-mode .v51-fine-noise,
+body.v62-smooth-mode .v51-breath-layer,
+body.v62-smooth-mode .v50-audio-tension {
+display: none !important;
+}
+body.v62-smooth-mode .v49-mini-map {
+opacity: .30 !important;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+body.v62-smooth-mode .v49-stage-frame,
+body.v62-smooth-mode .v51-fine-noise,
+body.v62-smooth-mode .v51-breath-layer,
+body.v62-smooth-mode .v49-vignette-pulse,
+body.v62-smooth-mode .v50-audio-pulse {
+animation: none !important;
+}
+}
+.game-board.v63-mask-board {
+position: relative !important;
+overflow: hidden !important;
+aspect-ratio: 4 / 5;
+height: auto !important;
+min-height: 420px !important;
+max-height: 560px;
+background: #050303;
+border: 1px solid rgba(191,164,116,.28);
+border-radius: 16px;
+box-shadow:
+inset 0 0 34px rgba(0,0,0,.88),
+0 0 28px rgba(80,0,0,.16);
+contain: layout paint style;
+}
+.v63-board-image-layer,
+.v63-mask-layer {
+position: absolute;
+inset: 0;
+z-index: 1;
+pointer-events: none;
+}
+.v63-board-img {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+object-position: center;
+opacity: .92;
+transform: translateZ(0);
+user-select: none;
+-webkit-user-select: none;
+}
+.v63-board-fallback {
+display: none;
+position: absolute;
+inset: 0;
+place-items: center;
+padding: 22px;
+text-align: center;
+color: rgba(241,227,200,.70);
+font-size: 12px;
+line-height: 1.75;
+background:
+radial-gradient(circle at 50% 38%, rgba(143,18,18,.20), transparent 35%),
+linear-gradient(180deg, rgba(20,5,5,.9), rgba(0,0,0,.95));
+}
+.v63-mask-layer {
+z-index: 2;
+}
+.v63-mask-piece {
+position: absolute;
+background:
+radial-gradient(circle at 50% 35%, rgba(52,16,16,.92), rgba(0,0,0,.96) 58%),
+rgba(0,0,0,.94);
+border: 1px dashed rgba(241,227,200,.20);
+border-radius: 14px;
+box-shadow:
+inset 0 0 22px rgba(0,0,0,.96),
+0 0 18px rgba(120,0,0,.18);
+opacity: .98;
+transition: opacity .42s ease, transform .42s ease, filter .42s ease;
+transform: translateZ(0);
+}
+.v63-mask-piece span {
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+color: rgba(241,227,200,.42);
+font-size: 10px;
+letter-spacing: .08em;
+white-space: nowrap;
+text-shadow: 0 0 8px rgba(0,0,0,.85);
+}
+.v63-mask-piece.revealed {
+opacity: 0;
+transform: scale(.94) translateZ(0);
+filter: blur(2px);
+}
+.game-board.v63-mask-board .slot {
+z-index: 4;
+background: rgba(0,0,0,.38);
+border-color: rgba(241,227,200,.24);
+color: rgba(241,227,200,.48);
+backdrop-filter: none;
+-webkit-backdrop-filter: none;
+transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.game-board.v63-mask-board .slot.filled {
+background: rgba(0,0,0,.08);
+border-color: rgba(255,178,164,.80);
+color: rgba(255,228,210,.85);
+box-shadow:
+0 0 14px rgba(191,47,47,.36),
+inset 0 0 10px rgba(0,0,0,.30);
+}
+.game-board.v63-mask-board .slot .bone-art-frame {
+display: none !important;
+}
+.game-board.v63-mask-board .slot-label {
+position: relative;
+z-index: 5;
+pointer-events: none;
+font-size: 10px;
+color: rgba(241,227,200,.68);
+text-shadow: 0 0 6px rgba(0,0,0,.95);
+}
+#mask-skull, #slot-skull {
+top: 11%; left: 34%;
+width: 22%; height: 13%;
+border-radius: 18px 26px 20px 16px;
+}
+#mask-neck, #slot-neck {
+top: 21%; left: 43%;
+width: 18%; height: 13%;
+border-radius: 16px;
+}
+#mask-chest, #slot-chest {
+top: 39%; left: 48%;
+width: 30%; height: 24%;
+border-radius: 18px;
+}
+#mask-leftWing, #slot-leftWing {
+top: 41%; left: 27%;
+width: 26%; height: 16%;
+border-radius: 18px;
+transform: translate(-50%, -50%) rotate(-12deg);
+}
+#mask-rightWing, #slot-rightWing {
+top: 40%; left: 70%;
+width: 28%; height: 16%;
+border-radius: 18px;
+transform: translate(-50%, -50%) rotate(12deg);
+}
+#mask-pelvis, #slot-pelvis {
+top: 58%; left: 61%;
+width: 24%; height: 17%;
+border-radius: 18px;
+}
+#mask-leftLeg, #slot-leftLeg {
+top: 72%; left: 43%;
+width: 18%; height: 24%;
+border-radius: 18px;
+}
+#mask-rightLeg, #slot-rightLeg {
+top: 73%; left: 65%;
+width: 18%; height: 24%;
+border-radius: 18px;
+}
+#mask-tail, #slot-tail {
+top: 59%; left: 80%;
+width: 24%; height: 13%;
+border-radius: 18px;
+transform: translate(-50%, -50%) rotate(8deg);
+}
+.game-board.v63-mask-board #slot-leftWing,
+.game-board.v63-mask-board #slot-rightWing,
+.game-board.v63-mask-board #slot-tail {
+transform-origin: center;
+}
+.game-board.v63-mask-board.v63-complete .v63-mask-piece {
+opacity: 0;
+transform: scale(.96) translateZ(0);
+pointer-events: none;
+}
+.v63-mask-status {
+margin-top: 8px;
+text-align: center;
+color: rgba(191,164,116,.70);
+font-size: 10px;
+letter-spacing: .08em;
+}
+body.v62-smooth-mode .v63-mask-piece {
+transition-duration: .28s;
+box-shadow: inset 0 0 16px rgba(0,0,0,.92);
+}
+@media (max-width: 390px) {
+.game-board.v63-mask-board {
+min-height: 390px !important;
+max-height: 520px;
+}
+.v63-mask-piece span {
+font-size: 9px;
+}
+}
+.v64-puzzle-notes {
+margin: 10px 0 12px;
+border: 1px solid rgba(191,47,47,.24);
+border-radius: 13px;
+background: rgba(10,3,3,.64);
+overflow: hidden;
+}
+.v64-puzzle-notes summary {
+cursor: pointer;
+list-style: none;
+padding: 11px 13px;
+color: rgba(241,227,200,.84);
+font-size: 12px;
+letter-spacing: .08em;
+user-select: none;
+-webkit-user-select: none;
+}
+.v64-puzzle-notes summary::-webkit-details-marker {
+display: none;
+}
+.v64-puzzle-notes summary::after {
+content: "展開";
+float: right;
+color: rgba(191,164,116,.62);
+font-size: 10px;
+letter-spacing: .08em;
+}
+.v64-puzzle-notes[open] summary::after {
+content: "收合";
+}
+.v64-note-body {
+display: grid;
+gap: 7px;
+padding: 0 13px 12px;
+color: rgba(232,220,196,.70);
+font-size: 11px;
+line-height: 1.6;
+}
+.v64-note-body b {
+color: #ffb2a4;
+letter-spacing: .08em;
+}
+.v64-asset-note {
+margin: 8px 0 10px !important;
+padding: 8px 10px !important;
+font-size: 10px !important;
+opacity: .72;
+}
+.v64-unlock-files {
+display: block;
+}
+.v64-unlock-files h3 {
+margin-bottom: 12px;
+}
+.v64-unlock-card {
+position: relative;
+margin: 10px 0;
+padding: 13px 12px 12px;
+border: 1px solid rgba(241,227,200,.12);
+border-radius: 14px;
+background:
+linear-gradient(180deg, rgba(40,8,8,.42), rgba(0,0,0,.30)),
+rgba(0,0,0,.18);
+box-shadow: inset 0 0 18px rgba(0,0,0,.28);
+}
+.v64-file-index {
+display: inline-block;
+margin-bottom: 6px;
+padding: 2px 7px;
+border: 1px solid rgba(191,47,47,.34);
+border-radius: 999px;
+color: #ffb2a4;
+background: rgba(100,10,10,.20);
+font-size: 10px;
+letter-spacing: .15em;
+}
+.v64-unlock-card h4 {
+margin: 0 0 7px;
+color: #f1e3c8;
+font-size: 15px;
+letter-spacing: .08em;
+}
+.v64-unlock-card p {
+margin: 0;
+text-align: left;
+color: rgba(232,220,196,.76);
+font-size: 12px;
+line-height: 1.78;
+}
+#btn-restart {
+position: relative !important;
+z-index: 140 !important;
+min-height: 52px;
+margin-bottom: max(44px, calc(env(safe-area-inset-bottom, 0px) + 40px)) !important;
+}
+@media (max-width: 390px) {
+.v64-puzzle-notes summary {
+padding: 10px 11px;
+}
+.v64-unlock-card {
+padding: 12px 10px;
+}
+}
+.v65-restore-badge {
+position: fixed;
+left: 50%;
+bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+transform: translateX(-50%) translateY(16px);
+z-index: 3600;
+width: min(340px, calc(100vw - 34px));
+padding: 10px 12px;
+border: 1px solid rgba(241,227,200,.16);
+border-radius: 14px;
+background: rgba(7,3,3,.92);
+color: rgba(241,227,200,.82);
+font-size: 11px;
+line-height: 1.55;
+text-align: center;
+box-shadow: 0 16px 42px rgba(0,0,0,.58);
+opacity: 0;
+pointer-events: none;
+transition: opacity .25s ease, transform .25s ease;
+}
+.v65-restore-badge.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+.v65-restore-badge b {
+color: #ffb2a4;
+letter-spacing: .08em;
+}
+.v66-taskbar {
+position: sticky;
+top: 10px;
+z-index: 120;
+margin: 8px auto 16px;
+width: min(720px, calc(100vw - 28px));
+padding: 10px 12px;
+border: 1px solid rgba(255,86,76,.24);
+border-radius: 16px;
+background: linear-gradient(135deg, rgba(14,5,5,.90), rgba(28,7,7,.72));
+box-shadow: 0 10px 28px rgba(0,0,0,.36);
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
+}
+.v66-taskbar b { display:block; color:#ffd2c7; font-size:12px; letter-spacing:.12em; }
+.v66-taskbar span { display:block; margin-top:2px; color:rgba(241,227,200,.74); font-size:11px; line-height:1.45; }
+.v66-sequence-strip {
+display:flex;
+gap:6px;
+overflow-x:auto;
+padding:8px 2px 2px;
+margin:8px 0 12px;
+-webkit-overflow-scrolling:touch;
+scrollbar-width:none;
+}
+.v66-sequence-strip::-webkit-scrollbar { display:none; }
+.v66-step-chip {
+flex:0 0 auto;
+border:1px solid rgba(241,227,200,.13);
+border-radius:999px;
+padding:6px 9px;
+color:rgba(241,227,200,.48);
+background:rgba(255,255,255,.035);
+font-size:11px;
+white-space:nowrap;
+}
+.v66-step-chip.current {
+color:#ffd2c7;
+border-color:rgba(255,86,76,.48);
+background:rgba(160,22,22,.18);
+box-shadow:0 0 18px rgba(181,23,23,.16);
+}
+.v66-step-chip.done { color:rgba(194,232,183,.78); border-color:rgba(194,232,183,.25); }
+.v66-puzzle-controls {
+display:grid;
+grid-template-columns:1fr;
+gap:8px;
+margin:12px 0 8px;
+}
+.v66-selection-status {
+border:1px solid rgba(241,227,200,.12);
+border-radius:14px;
+padding:10px 12px;
+background:rgba(0,0,0,.22);
+color:rgba(241,227,200,.78);
+font-size:12px;
+text-align:center;
+min-height:44px;
+display:grid;
+place-items:center;
+}
+.v66-selection-status b { color:#ffb2a4; }
+.v66-scan-btn {
+min-height:46px;
+border-color:rgba(255,86,76,.42) !important;
+background:linear-gradient(135deg, rgba(100,10,10,.55), rgba(28,5,5,.82)) !important;
+}
+.v66-scan-btn[disabled] { opacity:.45; filter:grayscale(.35); }
+.slot.v66-required { outline:2px solid rgba(255,189,129,.46); box-shadow:0 0 0 4px rgba(255,189,129,.08), 0 0 22px rgba(255,100,60,.20); }
+.slot.v66-possible { outline:2px solid rgba(170,235,160,.42); box-shadow:0 0 0 4px rgba(170,235,160,.08), 0 0 22px rgba(170,235,160,.18); }
+.slot.v66-scan-target { animation:v66ScanPulse .55s ease-in-out 0s 4; }
+@keyframes v66ScanPulse { 0%,100%{filter:none} 50%{filter:brightness(1.65) saturate(1.25); box-shadow:0 0 30px rgba(255,40,40,.42);} }
+.bone-item.v66-next { border-color:rgba(255,189,129,.38); }
+.v66-modal {
+position:fixed;
+inset:0;
+z-index:3900;
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+background:rgba(0,0,0,.68);
+backdrop-filter:blur(5px);
+-webkit-backdrop-filter:blur(5px);
+}
+.v66-modal.show { display:flex; }
+.v66-card {
+width:min(420px, 100%);
+border:1px solid rgba(241,227,200,.16);
+border-radius:22px;
+background:linear-gradient(180deg, rgba(23,8,8,.96), rgba(8,3,3,.96));
+box-shadow:0 24px 60px rgba(0,0,0,.64);
+padding:18px;
+color:rgba(241,227,200,.84);
+}
+.v66-kicker { color:#ff9d8d; font-size:11px; letter-spacing:.18em; margin-bottom:6px; }
+.v66-card h3 { margin:0 0 10px; color:#f1e3c8; font-size:22px; }
+.v66-card p { font-size:13px; line-height:1.7; color:rgba(241,227,200,.78); }
+.v66-option-grid { display:grid; gap:8px; margin-top:12px; }
+.v66-option-grid button { min-height:48px; }
+.v66-emergency-note {
+display:none;
+margin:10px auto;
+padding:10px 12px;
+border:1px solid rgba(255,86,76,.34);
+border-radius:14px;
+background:rgba(140,0,0,.14);
+color:#ffd2c7;
+font-size:12px;
+text-align:center;
+}
+body.v66-emergency .v66-emergency-note { display:block; }
+body.v66-experience .btn { min-height:44px; touch-action:manipulation; }
+body.v66-experience .screen { padding-bottom:max(96px, calc(env(safe-area-inset-bottom, 0px) + 84px)); }
+body.v66-experience .bone-item, body.v66-experience .slot { touch-action:manipulation; }
+@media (max-width: 560px) {
+.v66-taskbar { top:8px; margin-top:4px; }
+.v66-card { border-radius:18px; padding:16px; }
+}
+.v67-ai-panel {
+width: min(720px, calc(100vw - 28px));
+margin: -8px auto 16px;
+border: 1px solid rgba(146, 220, 255, .18);
+border-radius: 18px;
+background:
+radial-gradient(circle at 10% 0%, rgba(110, 18, 18, .32), transparent 42%),
+linear-gradient(135deg, rgba(5, 11, 14, .92), rgba(26, 5, 7, .84));
+box-shadow: 0 14px 36px rgba(0, 0, 0, .38);
+overflow: hidden;
+}
+.v67-ai-head {
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:10px 12px 7px;
+border-bottom:1px solid rgba(241,227,200,.08);
+}
+.v67-ai-head b {
+color:#d9f4ff;
+font-size:12px;
+letter-spacing:.14em;
+}
+.v67-ai-head span {
+color:rgba(241,227,200,.52);
+font-size:10px;
+letter-spacing:.10em;
+}
+.v67-ai-mood {
+flex:0 0 auto;
+border:1px solid rgba(146,220,255,.20);
+border-radius:999px;
+padding:4px 8px;
+color:#ffb2a4;
+background:rgba(0,0,0,.20);
+font-size:10px;
+letter-spacing:.10em;
+white-space:nowrap;
+}
+.v67-ai-body {
+padding:10px 12px 12px;
+}
+.v67-ai-text {
+margin:0;
+color:rgba(241,227,200,.80);
+font-size:12px;
+line-height:1.7;
+}
+.v67-ai-actions {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:10px;
+}
+.v67-ai-actions .btn {
+min-height:40px;
+padding:9px 10px;
+font-size:11px;
+}
+.v67-ai-chiprow {
+display:flex;
+gap:6px;
+overflow-x:auto;
+-webkit-overflow-scrolling:touch;
+scrollbar-width:none;
+padding-top:8px;
+}
+.v67-ai-chiprow::-webkit-scrollbar { display:none; }
+.v67-ai-chip {
+flex:0 0 auto;
+border:1px solid rgba(241,227,200,.12);
+border-radius:999px;
+padding:5px 8px;
+color:rgba(241,227,200,.58);
+background:rgba(0,0,0,.18);
+font-size:10px;
+white-space:nowrap;
+}
+.v67-ai-panel.alert {
+border-color:rgba(255,86,76,.34);
+box-shadow:0 0 0 1px rgba(255,86,76,.12), 0 16px 42px rgba(0,0,0,.42);
+}
+.v67-ai-modal {
+position:fixed;
+inset:0;
+z-index:4100;
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+background:rgba(0,0,0,.70);
+backdrop-filter:blur(5px);
+-webkit-backdrop-filter:blur(5px);
+}
+.v67-ai-modal.show { display:flex; }
+.v67-ai-dialog {
+width:min(430px, 100%);
+border:1px solid rgba(146,220,255,.20);
+border-radius:22px;
+background:linear-gradient(180deg, rgba(15,20,24,.97), rgba(9,3,3,.98));
+box-shadow:0 28px 70px rgba(0,0,0,.70);
+padding:18px;
+color:rgba(241,227,200,.84);
+}
+.v67-ai-dialog .kicker {
+color:#9ee6ff;
+font-size:11px;
+letter-spacing:.14em;
+margin-bottom:5px;
+}
+.v67-ai-dialog h3 {
+margin:0 0 8px;
+color:#f1e3c8;
+font-size:18px;
+}
+.v67-ai-dialog p {
+margin:0 0 14px;
+color:rgba(241,227,200,.78);
+font-size:13px;
+line-height:1.75;
+}
+.v67-ai-report {
+display:none;
+margin:16px 0 18px;
+border:1px solid rgba(146,220,255,.16);
+border-radius:20px;
+padding:14px;
+background:
+linear-gradient(135deg, rgba(11,19,23,.88), rgba(38,7,7,.78));
+box-shadow:0 18px 42px rgba(0,0,0,.32);
+}
+.v67-ai-report.show { display:block; }
+.v67-ai-report h3 {
+margin:0 0 8px;
+color:#d9f4ff;
+font-size:15px;
+letter-spacing:.12em;
+}
+.v67-ai-report-grid {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin:10px 0;
+}
+.v67-ai-report-item {
+border:1px solid rgba(241,227,200,.10);
+border-radius:12px;
+padding:8px;
+background:rgba(0,0,0,.18);
+font-size:11px;
+color:rgba(241,227,200,.62);
+}
+.v67-ai-report-item b {
+display:block;
+color:#ffd2c7;
+font-size:13px;
+margin-top:2px;
+}
+.v67-ai-report p {
+margin:8px 0 0;
+color:rgba(241,227,200,.76);
+font-size:12px;
+line-height:1.75;
+}
+body.v67-ai-active .v66-scan-btn {
+border-color:rgba(146,220,255,.30) !important;
+background:linear-gradient(135deg, rgba(10,45,56,.55), rgba(40,6,9,.82)) !important;
+}
+@media (max-width:560px) {
+.v67-ai-actions { grid-template-columns:1fr; }
+.v67-ai-head { align-items:flex-start; }
+.v67-ai-mood { font-size:9px; }
+.v67-ai-report-grid { grid-template-columns:1fr; }
 }</style>
 </head>
 <body>
@@ -4085,7 +5080,7 @@ min-height: 300px;
 <div class="v49-stage-frame"></div>
 <div class="v51-breath-layer"></div>
 <div class="v51-fine-noise"></div>
-<div class="v54-final-badge" id="v54FinalBadge">FINAL PATCH v56</div>
+<div class="v54-final-badge" id="v54FinalBadge">FINAL PATCH v67</div>
 <div class="v51-status-line" id="v51StatusLine">
 <span class="v51-stage-name" id="v51StageName">CASE 1931 / SYSTEM READY</span>
 <span class="v51-status-dot"></span>
@@ -4114,6 +5109,16 @@ min-height: 300px;
 <div class="ghost-cut" id="ghostCut"></div>
 <div class="blackout-event" id="blackoutEvent"><span id="blackoutText">標本完成</span></div>
 <div class="toast" id="toast"></div>
+<div class="v65-restore-badge" id="v65-restore-badge"><b>進度已恢復</b><br>已回到上次封存位置。</div>
+<div class="v61-blackout-layer" id="v61-blackout-layer" aria-live="assertive">
+<div class="v61-blackout-card">
+<div class="v61-red-dot"></div>
+<div class="v61-blackout-kicker">POWER INTERRUPTION</div>
+<h2 class="v61-blackout-title" id="v61-blackout-title">第七層供電中斷</h2>
+<div class="v61-blackout-msg" id="v61-blackout-msg">標本固定程序暫停。請勿移動骨架。</div>
+<div class="v61-blackout-code" id="v61-blackout-code">ERROR 1931</div>
+</div>
+</div>
 <div class="v58-fallback-image-panel" id="v58FallbackPanel">
 <div class="v58-fallback-card">
 <h2>保存圖片</h2>
@@ -4194,9 +5199,9 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="staff-note">素材檢查會測試圖片與 sounds/*.mp3。音效缺檔不會壞，會用內建 fallback。</div>
 <div class="v56-url-card">
 正式測試網址
-<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=59</code>
+<code id="v56OfficialUrlText">https://aaron0801.github.io/1931/?v=68</code>
 <button class="btn secondary" onclick="Game.v56CopyOfficialUrl()">複製正式網址</button>
-<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=59。</div>
+<div class="v56-cache-tip">若 GitHub Pages 沒更新，確認網址結尾是 ?v=68。</div>
 </div>
 <div class="v55-qa-panel">
 <div class="staff-subtitle">最終品質檢查</div>
@@ -4226,11 +5231,11 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <div class="v50-audio-note" id="v50AudioInfo">聲場導演會依照關卡、錯誤與進度調整敲擊、呼吸與低頻節奏。</div>
 <div class="staff-info-list" id="staffInfoList">
-<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v52</span></div>
+<div class="staff-info-row"><b>正式版</b><span id="staffVersionInfo">v68</span></div>
 <div class="staff-info-row"><b>密碼</b><span>玩家密碼與工作人員密碼可在 APP_CONFIG 修改</span></div>
 <div class="staff-info-row"><b>素材路徑</b><span>圖片資料夾：images/　音效資料夾：sounds/　骨頭資料夾：images/bones/　完成圖：images/reveal/full-fossil-board.png</span></div>
 <div class="staff-info-row"><b>展示建議</b><span>使用 Safari / Chrome，避免 LINE 內建瀏覽器</span></div>
-<div class="staff-info-row"><b>版本類型</b><span>v59：拼圖完成後顯示完整復原圖，不直接跳線索頁</span></div>
+<div class="staff-info-row"><b>版本類型</b><span>v68：AI 助理、穩定修補、自動保存、難度切換、降低恐怖、研究紀錄與素材檢查</span></div>
 </div>
 <div class="perf-row">
 <div class="perf-chip" id="staffFpsInfo">FPS：--</div>
@@ -4257,10 +5262,72 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <button class="btn damage-confirm" onclick="Game.closeDamageNotice()">確認</button>
 </div>
 </div>
+<div class="v66-modal" id="v66KnowledgeModal" role="dialog" aria-modal="true">
+<div class="v66-card">
+<div class="v66-kicker" id="v66KnowledgeKicker">RESTORATION NOTE</div>
+<h3 id="v66KnowledgeTitle">骨頭復原完成</h3>
+<p id="v66KnowledgeBody">標本資料讀取中。</p>
+<button class="btn" onclick="Game.v66CloseKnowledge()">繼續復原</button>
+</div>
+</div>
+<div class="v66-modal" id="v66MemoryModal" role="dialog" aria-modal="true">
+<div class="v66-card">
+<div class="v66-kicker">BLACKOUT MEMORY CHECK</div>
+<h3>定位資料遺失</h3>
+<p id="v66MemoryQuestion">剛才最後完成的部位是？</p>
+<div class="v66-option-grid" id="v66MemoryOptions"></div>
+</div>
+</div>
+<div class="v67-ai-modal" id="v68ResearchModal" role="dialog" aria-modal="true">
+<div class="v67-ai-dialog">
+<div class="kicker">RESEARCH LOG</div>
+<h3>研究紀錄</h3>
+<p id="v68ResearchSummary">已解鎖紀錄讀取中。</p>
+<div class="v68-research-list" id="v68ResearchList"></div>
+<button class="btn secondary" onclick="Game.v68CloseResearchLog()">關閉紀錄</button>
+</div>
+</div>
+<div class="v67-ai-modal" id="v67AiModal" role="dialog" aria-modal="true">
+<div class="v67-ai-dialog">
+<div class="kicker" id="v67AiModalKicker">LOCAL AI QUERY</div>
+<h3 id="v67AiModalTitle">AI 研究助理</h3>
+<p id="v67AiModalBody">分析資料讀取中。</p>
+<button class="btn secondary" onclick="Game.v67CloseAI()">關閉分析</button>
+</div>
+</div>
 <main id="app">
 <div class="hud" id="hud">
 <div class="hud-text" id="hud-status">SYS.ON // 第七層</div>
-<div class="hud-hearts" id="hud-hearts">♥♥♥</div>
+<div class="hud-hearts" id="hud-hearts">♥♥♥♥♥</div>
+</div>
+<div class="v66-taskbar" id="v66-taskbar">
+<b id="v66-task-title">目前任務：等待進入</b>
+<span id="v66-task-desc">系統會保存進度。AI 助理為本機判讀，不連外、不使用 API Key。</span>
+</div>
+<div class="v67-ai-panel" id="v67-ai-panel">
+<div class="v67-ai-head">
+<div>
+<b>AI 研究助理</b>
+<span>LOCAL ANALYSIS / NO API</span>
+</div>
+<div class="v67-ai-head-controls"><div class="v67-ai-mood" id="v67-ai-mood">OBSERVING</div><button class="v68-ai-toggle" id="v68-ai-toggle" onclick="Game.v68ToggleAI()">收合</button></div>
+</div>
+<div class="v67-ai-body">
+<p class="v67-ai-text" id="v67-ai-text">本機分析系統待命中。系統會依照你的操作、錯誤、掃描與復原進度給出判讀。</p>
+<div class="v67-ai-actions">
+<button class="btn secondary" onclick="Game.v67AskAI('next')">AI 判讀下一步</button>
+<button class="btn secondary" onclick="Game.v67UseAIScan()">AI 標本掃描</button>
+<button class="btn secondary" onclick="Game.v67AskAI('1931')">詢問 1931</button>
+<button class="btn secondary" onclick="Game.v67AskAI('fossil')">詢問化石形成</button>
+<button class="btn secondary" onclick="Game.v67AskAI('risk')">AI 風險判讀</button>
+<button class="btn secondary" onclick="Game.v68OpenResearchLog()">研究紀錄</button>
+</div>
+<div class="v67-ai-chiprow" id="v67-ai-chips">
+<span class="v67-ai-chip">離線運算</span>
+<span class="v67-ai-chip">不使用 API Key</span>
+<span class="v67-ai-chip">依玩家狀態分析</span>
+</div>
+</div>
 </div>
 <section class="screen active" id="screen-title">
 <div class="sys-header">
@@ -4269,9 +5336,10 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <h1>《第五位研究員》</h1>
 <h2>第七層標本復原程序</h2>
-<div class="formal-badge">DEVELOPMENT MAINTENANCE BUILD</div>
+<div class="formal-badge">STABLE EXHIBITION BUILD</div>
 <div class="scene-box">
-<img src="images/cover.jpg" alt="檔案" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22 loading="lazy" decoding="async"><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23111%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 text-anchor=%22middle%22>IMAGE MISSING</text></svg>'">
+<img src="images/cover.jpg" alt="檔案" onerror="Game.v68HandleCoverMissing(this)" loading="lazy" decoding="async">
+<div class="v68-cover-fallback" id="v68CoverFallback">首頁圖尚未載入<br>請確認 images/cover.jpg</div>
 <div class="scene-caption">ARCHIVE: SEALED RECORD / images/cover.jpg</div>
 </div>
 <p><span class="text-warning">警告：</span>若發現九塊骨頭，請勿拼湊。若聽見箱中有人敲門，請勿回應。若看見第五位研究員，請立刻停止操作。</p>
@@ -4290,6 +5358,22 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <button class="mode-choice" id="mode-immersive" onclick="Game.setPlayMode('immersive')">
 沉浸模式<br><span style="color:var(--bone-dim);">較強、較恐怖</span>
 </button>
+</div>
+</div>
+<div class="v68-sub-mode">
+<div class="v68-mode-row">
+<div class="v68-mode-title">挑戰難度</div>
+<div class="v68-mode-buttons">
+<button id="difficulty-simple" onclick="Game.v68SetDifficulty('simple')">簡單體驗<br><span style="color:var(--bone-dim);">自由拼、掃描 3 次</span></button>
+<button id="difficulty-standard" class="active" onclick="Game.v68SetDifficulty('standard')">標準挑戰<br><span style="color:var(--bone-dim);">照順序、掃描 2 次</span></button>
+</div>
+</div>
+<div class="v68-mode-row">
+<div class="v68-mode-title">恐怖效果</div>
+<div class="v68-mode-buttons">
+<button id="horror-standard" class="active" onclick="Game.v68SetHorrorMode('standard')">標準恐怖<br><span style="color:var(--bone-dim);">完整氣氛</span></button>
+<button id="horror-reduced" onclick="Game.v68SetHorrorMode('reduced')">降低恐怖<br><span style="color:var(--bone-dim);">少閃、較穩</span></button>
+</div>
 </div>
 </div>
 <input type="text" id="player-name" class="pin-input name" placeholder="輸入觀測代號" maxlength="8">
@@ -4313,7 +5397,33 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 </div>
 <div class="game-progress-bar"><div class="game-progress-fill" id="bone-progress-fill"></div></div>
 </div>
-<div class="game-board" id="game-board">
+<details class="v64-puzzle-notes" id="v64-puzzle-notes">
+<summary>復原任務提示</summary>
+<div class="v64-note-body">
+<div><b>加難模式</b>：提示不會一開始全亮，放錯三次後方位提示才會增強。</div>
+<div><b>異常事件</b>：復原到中段時，研究室可能短暫斷電，等待備用電源恢復即可。</div>
+<div><b>遮罩系統</b>：拼對骨頭後會揭開黑色遮罩，底圖不會移動。</div>
+</div>
+</details>
+<div class="game-board v63-mask-board" id="game-board">
+<div class="v63-board-image-layer" aria-hidden="true">
+<img id="v63-board-img" class="v63-board-img" src="images/reveal/full-fossil-board.png" alt="完整雞骨化石復原底圖" loading="lazy" decoding="async" onerror="Game.v63HandleBoardImageError()">
+<div class="v63-board-fallback" id="v63-board-fallback">
+標本影像尚未載入<br>
+封存檔案正在等待復原圖
+</div>
+</div>
+<div class="v63-mask-layer" id="v63-mask-layer" aria-hidden="true">
+<div class="v63-mask-piece" id="mask-skull"><span>頭骨封存</span></div>
+<div class="v63-mask-piece" id="mask-neck"><span>頸椎封存</span></div>
+<div class="v63-mask-piece" id="mask-chest"><span>胸骨封存</span></div>
+<div class="v63-mask-piece" id="mask-leftWing"><span>左翼封存</span></div>
+<div class="v63-mask-piece" id="mask-rightWing"><span>右翼封存</span></div>
+<div class="v63-mask-piece" id="mask-pelvis"><span>骨盆封存</span></div>
+<div class="v63-mask-piece" id="mask-leftLeg"><span>左腿封存</span></div>
+<div class="v63-mask-piece" id="mask-rightLeg"><span>右腿封存</span></div>
+<div class="v63-mask-piece" id="mask-tail"><span>尾端封存</span></div>
+</div>
 <div class="slot" id="slot-skull" onclick="Game.placeBone('skull')">頭骨</div>
 <div class="slot" id="slot-neck" onclick="Game.placeBone('neck')">頸椎</div>
 <div class="slot" id="slot-chest" onclick="Game.placeBone('chest')">胸骨</div>
@@ -4324,20 +5434,23 @@ onpointerleave="Game.cancelResetHold()">RESET</div>
 <div class="slot" id="slot-rightLeg" onclick="Game.placeBone('rightLeg')">右腿</div>
 <div class="slot" id="slot-tail" onclick="Game.placeBone('tail')">尾端</div>
 </div>
-<div class="asset-path-note">
-骨頭圖片路徑：images/bones/skull.png、neck.png、chest.png、left-wing.png、right-wing.png、pelvis.png、left-leg.png、right-leg.png、tail.png。骨架底圖可放 images/bones/skeleton-guide.png。沒放圖片時會自動顯示文字或淡底圖。拼圖完成圖路徑：images/reveal/full-fossil-board.png。
+<div class="asset-path-note v64-asset-note">
+標本影像載入中。若畫面出現封存提示，請確認完整復原圖已放入 images/reveal/full-fossil-board.png。
 </div>
 <div class="bone-pool" id="bone-pool"></div>
-<p id="puzzle-log" style="font-size:12px;text-align:center;margin-top:15px;color:var(--bone-dim);">可點選骨頭後點位置，也可以拖曳。拖錯會彈回，最後一塊會觸發封存黑屏。</p>
+<div class="v66-puzzle-controls">
+<div class="v66-selection-status" id="v66-selection-status">目前選取：尚未選擇骨頭</div>
+<button class="btn secondary v66-scan-btn" id="v66-scan-btn" onclick="Game.v67UseAIScan()">啟動 AI 標本掃描 0 / 2</button>
+</div>
+<p id="puzzle-log" style="font-size:12px;text-align:center;margin-top:15px;color:var(--bone-dim);">可點選骨頭後點位置，也可以拖曳。拼對後會揭開黑色遮罩，不再把骨頭圖片塞進格子，因此畫面會更穩。</p>
 <div class="v59-reveal-panel" id="v59-full-reveal">
 <div class="v59-reveal-kicker">RESTORATION COMPLETE</div>
 <h3>標本復原完成</h3>
 <div class="v59-reveal-frame">
 <img id="v59-reveal-img" src="images/reveal/full-fossil-board.png" alt="完整雞骨化石復原圖" loading="lazy" decoding="async" onerror="Game.v59HandleRevealImageError()">
 <div class="v59-reveal-fallback" id="v59-reveal-fallback">
-完整復原圖尚未放入。<br>
-請把圖片放到：<br>
-images/reveal/full-fossil-board.png
+標本復原影像尚未載入。<br>
+系統已保留復原紀錄，等待封存圖檔連線。
 </div>
 </div>
 <p>完整標本已鎖定。下一步請檢查骨頭背面的刻痕，找出封存箱密碼。</p>
@@ -4422,6 +5535,16 @@ images/reveal/full-fossil-board.png
 <div class="ending-stamp" id="ending-stamp">UNCLASSIFIED</div>
 </div>
 <div class="ending-rank" id="ending-rank" style="display:none;"></div>
+<div class="v67-ai-report" id="v67AiReport">
+<h3>AI 封存分析報告</h3>
+<div class="v67-ai-report-grid">
+<div class="v67-ai-report-item">操作穩定度<b id="v67-report-stability">--</b></div>
+<div class="v67-ai-report-item">錯誤風險<b id="v67-report-risk">--</b></div>
+<div class="v67-ai-report-item">掃描依賴<b id="v67-report-scan">--</b></div>
+<div class="v67-ai-report-item">教育解鎖<b id="v67-report-knowledge">--</b></div>
+</div>
+<p id="v67-report-body">AI 正在整理本次封存紀錄。</p>
+</div>
 <div class="archive-card" id="archive-card">
 <div class="archive-card-top">
 <div>
@@ -4442,7 +5565,26 @@ images/reveal/full-fossil-board.png
 <button class="btn" id="btn-open-camera" style="display:none;" onclick="Game.openCamera()">開啟選用相機</button>
 <button class="btn" id="btn-take-photo" style="display:none;" onclick="Game.takePhoto()">拍下第五位影像</button>
 <a class="btn secondary" id="photo-download" style="display:none;text-decoration:none;text-align:center;" download="fifth-researcher.png">保存照片</a>
-<button class="btn secondary" id="btn-restart" style="display:none;margin-top:26px;" onclick="location.reload()">重新封存</button>
+<button class="btn secondary" id="btn-restart" style="display:none;margin-top:26px;" onclick="Game.restartForNextPlayer()">重新開始 / 下一位玩家</button>
+<div class="v60-story-card v64-unlock-files" id="v60-story-card">
+<h3>解鎖檔案</h3>
+<article class="v64-unlock-card">
+<div class="v64-file-index">FILE 01</div>
+<h4>1931：封存起點</h4>
+<p><span class="v60-year">1931</span> 是左鎮第一個出土化石的年份，所以系統將 1931 設為最初封存編號。它不是單純密碼，而是左鎮化石記憶被打開的起點。</p>
+</article>
+<article class="v64-unlock-card">
+<div class="v64-file-index">FILE 02</div>
+<h4>化石形成條件</h4>
+<p>遺骸不是直接變成化石。它需要經過掩埋、時間、壓力與礦物質滲入，才可能把生命痕跡保存成地層中的紀錄。</p>
+</article>
+<article class="v64-unlock-card">
+<div class="v64-file-index">FILE 03</div>
+<h4>真正任務</h4>
+<p>你復原的不是普通雞骨，而是把左鎮化石知識轉成互動體驗的教育任務。黑暗研究室只是包裝，真正被保存的是地方歷史與學習記憶。</p>
+</article>
+<div class="v60-archive-note">結論：供電中斷不是故障，而是封存系統重新啟動 1931 號檔案的異常反應。標本復原完成後，玩家才看見完整劇情。</div>
+</div>
 </section>
 </main>
 <div class="stage-hud" id="stageHud">
@@ -4480,9 +5622,9 @@ v44 集中資料設定
 =========================================================
 */
 const APP_CONFIG = {
-VERSION: "v59",
-URL_VERSION: "59",
-BUILD_TYPE: "拼圖完成整圖顯示版",
+VERSION: "v68",
+URL_VERSION: "68",
+BUILD_TYPE: "穩定修補與展示完成版",
 PLAYER_PIN: "1931",
 STAFF_PASSWORD: "1931",
 FORMAL_MODE_DEFAULT: true,
@@ -4502,11 +5644,58 @@ V54_SHARE_TEXT_ENABLED: true,
 V55_RARITY_ENABLED: true,
 V55_QA_PANEL_ENABLED: true,
 V56_ARCHIVE_ID_ENABLED: true,
-V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=59",
+V56_OFFICIAL_URL: "https://aaron0801.github.io/1931/?v=68",
 V57_MOBILE_SCROLL_FIX: true,
 V58_SAVE_FIX_ENABLED: true,
 V59_FULL_REVEAL_ENABLED: true,
-V59_REVEAL_IMAGE: "images/reveal/full-fossil-board.png"
+V59_REVEAL_IMAGE: "images/reveal/full-fossil-board.png",
+V60_STABLE_PUZZLE_ENABLED: true,
+V60_HARD_MODE: true,
+V60_MIN_WRONG_TO_HINT: 3,
+V61_BLACKOUT_ENABLED: true,
+V61_BLACKOUT_AT_PROGRESS: 5,
+V61_ERROR_FLASH_AT_WRONG: 2,
+V61_BLACKOUT_DURATION_MS: 1900,
+V62_SMOOTH_MODE: true,
+V62_SHAKE_LIMIT: 2,
+V62_EFFECT_THROTTLE_MS: 520,
+V62_DISABLE_HEAVY_FILTERS: true,
+V63_MASK_REVEAL_ENABLED: true,
+V63_BOARD_IMAGE: "images/reveal/full-fossil-board.png",
+V64_EXHIBITION_MODE: true,
+V64_COLLAPSE_PUZZLE_NOTES: true,
+V64_UNLOCK_FILES_ENABLED: true,
+V65_AUTOSAVE_ENABLED: true,
+V65_SAVE_KEY: "fifthResearcher_v68_autosave",
+V65_SAVE_MAX_AGE_MS: 43200000,
+V66_EXPERIENCE_OPTIMIZED: true,
+V66_MAX_HEARTS: 5,
+V66_INITIAL_HEARTS: 5,
+V66_PUZZLE_ERRORS_PER_HEART: 2,
+V66_SEQUENCE_MODE: true,
+V66_RESTORE_ORDER: ["chest", "neck", "skull", "pelvis", "leftWing", "rightWing", "leftLeg", "rightLeg", "tail"],
+V66_SCAN_LIMIT: 2,
+V66_SCAN_FEAR: 0.15,
+V66_SCAN_REVEAL_MS: 2100,
+V66_MEMORY_CHALLENGE: true,
+V66_KNOWLEDGE_CARDS: true,
+V66_EMERGENCY_NO_GAMEOVER: true,
+V67_AI_ASSISTANT_ENABLED: true,
+V67_AI_LOCAL_ONLY: true,
+V67_AI_PANEL_DEFAULT_OPEN: true,
+V67_AI_REPORT_ENABLED: true,
+V67_AI_QA_ENABLED: true,
+V67_AI_MAX_LOGS: 8,
+V68_STABILITY_PATCH: true,
+V68_CLEAN_RESTART_URL: true,
+V68_AI_COLLAPSIBLE: true,
+V68_RESEARCH_LOG_ENABLED: true,
+V68_ENHANCED_ASSET_CHECK: true,
+V68_BONE_FALLBACK_ENABLED: true,
+V68_DIFFICULTY_MODE_ENABLED: true,
+V68_REDUCED_HORROR_ENABLED: true,
+V68_SIMPLE_SCAN_LIMIT: 3,
+V68_STANDARD_SCAN_LIMIT: 2
 };
 const SOUND_CONFIG = {
 ambient: "sounds/ambient.mp3",
@@ -5076,8 +6265,9 @@ this.initAudio();
 }
 };
 const Game = {
+v60HistoricalNote: "1931 是左鎮第一個出土化石的年份，也是本遊戲封存檔案編號的起點。",
 playerName: "觀測者",
-hearts: 3,
+hearts: 5,
 selectedBone: null,
 placedBones: 0,
 flippedCards: 0,
@@ -5114,6 +6304,33 @@ reducedMotion: false,
 staffLogs: [],
 v57ScrollFixBound: false,
 v59RevealShown: false,
+v60PuzzleScrollLock: false,
+v60WrongCount: 0,
+v61BlackoutTriggered: false,
+v61FinishBlackoutTriggered: false,
+v61ErrorFlashTriggered: false,
+v61PowerLocked: false,
+v62LastEffectAt: 0,
+v62ShakeCount: 0,
+v62ScrollRestorePending: false,
+v65SolvedBones: [],
+v65SaveTimer: null,
+v65AutoSaveBound: false,
+v65Restoring: false,
+scanUses: 0,
+puzzleSoftErrors: 0,
+sequenceErrors: 0,
+emergencyMode: false,
+lastPlacedBone: null,
+v66KnowledgeSeen: [],
+v66MemoryChallengeDone: false,
+v66MemoryChallengePending: false,
+v66MemoryTarget: null,
+v66MemoryChoices: [],
+v67AiEvents: [],
+v68AiCollapsed: false,
+v68Difficulty: "standard",
+v68HorrorMode: "standard",
 audioDirectorEnabled: true,
 audioDirectorTimer: null,
 audioIntensity: "normal",
@@ -5124,14 +6341,17 @@ bones: BONE_CONFIG,
 preloadCoreAssets() {
 try {
 const urls = this.imageAssetList ? this.imageAssetList() : [];
-urls.forEach(src => {
-if (!src) return;
+const queue = urls.filter(Boolean).slice(0, APP_CONFIG.V62_SMOOTH_MODE ? 6 : urls.length);
+queue.forEach((src, index) => {
+setTimeout(() => {
 const img = new Image();
 img.decoding = "async";
-img.loading = "eager";
+img.loading = index < 2 ? "eager" : "lazy";
 img.src = src + "?preload=" + APP_CONFIG.URL_VERSION;
+img.decode?.().catch(() => {});
+}, APP_CONFIG.V62_SMOOTH_MODE ? index * 90 : 0);
 });
-this.addStaffLog("核心圖片預載完成：" + urls.length + " 項");
+this.addStaffLog("核心圖片分批預載完成：" + queue.length + " 項");
 } catch (err) {
 this.addStaffLog("核心圖片預載略過：" + (err?.message || err), true);
 }
@@ -5149,6 +6369,7 @@ this.switchScreen("screen-clue");
 return;
 }
 this.v59RevealShown = true;
+this.v63RevealAllMasks();
 const screen = document.getElementById("screen-puzzle");
 const panel = document.getElementById("v59-full-reveal");
 const board = document.getElementById("game-board");
@@ -5158,14 +6379,14 @@ const img = document.getElementById("v59-reveal-img");
 if (screen) screen.classList.add("v59-reveal-open");
 if (board) board.classList.add("v59-completed");
 if (btn) btn.style.display = "none";
-if (log) log.innerHTML = "<span class='text-warning'>完整標本復原完成。請檢查骨頭背面刻痕。</span>";
+if (log) log.innerHTML = "<span class='text-warning'>完整標本復原完成。1931 是左鎮第一個出土化石的年份。請檢查骨頭背面刻痕。</span>";
 if (img && APP_CONFIG.V59_REVEAL_IMAGE) {
 img.src = APP_CONFIG.V59_REVEAL_IMAGE + "?v=" + APP_CONFIG.URL_VERSION;
 }
 if (panel) {
 panel.classList.add("show");
 setTimeout(() => {
-panel.scrollIntoView({block:"center", inline:"nearest", behavior:"smooth"});
+panel.scrollIntoView({block:"nearest", inline:"nearest", behavior:"smooth"});
 }, 80);
 }
 Engine.play("correct");
@@ -5179,9 +6400,1098 @@ const screen = document.getElementById("screen-puzzle");
 if (screen) screen.classList.remove("v59-reveal-open");
 this.switchScreen("screen-clue");
 },
+v60RememberPuzzleViewport() {
+if (!APP_CONFIG.V60_STABLE_PUZZLE_ENABLED) return;
+this.v60PuzzleScrollLock = true;
+this.v60PuzzleScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+document.body.classList.add("v60-placing");
+},
+v60RestorePuzzleViewport() {
+if (!APP_CONFIG.V60_STABLE_PUZZLE_ENABLED) return;
+const y = this.v60PuzzleScrollY || window.scrollY || 0;
+if (APP_CONFIG.V62_SMOOTH_MODE) {
+if (this.v62ScrollRestorePending) return;
+this.v62ScrollRestorePending = true;
+requestAnimationFrame(() => {
+this.v62FastScrollTo(y);
+document.body.classList.remove("v60-placing");
+this.v60PuzzleScrollLock = false;
+this.v62ScrollRestorePending = false;
+});
+return;
+}
+requestAnimationFrame(() => {
+window.scrollTo({top: y, left: 0, behavior: "auto"});
+setTimeout(() => {
+window.scrollTo({top: y, left: 0, behavior: "auto"});
+document.body.classList.remove("v60-placing");
+this.v60PuzzleScrollLock = false;
+}, 80);
+});
+},
+v60MakePuzzleHarder() {
+if (!APP_CONFIG.V60_HARD_MODE) return;
+const board = document.getElementById("game-board");
+if (board) board.classList.add("v60-hard-mode");
+// 加難：骨位初期降低提示亮度，錯三次後再變明顯。
+document.documentElement.style.setProperty("--v60-slot-opacity", this.v60WrongCount >= APP_CONFIG.V60_MIN_WRONG_TO_HINT ? ".86" : ".46");
+},
+v60WrongAttempt() {
+if (!APP_CONFIG.V60_HARD_MODE) return;
+this.v60WrongCount += 1;
+this.v60MakePuzzleHarder();
+if (this.v60WrongCount === APP_CONFIG.V60_MIN_WRONG_TO_HINT) {
+Engine.toast("系統偵測多次錯誤，方位提示已增強。");
+this.addStaffLog("v60 加難模式：已開啟方位提示。");
+}
+},
+v60InjectStoryEnding() {
+const story = document.getElementById("v60-story-card");
+if (!story) return;
+story.style.display = "block";
+},
+v61SetBlackoutText(title, msg, code = "ERROR 1931") {
+const titleEl = document.getElementById("v61-blackout-title");
+const msgEl = document.getElementById("v61-blackout-msg");
+const codeEl = document.getElementById("v61-blackout-code");
+if (titleEl) titleEl.textContent = title;
+if (msgEl) msgEl.textContent = msg;
+if (codeEl) codeEl.textContent = code;
+},
+v61TriggerBlackout(type = "mid") {
+if (!APP_CONFIG.V61_BLACKOUT_ENABLED || this.v61PowerLocked) return;
+const layer = document.getElementById("v61-blackout-layer");
+if (!layer) return;
+this.v61PowerLocked = true;
+document.body.classList.add("v61-power-off");
+layer.classList.remove("recovering");
+if (type === "finish") {
+this.v61SetBlackoutText("標本已回應", "復原完成。1931 號封存檔案重新開啟。", "ARCHIVE 1931");
+} else {
+this.v61SetBlackoutText("第七層供電中斷", "標本固定程序暫停。左鎮化石紀錄回應中。", "ERROR 1931");
+}
+layer.classList.add("show");
+if (!APP_CONFIG.V62_SMOOTH_MODE || this.v62CanRunEffect(850)) Engine.impact("glitch");
+try { Engine.play("blackout"); } catch (err) {}
+setTimeout(() => {
+layer.classList.add("recovering");
+document.body.classList.remove("v61-power-off");
+setTimeout(() => {
+layer.classList.remove("show", "recovering");
+this.v61PowerLocked = false;
+if (type === "finish") {
+this.v61FinishSequence();
+} else {
+Engine.toast("備用電源啟動，請完成定位確認。");
+this.addStaffLog("v61 中段斷電事件已完成，v66 記憶挑戰待確認。");
+setTimeout(() => this.v66OpenMemoryChallenge(), 260);
+}
+}, 520);
+}, APP_CONFIG.V61_BLACKOUT_DURATION_MS || 2200);
+},
+v61MaybeTriggerMidBlackout() {
+if (!APP_CONFIG.V61_BLACKOUT_ENABLED || this.v61BlackoutTriggered) return;
+const progress = this.correctBones?.size || this.placedBones || 0;
+if (progress >= APP_CONFIG.V61_BLACKOUT_AT_PROGRESS) {
+this.v61BlackoutTriggered = true;
+setTimeout(() => this.v61TriggerBlackout("mid"), 220);
+}
+},
+v61TriggerErrorFlash() {
+if (!APP_CONFIG.V61_BLACKOUT_ENABLED || this.v61ErrorFlashTriggered) return;
+if ((this.v60WrongCount || 0) < APP_CONFIG.V61_ERROR_FLASH_AT_WRONG) return;
+this.v61ErrorFlashTriggered = true;
+document.body.classList.add("v61-error-flash");
+if (!APP_CONFIG.V62_SMOOTH_MODE || this.v62CanRunEffect(900)) {
+Engine.impact("glitch");
+}
+Engine.toast("ERROR 1931：骨位資料不一致。");
+this.addStaffLog("v61 錯誤閃燈事件已觸發。");
+setTimeout(() => document.body.classList.remove("v61-error-flash"), APP_CONFIG.V62_SMOOTH_MODE ? 620 : 960);
+},
+v61TriggerBoardShake() {
+if (!APP_CONFIG.V61_BLACKOUT_ENABLED) return;
+if (APP_CONFIG.V62_SMOOTH_MODE) {
+if (this.v62ShakeCount >= (APP_CONFIG.V62_SHAKE_LIMIT || 2)) return;
+if (!this.v62CanRunEffect(760)) return;
+this.v62ShakeCount += 1;
+}
+document.body.classList.add("v61-board-shake");
+setTimeout(() => document.body.classList.remove("v61-board-shake"), APP_CONFIG.V62_SMOOTH_MODE ? 280 : 460);
+},
+v61FinishSequence() {
+if (!APP_CONFIG.V61_BLACKOUT_ENABLED) {
+this.v59ShowFullReveal();
+return;
+}
+if (this.v61FinishBlackoutTriggered) {
+this.v59ShowFullReveal();
+return;
+}
+this.v61FinishBlackoutTriggered = true;
+setTimeout(() => this.v61TriggerBlackout("finish"), 260);
+},
+v62EnableSmoothMode() {
+if (!APP_CONFIG.V62_SMOOTH_MODE) return;
+document.body.classList.add("v62-smooth-mode");
+this.addStaffLog("v62 流暢模式已啟用：降低濾鏡、限制震動、減少重繪。");
+},
+v62CanRunEffect(wait = APP_CONFIG.V62_EFFECT_THROTTLE_MS || 520) {
+if (!APP_CONFIG.V62_SMOOTH_MODE) return true;
+const now = performance.now();
+if (now - (this.v62LastEffectAt || 0) < wait) return false;
+this.v62LastEffectAt = now;
+return true;
+},
+v62FastScrollTo(y) {
+if (!APP_CONFIG.V62_SMOOTH_MODE) {
+window.scrollTo({top: y, left: 0, behavior: "auto"});
+return;
+}
+const current = window.scrollY || document.documentElement.scrollTop || 0;
+if (Math.abs(current - y) < 10) return;
+window.scrollTo({top: y, left: 0, behavior: "auto"});
+},
+v63HandleBoardImageError() {
+const img = document.getElementById("v63-board-img");
+const fallback = document.getElementById("v63-board-fallback");
+if (img) img.style.display = "none";
+if (fallback) fallback.style.display = "grid";
+this.addStaffLog("v63 完整圖遮罩底圖缺檔：images/reveal/full-fossil-board.png", true);
+},
+v63InitMaskBoard() {
+if (!APP_CONFIG.V63_MASK_REVEAL_ENABLED) return;
+const board = document.getElementById("game-board");
+if (board) board.classList.add("v63-mask-board");
+const img = document.getElementById("v63-board-img");
+if (img && APP_CONFIG.V63_BOARD_IMAGE) {
+img.src = APP_CONFIG.V63_BOARD_IMAGE + "?v=" + APP_CONFIG.URL_VERSION;
+}
+this.bones.forEach(b => {
+const mask = document.getElementById(`mask-${b.id}`);
+if (mask) {
+mask.classList.remove("revealed");
+mask.setAttribute("data-bone", b.id);
+}
+const slot = document.getElementById(`slot-${b.id}`);
+if (slot) {
+slot.classList.remove("filled", "just-filled", "snap-locked");
+slot.innerHTML = "";
+this.addSlotLabel(slot, b.name);
+}
+});
+},
+v63RevealPiece(id, label = "") {
+if (!APP_CONFIG.V63_MASK_REVEAL_ENABLED) return;
+const mask = document.getElementById(`mask-${id}`);
+if (mask) {
+mask.classList.add("revealed");
+mask.setAttribute("aria-hidden", "true");
+}
+const slot = document.getElementById(`slot-${id}`);
+if (slot) {
+slot.classList.add("filled", "just-filled", "snap-locked");
+slot.innerHTML = "";
+this.addSlotLabel(slot, label || id);
+}
+const board = document.getElementById("game-board");
+if (board && this.placedBones + 1 >= this.bones.length) {
+board.classList.add("v63-complete");
+}
+setTimeout(() => {
+if (slot) slot.classList.remove("just-filled", "snap-locked");
+}, 420);
+},
+v63RevealAllMasks() {
+if (!APP_CONFIG.V63_MASK_REVEAL_ENABLED) return;
+this.bones.forEach(b => this.v63RevealPiece(b.id, b.name));
+const board = document.getElementById("game-board");
+if (board) board.classList.add("v63-complete");
+},
+v68Init() {
+this.v68SetDifficulty(this.v68Difficulty || "standard", true);
+this.v68SetHorrorMode(this.v68HorrorMode || "standard", true);
+this.v68ToggleAI(this.v68AiCollapsed ? "collapse" : "expand", true);
+this.v68UpdateButtons();
+},
+v68HandleCoverMissing(img) {
+if (img) img.style.display = "none";
+const fallback = document.getElementById("v68CoverFallback");
+if (fallback) fallback.classList.add("show");
+this.addStaffLog?.("首頁圖缺檔：images/cover.jpg", true);
+},
+v68ToggleAI(force, silent = false) {
+const panel = document.getElementById("v67-ai-panel");
+const btn = document.getElementById("v68-ai-toggle");
+if (!panel) return;
+if (force === "collapse") this.v68AiCollapsed = true;
+else if (force === "expand") this.v68AiCollapsed = false;
+else this.v68AiCollapsed = !this.v68AiCollapsed;
+panel.classList.toggle("collapsed", !!this.v68AiCollapsed);
+if (btn) btn.textContent = this.v68AiCollapsed ? "展開" : "收合";
+if (!silent) {
+Engine.play("click");
+this.v65ScheduleSave?.();
+}
+},
+v68SetDifficulty(mode = "standard", silent = false) {
+this.v68Difficulty = mode === "simple" ? "simple" : "standard";
+const isSimple = this.v68Difficulty === "simple";
+APP_CONFIG.V66_SEQUENCE_MODE = !isSimple;
+APP_CONFIG.V66_SCAN_LIMIT = isSimple ? (APP_CONFIG.V68_SIMPLE_SCAN_LIMIT || 3) : (APP_CONFIG.V68_STANDARD_SCAN_LIMIT || 2);
+document.body.classList.toggle("v68-simple-mode", isSimple);
+this.v68UpdateButtons();
+this.v66RenderSequenceStrip?.();
+this.v66UpdateSelectionUI?.();
+this.v66UpdateScanButton?.();
+this.v66UpdateTask?.();
+if (!silent) {
+Engine.toast(isSimple ? "簡單體驗：可自由復原，AI 掃描 3 次。" : "標準挑戰：需依順序復原，AI 掃描 2 次。");
+this.v67RecordAI?.("mode", isSimple ? "AI 設定：簡單體驗已啟用，降低卡關風險。" : "AI 設定：標準挑戰已啟用，復原順序將被檢查。");
+this.v65ScheduleSave?.();
+}
+},
+v68SetHorrorMode(mode = "standard", silent = false) {
+this.v68HorrorMode = mode === "reduced" ? "reduced" : "standard";
+const reduced = this.v68HorrorMode === "reduced";
+document.body.classList.toggle("v68-reduced-horror", reduced);
+APP_CONFIG.V61_BLACKOUT_DURATION_MS = reduced ? 1050 : 1900;
+APP_CONFIG.V66_SCAN_FEAR = reduced ? .08 : .15;
+APP_CONFIG.V50_AUDIO_INTENSITY = reduced ? "low" : "normal";
+this.audioIntensity = reduced ? "low" : "normal";
+this.v68UpdateButtons();
+this.v50UpdateAudioUI?.();
+if (!silent) {
+Engine.toast(reduced ? "降低恐怖模式：減少閃爍與壓迫感。" : "標準恐怖模式：恢復完整氣氛。");
+this.v67RecordAI?.("mode", reduced ? "AI 設定：降低恐怖模式已啟用，適合教室或展場。" : "AI 設定：標準恐怖模式已啟用。");
+this.v65ScheduleSave?.();
+}
+},
+v68UpdateButtons() {
+const diffSimple = document.getElementById("difficulty-simple");
+const diffStd = document.getElementById("difficulty-standard");
+if (diffSimple) diffSimple.classList.toggle("active", this.v68Difficulty === "simple");
+if (diffStd) diffStd.classList.toggle("active", this.v68Difficulty !== "simple");
+const horrorStd = document.getElementById("horror-standard");
+const horrorReduced = document.getElementById("horror-reduced");
+if (horrorStd) horrorStd.classList.toggle("active", this.v68HorrorMode !== "reduced");
+if (horrorReduced) horrorReduced.classList.toggle("active", this.v68HorrorMode === "reduced");
+},
+v68RegisterKnowledge(id) {
+if (!APP_CONFIG.V66_KNOWLEDGE_CARDS || !id) return false;
+this.v66KnowledgeSeen = this.v66KnowledgeSeen || [];
+if (!this.v66KnowledgeSeen.includes(id)) {
+this.v66KnowledgeSeen.push(id);
+this.v65ScheduleSave?.();
+return true;
+}
+return false;
+},
+v68OpenResearchLog() {
+const modal = document.getElementById("v68ResearchModal");
+const list = document.getElementById("v68ResearchList");
+const summary = document.getElementById("v68ResearchSummary");
+if (!modal || !list) return;
+const map = this.v66KnowledgeMap?.() || {};
+const seen = this.v66KnowledgeSeen || [];
+if (summary) summary.textContent = `已解鎖紀錄 ${seen.length} / ${this.bones.length}`;
+list.innerHTML = this.bones.map(b => {
+const data = map[b.id] || {title:b.name, body:"此紀錄尚未建立。"};
+const unlocked = seen.includes(b.id);
+return `<div class="v68-research-item ${unlocked ? "" : "locked"}"><b>${unlocked ? data.title : "未解鎖：" + b.name}</b>${unlocked ? data.body : "完成此部位復原後，才會解鎖研究紀錄。"}</div>`;
+}).join("");
+modal.classList.add("show");
+Engine.play("click");
+},
+v68CloseResearchLog() {
+const modal = document.getElementById("v68ResearchModal");
+if (modal) modal.classList.remove("show");
+Engine.play("click");
+},
+v68OpenPendingMemoryChallenge() {
+if (!this.v66MemoryChallengePending || !this.v66MemoryTarget) return;
+const modal = document.getElementById("v66MemoryModal");
+const options = document.getElementById("v66MemoryOptions");
+const q = document.getElementById("v66MemoryQuestion");
+if (!modal || !options) return;
+const choices = Array.isArray(this.v66MemoryChoices) && this.v66MemoryChoices.length
+? this.v66MemoryChoices
+: [this.v66MemoryTarget, ...this.bones.map(b => b.id).filter(id => id !== this.v66MemoryTarget).slice(0, 2)];
+this.v66MemoryChoices = choices;
+if (q) q.textContent = "剛才停電前，最後完成的部位是？";
+options.innerHTML = choices.map(id => `<button class="btn secondary" onclick="Game.v66AnswerMemory('${id}')">${this.v66GetBoneLabel(id)}</button>`).join("");
+modal.classList.add("show");
+},
+v68CheckStorage() {
+try {
+const key = "__v68_storage_test__";
+localStorage.setItem(key, "ok");
+localStorage.removeItem(key);
+return {type:"SAVE", src:"localStorage", ok:true, level:"CRIT", note:"自動保存可用"};
+} catch (err) {
+return {type:"SAVE", src:"localStorage", ok:false, level:"CRIT", note:"自動保存不可用；進度可能無法恢復"};
+}
+},
+restartForNextPlayer() {
+Engine.toast("正在清除封存紀錄，準備下一位玩家。");
+try {
+this.v65ClearState?.();
+localStorage.removeItem("fifthResearcherState");
+sessionStorage.clear();
+} catch (err) {}
+setTimeout(() => {
+window.location.href = window.location.pathname + "?v=" + APP_CONFIG.URL_VERSION + "&restart=" + Date.now();
+}, 180);
+},
+v67Init() {
+if (!APP_CONFIG.V67_AI_ASSISTANT_ENABLED) return;
+document.body.classList.add("v67-ai-active");
+this.v67AiEvents = this.v67AiEvents || [];
+this.v67UpdateAI(this.v65GetCurrentScreenId?.() || "screen-title");
+},
+v67RecordAI(event, message) {
+if (!APP_CONFIG.V67_AI_ASSISTANT_ENABLED) return;
+this.v67AiEvents = this.v67AiEvents || [];
+this.v67AiEvents.unshift({
+event,
+message,
+time: Date.now()
+});
+this.v67AiEvents = this.v67AiEvents.slice(0, APP_CONFIG.V67_AI_MAX_LOGS || 8);
+this.v67SetAI(message, event);
+this.v65ScheduleSave?.();
+},
+v67SetAI(message, mode = "observe") {
+const panel = document.getElementById("v67-ai-panel");
+const text = document.getElementById("v67-ai-text");
+const mood = document.getElementById("v67-ai-mood");
+if (!text || !mood) return;
+const hearts = Math.max(0, this.hearts || 0);
+const mistakes = this.mistakeTotal || 0;
+const emergency = this.emergencyMode || hearts <= 0;
+let label = "OBSERVING";
+if (emergency) label = "EMERGENCY SEAL";
+else if (mode === "scan") label = "AI SCANNING";
+else if (mode === "wrong" || mistakes >= 4) label = "RISK RISING";
+else if (mode === "correct") label = "RESTORING";
+else if (mode === "ending") label = "REPORT READY";
+text.textContent = message || this.v67GetAIMessage();
+mood.textContent = label;
+if (panel) {
+panel.classList.toggle("alert", emergency || mistakes >= 4 || mode === "wrong");
+}
+},
+v67GetAIMessage(targetId = this.v65GetCurrentScreenId?.() || "screen-title") {
+const mistakes = this.mistakeTotal || 0;
+const scans = this.scanUses || 0;
+const next = this.v66GetRequiredBoneId?.();
+const nextLabel = next ? this.v66GetBoneLabel(next) : "";
+if (this.emergencyMode || this.hearts <= 0) {
+return "AI 判讀：穩定度歸零，系統已轉入緊急封存。任務仍可完成，但最終紀錄會被標記為高風險樣本。";
+}
+if (targetId === "screen-title") {
+return "AI 待命：輸入研究員代號後，系統會追蹤復原順序、錯誤紀錄、掃描次數與封存結果。";
+}
+if (targetId === "screen-puzzle") {
+if (this.placedBones >= this.bones.length) {
+return "AI 判讀：骨架復原完成。下一步請檢查骨頭背面刻痕，找出封存年份。";
+}
+if (mistakes >= 5) {
+return `AI 警告：錯誤紀錄已達 ${mistakes} 次。建議暫停亂試，先確認下一塊應為「${nextLabel}」。`;
+}
+if (this.placedBones >= 7) {
+return "AI 異常提示：標本接近完整，封存檔案開始出現自動覆寫。請保持復原順序穩定。";
+}
+if (this.placedBones >= 5) {
+return "AI 監測：中段復原已完成，斷電後的記憶校驗會影響穩定度。";
+}
+return next ? `AI 建議：目前應先復原「${nextLabel}」。若不確定，可使用 AI 標本掃描，但會留下掃描紀錄。` : "AI 建議：標本主軸已接近完成。";
+}
+if (targetId === "screen-clue") {
+const found = this.markedCluesFound || 0;
+const total = this.getMarkedClueTotal?.() || 4;
+if (this.orderSolved) return "AI 判讀：刻痕順序已通過。封存年份為 1931，請前往封存箱。";
+return `AI 建議：目前找到刻痕 ${found} / ${total}。請翻看所有骨頭背面，再依身體由上到下排序。`;
+}
+if (targetId === "screen-box") {
+return "AI 判讀：封存箱密碼不是隨機數字。1931 對應左鎮第一個出土化石年份，是本案封存起點。";
+}
+if (targetId === "screen-ending") {
+return "AI 報告：本次封存分析完成。系統已依錯誤、掃描、穩定度與知識解鎖產生最終判定。";
+}
+return "AI 研究助理持續監測中。";
+},
+v67UpdateAI(targetId = this.v65GetCurrentScreenId?.() || "screen-title") {
+if (!APP_CONFIG.V67_AI_ASSISTANT_ENABLED) return;
+this.v67SetAI(this.v67GetAIMessage(targetId), "observe");
+},
+v67UseAIScan() {
+if (!APP_CONFIG.V67_AI_ASSISTANT_ENABLED) {
+this.v66UseRedScan();
+return;
+}
+const max = APP_CONFIG.V66_SCAN_LIMIT || 2;
+const targetId = this.v66GetRequiredBoneId?.() || this.bones.find(b => !this.v65SolvedBones.includes(b.id))?.id;
+if ((this.scanUses || 0) >= max) {
+Engine.toast("AI 標本掃描次數已用完。");
+this.v67SetAI("AI 掃描拒絕：本次體驗的掃描額度已用完。", "wrong");
+return;
+}
+if (!targetId) {
+Engine.toast("AI 掃描沒有可標示的目標。");
+this.v67SetAI("AI 掃描中止：目前沒有尚未復原的標本區域。", "observe");
+return;
+}
+const before = this.scanUses || 0;
+this.v67RecordAI("scan", "AI 掃描啟動：系統將短暫標出下一個建議復原區域。此動作會被寫入封存報告。");
+this.v66UseRedScan();
+if ((this.scanUses || 0) > before) {
+this.v67SetAI(`AI 掃描完成：下一個建議復原區域為「${this.v66GetBoneLabel(targetId)}」。`, "scan");
+}
+},
+v67AskAI(topic) {
+if (!APP_CONFIG.V67_AI_QA_ENABLED) return;
+const modal = document.getElementById("v67AiModal");
+const title = document.getElementById("v67AiModalTitle");
+const body = document.getElementById("v67AiModalBody");
+const kicker = document.getElementById("v67AiModalKicker");
+if (!modal || !title || !body) return;
+let t = "AI 研究助理";
+let b = "目前沒有可讀取的分析資料。";
+let k = "LOCAL AI QUERY";
+const next = this.v66GetRequiredBoneId?.();
+const nextLabel = next ? this.v66GetBoneLabel(next) : "無";
+if (topic === "next") {
+t = "下一步判讀";
+k = "LOCAL STRATEGY";
+if (this.v65GetCurrentScreenId?.() === "screen-puzzle") {
+b = next
+? `目前建議先復原「${nextLabel}」。原因是標本需要先建立主軸，再向左右翼骨、腿骨與尾端延伸。若你亂放，系統會記錄錯誤，但不一定每次扣穩定度。`
+: "骨架已完成。請前往骨頭背面頁，翻找四個有羅馬數字刻痕的骨頭。";
+} else if (this.v65GetCurrentScreenId?.() === "screen-clue") {
+b = this.orderSolved
+? "刻痕排序已完成。請前往封存箱輸入 1931。"
+: "請把有刻痕的骨頭依照身體由上到下排序。排序線索會指向封存年份。";
+} else if (this.v65GetCurrentScreenId?.() === "screen-box") {
+b = "封存年份為 1931。輸入後即可開啟封存箱。";
+} else {
+b = "先啟動復原程序，AI 才能依照你的操作狀態給出下一步。";
+}
+}
+if (topic === "1931") {
+t = "1931 為什麼重要";
+k = "ARCHIVE KNOWLEDGE";
+b = "1931 是左鎮第一個出土化石的年份，因此被設定為封存箱密碼。它不是普通數字，而是把地方化石記憶轉成互動任務的起點。";
+}
+if (topic === "fossil") {
+t = "化石形成條件";
+k = "FOSSIL KNOWLEDGE";
+b = "化石形成通常需要遺骸被快速掩埋，經過足夠時間、地層壓力，以及礦物質滲入或替代。遊戲把這些知識轉成復原標本、找線索與開啟封存檔案的流程。";
+}
+if (topic === "risk") {
+t = "目前風險判讀";
+k = "RISK ANALYSIS";
+b = `目前錯誤紀錄 ${this.mistakeTotal || 0} 次，AI 掃描 ${this.scanUses || 0} 次，穩定度 ${Math.max(0, this.hearts || 0)} / ${APP_CONFIG.V66_MAX_HEARTS || 5}。錯誤越多，結尾越容易被標記為異常接觸或污染樣本。`;
+}
+if (kicker) kicker.textContent = k;
+title.textContent = t;
+body.textContent = b;
+modal.classList.add("show");
+Engine.play("click");
+this.v67RecordAI("query", `AI 問答開啟：${t}`);
+},
+v67CloseAI() {
+const modal = document.getElementById("v67AiModal");
+if (modal) modal.classList.remove("show");
+Engine.play("click");
+},
+v67RenderAIReport(data = this.getEndingData?.()) {
+if (!APP_CONFIG.V67_AI_REPORT_ENABLED || !data) return;
+const report = document.getElementById("v67AiReport");
+if (!report) return;
+const stability = document.getElementById("v67-report-stability");
+const risk = document.getElementById("v67-report-risk");
+const scan = document.getElementById("v67-report-scan");
+const knowledge = document.getElementById("v67-report-knowledge");
+const body = document.getElementById("v67-report-body");
+const max = APP_CONFIG.V66_MAX_HEARTS || 5;
+const stableText = `${Math.max(0, data.hearts)} / ${max}`;
+const riskText = data.emergency ? "緊急封存" : data.mistakes >= 6 ? "高" : data.mistakes >= 3 ? "中" : "低";
+const scanText = `${data.scanUses || 0} 次`;
+const knowledgeCount = (this.v66KnowledgeSeen || []).length;
+const knowledgeText = `${knowledgeCount} / ${this.bones.length}`;
+if (stability) stability.textContent = stableText;
+if (risk) risk.textContent = riskText;
+if (scan) scan.textContent = scanText;
+if (knowledge) knowledge.textContent = knowledgeText;
+let summary = "";
+if (data.emergency) {
+summary = "AI 判定：本次復原在穩定度歸零後仍完成，系統保留教育流程，但將本次操作列為高風險封存紀錄。";
+} else if (data.mistakes <= 1 && (data.scanUses || 0) === 0) {
+summary = "AI 判定：復原順序穩定、錯誤極低，玩家能在少量提示下理解標本復原邏輯。";
+} else if ((data.scanUses || 0) >= 2) {
+summary = "AI 判定：玩家多次依賴掃描，但仍完成標本復原。此結果適合說明提示系統如何降低學習挫折。";
+} else if (data.mistakes >= 6) {
+summary = "AI 判定：錯誤累積偏高，恐怖節奏與封存警告已有效製造壓力，但仍保留通關可能。";
+} else {
+summary = "AI 判定：本次體驗在挑戰與可完成性之間維持平衡，玩家完成復原並解鎖左鎮化石知識。";
+}
+if (body) body.textContent = summary;
+report.classList.add("show");
+this.v67SetAI("AI 報告完成：本次操作已轉換成封存分析紀錄，可作為展場結尾展示。", "ending");
+},
+v66Init() {
+if (!APP_CONFIG.V66_EXPERIENCE_OPTIMIZED) return;
+document.body.classList.add("v66-experience");
+this.hearts = Math.min(APP_CONFIG.V66_MAX_HEARTS || 5, Math.max(0, this.hearts || APP_CONFIG.V66_INITIAL_HEARTS || 5));
+this.v66RenderSequenceStrip();
+this.v66UpdateScanButton();
+this.v66UpdateSelectionUI();
+this.v66UpdateTask();
+this.updateHUD();
+},
+v66GetBoneLabel(id) {
+const bone = this.getBoneData(id);
+return bone?.displayName || bone?.name || id;
+},
+v66GetRequiredBoneId() {
+const order = APP_CONFIG.V66_RESTORE_ORDER || [];
+return order.find(id => !this.v65SolvedBones.includes(id)) || null;
+},
+v66RenderSequenceStrip() {
+const strip = document.getElementById("v66-sequence-strip");
+if (!strip) return;
+const required = this.v66GetRequiredBoneId();
+strip.innerHTML = (APP_CONFIG.V66_RESTORE_ORDER || []).map(id => {
+const cls = this.v65SolvedBones.includes(id) ? "done" : id === required ? "current" : "";
+return `<span class="v66-step-chip ${cls}">${this.v66GetBoneLabel(id)}</span>`;
+}).join("");
+},
+v66ClearSlotGuides() {
+document.querySelectorAll(".slot.v66-required, .slot.v66-possible, .slot.v66-scan-target").forEach(el => {
+el.classList.remove("v66-required", "v66-possible", "v66-scan-target");
+});
+document.querySelectorAll(".bone-item.v66-next").forEach(el => el.classList.remove("v66-next"));
+},
+v66UpdateSelectionUI() {
+this.v66ClearSlotGuides();
+const status = document.getElementById("v66-selection-status");
+const required = this.v66GetRequiredBoneId();
+const requiredSlot = required ? document.getElementById(`slot-${required}`) : null;
+const nextItem = required ? document.getElementById(`item-${required}`) : null;
+if (requiredSlot && !requiredSlot.classList.contains("filled")) requiredSlot.classList.add("v66-required");
+if (nextItem && !nextItem.classList.contains("used")) nextItem.classList.add("v66-next");
+if (!status) return;
+if (!this.selectedBone) {
+status.innerHTML = required
+? `目前選取：尚未選擇。建議下一塊：<b>${this.v66GetBoneLabel(required)}</b>`
+: "目前選取：標本已完成";
+return;
+}
+const label = this.v66GetBoneLabel(this.selectedBone);
+if (APP_CONFIG.V66_SEQUENCE_MODE && required && this.selectedBone !== required) {
+status.innerHTML = `目前選取：<b>${label}</b>。復原順序建議先放：<b>${this.v66GetBoneLabel(required)}</b>`;
+} else {
+status.innerHTML = `目前選取：<b>${label}</b>。請點擊對應位置完成復原。`;
+const slot = document.getElementById(`slot-${this.selectedBone}`);
+if (slot && !slot.classList.contains("filled")) slot.classList.add("v66-possible");
+}
+},
+v66UpdateScanButton() {
+const btn = document.getElementById("v66-scan-btn");
+if (!btn) return;
+const used = this.scanUses || 0;
+const max = APP_CONFIG.V66_SCAN_LIMIT || 2;
+btn.textContent = `啟動 AI 標本掃描 ${used} / ${max}`;
+btn.disabled = used >= max || this.placedBones >= this.bones.length;
+},
+v66UseRedScan() {
+if (!APP_CONFIG.V66_EXPERIENCE_OPTIMIZED) return;
+const max = APP_CONFIG.V66_SCAN_LIMIT || 2;
+if ((this.scanUses || 0) >= max) {
+Engine.toast("AI 標本掃描次數已用完。");
+return;
+}
+const targetId = this.v66GetRequiredBoneId() || this.bones.find(b => !this.v65SolvedBones.includes(b.id))?.id;
+if (!targetId) return;
+this.scanUses = (this.scanUses || 0) + 1;
+this.hintCount = (this.hintCount || 0) + 1;
+Engine.addFear(APP_CONFIG.V66_SCAN_FEAR || .15);
+Engine.play("glitch");
+Engine.toast("AI 標本掃描啟動 / 第七層正在記錄你的選擇");
+const slot = document.getElementById(`slot-${targetId}`);
+if (slot) {
+slot.classList.add("v66-scan-target");
+setTimeout(() => slot.classList.remove("v66-scan-target"), APP_CONFIG.V66_SCAN_REVEAL_MS || 2100);
+}
+const log = document.getElementById("puzzle-log");
+if (log) log.innerHTML = `<span class='text-warning'>AI 標本掃描指出下一個復原區域：${this.v66GetBoneLabel(targetId)}。提示使用會影響最終評級。</span>`;
+this.v66UpdateScanButton();
+this.v66UpdateTask();
+this.v65ScheduleSave();
+},
+v66UpdateTask(targetId = this.v65GetCurrentScreenId?.() || "screen-title") {
+const title = document.getElementById("v66-task-title");
+const desc = document.getElementById("v66-task-desc");
+if (!title || !desc) return;
+if (targetId === "screen-title") {
+title.textContent = "目前任務：進入第七層";
+desc.textContent = "輸入研究員代號後開始。系統會自動保存進度。";
+} else if (targetId === "screen-puzzle") {
+const next = this.v66GetRequiredBoneId();
+title.textContent = `目前任務：復原雞骨標本 ${this.placedBones} / ${this.bones.length}`;
+desc.textContent = next ? `建議下一塊：${this.v66GetBoneLabel(next)}。可使用 AI 標本掃描，但會影響評級。` : "標本已完成，請檢查骨頭背面刻痕。";
+} else if (targetId === "screen-clue") {
+title.textContent = `目前任務：翻找刻痕 ${this.markedCluesFound} / ${this.getMarkedClueTotal()}`;
+desc.textContent = this.orderSolved ? "刻痕排序已破譯，前往封存箱輸入 1931。" : "翻看九塊骨頭背面，找出有羅馬數字的四塊並排序。";
+} else if (targetId === "screen-box") {
+title.textContent = "目前任務：開啟封存箱";
+desc.textContent = "輸入四位數封存年份。排序線索會指向 1931。";
+} else if (targetId === "screen-ending") {
+title.textContent = "目前任務：取得封存紀錄";
+desc.textContent = "系統會依錯誤、提示、穩定度判定你的研究員評級。";
+}
+this.v67UpdateAI?.(targetId);
+},
+v66RegisterPuzzleMistake(message, kind = "bone") {
+this.mistakeTotal = (this.mistakeTotal || 0) + 1;
+if (kind === "sequence") this.sequenceErrors = (this.sequenceErrors || 0) + 1;
+this.puzzleSoftErrors = (this.puzzleSoftErrors || 0) + 1;
+this.wrongBoneCount = (this.wrongBoneCount || 0) + 1;
+this.v60WrongAttempt();
+this.v61TriggerErrorFlash();
+Engine.play("wrong");
+Engine.addFear(.055 + Math.min(.14, this.mistakeTotal * .012));
+Engine.toast(kind === "sequence" ? "復原順序錯誤" : "骨位不符");
+this.v67RecordAI?.('wrong', kind === "sequence" ? "AI 警告：復原順序與標本主軸不符。" : "AI 警告：骨位定位不一致，錯誤紀錄已增加。");
+const shouldDeduct = this.puzzleSoftErrors % (APP_CONFIG.V66_PUZZLE_ERRORS_PER_HEART || 2) === 0;
+if (shouldDeduct) {
+this.v66DeductHeart(message || "標本定位錯誤累積，穩定度下降。");
+} else {
+const log = document.getElementById("puzzle-log");
+if (log) log.innerHTML = `<span class='text-warning'>${message || "定位資料不一致。"} 這次只記錄錯誤，不扣穩定度。</span>`;
+this.v51PolishHit("soft");
+}
+if (this.mistakeTotal >= 2) document.body.classList.add("corrupted-ui");
+this.v66UpdateTask();
+this.v66UpdateSelectionUI();
+this.v65ScheduleSave();
+},
+v66DeductHeart(message) {
+this.hearts = Math.max(0, (this.hearts || 0) - 1);
+this.updateHUD();
+this.v51PolishHit("hard");
+this.v50AudioBeat(true);
+this.showDamageNotice(message || "封存程序出現排斥反應。");
+Engine.addFear(.10 + Math.min(.22, (this.mistakeTotal || 0) * .025));
+Engine.impact("wrong");
+if (this.hearts <= 0) {
+this.v66EnterEmergencyMode();
+}
+},
+v66EnterEmergencyMode() {
+if (this.emergencyMode) return;
+this.emergencyMode = true;
+document.body.classList.add("v66-emergency");
+Engine.toast("緊急封存模式啟動 / 任務可繼續，但結局將被標記");
+this.v67RecordAI?.('emergency', 'AI 判定：穩定度歸零，切換為緊急封存流程。');
+const log = document.getElementById("puzzle-log");
+if (log) log.innerHTML = "<span class='text-warning'>穩定度歸零。系統已啟動緊急封存模式，你仍可完成復原。</span>";
+this.v65ScheduleSave();
+},
+v66ShowKnowledgeCard(id) {
+if (!APP_CONFIG.V66_KNOWLEDGE_CARDS) return;
+if (this.v66KnowledgeSeen.includes(id)) return;
+const data = this.v66KnowledgeMap()[id];
+if (!data) return;
+this.v68RegisterKnowledge(id);
+const modal = document.getElementById("v66KnowledgeModal");
+const title = document.getElementById("v66KnowledgeTitle");
+const body = document.getElementById("v66KnowledgeBody");
+const kicker = document.getElementById("v66KnowledgeKicker");
+if (kicker) kicker.textContent = `RESTORATION NOTE / ${Math.min(this.placedBones, this.bones.length)} OF ${this.bones.length}`;
+if (title) title.textContent = data.title;
+if (body) body.textContent = data.body;
+if (modal) modal.classList.add("show");
+this.v65ScheduleSave();
+},
+v66CloseKnowledge() {
+const modal = document.getElementById("v66KnowledgeModal");
+if (modal) modal.classList.remove("show");
+},
+v66KnowledgeMap() {
+return {
+chest: {title:"胸骨復原完成", body:"鳥類胸骨發達，能提供翅膀肌肉附著位置。先建立胸骨，標本主軸會更穩定。"},
+neck: {title:"頸椎復原完成", body:"頸椎連接頭骨與軀幹，是判斷頭部位置與骨架方向的重要線索。"},
+skull: {title:"頭骨復原完成", body:"頭骨常用於辨識動物種類與頭部結構。復原頭骨後，標本的身份更明確。"},
+pelvis: {title:"骨盆復原完成", body:"骨盆連接後肢，能幫助觀察動物站立、移動與身體重心。"},
+leftWing: {title:"左翼骨復原完成", body:"翼骨顯示鳥類前肢結構。左右翼分開復原，能避免與胸骨區域混淆。"},
+rightWing: {title:"右翼骨復原完成", body:"左右翼骨互相對應，可作為判斷標本是否完整的重要依據。"},
+leftLeg: {title:"左腿骨復原完成", body:"腿骨與骨盆相連，能輔助理解後肢支撐與活動方式。"},
+rightLeg: {title:"右腿骨復原完成", body:"兩側腿骨完成後，標本下半部位置會被固定，接近完整復原。"},
+tail: {title:"尾端骨復原完成", body:"尾端骨雖小，但能補足骨盆後方結構。化石復原需要注意每一個細節。"}
+};
+},
+v66OpenMemoryChallenge() {
+if (!APP_CONFIG.V66_MEMORY_CHALLENGE || this.v66MemoryChallengeDone || !this.lastPlacedBone) return;
+if (this.v66MemoryChallengePending) {
+this.v68OpenPendingMemoryChallenge();
+return;
+}
+this.v66MemoryChallengePending = true;
+this.v66MemoryTarget = this.lastPlacedBone;
+const correct = this.v66MemoryTarget;
+const decoys = this.bones.map(b => b.id).filter(id => id !== correct).sort(() => Math.random() - .5).slice(0, 2);
+this.v66MemoryChoices = [correct, ...decoys].sort(() => Math.random() - .5);
+this.v68OpenPendingMemoryChallenge();
+this.v65ScheduleSave();
+},
+v66AnswerMemory(id) {
+const modal = document.getElementById("v66MemoryModal");
+if (modal) modal.classList.remove("show");
+const target = this.v66MemoryTarget || this.lastPlacedBone;
+this.v66MemoryChallengePending = false;
+this.v66MemoryChallengeDone = true;
+this.v66MemoryTarget = null;
+this.v66MemoryChoices = [];
+if (id === target) {
+this.hearts = Math.min(APP_CONFIG.V66_MAX_HEARTS || 5, (this.hearts || 0) + 1);
+this.updateHUD();
+Engine.play("correct");
+Engine.toast("定位資料恢復 / 穩定度回升");
+this.v67RecordAI?.('memory', 'AI 校驗：記憶挑戰通過，定位資料恢復。');
+} else {
+this.wrongBoneCount = (this.wrongBoneCount || 0) + 1;
+this.mistakeTotal = (this.mistakeTotal || 0) + 1;
+this.v67RecordAI?.('wrong', 'AI 校驗失敗：停電前復原記憶不一致。');
+this.loseHeart("記憶挑戰錯誤。定位資料遺失，穩定度下降。");
+}
+this.v66UpdateTask();
+this.v65ScheduleSave();
+},
+v66GetPerformanceTitle(data) {
+if (this.emergencyMode || data.rank === "X") return "緊急封存樣本";
+if (data.mistakes <= 1 && data.hints === 0) return "精準復原者";
+if (data.mistakes <= 3) return "封存研究員";
+if (data.mistakes <= 5) return "異常接觸者";
+return "第七層污染樣本";
+},
+v64PrepareExhibitionEnding() {
+const story = document.getElementById("v60-story-card");
+if (story) story.style.display = "block";
+const restart = document.getElementById("btn-restart");
+if (restart) restart.textContent = "重新開始 / 下一位玩家";
+},
+v65GetCurrentScreenId() {
+const active = document.querySelector(".screen.active");
+return active?.id || "screen-title";
+},
+v65CollectSolvedBones() {
+const fromDom = [...document.querySelectorAll(".slot.filled")]
+.map(el => (el.id || "").replace(/^slot-/, ""))
+.filter(Boolean);
+const merged = new Set([...(this.v65SolvedBones || []), ...fromDom]);
+return [...merged].filter(id => this.bones.some(b => b.id === id));
+},
+v65CollectFlippedClues() {
+return [...document.querySelectorAll(".clue-card.flipped")]
+.map(el => el.dataset.id)
+.filter(Boolean);
+},
+v65GetSaveState() {
+return {
+saveVersion: APP_CONFIG.URL_VERSION,
+savedAt: Date.now(),
+screenId: this.v65GetCurrentScreenId(),
+playerName: this.playerName,
+hearts: this.hearts,
+selectedBone: null,
+placedBones: this.placedBones,
+solvedBones: this.v65CollectSolvedBones(),
+flippedClues: this.v65CollectFlippedClues(),
+foundMarkedClues: this.foundMarkedClues || [],
+clueOrderIds: (this.clueOrder || []).map(c => c.id),
+orderSolved: this.orderSolved,
+orderMistakes: this.orderMistakes,
+boxAttempts: this.boxAttempts,
+boxUnlocked: this.boxUnlocked,
+hintCount: this.hintCount,
+mistakeTotal: this.mistakeTotal,
+wrongBoneCount: this.wrongBoneCount,
+wrongPinCount: this.wrongPinCount,
+v60WrongCount: this.v60WrongCount,
+v61BlackoutTriggered: this.v61BlackoutTriggered,
+v61ErrorFlashTriggered: this.v61ErrorFlashTriggered,
+v59RevealShown: this.v59RevealShown,
+scanUses: this.scanUses || 0,
+puzzleSoftErrors: this.puzzleSoftErrors || 0,
+sequenceErrors: this.sequenceErrors || 0,
+emergencyMode: !!this.emergencyMode,
+lastPlacedBone: this.lastPlacedBone,
+v66KnowledgeSeen: this.v66KnowledgeSeen || [],
+v66MemoryChallengeDone: !!this.v66MemoryChallengeDone,
+v66MemoryChallengePending: !!this.v66MemoryChallengePending,
+v66MemoryTarget: this.v66MemoryTarget || null,
+v66MemoryChoices: this.v66MemoryChoices || [],
+v68Difficulty: this.v68Difficulty || "standard",
+v68HorrorMode: this.v68HorrorMode || "standard",
+v68AiCollapsed: !!this.v68AiCollapsed,
+v67AiEvents: this.v67AiEvents || [],
+startTime: this.startTime,
+endingData: this.endingData,
+archiveCode: this.archiveCode,
+fear: Engine.fear || 0
+};
+},
+v65SaveStateNow() {
+if (!APP_CONFIG.V65_AUTOSAVE_ENABLED || this.v65Restoring) return;
+try {
+const state = this.v65GetSaveState();
+localStorage.setItem(APP_CONFIG.V65_SAVE_KEY, JSON.stringify(state));
+this.addStaffLog?.("v65 自動存檔：" + state.screenId);
+} catch (err) {
+this.addStaffLog?.("v65 自動存檔失敗：" + (err?.message || err), true);
+}
+},
+v65ScheduleSave() {
+if (!APP_CONFIG.V65_AUTOSAVE_ENABLED || this.v65Restoring) return;
+clearTimeout(this.v65SaveTimer);
+this.v65SaveTimer = setTimeout(() => this.v65SaveStateNow(), 90);
+},
+v65BindAutoSave() {
+if (!APP_CONFIG.V65_AUTOSAVE_ENABLED || this.v65AutoSaveBound) return;
+this.v65AutoSaveBound = true;
+window.addEventListener("beforeunload", () => this.v65SaveStateNow());
+document.addEventListener("visibilitychange", () => {
+if (document.hidden) this.v65SaveStateNow();
+}, {passive:true});
+setInterval(() => this.v65SaveStateNow(), 2200);
+},
+v65ClearState() {
+try {
+localStorage.removeItem(APP_CONFIG.V65_SAVE_KEY);
+localStorage.removeItem("fifthResearcher_v67_autosave");
+localStorage.removeItem("fifthResearcher_v66_autosave");
+localStorage.removeItem("fifthResearcherState");
+} catch (err) {}
+},
+v65DirectShowScreen(targetId) {
+const target = document.getElementById(targetId) || document.getElementById("screen-title");
+document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+target.classList.add("active");
+Engine.setStage(target.id);
+this.v49UpdateMiniMap(target.id);
+this.v51UpdateStatusLine(target.id);
+this.v50UpdateAudioUI();
+const hud = document.getElementById("hud");
+if (hud) {
+const showHud = !["screen-title", "screen-ending"].includes(target.id);
+hud.classList.toggle("active", showHud);
+}
+if (target.id === "screen-box") this.updateBoxState();
+if (target.id === "screen-ending") this.v64PrepareExhibitionEnding();
+window.scrollTo(0, 0);
+},
+v65ShowRestoreBadge() {
+const badge = document.getElementById("v65-restore-badge");
+if (!badge) return;
+badge.classList.add("show");
+setTimeout(() => badge.classList.remove("show"), 2300);
+},
+v65RestoreBoneState(state) {
+this.v65SolvedBones = Array.isArray(state.solvedBones) ? state.solvedBones : [];
+this.placedBones = Math.min(this.bones.length, this.v65SolvedBones.length || state.placedBones || 0);
+this.v65SolvedBones.forEach(id => {
+const bone = this.getBoneData(id);
+if (APP_CONFIG.V63_MASK_REVEAL_ENABLED) {
+this.v63RevealPiece(id, bone?.name || id);
+}
+const slot = document.getElementById(`slot-${id}`);
+if (slot) {
+slot.classList.add("filled");
+slot.innerHTML = "";
+this.addSlotLabel(slot, bone?.name || id);
+}
+const item = document.getElementById(`item-${id}`);
+if (item) item.classList.add("used");
+});
+this.updateBoneProgress();
+this.v66RenderSequenceStrip();
+this.v66UpdateSelectionUI();
+this.v66UpdateScanButton();
+if (this.placedBones >= this.bones.length) {
+const btn = document.getElementById("btn-to-clue");
+if (btn) btn.style.display = APP_CONFIG.V59_FULL_REVEAL_ENABLED ? "none" : "block";
+this.v63RevealAllMasks();
+}
+},
+v65RestoreClueState(state) {
+const flipped = Array.isArray(state.flippedClues) ? state.flippedClues : [];
+this.flippedCards = 0;
+this.markedCluesFound = 0;
+this.foundMarkedClues = [];
+flipped.forEach(id => {
+const card = document.querySelector(`.clue-card[data-id="${id}"]`);
+if (!card) return;
+card.classList.add("flipped");
+this.flippedCards += 1;
+if (card.dataset.marked === "1") {
+card.classList.add("marked-found");
+this.markedCluesFound += 1;
+this.registerMarkedClue(card);
+} else {
+card.classList.add("unmarked-found");
+}
+});
+if (this.foundMarkedClues.length >= this.getMarkedClueTotal()) {
+this.renderOrderPuzzle();
+}
+const orderIds = Array.isArray(state.clueOrderIds) ? state.clueOrderIds : [];
+if (orderIds.length) {
+this.clueOrder = orderIds
+.map(id => this.foundMarkedClues.find(c => c.id === id))
+.filter(Boolean);
+this.renderOrderPuzzle();
+}
+this.orderSolved = !!state.orderSolved;
+this.orderMistakes = Number(state.orderMistakes || 0);
+if (this.orderSolved) {
+const btn = document.getElementById("btn-to-box");
+const log = document.getElementById("order-log");
+if (btn) btn.style.display = "block";
+if (log) log.innerHTML = "<span class='text-warning'>排序正確。密碼路徑已被恢復。</span>";
+}
+this.updateClueStatus();
+this.v66UpdateTask("screen-clue");
+},
+v65RestoreBoxState(state) {
+this.boxAttempts = Number(state.boxAttempts || 0);
+this.boxUnlocked = !!state.boxUnlocked;
+this.updateBoxState();
+if (this.boxUnlocked) {
+const input = document.getElementById("pin-input");
+const btn = document.getElementById("btn-to-ending");
+const log = document.getElementById("pin-log");
+if (input) {
+input.value = APP_CONFIG.PLAYER_PIN;
+input.disabled = true;
+input.classList.add("pin-ok");
+}
+if (btn) btn.style.display = "block";
+if (log) {
+log.style.color = "var(--bone-light)";
+log.textContent = "驗證通過。封存箱開啟。";
+}
+}
+},
+v65RestoreEndingState(state) {
+if (state.endingData) {
+this.endingData = state.endingData;
+this.archiveCode = state.archiveCode || state.endingData.code || "";
+}
+const finalName = document.getElementById("final-name");
+const endingText = document.getElementById("ending-text");
+const restart = document.getElementById("btn-restart");
+const fallback = document.getElementById("fallback-img");
+if (finalName) finalName.textContent = this.playerName;
+if (endingText) endingText.innerHTML = "<span class='text-warning'>已從封存紀錄恢復。</span>";
+if (restart) restart.style.display = "block";
+if (fallback) fallback.style.display = "block";
+this.showEndingRank();
+this.v64PrepareExhibitionEnding();
+},
+v65RestoreStateFromStorage() {
+if (!APP_CONFIG.V65_AUTOSAVE_ENABLED) return;
+if (location.search.includes("restart=")) {
+this.v65ClearState();
+if (APP_CONFIG.V68_CLEAN_RESTART_URL && history?.replaceState) {
+history.replaceState(null, "", location.pathname + "?v=" + APP_CONFIG.URL_VERSION);
+}
+return;
+}
+let state = null;
+try {
+const raw = localStorage.getItem(APP_CONFIG.V65_SAVE_KEY);
+if (!raw) return;
+state = JSON.parse(raw);
+} catch (err) {
+this.v65ClearState();
+return;
+}
+if (!state || !state.savedAt) return;
+const age = Date.now() - state.savedAt;
+if (age > APP_CONFIG.V65_SAVE_MAX_AGE_MS) {
+this.v65ClearState();
+return;
+}
+this.v65Restoring = true;
+try {
+this.playerName = state.playerName || "觀測者";
+this.hearts = Number.isFinite(state.hearts) ? state.hearts : (APP_CONFIG.V66_INITIAL_HEARTS || 5);
+this.hintCount = Number(state.hintCount || 0);
+this.mistakeTotal = Number(state.mistakeTotal || 0);
+this.wrongBoneCount = Number(state.wrongBoneCount || 0);
+this.wrongPinCount = Number(state.wrongPinCount || 0);
+this.v60WrongCount = Number(state.v60WrongCount || 0);
+this.v61BlackoutTriggered = !!state.v61BlackoutTriggered;
+this.v61ErrorFlashTriggered = !!state.v61ErrorFlashTriggered;
+this.v59RevealShown = !!state.v59RevealShown;
+this.scanUses = Number(state.scanUses || 0);
+this.puzzleSoftErrors = Number(state.puzzleSoftErrors || 0);
+this.sequenceErrors = Number(state.sequenceErrors || 0);
+this.emergencyMode = !!state.emergencyMode;
+this.lastPlacedBone = state.lastPlacedBone || null;
+this.v66KnowledgeSeen = Array.isArray(state.v66KnowledgeSeen) ? state.v66KnowledgeSeen : [];
+this.v66MemoryChallengeDone = !!state.v66MemoryChallengeDone;
+this.v66MemoryChallengePending = !!state.v66MemoryChallengePending;
+this.v66MemoryTarget = state.v66MemoryTarget || null;
+this.v66MemoryChoices = Array.isArray(state.v66MemoryChoices) ? state.v66MemoryChoices : [];
+this.v68Difficulty = state.v68Difficulty || this.v68Difficulty || "standard";
+this.v68HorrorMode = state.v68HorrorMode || this.v68HorrorMode || "standard";
+this.v68AiCollapsed = !!state.v68AiCollapsed;
+this.v67AiEvents = Array.isArray(state.v67AiEvents) ? state.v67AiEvents : [];
+this.startTime = state.startTime || Date.now();
+if (typeof state.fear === "number") Engine.fear = Math.max(0, Math.min(1, state.fear));
+const nameInput = document.getElementById("player-name");
+if (nameInput) nameInput.value = this.playerName;
+this.updateHUD();
+this.v68SetDifficulty?.(this.v68Difficulty, true);
+this.v68SetHorrorMode?.(this.v68HorrorMode, true);
+this.v68ToggleAI?.(this.v68AiCollapsed ? "collapse" : "expand", true);
+this.v66UpdateScanButton();
+this.v65RestoreBoneState(state);
+this.v65RestoreClueState(state);
+this.v65RestoreBoxState(state);
+const screenId = state.screenId || "screen-title";
+this.v65DirectShowScreen(screenId);
+if (screenId === "screen-ending") {
+this.v65RestoreEndingState(state);
+}
+if (this.v59RevealShown && screenId === "screen-puzzle") {
+setTimeout(() => this.v59ShowFullReveal(), 180);
+}
+this.v66RenderSequenceStrip();
+this.v66UpdateSelectionUI();
+this.v66UpdateScanButton();
+this.v66UpdateTask(screenId);
+this.v67UpdateAI?.(screenId);
+if (this.v66MemoryChallengePending) setTimeout(() => this.v68OpenPendingMemoryChallenge(), 320);
+this.v65ShowRestoreBadge();
+this.addStaffLog("v66 已恢復進度：" + screenId);
+} catch (err) {
+this.addStaffLog("v65 恢復進度失敗：" + (err?.message || err), true);
+} finally {
+setTimeout(() => {
+this.v65Restoring = false;
+this.v65SaveStateNow();
+}, 220);
+}
+},
 init() {
+this.v62EnableSmoothMode();
 Engine.init();
 this.renderBonePool();
+this.v63InitMaskBoard();
 this.renderClueCards();
 this.updateBoneProgress();
 this.startDirector();
@@ -5191,11 +7501,17 @@ this.setPerformanceLite(GAME_CONFIG.PERFORMANCE_LITE_DEFAULT);
 this.setReducedMotion(APP_CONFIG.REDUCED_MOTION_DEFAULT || window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches);
 this.bindOrientationCheck();
 this.v57BindMobileScrollFix();
+this.v60MakePuzzleHarder();
 this.v49UpdateMiniMap("screen-title");
 this.v51UpdateStatusLine("screen-title");
 this.bindGlobalErrorLog();
 this.v50StartAudioDirector();
 if (APP_CONFIG.PRELOAD_CORE_ASSETS) this.preloadCoreAssets();
+this.v66Init();
+this.v67Init();
+this.v68Init();
+this.v65BindAutoSave();
+this.v65RestoreStateFromStorage();
 },
 v58DownloadDataUrl(dataUrl, filename = "archive-card.png") {
 if (!APP_CONFIG.V58_SAVE_FIX_ENABLED) return false;
@@ -5249,6 +7565,10 @@ this.downloadArchiveCard();
 v57EnsureScrollTop(targetId = "") {
 if (!APP_CONFIG.V57_MOBILE_SCROLL_FIX) return;
 requestAnimationFrame(() => {
+if (APP_CONFIG.V62_SMOOTH_MODE) {
+if ((window.scrollY || 0) > 8) this.v62FastScrollTo(0);
+return;
+}
 window.scrollTo({top: 0, left: 0, behavior: "auto"});
 const active = document.querySelector(".screen.active");
 if (active) active.scrollIntoView({block: "start", inline: "nearest"});
@@ -5260,8 +7580,8 @@ document.addEventListener("focusin", (event) => {
 const target = event.target;
 if (!target || !target.scrollIntoView) return;
 setTimeout(() => {
-target.scrollIntoView({block: "center", inline: "nearest", behavior: "smooth"});
-}, 180);
+target.scrollIntoView({block: "center", inline: "nearest", behavior: APP_CONFIG.V62_SMOOTH_MODE ? "auto" : "smooth"});
+}, APP_CONFIG.V62_SMOOTH_MODE ? 80 : 180);
 });
 },
 v57BindMobileScrollFix() {
@@ -5961,6 +8281,7 @@ Engine.toast("工作人員驗證通過。");
 } else {
 if (err) err.textContent = "密碼錯誤。";
 Engine.play("wrong");
+this.v60WrongAttempt();
 if (navigator.vibrate) navigator.vibrate([30, 20, 30]);
 }
 },
@@ -6038,8 +8359,7 @@ muteBtn.innerHTML = Engine.muted
 }
 },
 resetDemo() {
-Engine.toast("正在重置展示。");
-setTimeout(() => window.location.href = window.location.pathname + "?v=" + GAME_CONFIG.OFFICIAL_URL_VERSION, 180);
+this.restartForNextPlayer();
 },
 staffJump(targetId) {
 this.closeStaffPanel();
@@ -6053,6 +8373,7 @@ if (targetId === "screen-box") this.updateBoxState();
 window.scrollTo(0, 0);
 this.addStaffLog("工作人員跳關：" + targetId);
 Engine.toast("已跳到測試關卡。");
+this.v65ScheduleSave();
 },
 staffJumpEnding() {
 this.closeStaffPanel();
@@ -6061,23 +8382,31 @@ this.startEnding();
 },
 staffCompletePuzzle() {
 this.placedBones = this.bones.length;
+this.v65SolvedBones = this.bones.map(b => b.id);
 this.updateBoneProgress();
+this.v66RenderSequenceStrip();
+this.v66UpdateSelectionUI();
+this.v66UpdateScanButton();
 const btn = document.getElementById("btn-to-clue");
-if (btn) btn.style.display = "block";
+if (btn) btn.style.display = APP_CONFIG.V59_FULL_REVEAL_ENABLED ? "none" : "block";
 this.bones.forEach(b => {
 const slot = document.getElementById(`slot-${b.id}`);
 if (slot && !slot.classList.contains("filled")) {
+if (APP_CONFIG.V63_MASK_REVEAL_ENABLED) {
+this.v63RevealPiece(b.id, b.name);
+} else {
 slot.classList.add("filled");
 slot.innerHTML = "";
-slot.appendChild(this.createBoneVisual(b));
 this.addSlotLabel(slot, b.name);
+}
 }
 const item = document.getElementById(`item-${b.id}`);
 if (item) item.classList.add("used");
 });
+this.v63RevealAllMasks();
 this.staffJump("screen-puzzle");
-setTimeout(() => this.v59ShowFullReveal(), 160);
-Engine.toast("拼圖已標記完成，顯示完整復原圖。");
+setTimeout(() => this.v61FinishSequence(), 160);
+Engine.toast("拼圖已標記完成，完整圖遮罩已解除。");
 },
 staffUnlockClues() {
 this.closeStaffPanel();
@@ -6115,25 +8444,33 @@ setTimeout(() => Engine.play(key), i * 360);
 Engine.toast("音效測試中。");
 },
 imageAssetList() {
-return [
+return [...new Set([
 "images/cover.jpg",
 "images/sealed-box.jpg",
 "images/bones/skeleton-guide.png",
 APP_CONFIG.V59_REVEAL_IMAGE,
+APP_CONFIG.V63_BOARD_IMAGE,
 ...BONE_CONFIG.map(b => b.img)
-];
+].filter(Boolean))];
 },
 checkImageAsset(src) {
 return new Promise(resolve => {
 const img = new Image();
-const timer = setTimeout(() => resolve({type:"IMG", src, ok:false, note:"逾時或路徑錯誤"}), GAME_CONFIG.ASSET_CHECK_TIMEOUT_MS);
+const critical = [
+"images/cover.jpg",
+"images/sealed-box.jpg",
+APP_CONFIG.V59_REVEAL_IMAGE,
+APP_CONFIG.V63_BOARD_IMAGE
+].filter(Boolean);
+const level = critical.includes(src) ? "CRIT" : "OPT";
+const timer = setTimeout(() => resolve({type:"IMG", src, ok:false, level, note:"逾時或路徑錯誤"}), GAME_CONFIG.ASSET_CHECK_TIMEOUT_MS);
 img.onload = () => {
 clearTimeout(timer);
-resolve({type:"IMG", src, ok:true, note:img.naturalWidth + "×" + img.naturalHeight});
+resolve({type:"IMG", src, ok:true, level, note:img.naturalWidth + "×" + img.naturalHeight});
 };
 img.onerror = () => {
 clearTimeout(timer);
-resolve({type:"IMG", src, ok:false, note:"找不到圖片"});
+resolve({type:"IMG", src, ok:false, level, note:level === "CRIT" ? "找不到關鍵圖片，展示會受影響" : "找不到圖片，會顯示文字 fallback"});
 };
 img.src = src + "?assetCheck=" + Date.now();
 });
@@ -6141,10 +8478,10 @@ img.src = src + "?assetCheck=" + Date.now();
 checkSoundAsset(key, src) {
 return new Promise(resolve => {
 if (!window.fetch) {
-resolve({type:"SND", src, ok:false, note:"瀏覽器不支援 fetch；音效仍有內建 fallback"});
+resolve({type:"SND", src, ok:false, level:"OPT", note:"瀏覽器不支援 fetch；音效仍有內建 fallback"});
 return;
 }
-const timer = setTimeout(() => resolve({type:"SND", src, ok:false, note:"檢查逾時；可能缺檔"}), GAME_CONFIG.ASSET_CHECK_TIMEOUT_MS);
+const timer = setTimeout(() => resolve({type:"SND", src, ok:false, level:"OPT", note:"檢查逾時；可能缺檔"}), GAME_CONFIG.ASSET_CHECK_TIMEOUT_MS);
 fetch(src + "?assetCheck=" + Date.now(), {method:"HEAD", cache:"no-store"})
 .then(res => {
 clearTimeout(timer);
@@ -6152,12 +8489,13 @@ resolve({
 type:"SND",
 src,
 ok:res.ok,
+level:"OPT",
 note:res.ok ? key + " / 已找到" : "缺檔，但會使用內建音效"
 });
 })
 .catch(() => {
 clearTimeout(timer);
-resolve({type:"SND", src, ok:false, note:"無法讀取；會使用內建音效"});
+resolve({type:"SND", src, ok:false, level:"OPT", note:"無法讀取；會使用內建音效"});
 });
 });
 },
@@ -6167,23 +8505,24 @@ if (!box) return;
 box.innerHTML = "<div class='asset-row'><span class='tag'>WAIT</span><span>素材檢查中...</span></div>";
 const imageJobs = this.imageAssetList().map(src => this.checkImageAsset(src));
 const soundJobs = Object.entries(Engine.soundFiles).map(([key, src]) => this.checkSoundAsset(key, src));
-const results = await Promise.all([...imageJobs, ...soundJobs]);
+const results = [this.v68CheckStorage(), ...(await Promise.all([...imageJobs, ...soundJobs]))];
 const okCount = results.filter(r => r.ok).length;
 const missCount = results.length - okCount;
+const criticalMiss = results.filter(r => !r.ok && r.level === "CRIT").length;
 box.innerHTML = `
-<div class="asset-row ${missCount ? "missing" : "ok"}">
+<div class="asset-row ${criticalMiss ? "missing" : missCount ? "missing" : "ok"}">
 <span class="tag">SUM</span>
-<span>完成：${okCount} 個找到，${missCount} 個缺少或無法讀取。缺少音效不會壞，會使用內建 fallback。</span>
+<span>完成：${okCount} 個正常，${missCount} 個缺少或無法讀取。關鍵缺失：${criticalMiss}。音效缺失會使用內建 fallback。</span>
 </div>
 ${results.map(r => `
 <div class="asset-row ${r.ok ? "ok" : "missing"}">
-<span class="tag">${r.ok ? "OK" : "MISS"}<br>${r.type}</span>
+<span class="tag">${r.ok ? "OK" : "MISS"}<br>${r.level || "OPT"}<br>${r.type}</span>
 <span>${r.src}<br>${r.note}</span>
 </div>
 `).join("")}
 `;
-this.addStaffLog("素材檢查完成：找到 " + okCount + "，缺少 " + missCount, missCount > 0);
-Engine.toast("素材檢查完成。");
+this.addStaffLog("素材檢查完成：正常 " + okCount + "，缺失 " + missCount + "，關鍵缺失 " + criticalMiss, criticalMiss > 0 || missCount > 0);
+Engine.toast(criticalMiss ? "素材檢查：有關鍵缺失。" : "素材檢查完成。");
 },
 startDirector() {
 if (this.midEvent) clearInterval(this.midEvent);
@@ -6285,10 +8624,33 @@ const name = document.getElementById("player-name").value.trim();
 if (name) this.playerName = name;
 this.startTime = Date.now();
 this.endingData = null;
+this.hearts = APP_CONFIG.V66_INITIAL_HEARTS || 5;
+this.mistakeTotal = 0;
+this.wrongBoneCount = 0;
+this.wrongPinCount = 0;
+this.orderMistakes = 0;
+this.boxAttempts = 0;
+this.hintCount = 0;
+this.scanUses = 0;
+this.puzzleSoftErrors = 0;
+this.sequenceErrors = 0;
+this.emergencyMode = false;
+this.lastPlacedBone = null;
+this.v66KnowledgeSeen = [];
+this.v66MemoryChallengeDone = false;
+this.v66MemoryChallengePending = false;
+this.v66MemoryTarget = null;
+this.v66MemoryChoices = [];
+this.v67AiEvents = [];
+this.v67RecordAI?.('start', 'AI 系統已綁定研究員代號，開始記錄復原行為。');
+document.body.classList.remove("v66-emergency", "corrupted-ui");
 Engine.initAudio();
 document.getElementById("hud").classList.add("active");
 this.updateHUD();
+this.v66UpdateScanButton();
+this.v66UpdateTask("screen-puzzle");
 this.switchScreen("screen-puzzle");
+this.v65ScheduleSave();
 },
 switchScreen(targetId) {
 Engine.play("click");
@@ -6305,8 +8667,10 @@ this.v49UpdateMiniMap(targetId);
 this.v51UpdateStatusLine(targetId);
 this.v49ShowChapter(targetId);
 this.v50UpdateAudioUI();
+this.v66UpdateTask(targetId);
 setTimeout(() => this.v50AudioBeat(true), 260);
 if (targetId === "screen-box") this.updateBoxState();
+this.v65ScheduleSave();
 if (targetId === "screen-clue") {
 setTimeout(() => this.showTutorial("clue"), GAME_CONFIG.TUTORIAL_DELAY_MS);
 }
@@ -6318,11 +8682,11 @@ window.scrollTo(0, 0);
 if (window.gsap && current) {
 gsap.to(current, {
 opacity: 0,
-y: -18,
-duration: .24,
+y: -12,
+duration: .18,
 onComplete: () => {
 change();
-gsap.fromTo(target, {opacity:0, y:18, scale:.97}, {opacity:1, y:0, scale:1, duration:.34, ease:"power2.out"});
+gsap.fromTo(target, {opacity:0, y:12, scale:.985}, {opacity:1, y:0, scale:1, duration:.24, ease:"power2.out"});
 }
 });
 } else {
@@ -6337,8 +8701,13 @@ createBoneImage(bone) {
 const img = document.createElement("img");
 img.src = bone.img;
 img.alt = bone.name;
+img.loading = "lazy";
+img.decoding = "async";
 img.onerror = () => {
 img.style.display = "none";
+const fallback = img.parentElement?.querySelector(".v68-bone-fallback");
+if (fallback) fallback.classList.add("show");
+this.addStaffLog?.("骨頭圖片缺檔：" + bone.img, true);
 };
 return img;
 },
@@ -6346,6 +8715,12 @@ createBoneVisual(bone) {
 const frame = document.createElement("div");
 frame.className = "bone-art-frame";
 frame.appendChild(this.createBoneImage(bone));
+if (APP_CONFIG.V68_BONE_FALLBACK_ENABLED) {
+const fallback = document.createElement("div");
+fallback.className = "v68-bone-fallback";
+fallback.textContent = (bone.id || bone.name || "BONE").toUpperCase();
+frame.appendChild(fallback);
+}
 return frame;
 },
 addSlotLabel(slot, name) {
@@ -6432,7 +8807,8 @@ if (after) after();
 },
 startDrag(e, bone, el) {
 if (el.classList.contains("used")) return;
-this.selectBone(bone.id, el);
+this.drag.wasSelected = this.selectedBone === bone.id;
+this.selectBone(bone.id, el, true);
 this.drag.active = true;
 this.drag.id = bone.id;
 this.drag.moved = false;
@@ -6498,6 +8874,7 @@ const target = this.drag.target;
 const ghost = this.drag.ghost;
 const sourceEl = this.drag.sourceEl;
 const wasMoved = this.drag.moved;
+const wasSelected = !!this.drag.wasSelected;
 document.querySelectorAll(".slot.drop-target").forEach(s => s.classList.remove("drop-target"));
 document.querySelectorAll(".slot.snap-near").forEach(s => s.classList.remove("snap-near"));
 this.drag.active = false;
@@ -6505,10 +8882,17 @@ this.drag.ghost = null;
 this.drag.target = null;
 this.drag.sourceEl = null;
 this.drag.lastTarget = null;
-// 單純點一下不視為拖曳；保留原本點選玩法，不顯示錯誤。
+this.drag.wasSelected = false;
+// 單純點一下：第一次選取；再點同一塊則取消選取。
 if (!wasMoved) {
 if (ghost) ghost.remove();
 this.cleanupDragSource(sourceEl);
+if (wasSelected && sourceEl && !sourceEl.classList.contains("used")) {
+sourceEl.classList.remove("selected");
+this.selectedBone = null;
+Engine.toast("已取消選取。");
+this.v66UpdateSelectionUI();
+}
 e.preventDefault();
 return;
 }
@@ -6555,7 +8939,7 @@ renderBonePool() {
 const pool = document.getElementById("bone-pool");
 pool.innerHTML = "";
 const shuffled = [...this.bones].sort(() => Math.random() - .5);
-// 讓骨架 slot 保留文字標籤，放圖片後也知道原本位置。
+// v63：骨架 slot 只保留文字標籤，圖片固定在底圖，不塞進格子。
 this.bones.forEach(b => {
 const slot = document.getElementById(`slot-${b.id}`);
 if (slot) this.addSlotLabel(slot, b.name);
@@ -6570,66 +8954,102 @@ label.className = "bone-label";
 label.textContent = b.name;
 div.appendChild(visual);
 div.appendChild(label);
-div.onclick = () => this.selectBone(b.id, div);
+// v66：點擊選取改由 pointerdown/endDrag 控制，避免手機 click 與 pointerdown 重複觸發。
+div.onclick = e => e.preventDefault();
 div.addEventListener("pointerdown", e => this.startDrag(e, b, div), {passive:false});
 div.addEventListener("pointermove", e => this.moveDrag(e), {passive:false});
 div.addEventListener("pointerup", e => this.endDrag(e), {passive:false});
 div.addEventListener("pointercancel", e => this.endDrag(e), {passive:false});
 pool.appendChild(div);
 });
+this.v66RenderSequenceStrip();
+this.v66UpdateSelectionUI();
 },
-selectBone(id, el) {
-if (el.classList.contains("used")) return;
+selectBone(id, el, force = false) {
+if (!el || el.classList.contains("used")) return;
+if (!force && this.selectedBone === id) {
+el.classList.remove("selected");
+this.selectedBone = null;
+Engine.play("click");
+this.v66UpdateSelectionUI();
+return;
+}
 document.querySelectorAll(".bone-item").forEach(d => d.classList.remove("selected"));
 el.classList.add("selected");
 this.selectedBone = id;
 Engine.play("click");
+this.v66UpdateSelectionUI();
 },
 placeBone(slotId) {
+if (this.v61PowerLocked) return;
+const log = document.getElementById("puzzle-log");
 if (!this.selectedBone) {
-document.getElementById("puzzle-log").textContent = "請先選擇下方殘骸。";
+if (log) log.textContent = "請先選擇下方殘骸。";
+this.v66UpdateSelectionUI();
 return;
 }
 const slot = document.getElementById(`slot-${slotId}`);
-if (slot.classList.contains("filled")) return;
-if (this.selectedBone === slotId) {
-slot.classList.add("filled", "just-filled");
+if (!slot || slot.classList.contains("filled")) return;
+const required = this.v66GetRequiredBoneId();
+const selectedLabel = this.v66GetBoneLabel(this.selectedBone);
+const slotLabel = this.v66GetBoneLabel(slotId);
+if (this.selectedBone !== slotId) {
+this.v66RegisterPuzzleMistake(`骨位不符：你選的是 ${selectedLabel}，但放到 ${slotLabel}。`);
+if (log) log.innerHTML = `<span class='text-warning'>骨位不符。請確認目前選取與目標位置。</span>`;
+return;
+}
+if (APP_CONFIG.V66_SEQUENCE_MODE && required && this.selectedBone !== required) {
+this.v66RegisterPuzzleMistake(`復原順序錯誤。請先建立標本主軸：${this.v66GetBoneLabel(required)}。`, "sequence");
+if (log) log.innerHTML = `<span class='text-warning'>復原順序錯誤。請先放 ${this.v66GetBoneLabel(required)}。</span>`;
+return;
+}
+this.v60RememberPuzzleViewport();
 const boneData = this.getBoneData(this.selectedBone);
-const oldLabel = slot.querySelector(".slot-label");
+const boneLabel = boneData ? boneData.name : this.selectedBone;
+// v63 核心：不再把骨頭圖片放進格子，只揭開完整圖上方的黑色遮罩。
+if (!this.v65SolvedBones.includes(slotId)) this.v65SolvedBones.push(slotId);
+if (APP_CONFIG.V63_MASK_REVEAL_ENABLED) {
+this.v63RevealPiece(slotId, boneLabel);
+} else {
+slot.classList.add("filled", "just-filled");
 slot.innerHTML = "";
-if (boneData) {
-const lockedVisual = this.createBoneVisual(boneData);
-slot.appendChild(lockedVisual);
-this.addSlotLabel(slot, boneData.name);
-} else if (oldLabel) {
-slot.appendChild(oldLabel);
+this.addSlotLabel(slot, boneLabel);
 }
 const item = document.getElementById(`item-${this.selectedBone}`);
+if (item) {
 item.classList.remove("selected");
 item.classList.add("used", "just-used");
-slot.classList.add("snap-locked");
-setTimeout(() => {
-slot.classList.remove("just-filled", "snap-locked");
-item.classList.remove("just-used");
-}, 520);
+setTimeout(() => item.classList.remove("just-used"), 420);
+}
+this.lastPlacedBone = slotId;
 this.selectedBone = null;
 this.placedBones++;
 this.updateBoneProgress();
-document.getElementById("puzzle-log").textContent = "定位吻合。";
+this.v66RenderSequenceStrip();
+this.v66UpdateSelectionUI();
+this.v66UpdateScanButton();
+this.v66UpdateTask("screen-puzzle");
+if (log) log.textContent = "遮罩解除。標本影像正在復原。";
+this.v67RecordAI?.('correct', `AI 確認：${boneLabel} 已復原，遮罩解除。`);
 Engine.play("correct");
-Engine.spawnBlood(window.innerWidth * .5, window.innerHeight * .35, 8);
-if (this.placedBones === this.bones.length) {
-document.getElementById("puzzle-log").innerHTML = "<span class='text-warning'>復原完成。結構鎖定。</span>";
+this.v61TriggerBoardShake();
+this.v61MaybeTriggerMidBlackout();
+this.v60RestorePuzzleViewport();
+this.v65ScheduleSave();
+const completed = this.placedBones === this.bones.length;
+if (APP_CONFIG.V66_KNOWLEDGE_CARDS) {
+if (completed) {
+this.v68RegisterKnowledge(slotId);
+} else {
+setTimeout(() => this.v66ShowKnowledgeCard(slotId), 240);
+}
+}
+if (completed) {
+if (log) log.innerHTML = "<span class='text-warning'>復原完成。完整標本影像已解除封存。</span>";
 const clueBtn = document.getElementById("btn-to-clue");
 if (clueBtn) clueBtn.style.display = APP_CONFIG.V59_FULL_REVEAL_ENABLED ? "none" : "block";
 Engine.impact("glitch");
 this.finalBoneBlackout();
-}
-} else {
-this.wrongBoneCount++;
-Engine.toast("吸附失敗 / 骨位不符");
-this.loseHeart("骨位不符。標本出現排斥反應。");
-document.getElementById("puzzle-log").innerHTML = `<span class='text-warning'>排斥反應。剩餘穩定度：${this.hearts}</span>`;
 }
 },
 updateClueStatus() {
@@ -6720,6 +9140,7 @@ if (this.clueOrder.some(c => c.id === id)) return;
 this.clueOrder.push(clue);
 Engine.play("click");
 this.renderOrderPuzzle();
+this.v65ScheduleSave();
 },
 removeOrderClue(index) {
 if (this.orderSolved) return;
@@ -6727,6 +9148,7 @@ if (!this.clueOrder[index]) return;
 this.clueOrder.splice(index, 1);
 Engine.play("click");
 this.renderOrderPuzzle();
+this.v65ScheduleSave();
 },
 resetOrderPuzzle() {
 if (this.orderSolved) return;
@@ -6734,6 +9156,7 @@ this.clueOrder = [];
 document.getElementById("order-log").textContent = "排序已重置。請依身體由上到下重新排列。";
 Engine.play("click");
 this.renderOrderPuzzle();
+this.v65ScheduleSave();
 },
 checkOrderPuzzle() {
 const box = document.getElementById("order-puzzle");
@@ -6756,14 +9179,19 @@ setTimeout(() => s.classList.remove("correct-flash"), 520);
 });
 Engine.play("correct");
 Engine.toast("ORDER ACCEPTED / " + APP_CONFIG.PLAYER_PIN.split("").join(" "));
+this.v67RecordAI?.('correct', 'AI 判讀：刻痕排序正確，封存年份路徑已確認。');
 this.updateClueStatus();
+this.v66UpdateTask("screen-clue");
+this.v65ScheduleSave();
 } else {
 this.orderMistakes++;
 box.classList.remove("wrong");
 void box.offsetWidth;
 box.classList.add("wrong");
 log.innerHTML = "<span class='text-warning'>排序錯誤。刻痕開始滲血。</span>";
+this.v67RecordAI?.('wrong', 'AI 警告：刻痕排序錯誤，封存資料出現污染。');
 this.loseHeart("刻痕順序錯誤。請依照身體由上到下排列。");
+this.v65ScheduleSave();
 }
 },
 flipCard(card) {
@@ -6785,8 +9213,10 @@ this.updateClueStatus();
 if (this.markedCluesFound >= this.getMarkedClueTotal()) {
 Engine.addFear(.12);
 Engine.toast("四個刻痕已找到 / 請排列順序");
+this.v67RecordAI?.('clue', 'AI 判讀：四個刻痕已收集，請進行身體由上到下排序。');
 this.renderOrderPuzzle();
 }
+this.v65ScheduleSave();
 }
 },
 updateBoxState() {
@@ -6836,6 +9266,7 @@ this.knockBox(true);
 Engine.addFear(.18);
 Engine.toast("BOX OPENED / 封存箱已開啟");
 this.v50AudioBeat(true);
+this.v65ScheduleSave();
 },
 checkPin() {
 const input = document.getElementById("pin-input");
@@ -6853,6 +9284,7 @@ input.classList.add("pin-ok");
 input.disabled = true;
 document.getElementById("btn-to-ending").style.display = "block";
 Engine.play("correct");
+this.v67RecordAI?.('correct', 'AI 確認：1931 封存年份通過，箱體開啟。');
 this.unlockBox();
 } else {
 log.textContent = "密碼錯誤。箱內傳來敲擊聲。";
@@ -6866,16 +9298,23 @@ this.wrongPinCount++;
 this.updateBoxState();
 this.knockBox(this.boxAttempts >= 2);
 this.v50AudioBeat(true);
+this.v67RecordAI?.('wrong', 'AI 警告：密碼輸入錯誤，箱體回應異常敲擊。');
 this.loseHeart("密碼錯誤。箱內傳來敲擊聲，穩定度下降。");
+this.v65ScheduleSave();
 }
 }
 },
 updateHUD() {
+const max = APP_CONFIG.V66_MAX_HEARTS || 5;
 let h = "";
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < max; i++) {
 h += i < this.hearts ? "♥" : "<span class='broken'>💔</span>";
 }
-document.getElementById("hud-hearts").innerHTML = h;
+const heartsEl = document.getElementById("hud-hearts");
+if (heartsEl) heartsEl.innerHTML = h;
+const status = document.getElementById("hud-status");
+if (status) status.textContent = `SYS.ON // 穩定度 ${Math.max(0, this.hearts)} / ${max}`;
+document.body.classList.toggle("v66-emergency", !!this.emergencyMode);
 },
 showDamageNotice(message) {
 const modal = document.getElementById("damageModal");
@@ -6885,7 +9324,8 @@ const countdown = document.getElementById("damageCountdown");
 if (!modal || !msg || !hearts || !countdown) return;
 msg.textContent = message || "封存程序出現排斥反應。";
 let heartText = "";
-for (let i = 0; i < 3; i++) heartText += i < this.hearts ? "♥" : "💔";
+const max = APP_CONFIG.V66_MAX_HEARTS || 5;
+for (let i = 0; i < max; i++) heartText += i < this.hearts ? "♥" : "💔";
 hearts.textContent = heartText;
 modal.classList.add("show");
 let remain = GAME_CONFIG.DAMAGE_MODAL_SECONDS;
@@ -6910,40 +9350,26 @@ this.damageTimer = null;
 this.damageCountdownTimer = null;
 },
 loseHeart(message) {
-this.mistakeTotal++;
-this.hearts = Math.max(0, this.hearts - 1);
-this.updateHUD();
-this.v51PolishHit("hard");
-this.v50AudioBeat(true);
-this.showDamageNotice(message);
-Engine.addFear(.12 + this.mistakeTotal * .035);
-Engine.impact("wrong");
+this.mistakeTotal = (this.mistakeTotal || 0) + 1;
+this.v66DeductHeart(message);
 if (this.mistakeTotal >= 2) {
 document.body.classList.add("corrupted-ui");
 }
 if (this.mistakeTotal >= 2 && this.hearts > 0) {
 setTimeout(() => {
 Engine.toast("錯誤累積 / 第七層開始接近");
-if (Math.random() > .35) Engine.ghost();
+if (Math.random() > .48) Engine.ghost();
 }, 520);
 }
-if (this.hearts <= 0) {
-setTimeout(() => this.gameOver(), 650);
-}
+this.v65ScheduleSave();
 },
 gameOver() {
+this.emergencyMode = true;
+this.hearts = 0;
+this.updateHUD();
 Engine.impact("scream");
-Engine.toast("封存失敗 / 第七層已接管");
-setTimeout(() => {
-document.getElementById("hud").classList.remove("active");
-this.switchScreen("screen-ending");
-this.v49VisualHit();
-document.getElementById("final-name").textContent = this.playerName;
-document.getElementById("ending-text").innerHTML = "<span class='text-warning'>封存失敗。第五位研究員已提前登錄。</span>";
-document.getElementById("btn-restart").style.display = "block";
-this.showEndingRank();
-Engine.setStage("screen-gameover");
-}, 800);
+Engine.toast("緊急封存 / 系統仍允許完成任務");
+this.v66EnterEmergencyMode();
 },
 async startEnding() {
 this.switchScreen("screen-ending");
@@ -6969,14 +9395,17 @@ Engine.addFear(.42);
 document.getElementById("ending-text").innerHTML = "<span class='glitch-text'>請確認畫面後方。</span>";
 document.getElementById("btn-restart").style.display = "block";
 this.showEndingRank();
+this.v64PrepareExhibitionEnding();
 }, 5200);
 },
 getEndingData() {
-// v38：結局資料集中產生，並快取，避免畫面與下載證明卡的封存編號不同。
+// v66：結局依錯誤紀錄、提示、穩定度與緊急封存狀態判定。
 if (this.endingData) return this.endingData;
-const threat = Math.round(Engine.fear * 100);
+const threat = Math.min(100, Math.round((Engine.fear || 0) * 100));
 const seconds = this.startTime ? Math.max(1, Math.round((Date.now() - this.startTime) / 1000)) : 0;
 const safeName = (this.playerName || "觀測者").replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "").slice(0, 8) || "OBSERVER";
+const mistakes = this.mistakeTotal || 0;
+const hints = this.hintCount || 0;
 let ending = "";
 let rank = "";
 let desc = "";
@@ -6984,46 +9413,54 @@ let theme = "end-low";
 let visualTitle = "";
 let visualCode = "";
 let stamp = "SEALED";
-if (this.hearts <= 0) {
-ending = "被封存者";
+if (this.emergencyMode || this.hearts <= 0) {
+ending = "緊急封存";
 rank = "X";
 theme = "end-specimen";
 stamp = "SPECIMEN";
-visualTitle = safeName + " 已被列入標本";
-visualCode = "SPECIMEN / LAYER-07 / 1931";
-desc = "你不是研究員。你是這次被保存下來的標本。";
-} else if (this.hintCount >= 3) {
+visualTitle = safeName + " 被標記為污染樣本";
+visualCode = "EMERGENCY-SEAL / LAYER-07 / 1931";
+desc = "穩定度歸零後仍完成程序。系統保留你的紀錄，但將你的代號列入第七層污染樣本。";
+} else if (hints >= 3 || (this.scanUses || 0) >= 2) {
 ending = "被監視的研究員";
 rank = "W";
 theme = "end-watched";
 stamp = "WATCHED";
 visualTitle = "系統正在學習你";
-visualCode = "OBSERVER TRACE / HINT LOGGED";
-desc = "你過度要求系統破譯。第七層已取得你的思考路徑。";
-} else if (this.hearts >= 3 && this.hintCount === 0 && this.mistakeTotal === 0) {
+visualCode = "OBSERVER TRACE / SCAN LOGGED";
+desc = "你多次要求系統提示。第七層已取得你的復原路徑與判斷習慣。";
+} else if (mistakes <= 1 && hints === 0 && this.hearts >= 4) {
 ending = "完整封存";
 rank = "S";
 theme = "end-perfect";
 stamp = "CERTIFIED";
 visualTitle = "完整封存完成";
 visualCode = "CLEARANCE-S / ARCHIVE-1931";
-desc = "零錯誤、零提示。你沒有被第七層校正，系統暫時承認你的觀測權限。";
-} else if (this.hearts >= 2 && this.mistakeTotal <= 1) {
+desc = "近乎零錯誤、零掃描。系統暫時承認你的觀測權限。";
+} else if (mistakes <= 3) {
 ending = "低污染通關";
 rank = "A";
 theme = "end-low";
 stamp = "SEALED";
 visualTitle = "低污染封存";
 visualCode = "STABLE / MINOR TRACE";
-desc = "標本成功復原，但封存箱記錄到一次不穩定反應。";
-} else {
-ending = "高污染通關";
+desc = "標本成功復原，錯誤紀錄仍在可控範圍內。";
+} else if (mistakes <= 5) {
+ending = "異常接觸通關";
 rank = "B";
 theme = "end-high";
 stamp = "CONTAMINATED";
 visualTitle = safeName + " 的名字正在滲入檔案";
 visualCode = "CONTAMINATION-B / NAME TRACE";
-desc = "你打開了箱子，但研究員登錄表已開始覆寫你的代號。";
+desc = "你打開了箱子，但多次錯誤讓研究員登錄表開始覆寫你的代號。";
+} else {
+ending = "第七層污染樣本";
+rank = "C";
+theme = "end-high";
+stamp = "CONTAMINATED";
+visualTitle = "第七層保留你的操作紀錄";
+visualCode = "CONTAMINATION-C / ERROR TRACE";
+desc = "錯誤紀錄超過安全值。你完成了任務，但系統判定你已被標本反向觀測。";
 }
 this.archiveCode = "ARCHIVE-" + APP_CONFIG.PLAYER_PIN + "-" + safeName.toUpperCase() + "-" + rank + "-" + String(Math.floor(Math.random() * 900 + 100));
 this.endingData = {
@@ -7037,15 +9474,19 @@ visualCode,
 stamp,
 desc,
 threat,
-mistakes: this.mistakeTotal,
-wrongBone: this.wrongBoneCount,
-wrongPin: this.wrongPinCount,
-orderMistakes: this.orderMistakes,
-boxAttempts: this.boxAttempts,
-hints: this.hintCount,
+mistakes,
+wrongBone: this.wrongBoneCount || 0,
+wrongPin: this.wrongPinCount || 0,
+orderMistakes: this.orderMistakes || 0,
+boxAttempts: this.boxAttempts || 0,
+hints,
+scanUses: this.scanUses || 0,
+hearts: this.hearts,
+emergency: !!this.emergencyMode,
 seconds,
 code: this.archiveCode
 };
+this.endingData.performanceTitle = this.v66GetPerformanceTitle(this.endingData);
 return this.endingData;
 },
 renderEndingVisual(data) {
@@ -7080,7 +9521,9 @@ if (rank) {
 rank.innerHTML = `
 <div class="ending-type">
 <span class="text-warning">結局：${data.ending} / 評級 ${data.rank}</span><br>
-${data.desc}
+<b>${data.performanceTitle}</b><br>
+${data.desc}<br>
+<span style="color:rgba(241,227,200,.62)">穩定度 ${Math.max(0, data.hearts)} / ${APP_CONFIG.V66_MAX_HEARTS || 5}・錯誤 ${data.mistakes}・掃描 ${data.scanUses || 0}</span>
 </div>
 `;
 rank.style.display = "block";
@@ -7091,12 +9534,13 @@ this.v53ApplyArchiveDeluxe(data);
 this.v55RenderRarity(data);
 this.v56RenderArchiveId(data);
 this.v54RenderShareText(data);
+this.v67RenderAIReport(data);
 document.getElementById("archive-code").textContent = data.code;
 document.getElementById("archive-name").textContent = data.name;
-document.getElementById("archive-ending").textContent = data.ending + " / " + data.rank;
+document.getElementById("archive-ending").textContent = data.ending + " / " + data.rank + " / " + data.performanceTitle;
 document.getElementById("archive-threat").textContent = data.threat + "%";
 document.getElementById("archive-mistakes").textContent = `${data.mistakes} 次（骨頭 ${data.wrongBone} / 排序 ${data.orderMistakes} / 密碼 ${data.wrongPin}）`;
-document.getElementById("archive-hints").textContent = data.hints + " 次";
+document.getElementById("archive-hints").textContent = `${data.hints} 次（紅光掃描 ${data.scanUses || 0}）`;
 if (card) {
 card.classList.remove("end-perfect", "end-low", "end-high", "end-watched", "end-specimen");
 card.classList.add("show", data.theme);
@@ -7104,6 +9548,7 @@ const seal = card.querySelector(".archive-seal");
 if (seal) seal.textContent = data.stamp;
 }
 document.getElementById("btn-save-archive").style.display = "block";
+this.v65ScheduleSave();
 },
 downloadArchiveCard() {
 const data = this.getEndingData();
@@ -7161,7 +9606,8 @@ const rows = [
 ["錯誤紀錄", data.mistakes + " 次"],
 ["排序錯誤", data.orderMistakes + " 次"],
 ["封存箱反應", data.boxAttempts + " 次"],
-["提示使用", data.hints + " 次"],
+["提示使用", data.hints + " 次（紅光掃描 " + (data.scanUses || 0) + "）"],
+["評級稱號", data.performanceTitle],
 ["玩家稱號", this.v52GetPlayerTitle(data).title],
 ["稀有度", this.v55GetRarity(data).label],
 ["封存收藏編號", this.v56GetArchiveId(data)],
