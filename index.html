@@ -1235,6 +1235,72 @@
       animation-duration:.18s !important;
     }
 
+
+    /* v1.13 refined minimal visual language */
+    .section-label {
+      color: rgba(255,178,164,.55);
+      font-size: 11px;
+      letter-spacing: .22em;
+      margin: 18px 0 8px;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(112,14,14,.92), rgba(24,2,2,.98));
+      border-color: rgba(255,178,164,.34);
+      box-shadow: 0 0 18px rgba(160,28,28,.16);
+    }
+    .btn.subtle {
+      background: rgba(0,0,0,.14);
+      border-color: rgba(255,178,164,.12);
+      color: rgba(241,227,200,.62);
+    }
+    .btn.danger {
+      background: rgba(58,5,5,.24);
+      border-color: rgba(210,58,50,.36);
+      color: rgba(255,213,204,.86);
+    }
+    .task {
+      border-color: rgba(255,178,164,.12);
+      background: rgba(0,0,0,.26);
+      color: rgba(241,227,200,.70);
+    }
+    .step-card, .difficulty-card, .privacy-card, .resume-warning {
+      background: rgba(0,0,0,.24);
+      border-color: rgba(255,178,164,.12);
+    }
+    .difficulty-card b {
+      display: block;
+      margin-bottom: 4px;
+      letter-spacing: .08em;
+    }
+    .file-row {
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px;
+      border-bottom:1px solid rgba(255,178,164,.08);
+      color:rgba(241,227,200,.60);
+      font-size:14px;
+      line-height:1.55;
+    }
+    .file-row:last-child { border-bottom:0; }
+    .file-row span:first-child {
+      color:rgba(255,178,164,.50);
+      letter-spacing:.10em;
+      white-space:nowrap;
+    }
+    .file-row b {
+      color:rgba(241,227,200,.88);
+      text-align:right;
+      font-weight:600;
+    }
+    .minimal-note {
+      color:rgba(241,227,200,.52);
+      font-size:12px;
+      line-height:1.7;
+      margin:12px 0 0;
+      text-align:left;
+    }
+
   </style>
 </head>
 
@@ -1255,7 +1321,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.12</div>
+          <div class="kicker">FINAL BUILD 1.13</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1297,59 +1363,68 @@
             <img data-src="images/ui/title-main-visual.png" alt="主頁主視覺">
           </div>
           <div class="btn-grid">
-            <button class="btn primary" data-action="toName">開始遊戲</button>
-            <button class="btn" data-action="toSettings">遊戲設定</button>
-            <button class="btn" data-action="toHow">遊戲玩法</button>
-            <button class="btn" data-action="toStory">劇情檔案</button>
+            <button class="btn primary" data-action="toName">開始封存程序</button>
+            <button class="btn" data-action="toSettings">封存設定</button>
+            <button class="btn" data-action="toHow">操作說明</button>
+            <button class="btn subtle" data-action="toStory">封存檔案</button>
           </div>
-          <p class="small-note">建議使用 Safari / Chrome，保持手機直向。相機與聲音皆為選用。</p>
+          <p class="small-note">建議使用 Safari / Chrome，保持手機直向。</p>
         </div>
       </section>
 
       <section id="screen-settings" class="screen">
         <div class="panel">
           <div class="kicker">SETTINGS</div>
-          <h1>遊戲設定</h1>
-          <h2>難度與聲音</h2>
+          <h1>封存設定</h1>
+          <h2>選擇封存模式</h2>
+
+          <div class="section-label">ARCHIVE MODE</div>
           <div class="difficulty-grid">
             <button class="difficulty-card" data-difficulty="easy">
-              <b>初次觀測</b><br>顯示骨頭名稱與位置名稱，生命不扣，適合第一次體驗。
+              <b>初次觀測</b>
+              適合第一次體驗。顯示骨頭名稱與位置名稱，生命訊號不扣除。
             </button>
             <button class="difficulty-card" data-difficulty="normal">
-              <b>正式封存</b><br>骨頭改用骨骼類型提示，標本板只顯示定位區域，加入 3 張干擾骨片。
+              <b>正式封存</b>
+              標準挑戰模式。隱藏直接配對提示，加入 3 張干擾骨片。
             </button>
             <button class="difficulty-card" data-difficulty="hard">
-              <b>深層污染</b><br>隱藏名稱與位置文字，只能依影像、掃描與判斷完成，加入 6 張干擾骨片。
+              <b>深層污染</b>
+              高風險模式。隱藏名稱與位置文字，加入 6 張干擾骨片。
             </button>
           </div>
+
+          <div class="section-label">SYSTEM AUDIO</div>
           <button class="btn primary" id="sound-toggle">聲音：開</button>
-          <button class="btn subtle" data-action="home" style="margin-top:10px;">返回主頁</button>
-        </div>
-      
+
           <div class="privacy-card">
             <h3>相機權限</h3>
-            <p>遊戲後段會需要拍攝研究員影像，作為封存證明卡的一部分。</p>
+            <p>後段會拍攝研究員影像，用於生成封存證明卡。</p>
             <p>照片只會在你的手機瀏覽器內使用，不會上傳到伺服器，也不會傳送給我們。</p>
-            <p>若不想開啟相機，也可以使用觀測者剪影完成遊戲。</p>
+            <p>若不想開啟相機，也可以使用觀測者剪影完成。</p>
             <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
             <button class="btn" id="camera-test-btn">測試相機權限</button>
           </div>
 
+          <div class="btn-grid" style="margin-top:14px;">
+            <button class="btn subtle" data-action="home">返回主頁</button>
+          </div>
+        </div>
       </section>
 
       <section id="screen-how" class="screen">
         <div class="panel">
-          <div class="kicker">HOW TO PLAY</div>
-          <h1>遊戲玩法</h1>
-          <h2>四步驟完成封存</h2>
+          <div class="kicker">PROCEDURE</div>
+          <h1>操作說明</h1>
+          <h2>三步驟完成封存</h2>
           <div class="step-grid">
-            <div class="step-card"><b>01 復原標本</b><br>先選下方骨片，再點標本板上的對應位置。不同難度會隱藏名稱或加入干擾骨片。</div>
-            <div class="step-card"><b>02 判讀刻痕</b><br>翻看骨頭背面，找出 I / IX / III / I。</div>
-            <div class="step-card"><b>03 開啟封存箱</b><br>依身體由上到下排列刻痕，破譯 核心封存碼。</div>
-            <div class="step-card"><b>04 確認研究員</b><br>完成登錄，取得封存證明卡。</div>
+            <div class="step-card"><b>01 復原雞骨化石</b><br>選擇骨片，定位到標本板上。</div>
+            <div class="step-card"><b>02 判讀骨片刻痕</b><br>翻看骨片背面，記錄有效刻痕。</div>
+            <div class="step-card"><b>03 開啟封存箱</b><br>依照身體位置排序刻痕，復原核心封存碼。</div>
           </div>
+          <p class="minimal-note">後段會建立研究員證明卡。影像只會在本機使用，不會上傳。</p>
           <div class="btn-grid">
-            <button class="btn primary" data-action="toName">開始遊戲</button>
+            <button class="btn primary" data-action="toName">開始封存程序</button>
             <button class="btn subtle" data-action="home">返回主頁</button>
           </div>
         </div>
@@ -1358,21 +1433,20 @@
       <section id="screen-story" class="screen">
         <div class="panel">
           <div class="kicker">ARCHIVE FILE</div>
-          <h1>劇情檔案</h1>
+          <h1>封存檔案</h1>
           <h2>CASE-████</h2>
           <div class="hero" id="hero-story">
             <img data-src="images/ui/story-bg.png" alt="劇情背景">
           </div>
-          <div class="task">
-            四位研究員曾進入復原程序。<br>
-            紀錄皆在標本完成前中斷。<br><br>
-            封存年份已被抹除。<br>
-            核心封存碼只能從標本背面的刻痕重新推回。<br><br>
-            系統顯示：第五位研究員尚未登錄。<br>
-            當你完成復原程序，系統將確認最後一位研究員。
+          <div class="table">
+            <div class="file-row"><span>檔案狀態</span><b>重新開啟</b></div>
+            <div class="file-row"><span>地點</span><b>第七層封存室</b></div>
+            <div class="file-row"><span>標本狀態</span><b>破碎，待復原</b></div>
+            <div class="file-row"><span>研究員紀錄</span><b>缺失一名</b></div>
+            <div class="file-row"><span>系統指令</span><b>完成復原後，重新確認第五位研究員身份。</b></div>
           </div>
           <div class="btn-grid">
-            <button class="btn primary" data-action="toName">開始遊戲</button>
+            <button class="btn primary" data-action="toName">開始封存程序</button>
             <button class="btn subtle" data-action="home">返回主頁</button>
           </div>
         </div>
@@ -1392,8 +1466,8 @@
       <section id="screen-puzzle" class="screen">
         <div id="status-puzzle" class="status"></div>
         <div class="task">
-          <b>目前任務：復原雞骨化石標本</b><br>
-          先選下方骨片，再點標本板上的對應位置。不同難度會隱藏名稱或加入干擾骨片。
+          <b>目前任務：復原標本</b><br>
+          選擇骨片，定位標本。必要時啟動標本掃描。
           <div class="bar"><i id="puzzle-bar"></i></div>
           <div class="scan-control">
             <button class="btn" id="scan-btn">啟動標本掃描</button>
@@ -1405,12 +1479,12 @@
           <h2 id="selected-label">尚未選擇骨片</h2>
           <div class="board" id="fossil-board">
             <img class="full" data-src="images/reveal/full-fossil-board.png" alt="完整雞骨化石標本">
-            <div class="board-fallback">備用標本板已啟用<br>請放入正確骨片位置</div>
+            <div class="board-fallback">備用標本板已啟用<br>請依掃描與位置判斷</div>
             <div class="scan-line"></div>
             <div id="drop-zones"></div>
           </div>
           <div class="bone-grid" id="bone-grid"></div>
-          <div class="system-log" id="puzzle-log">SYSTEM：選擇一塊骨片。</div>
+          <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
       </section>
 
@@ -1591,9 +1665,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_12_EVENT_ANIMATION_ONLY",
-      saveKey: "fifthResearcher_final_v1_12",
-      settingsKey: "fifthResearcher_final_v1_12_settings",
+      version: "FINAL_BUILD_1_13_REFINED_COPY",
+      saveKey: "fifthResearcher_final_v1_13",
+      settingsKey: "fifthResearcher_final_v1_13_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1974,9 +2048,9 @@
     function screenName(id) {
       const names = {
         "screen-home":"主頁",
-        "screen-settings":"遊戲設定",
-        "screen-how":"遊戲玩法",
-        "screen-story":"劇情檔案",
+        "screen-settings":"封存設定",
+        "screen-how":"操作說明",
+        "screen-story":"封存檔案",
         "screen-name":"輸入觀測代號",
         "screen-puzzle":"化石復原",
         "screen-clues":"刻痕翻面",
@@ -1995,10 +2069,8 @@
       const rows = [
         ["觀測代號", s.player || "觀測者"],
         ["停留階段", screenName(s.dead ? "screen-failure" : s.screen)],
-        ["生命訊號", (s.life ?? 3) + " / 3"],
-        ["污染值", (s.pollution ?? 0) + "%"],
-        ["難度", diff.label],
-        ["錯誤 / 提示", (s.mistakes ?? 0) + " / " + (s.hints ?? 0)]
+        ["封存模式", diff.label],
+        ["污染值", (s.pollution ?? 0) + "%"]
       ];
       $("resume-summary").innerHTML = rows.map(row => `<div class="resume-line"><span>${row[0]}</span><b>${row[1]}</b></div>`).join("");
     }
@@ -2151,7 +2223,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_12";
+        img.src = src + "?v=final1_13";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2167,7 +2239,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_12");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_13");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2246,7 +2318,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_12";
+        img.src = src + "?v=final1_13";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -2368,9 +2440,9 @@
         "screen-loading":"LEVEL 07 / SYSTEM BOOT",
         "screen-resume":"LEVEL 07 / 未完成紀錄",
         "screen-home":"LEVEL 07 / 主頁",
-        "screen-settings":"LEVEL 07 / 遊戲設定",
-        "screen-how":"LEVEL 07 / 遊戲玩法",
-        "screen-story":"CASE-████ / 劇情檔案",
+        "screen-settings":"LEVEL 07 / 封存設定",
+        "screen-how":"LEVEL 07 / 操作說明",
+        "screen-story":"CASE-████ / 封存檔案",
         "screen-name":"LEVEL 07 / 觀測者登入",
         "screen-puzzle":"PHASE 01 / 標本復原",
         "screen-clues":"PHASE 02 / 刻痕檢查",
@@ -2598,7 +2670,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_12" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_13" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -3054,25 +3126,29 @@
       if (!state.completedAt) state.completedAt = new Date().toLocaleString("zh-TW");
       if (!state.certNo) state.certNo = makeCertNo();
       const r = calcRank();
-      $("rank-title").textContent = `評級 ${r.rank}｜${r.title}`;
-      const emergency = state.emergency ? "是" : "否";
-      const common = `
-        <div class="row"><span>封存結果</span><b>${r.title}</b></div>
-        <div class="row"><span>評級</span><b>${r.rank}</b></div>
+      $("rank-title").textContent = `封存評級 ${r.rank}｜${r.title}`;
+      const resultRows = `
+        <div class="row"><span>封存狀態</span><b>研究員身份已確認</b></div>
+        <div class="row"><span>封存評級</span><b>${r.rank}</b></div>
+        <div class="row"><span>封存模式</span><b>${difficulty().label}</b></div>
+        <div class="row"><span>污染值</span><b>${state.pollution}%</b></div>
+        <div class="row"><span>判讀錯誤</span><b>${state.mistakes}</b></div>
+        <div class="row"><span>標本掃描</span><b>${state.hints}</b></div>
+        <div class="row"><span>說明</span><b>${r.desc}</b></div>
+      `;
+      const certRows = `
+        <div class="row"><span>封存編號</span><b>${state.certNo}</b></div>
         <div class="row"><span>研究員代號</span><b>${state.player || "觀測者"}</b></div>
-        <div class="row"><span>難度</span><b>${difficulty().label}</b></div>
+        <div class="row"><span>封存模式</span><b>${difficulty().label}</b></div>
         <div class="row"><span>生命訊號</span><b>${state.life} / 3</b></div>
         <div class="row"><span>污染值</span><b>${state.pollution}%</b></div>
-        <div class="row"><span>錯誤次數</span><b>${state.mistakes}</b></div>
-        <div class="row"><span>提示次數</span><b>${state.hints}</b></div>
-        <div class="row"><span>緊急封存</span><b>${emergency}</b></div>
-      `;
-      $("result-table").innerHTML = common + `<div class="row"><span>說明</span><b>${r.desc}</b></div>`;
-      $("cert-table").innerHTML = `
-        <div class="row"><span>封存編號</span><b>${state.certNo}</b></div>
-        ${common}
+        <div class="row"><span>判讀錯誤</span><b>${state.mistakes}</b></div>
+        <div class="row"><span>標本掃描</span><b>${state.hints}</b></div>
+        <div class="row"><span>封存評級</span><b>${r.rank}</b></div>
         <div class="row"><span>封存日期</span><b>${state.completedAt}</b></div>
       `;
+      $("result-table").innerHTML = resultRows;
+      $("cert-table").innerHTML = certRows;
       setTab(state.endingTab || "result", false);
       saveGame();
     }
