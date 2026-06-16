@@ -1898,7 +1898,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.17</div>
+          <div class="kicker">FINAL BUILD 1.19</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2262,9 +2262,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_17_INTERFACE_REFINEMENT",
-      saveKey: "fifthResearcher_final_v1_17",
-      settingsKey: "fifthResearcher_final_v1_17_settings",
+      version: "FINAL_BUILD_1_19_AUDIT_CLEANUP",
+      saveKey: "fifthResearcher_final_v1_19",
+      settingsKey: "fifthResearcher_final_v1_19_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2477,6 +2477,8 @@
       player: "",
       difficulty: "normal",
       sound: true,
+      cameraStatus: "untested",
+      cameraPanelOpen: false,
       life: 3,
       pollution: 0,
       emergency: false,
@@ -2622,8 +2624,8 @@
         if (!raw) return false;
         const loaded = JSON.parse(raw);
         const merged = Object.assign(defaultState(), loaded);
-        if (!CONFIG.screens.includes(merged.screen)) merged.screen = "screen-home";
-        if (merged.dead) merged.screen = "screen-failure";
+        if (!merged.cameraStatus) merged.cameraStatus = state.cameraStatus || "untested";
+        if (typeof merged.cameraPanelOpen !== "boolean") merged.cameraPanelOpen = !!state.cameraPanelOpen;
         state = merged;
         ensureRandomLayouts(false);
         return true;
@@ -2703,7 +2705,12 @@
 
 
     function clearGameProgress(keepSettings = true) {
-      const keep = { difficulty: state.difficulty, sound: state.sound };
+      const keep = {
+        difficulty: state.difficulty,
+        sound: state.sound,
+        cameraStatus: state.cameraStatus || "untested",
+        cameraPanelOpen: !!state.cameraPanelOpen
+      };
       try { localStorage.removeItem(CONFIG.saveKey); } catch (e) {}
       state = defaultState();
       if (keepSettings) Object.assign(state, keep);
@@ -2822,7 +2829,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_17";
+        img.src = src + "?v=final1_19";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2838,7 +2845,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_17");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_19");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2917,7 +2924,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_17";
+        img.src = src + "?v=final1_19";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -3279,7 +3286,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_17" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_19" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -3294,24 +3301,21 @@
       if (state.placedBones.includes(id)) return;
 
       const decoy = DECOY_BONES.find(b => b.id === id);
+      state.selectedBone = id;
+      tone("click");
+      updatePuzzleUI();
+
       if (decoy) {
         const card = document.querySelector(`[data-bone="${id}"]`);
         if (card) {
           card.classList.add("decoy-glitch");
-          setTimeout(() => card.classList.remove("decoy-glitch"), 420);
+          setTimeout(() => card.classList.remove("decoy-glitch"), 360);
         }
-        state.selectedBone = "";
-        tone("error");
-        registerMistake("puzzle");
-        logTo("puzzle-log", "非本標本骨片。污染值上升。");
-        renderPuzzle();
+        logTo("puzzle-log", "已選擇疑似骨片。請放入標本板位置進行比對。");
         saveGame();
         return;
       }
 
-      state.selectedBone = id;
-      tone("click");
-      updatePuzzleUI();
       const bone = BONES.find(b => b.id === id);
       const label = puzzleDisplayMode().bone === "name" ? bone.name : displayBoneLabel(bone);
       logTo("puzzle-log", "已選擇 " + label + "。請點標本板上的對應位置。");
@@ -3321,6 +3325,27 @@
     function placeSelectedBone(targetId) {
       if (!state.selectedBone) {
         toast("請先選擇下方骨片。");
+        return;
+      }
+
+      const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
+      if (selectedDecoy) {
+        const card = document.querySelector(`[data-bone="${state.selectedBone}"]`);
+        const zone = document.querySelector(`[data-target="${targetId}"]`);
+        if (card) {
+          card.classList.add("decoy-glitch");
+          setTimeout(() => card.classList.remove("decoy-glitch"), 420);
+        }
+        if (zone) {
+          zone.classList.add("shake");
+          setTimeout(() => zone.classList.remove("shake"), 300);
+        }
+        registerMistake("puzzle");
+        tone("error");
+        logTo("puzzle-log", "非本標本骨片。污染值上升。");
+        state.selectedBone = "";
+        renderPuzzle();
+        saveGame();
         return;
       }
 
@@ -3362,7 +3387,15 @@
 
     function updatePuzzleUI() {
       const selected = BONES.find(b => b.id === state.selectedBone);
-      $("selected-label").textContent = selected ? "目前選擇：" + displayBoneLabel(selected) : "尚未選擇骨片";
+      const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
+      if (selected) {
+        $("selected-label").textContent = "目前選擇：" + displayBoneLabel(selected);
+      } else if (selectedDecoy) {
+        $("selected-label").textContent = "目前選擇：疑似骨片";
+      } else {
+        $("selected-label").textContent = "尚未選擇骨片";
+      }
+
       $("puzzle-bar").style.width = (state.placedBones.length / BONES.length * 100) + "%";
 
       const mode = puzzleDisplayMode();
@@ -3854,13 +3887,14 @@
     function performResetGame() {
       stopCamera();
       stopEndingMusic();
-      const keepDifficulty = state.difficulty;
-      const keepSound = state.sound;
-      const keepCameraStatus = state.cameraStatus;
+      const keep = {
+        difficulty: state.difficulty,
+        sound: state.sound,
+        cameraStatus: state.cameraStatus || "untested",
+        cameraPanelOpen: !!state.cameraPanelOpen
+      };
       clearGameProgress(true);
-      state.difficulty = keepDifficulty;
-      state.sound = keepSound;
-      state.cameraStatus = keepCameraStatus;
+      Object.assign(state, keep);
       saveSettings();
       saveGame();
       showScreen("screen-home");
