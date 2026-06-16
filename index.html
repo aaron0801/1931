@@ -1035,7 +1035,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.6</div>
+          <div class="kicker">FINAL BUILD 1.7</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1293,6 +1293,7 @@
             <h1 style="font-size:30px;">研究員登錄結果</h1>
             <h2 id="rank-title">封存完成</h2>
             <div class="table" id="result-table"></div>
+            <button class="btn danger" id="ending-result-restart-btn" style="margin-top:14px;">重新開始 / 下一位玩家</button>
           </div>
         </div>
 
@@ -1345,9 +1346,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_6_ADULT_HINT_FIX",
-      saveKey: "fifthResearcher_final_v1_6",
-      settingsKey: "fifthResearcher_final_v1_6_settings",
+      version: "FINAL_BUILD_1_7_RESULT_RESTART",
+      saveKey: "fifthResearcher_final_v1_7",
+      settingsKey: "fifthResearcher_final_v1_7_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1845,7 +1846,7 @@
         const img = new Image();
         img.onload = () => { assetStatus.images[src] = true; resolve(true); };
         img.onerror = () => { assetStatus.images[src] = false; resolve(false); };
-        img.src = src + "?v=final1_6";
+        img.src = src + "?v=final1_7";
       });
     }
 
@@ -1913,7 +1914,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_6";
+        img.src = src + "?v=final1_7";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -1965,6 +1966,7 @@
 
       $$(".tab-btn").forEach(btn => btn.addEventListener("click", () => safeAction(() => setTab(btn.dataset.tab))));
       $("save-card-btn").addEventListener("click", () => safeAction(saveCertificate));
+      $("ending-result-restart-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
       $("reset-game-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
       $("failure-restart-btn").addEventListener("click", () => safeAction(() => resetGame(false)));
       $("failure-home-btn").addEventListener("click", () => safeAction(() => { clearGameProgress(true); saveGame(); showScreen("screen-home"); }));
@@ -2228,7 +2230,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_6" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_7" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
