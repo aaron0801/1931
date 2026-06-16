@@ -1711,6 +1711,173 @@
       }
     }
 
+
+    /* v1.17 interface consistency refinement */
+    .section-label {
+      color: rgba(255,178,164,.58);
+      font-size: 12.5px;
+      letter-spacing: .18em;
+      margin: 24px 0 10px;
+      text-transform: uppercase;
+    }
+
+    .section-label::after {
+      content: "";
+      display: block;
+      width: 38px;
+      height: 1px;
+      background: rgba(255,178,164,.20);
+      margin-top: 9px;
+    }
+
+    .panel {
+      gap: 0;
+    }
+
+    .btn-grid {
+      gap: 12px;
+    }
+
+    .btn {
+      min-height: 56px;
+      border-radius: 18px;
+      letter-spacing: .05em;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(128,18,18,.92), rgba(38,3,3,.98));
+      border-color: rgba(255,178,164,.38);
+      box-shadow: 0 0 20px rgba(180,28,28,.14);
+    }
+
+    .btn.subtle {
+      background: rgba(0,0,0,.16);
+      border-color: rgba(255,178,164,.12);
+      color: rgba(241,227,200,.62);
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: rgba(58,5,5,.20);
+      border-color: rgba(210,58,50,.34);
+      color: rgba(255,218,208,.86);
+      box-shadow: none;
+    }
+
+    .collapse-card,
+    .camera-collapse,
+    .step-card,
+    .task,
+    .resume-warning,
+    .table {
+      border-color: rgba(255,178,164,.12);
+      box-shadow: inset 0 0 18px rgba(255,255,255,.018);
+    }
+
+    .collapse-head {
+      min-height: 68px;
+    }
+
+    .collapse-body {
+      padding-top: 0;
+    }
+
+    .compact-copy {
+      color: rgba(241,227,200,.72);
+      font-size: 15.5px;
+      line-height: 1.8;
+    }
+
+    .puzzle-actions {
+      margin: 14px 0 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .puzzle-actions .btn {
+      min-height: 52px;
+    }
+
+    .result-hero {
+      border: 1px solid rgba(255,178,164,.16);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(180,28,28,.26), transparent 54%),
+        rgba(0,0,0,.28);
+      padding: 22px 16px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .result-hero-title {
+      color: var(--cream);
+      font-size: clamp(30px, 8vw, 42px);
+      font-weight: 900;
+      letter-spacing: .08em;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .result-hero-sub {
+      color: rgba(241,227,200,.66);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .result-chip-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .result-chip {
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .result-chip span {
+      display: block;
+      color: rgba(255,178,164,.48);
+      font-size: 12px;
+      letter-spacing: .12em;
+      margin-bottom: 5px;
+    }
+
+    .result-chip b {
+      color: var(--cream);
+      font-size: 18px;
+    }
+
+    @media (max-width: 520px) {
+      .section-label {
+        font-size: 13px;
+        margin: 24px 0 12px;
+      }
+
+      .btn {
+        min-height: 58px;
+      }
+
+      .collapse-head {
+        min-height: 70px;
+      }
+
+      .result-chip b {
+        font-size: 18px;
+      }
+    }
+
+
+    /* scan-btn-fallback-spacing */
+    #scan-btn {
+      margin-top: 10px;
+      margin-bottom: 14px;
+    }
+
   </style>
 </head>
 
@@ -1731,7 +1898,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.16</div>
+          <div class="kicker">FINAL BUILD 1.17</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1788,14 +1955,14 @@
           <h1>封存設定</h1>
           <h2>選擇封存模式</h2>
 
-          <div class="section-label">ARCHIVE MODE</div>
+          <div class="section-label">ARCHIVE MODE｜封存模式</div>
           <div class="difficulty-grid">
             <button class="difficulty-card collapse-card" data-difficulty="easy">
               <div class="collapse-head">
                 <div class="collapse-title"><span class="collapse-arrow">▸</span><span>初次觀測</span></div>
               </div>
               <div class="collapse-body">
-                適合第一次體驗。顯示骨頭名稱與位置名稱，生命訊號不扣除。
+                第一次體驗適用。顯示名稱與位置，生命訊號不扣除。
               </div>
             </button>
 
@@ -1804,7 +1971,7 @@
                 <div class="collapse-title"><span class="collapse-arrow">▸</span><span>正式封存</span></div>
               </div>
               <div class="collapse-body">
-                標準挑戰模式。隱藏直接配對提示，加入 3 張干擾骨片。
+                標準挑戰。隱藏直接配對提示，加入 3 張干擾骨片。
               </div>
             </button>
 
@@ -1813,15 +1980,15 @@
                 <div class="collapse-title"><span class="collapse-arrow">▸</span><span>深層污染</span></div>
               </div>
               <div class="collapse-body">
-                高風險模式。隱藏名稱與位置文字，加入 6 張干擾骨片。
+                高風險模式。隱藏名稱與位置，加入 6 張干擾骨片。
               </div>
             </button>
           </div>
 
-          <div class="section-label">SYSTEM AUDIO</div>
+          <div class="section-label">SYSTEM AUDIO｜系統聲音</div>
           <button class="btn primary" id="sound-toggle">聲音：開</button>
 
-          <div class="section-label">CAMERA</div>
+          <div class="section-label">CAMERA ACCESS｜相機權限</div>
           <div class="camera-collapse" id="camera-collapse">
             <button class="camera-collapse-head" id="camera-toggle-btn" type="button">
               <div class="camera-head-row">
@@ -1830,9 +1997,9 @@
               <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
             </button>
             <div class="camera-collapse-body" id="camera-collapse-body">
-              <p>可在此先測試相機權限。</p>
-              <p>若尚未測試，後段按下「拍攝研究員影像」時，瀏覽器仍會詢問是否允許相機。</p>
-              <p>照片只會在本機生成封存證明卡，不會上傳。</p>
+              <p>可先測試相機權限。</p>
+              <p>未測試也沒關係，後段拍攝時仍會詢問授權。</p>
+              <p>影像只在本機生成證明卡，不會上傳。</p>
               <button class="btn" id="camera-test-btn">測試相機權限</button>
             </div>
           </div>
@@ -1900,7 +2067,7 @@
           選擇骨片，定位標本。必要時啟動標本掃描。
           <div class="bar"><i id="puzzle-bar"></i></div>
           <div class="scan-control">
-            <button class="btn" id="scan-btn">啟動標本掃描</button>
+            <div class="puzzle-actions"><button class="btn" id="scan-btn">啟動標本掃描</button></div>
             <div class="scan-count" id="scan-count">掃描：0 / 0</div>
           </div>
         </div>
@@ -2095,9 +2262,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_16_CAMERA_CARD_LAYOUT",
-      saveKey: "fifthResearcher_final_v1_16",
-      settingsKey: "fifthResearcher_final_v1_16_settings",
+      version: "FINAL_BUILD_1_17_INTERFACE_REFINEMENT",
+      saveKey: "fifthResearcher_final_v1_17",
+      settingsKey: "fifthResearcher_final_v1_17_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2655,7 +2822,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_16";
+        img.src = src + "?v=final1_17";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2671,7 +2838,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_16");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_17");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2750,7 +2917,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_16";
+        img.src = src + "?v=final1_17";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -3112,7 +3279,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_16" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_17" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -3569,15 +3736,22 @@
       if (!state.certNo) state.certNo = makeCertNo();
       const r = calcRank();
       $("rank-title").textContent = `封存評級 ${r.rank}｜${r.title}`;
+
       const resultRows = `
-        <div class="row"><span>封存狀態</span><b>研究員身份已確認</b></div>
-        <div class="row"><span>封存評級</span><b>${r.rank}</b></div>
-        <div class="row"><span>封存模式</span><b>${difficulty().label}</b></div>
-        <div class="row"><span>污染值</span><b>${state.pollution}%</b></div>
+        <div class="result-hero">
+          <div class="result-hero-title">封存完成</div>
+          <div class="result-hero-sub">第五位研究員身份已確認。<br>CASE-1931 已重新歸檔。</div>
+        </div>
+        <div class="result-chip-grid">
+          <div class="result-chip"><span>評級</span><b>${r.rank}</b></div>
+          <div class="result-chip"><span>模式</span><b>${difficulty().label}</b></div>
+          <div class="result-chip"><span>污染值</span><b>${state.pollution}%</b></div>
+          <div class="result-chip"><span>掃描</span><b>${state.hints}</b></div>
+        </div>
         <div class="row"><span>判讀錯誤</span><b>${state.mistakes}</b></div>
-        <div class="row"><span>標本掃描</span><b>${state.hints}</b></div>
-        <div class="row"><span>說明</span><b>${r.desc}</b></div>
+        <div class="row"><span>封存說明</span><b>${r.desc}</b></div>
       `;
+
       const certRows = `
         <div class="row"><span>封存編號</span><b>${state.certNo}</b></div>
         <div class="row"><span>研究員代號</span><b>${state.player || "觀測者"}</b></div>
