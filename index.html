@@ -1607,6 +1607,110 @@
       }
     }
 
+
+    /* v1.16 camera permission card layout fix */
+    .camera-collapse {
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 22px;
+      background: rgba(0,0,0,.24);
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .camera-collapse.is-open {
+      border-color: rgba(255,178,164,.28);
+      background: linear-gradient(180deg, rgba(70,8,8,.20), rgba(0,0,0,.25));
+    }
+
+    .camera-collapse-head {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--cream);
+      display: block;
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .camera-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .camera-collapse-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      font-size: 24px;
+      letter-spacing: .04em;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .camera-collapse-title span:last-child {
+      white-space: nowrap;
+    }
+
+    .camera-collapse .camera-status {
+      border: 0;
+      background: transparent;
+      padding: 8px 0 0 28px;
+      margin: 0;
+      color: rgba(241,227,200,.62);
+      font-size: 15px;
+      line-height: 1.65;
+      text-align: left;
+      box-shadow: none;
+    }
+
+    .camera-collapse-body {
+      display: none;
+      padding: 0 18px 18px;
+      animation: collapseIn .22s ease both;
+    }
+
+    .camera-collapse.is-open .camera-collapse-body {
+      display: block;
+    }
+
+    .camera-collapse-body p {
+      margin: 0 0 12px;
+      color: rgba(241,227,200,.76);
+      line-height: 1.85;
+      font-size: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .camera-collapse-head {
+        padding: 18px 17px;
+      }
+
+      .camera-collapse-title {
+        font-size: 25px;
+      }
+
+      .camera-collapse .camera-status {
+        font-size: 15.5px;
+        padding-left: 29px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .camera-collapse-title {
+        font-size: 23px;
+      }
+
+      .camera-collapse .camera-status {
+        font-size: 15px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1627,7 +1731,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.15</div>
+          <div class="kicker">FINAL BUILD 1.16</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1720,7 +1824,9 @@
           <div class="section-label">CAMERA</div>
           <div class="camera-collapse" id="camera-collapse">
             <button class="camera-collapse-head" id="camera-toggle-btn" type="button">
-              <div class="camera-collapse-title"><span id="camera-arrow">▸</span><span>相機權限</span></div>
+              <div class="camera-head-row">
+                <div class="camera-collapse-title"><span id="camera-arrow">▸</span><span>相機權限</span></div>
+              </div>
               <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
             </button>
             <div class="camera-collapse-body" id="camera-collapse-body">
@@ -1730,8 +1836,7 @@
               <button class="btn" id="camera-test-btn">測試相機權限</button>
             </div>
           </div>
-
-          <div class="btn-grid" style="margin-top:14px;">
+<div class="btn-grid" style="margin-top:14px;">
             <button class="btn subtle" data-action="home">返回主頁</button>
           </div>
         </div>
@@ -1990,9 +2095,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_15_COLLAPSIBLE_SETTINGS",
-      saveKey: "fifthResearcher_final_v1_15",
-      settingsKey: "fifthResearcher_final_v1_15_settings",
+      version: "FINAL_BUILD_1_16_CAMERA_CARD_LAYOUT",
+      saveKey: "fifthResearcher_final_v1_16",
+      settingsKey: "fifthResearcher_final_v1_16_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2550,7 +2655,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_15";
+        img.src = src + "?v=final1_16";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2566,7 +2671,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_15");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_16");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2645,7 +2750,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_15";
+        img.src = src + "?v=final1_16";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -3007,7 +3112,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_15" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_16" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
