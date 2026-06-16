@@ -110,6 +110,7 @@
     }
 
     .screen { display:none; animation:fadeIn .22s ease both; }
+    @keyframes screenFadeIn { from { opacity:.92; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
     .screen.active { display:block; }
 
     h1,h2,h3,p { margin:0; }
@@ -1254,7 +1255,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.11</div>
+          <div class="kicker">FINAL BUILD 1.12</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1590,9 +1591,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_11_IMMERSIVE_ANIMATION",
-      saveKey: "fifthResearcher_final_v1_11",
-      settingsKey: "fifthResearcher_final_v1_11_settings",
+      version: "FINAL_BUILD_1_12_EVENT_ANIMATION_ONLY",
+      saveKey: "fifthResearcher_final_v1_12",
+      settingsKey: "fifthResearcher_final_v1_12_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2150,7 +2151,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_11";
+        img.src = src + "?v=final1_12";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2166,7 +2167,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_11");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_12");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2245,7 +2246,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_11";
+        img.src = src + "?v=final1_12";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -2336,7 +2337,6 @@
 
     function showScreen(id, persist = true) {
       if (!CONFIG.screens.includes(id)) id = "screen-home";
-      flashBodyClass("transition-scan", assetStatus.lowPerformance ? 220 : 460);
       stopCamera();
       if (id !== "screen-ending") stopEndingMusic();
 
@@ -2598,7 +2598,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_11" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_12" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
