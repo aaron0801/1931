@@ -1051,6 +1051,189 @@
       line-height: 1.65;
     }
 
+
+    /* v1.11 immersive animation layer */
+    .fx-overlay {
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:80;
+      opacity:0;
+      background:
+        linear-gradient(to bottom, transparent 0%, rgba(255,40,35,.20) 48%, transparent 52%),
+        radial-gradient(circle at 50% 50%, rgba(255,25,25,.18), transparent 56%);
+      transform:translateY(-24%);
+      mix-blend-mode:screen;
+    }
+    body.transition-scan .fx-overlay {
+      animation:screenScanTransition .46s ease both;
+    }
+    @keyframes screenScanTransition {
+      0% { opacity:0; transform:translateY(-55%); filter:blur(1px); }
+      28% { opacity:1; }
+      100% { opacity:0; transform:translateY(62%); filter:blur(0); }
+    }
+
+    .system-modal {
+      position:fixed;
+      inset:0;
+      z-index:120;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:rgba(0,0,0,.64);
+      backdrop-filter:blur(6px);
+    }
+    .system-modal.show {
+      display:flex;
+      animation:modalBackdropIn .18s ease both;
+    }
+    .system-modal-card {
+      width:min(440px, 92vw);
+      border:1px solid rgba(255,178,164,.24);
+      border-radius:24px;
+      background:
+        linear-gradient(180deg, rgba(120,12,12,.36), rgba(6,0,0,.94)),
+        rgba(10,0,0,.96);
+      box-shadow:0 0 34px rgba(255,20,20,.22), inset 0 0 20px rgba(255,255,255,.035);
+      padding:22px;
+      transform-origin:center;
+      animation:modalCardIn .24s cubic-bezier(.2,.9,.2,1) both;
+    }
+    .system-modal-kicker {
+      color:rgba(255,178,164,.58);
+      font-size:11px;
+      letter-spacing:.22em;
+      margin-bottom:9px;
+    }
+    .system-modal-title {
+      color:var(--cream);
+      font-size:26px;
+      font-weight:800;
+      letter-spacing:.08em;
+      margin-bottom:10px;
+    }
+    .system-modal-message {
+      color:rgba(241,227,200,.74);
+      line-height:1.75;
+      font-size:14px;
+      white-space:pre-line;
+      margin-bottom:16px;
+    }
+    .system-modal-actions {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    @keyframes modalBackdropIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes modalCardIn {
+      from { opacity:0; transform:translateY(10px) scale(.96); }
+      to { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    body.pollution-hit .frame::after {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:75;
+      background:radial-gradient(circle at 50% 50%, transparent 42%, rgba(255,16,16,.34) 100%);
+      animation:pollutionImpact .55s ease both;
+    }
+    @keyframes pollutionImpact {
+      0% { opacity:0; }
+      22% { opacity:1; }
+      100% { opacity:0; }
+    }
+
+    body.life-hit .topbar,
+    body.life-hit .status {
+      animation:lifeWarning .42s ease both;
+    }
+    @keyframes lifeWarning {
+      0%,100% { transform:translateX(0); filter:none; }
+      18% { transform:translateX(-5px); filter:drop-shadow(0 0 12px rgba(255,40,40,.7)); }
+      40% { transform:translateX(5px); }
+      62% { transform:translateX(-3px); }
+    }
+
+    .board.scanning::before {
+      content:"";
+      position:absolute;
+      inset:-1px;
+      z-index:3;
+      pointer-events:none;
+      background:linear-gradient(to bottom, transparent 0%, rgba(255,50,45,.35) 46%, rgba(255,230,210,.18) 50%, rgba(255,50,45,.35) 54%, transparent 100%);
+      animation:boardScanSweep 1.45s ease-in-out infinite;
+      mix-blend-mode:screen;
+    }
+    body.scan-hit .board {
+      box-shadow:0 0 30px rgba(255,20,20,.28), inset 0 0 24px rgba(255,40,40,.12);
+    }
+    @keyframes boardScanSweep {
+      from { transform:translateY(-70%); opacity:.2; }
+      45% { opacity:1; }
+      to { transform:translateY(70%); opacity:.05; }
+    }
+
+    .bone-card.correct-flash,
+    .drop-zone.correct-flash {
+      animation:correctLock .55s ease both;
+    }
+    @keyframes correctLock {
+      0% { box-shadow:0 0 0 rgba(255,240,220,0); }
+      35% { box-shadow:0 0 24px rgba(255,230,200,.35), 0 0 42px rgba(255,50,45,.25); }
+      100% { box-shadow:0 0 0 rgba(255,240,220,0); }
+    }
+    .bone-card.decoy-glitch {
+      animation:decoyGlitch .34s steps(2,end) both;
+    }
+    @keyframes decoyGlitch {
+      0% { transform:translateX(0); filter:none; }
+      25% { transform:translateX(-4px); filter:hue-rotate(18deg) contrast(1.4); }
+      50% { transform:translateX(5px); }
+      75% { transform:translateX(-2px); filter:contrast(1.8); }
+      100% { transform:translateX(0); filter:none; }
+    }
+
+    .year-reveal.show b {
+      display:inline-block;
+      overflow:hidden;
+      animation:codeDecode .85s steps(4,end) both, redPulse 1s ease;
+      white-space:nowrap;
+    }
+    @keyframes codeDecode {
+      0% { max-width:0; opacity:.4; filter:blur(3px); }
+      30% { opacity:1; }
+      100% { max-width:6em; opacity:1; filter:blur(0); }
+    }
+
+    body.box-unlock .box-visual {
+      animation:shake .28s ease, redPulse 1.1s ease, boxUnlockGlow 1.1s ease both;
+    }
+    @keyframes boxUnlockGlow {
+      0% { filter:brightness(1); }
+      35% { filter:brightness(1.8) contrast(1.18); }
+      100% { filter:brightness(1); }
+    }
+
+    body.identity-reveal .panel:has(#observer-frame),
+    body.identity-reveal #observer-frame {
+      animation:identityPulse .95s ease both;
+    }
+    @keyframes identityPulse {
+      0% { filter:brightness(.65) blur(1px); box-shadow:none; }
+      38% { filter:brightness(1.6) blur(0); box-shadow:0 0 30px rgba(255,40,40,.34); }
+      100% { filter:brightness(1); box-shadow:none; }
+    }
+
+    body.low-performance .fx-overlay,
+    body.low-performance .board.scanning::before,
+    body.low-performance .system-modal-card {
+      animation-duration:.18s !important;
+    }
+
   </style>
 </head>
 
@@ -1071,7 +1254,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.10</div>
+          <div class="kicker">FINAL BUILD 1.11</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1387,15 +1570,29 @@
   </div>
 
   <div class="staff-panel" id="staff-panel"></div>
+  <div class="fx-overlay" id="fx-overlay"></div>
   <div class="toast" id="toast"></div>
+
+
+  <div class="system-modal" id="system-modal" aria-hidden="true">
+    <div class="system-modal-card">
+      <div class="system-modal-kicker" id="system-modal-kicker">SYSTEM NOTICE</div>
+      <div class="system-modal-title" id="system-modal-title">系統確認</div>
+      <div class="system-modal-message" id="system-modal-message">請確認操作。</div>
+      <div class="system-modal-actions">
+        <button class="btn subtle" id="system-modal-cancel">取消</button>
+        <button class="btn danger" id="system-modal-confirm">確認</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_10_CAMERA_PRIVACY",
-      saveKey: "fifthResearcher_final_v1_10",
-      settingsKey: "fifthResearcher_final_v1_10_settings",
+      version: "FINAL_BUILD_1_11_IMMERSIVE_ANIMATION",
+      saveKey: "fifthResearcher_final_v1_11",
+      settingsKey: "fifthResearcher_final_v1_11_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1662,6 +1859,54 @@
       toast.timer = setTimeout(() => el.classList.remove("show"), 1800);
     }
 
+    function flashBodyClass(className, duration = 520) {
+      document.body.classList.remove(className);
+      void document.body.offsetWidth;
+      document.body.classList.add(className);
+      clearTimeout(flashBodyClass.timers[className]);
+      flashBodyClass.timers[className] = setTimeout(() => document.body.classList.remove(className), duration);
+    }
+    flashBodyClass.timers = {};
+
+    function showSystemModal(options = {}) {
+      const modal = $("system-modal");
+      $("system-modal-kicker").textContent = options.kicker || "SYSTEM NOTICE";
+      $("system-modal-title").textContent = options.title || "系統確認";
+      $("system-modal-message").textContent = options.message || "請確認操作。";
+      $("system-modal-confirm").textContent = options.confirmText || "確認";
+      $("system-modal-cancel").textContent = options.cancelText || "取消";
+      $("system-modal-confirm").className = "btn " + (options.danger ? "danger" : "primary");
+      modal.dataset.onConfirm = options.onConfirm || "";
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSystemModal() {
+      const modal = $("system-modal");
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      modal.dataset.onConfirm = "";
+    }
+
+    function confirmSystemRestart() {
+      showSystemModal({
+        kicker: "SYSTEM RESET",
+        title: "重新開始",
+        message: "確定要清除目前進度並重新開始？",
+        confirmText: "重新開始",
+        cancelText: "取消",
+        danger: true,
+        onConfirm: "reset"
+      });
+    }
+
+    function runSystemModalConfirm() {
+      const action = $("system-modal").dataset.onConfirm;
+      closeSystemModal();
+      if (action === "reset") performResetGame();
+    }
+
+
     function logTo(id, message) {
       const el = $(id);
       if (el) el.textContent = "SYSTEM：" + message;
@@ -1905,7 +2150,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_10";
+        img.src = src + "?v=final1_11";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -1921,7 +2166,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_10");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_11");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2000,7 +2245,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_10";
+        img.src = src + "?v=final1_11";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -2045,6 +2290,8 @@
         toast(state.sound ? "聲音已開啟" : "聲音已關閉");
       }));
 
+      bindOnce($("system-modal-cancel"), "click", () => safeAction(closeSystemModal));
+      bindOnce($("system-modal-confirm"), "click", () => safeAction(runSystemModalConfirm));
       bindOnce($("camera-test-btn"), "click", () => safeAction(requestCameraTest));
       bindOnce($("scan-btn"), "click", () => safeAction(useScan));
       bindOnce($("to-order-btn"), "click", () => safeAction(() => showScreen("screen-order")));
@@ -2089,6 +2336,7 @@
 
     function showScreen(id, persist = true) {
       if (!CONFIG.screens.includes(id)) id = "screen-home";
+      flashBodyClass("transition-scan", assetStatus.lowPerformance ? 220 : 460);
       stopCamera();
       if (id !== "screen-ending") stopEndingMusic();
 
@@ -2103,7 +2351,10 @@
       if (id === "screen-clues") renderClues();
       if (id === "screen-order") renderOrder();
       if (id === "screen-box") updateBoxUI();
-      if (id === "screen-reveal") renderReveal();
+      if (id === "screen-reveal") {
+        renderReveal();
+        flashBodyClass("identity-reveal", 950);
+      }
       if (id === "screen-failure") renderFailure();
       if (id === "screen-ending") renderEnding();
       document.body.classList.toggle("death-active", id === "screen-failure");
@@ -2177,6 +2428,7 @@
     function addPollution(amount) {
       state.pollution = Math.min(100, state.pollution + amount);
       tone("pollution");
+      flashBodyClass("pollution-hit", assetStatus.lowPerformance ? 260 : 560);
       applyPollutionClass();
       updateStatusAll();
       if (state.pollution >= 100) {
@@ -2189,6 +2441,7 @@
       state.life = Math.max(0, state.life - amount);
       if (state.life < before) {
         tone("damage");
+        flashBodyClass("life-hit", assetStatus.lowPerformance ? 260 : 460);
         document.querySelector(".frame").classList.add("shake");
         setTimeout(() => document.querySelector(".frame").classList.remove("shake"), 300);
       }
@@ -2345,7 +2598,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_10" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_11" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -2361,6 +2614,11 @@
 
       const decoy = DECOY_BONES.find(b => b.id === id);
       if (decoy) {
+        const card = document.querySelector(`[data-bone="${id}"]`);
+        if (card) {
+          card.classList.add("decoy-glitch");
+          setTimeout(() => card.classList.remove("decoy-glitch"), 420);
+        }
         state.selectedBone = "";
         tone("error");
         registerMistake("puzzle");
@@ -2384,35 +2642,40 @@
         toast("請先選擇下方骨片。");
         return;
       }
-      if (state.placedBones.includes(targetId)) return;
 
       if (state.selectedBone === targetId) {
-        state.placedBones.push(targetId);
-        state.selectedBone = "";
-        state.puzzleWrongStreak = 0;
-        tone("ok");
-        const bone = BONES.find(b => b.id === targetId);
-        const zone = document.querySelector(`[data-target="${targetId}"]`);
-        zone?.classList.add("hit");
-        $("fossil-board").classList.add("scanning");
-        setTimeout(() => $("fossil-board").classList.remove("scanning"), 900);
-        logTo("puzzle-log", bone.name + " 已定位。");
-        if (state.placedBones.length === BONES.length) {
+        if (!state.placedBones.includes(targetId)) {
+          state.placedBones.push(targetId);
+          tone("ok");
+          const bone = BONES.find(b => b.id === targetId);
+          const zone = document.querySelector(`[data-target="${targetId}"]`);
+          const card = document.querySelector(`[data-bone="${targetId}"]`);
+          if (zone) zone.classList.add("correct-flash");
+          if (card) card.classList.add("correct-flash");
           setTimeout(() => {
-            toast("標本復原完成。");
-            showScreen("screen-clues");
+            if (zone) zone.classList.remove("correct-flash");
+            if (card) card.classList.remove("correct-flash");
+          }, 600);
+          logTo("puzzle-log", (bone ? bone.name : "骨片") + " 定位完成。");
+        }
+        state.selectedBone = "";
+        if (state.placedBones.length === BONES.length) {
+          logTo("puzzle-log", "九塊骨片已定位。進入刻痕檢查。");
+          setTimeout(() => {
+            if (!state.dead) {
+              toast("標本復原完成。");
+              showScreen("screen-clues");
+            }
           }, 650);
         }
       } else {
-        tone("error");
         registerMistake("puzzle");
-        const board = $("fossil-board");
-        board.classList.add("shake");
-        setTimeout(() => board.classList.remove("shake"), 260);
-        logTo("puzzle-log", "位置不符。污染值上升。");
+        tone("error");
+        document.querySelector(".board").classList.add("shake");
+        setTimeout(() => document.querySelector(".board").classList.remove("shake"), 260);
+        logTo("puzzle-log", "骨片不匹配。污染值上升。");
       }
-
-      updatePuzzleUI();
+      renderPuzzle();
       saveGame();
     }
 
@@ -2456,6 +2719,7 @@
       state.hints++;
       addPollution(mode.scanCost);
       tone("glitch");
+      flashBodyClass("scan-hit", state.difficulty === "hard" ? 2200 : 3200);
 
       $$(".drop-zone").forEach(zone => zone.classList.add("scan-visible"));
       $("fossil-board").classList.add("scanning");
@@ -2575,7 +2839,8 @@
       if (state.order.join(",") === CORRECT_ORDER.join(",")) {
         state.orderSolved = true;
         tone("ok");
-        logTo("order-log", "刻痕順序確認，核心封存碼已復原。");
+        flashBodyClass("transition-scan", 420);
+        logTo("order-log", "羅馬刻痕轉譯中……核心封存碼已復原。");
       } else {
         registerMistake("order");
         tone("error");
@@ -2596,6 +2861,7 @@
       if (pin === CONFIG.pin) {
         state.boxUnlocked = true;
         tone("ok");
+        flashBodyClass("box-unlock", 1150);
         playExternal("boxOpen").then(ok => { if (!ok) tone("ok"); });
         $("box-visual").classList.add("opening");
         logTo("box-log", "密碼正確。封存箱已開啟。");
@@ -2893,18 +3159,27 @@
       toast("封存證明卡已生成。");
     }
 
-    function resetGame(confirmFirst = false) {
-      if (confirmFirst && !confirm("確定清除目前玩家進度，開始下一位玩家？")) return;
+    function performResetGame() {
       stopCamera();
       stopEndingMusic();
       const keepDifficulty = state.difficulty;
       const keepSound = state.sound;
+      const keepCameraStatus = state.cameraStatus;
       clearGameProgress(true);
       state.difficulty = keepDifficulty;
       state.sound = keepSound;
+      state.cameraStatus = keepCameraStatus;
       saveSettings();
       saveGame();
       showScreen("screen-home");
+    }
+
+    function resetGame(confirmFirst = false) {
+      if (confirmFirst) {
+        confirmSystemRestart();
+        return;
+      }
+      performResetGame();
     }
 
     function updateStaffPanel() {
