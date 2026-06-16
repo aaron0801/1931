@@ -1015,6 +1015,42 @@
       letter-spacing: .12em;
     }
 
+
+    .privacy-card {
+      border: 1px solid rgba(255,178,164,.14);
+      border-radius: 20px;
+      background: rgba(0,0,0,.28);
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .privacy-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--cream);
+      letter-spacing: .08em;
+    }
+    .privacy-card p {
+      margin: 0 0 10px;
+      color: rgba(241,227,200,.68);
+      line-height: 1.75;
+      font-size: 13px;
+    }
+    .camera-status {
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: rgba(241,227,200,.72);
+      background: rgba(0,0,0,.30);
+      font-size: 13px;
+      margin: 10px 0;
+    }
+    .privacy-note {
+      margin-top: 10px;
+      color: rgba(241,227,200,.52);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
   </style>
 </head>
 
@@ -1035,7 +1071,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.9</div>
+          <div class="kicker">FINAL BUILD 1.10</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1064,7 +1100,7 @@
             <button class="btn subtle" id="resume-home-btn">回首頁</button>
           </div>
 
-          <p class="small-note">展場展示時，建議每位玩家開始前選擇「重新開始」。</p>
+          <p class="small-note"></p>
         </div>
       </section>
 
@@ -1105,6 +1141,16 @@
           <button class="btn primary" id="sound-toggle">聲音：開</button>
           <button class="btn subtle" data-action="home" style="margin-top:10px;">返回主頁</button>
         </div>
+      
+          <div class="privacy-card">
+            <h3>相機權限</h3>
+            <p>遊戲後段會需要拍攝研究員影像，作為封存證明卡的一部分。</p>
+            <p>照片只會在你的手機瀏覽器內使用，不會上傳到伺服器，也不會傳送給我們。</p>
+            <p>若不想開啟相機，也可以使用觀測者剪影完成遊戲。</p>
+            <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
+            <button class="btn" id="camera-test-btn">測試相機權限</button>
+          </div>
+
       </section>
 
       <section id="screen-how" class="screen">
@@ -1261,6 +1307,7 @@
           </div>
           <p class="small-note">相機為選用，不開啟也能完成遊戲。</p>
         </div>
+      <p class="privacy-note">影像僅用於本機生成封存證明卡，不會上傳。</p>
       </section>
 
 
@@ -1346,9 +1393,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_9_RESUME_COPY_CLEANUP",
-      saveKey: "fifthResearcher_final_v1_9",
-      settingsKey: "fifthResearcher_final_v1_9_settings",
+      version: "FINAL_BUILD_1_10_CAMERA_PRIVACY",
+      saveKey: "fifthResearcher_final_v1_10",
+      settingsKey: "fifthResearcher_final_v1_10_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1622,7 +1669,11 @@
 
     function saveSettings() {
       try {
-        localStorage.setItem(CONFIG.settingsKey, JSON.stringify({ difficulty: state.difficulty, sound: state.sound }));
+        localStorage.setItem(CONFIG.settingsKey, JSON.stringify({
+          difficulty: state.difficulty,
+          sound: state.sound,
+          cameraStatus: state.cameraStatus
+        }));
       } catch (e) {}
     }
 
@@ -1630,9 +1681,10 @@
       try {
         const raw = localStorage.getItem(CONFIG.settingsKey);
         if (!raw) return;
-        const s = JSON.parse(raw);
-        if (s.difficulty && DIFFICULTIES[s.difficulty]) state.difficulty = s.difficulty;
-        if (typeof s.sound === "boolean") state.sound = s.sound;
+        const data = JSON.parse(raw);
+        if (data.difficulty && DIFFICULTIES[data.difficulty]) state.difficulty = data.difficulty;
+        if (typeof data.sound === "boolean") state.sound = data.sound;
+        if (data.cameraStatus) state.cameraStatus = data.cameraStatus;
       } catch (e) {}
     }
 
@@ -1853,7 +1905,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_9";
+        img.src = src + "?v=final1_10";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -1869,7 +1921,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_9");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_10");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -1948,7 +2000,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_9";
+        img.src = src + "?v=final1_10";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -1993,6 +2045,7 @@
         toast(state.sound ? "聲音已開啟" : "聲音已關閉");
       }));
 
+      bindOnce($("camera-test-btn"), "click", () => safeAction(requestCameraTest));
       bindOnce($("scan-btn"), "click", () => safeAction(useScan));
       bindOnce($("to-order-btn"), "click", () => safeAction(() => showScreen("screen-order")));
       bindOnce($("confirm-order-btn"), "click", () => safeAction(confirmOrder));
@@ -2227,7 +2280,24 @@
       $$(".difficulty-card").forEach(btn => btn.classList.toggle("active", btn.dataset.difficulty === state.difficulty));
       const st = $("sound-toggle");
       if (st) st.textContent = state.sound ? "聲音：開" : "聲音：關";
+    
+      updateCameraStatusUI();
     }
+
+    function cameraStatusText() {
+      const status = state.cameraStatus || "untested";
+      if (!assetStatus.camera) return "相機狀態：此瀏覽器不支援";
+      if (status === "allowed") return "相機狀態：已允許";
+      if (status === "denied") return "相機狀態：已拒絕，可使用剪影";
+      if (status === "testing") return "相機狀態：測試中……";
+      return "相機狀態：尚未測試";
+    }
+
+    function updateCameraStatusUI() {
+      const el = $("camera-status-text");
+      if (el) el.textContent = cameraStatusText();
+    }
+
 
     function renderPuzzle() {
       ensureRandomLayouts(false);
@@ -2275,7 +2345,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_9" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_10" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -2551,22 +2621,67 @@
       }
     }
 
-    async function openCamera() {
+
+    async function requestCameraTest() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        useSilhouette();
-        toast("此瀏覽器不支援相機，已使用剪影。");
+        state.cameraStatus = "unsupported";
+        updateCameraStatusUI();
+        saveSettings();
+        saveGame();
+        toast("此瀏覽器不支援相機。");
         return;
       }
+
+      state.cameraStatus = "testing";
+      updateCameraStatusUI();
+
+      let testStream = null;
       try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:"user" }, audio:false });
-        $("camera-video").srcObject = mediaStream;
-        $("photo-frame").classList.add("live");
-        $("photo-frame").classList.remove("has-photo");
-        $("capture-btn").style.display = "block";
+        testStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: false
+        });
+        state.cameraStatus = "allowed";
+        toast("相機權限已允許。");
+      } catch (e) {
+        state.cameraStatus = "denied";
+        toast("相機未允許，可改用剪影。");
+      } finally {
+        if (testStream) testStream.getTracks().forEach(track => track.stop());
+        updateCameraStatusUI();
+        saveSettings();
+        saveGame();
+      }
+    }
+
+    async function openCamera() {
+      initAudio();
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        state.cameraStatus = "unsupported";
+        updateCameraStatusUI();
+        toast("此瀏覽器不支援相機，可使用剪影。");
+        useSilhouette();
+        return;
+      }
+
+      try {
+        stopCamera();
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio:false });
+        $("camera-video").srcObject = cameraStream;
+        $("camera-video").style.display = "block";
+        $("capture-btn").disabled = false;
+        state.cameraStatus = "allowed";
+        updateCameraStatusUI();
+        saveSettings();
+        saveGame();
         tone("ok");
       } catch (e) {
+        state.cameraStatus = "denied";
+        updateCameraStatusUI();
+        saveSettings();
+        saveGame();
+        toast("相機未允許，可使用剪影。");
         useSilhouette();
-        toast("相機未啟用，已使用剪影。");
       }
     }
 
