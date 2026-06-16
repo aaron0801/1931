@@ -1035,7 +1035,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.7</div>
+          <div class="kicker">FINAL BUILD 1.8</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1346,9 +1346,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_7_RESULT_RESTART",
-      saveKey: "fifthResearcher_final_v1_7",
-      settingsKey: "fifthResearcher_final_v1_7_settings",
+      version: "FINAL_BUILD_1_8_BOOT_STABILITY",
+      saveKey: "fifthResearcher_final_v1_8",
+      settingsKey: "fifthResearcher_final_v1_8_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -1843,93 +1843,138 @@
 
     function preloadImage(src) {
       return new Promise(resolve => {
+        let done = false;
+        const finish = ok => {
+          if (done) return;
+          done = true;
+          assetStatus.images[src] = ok;
+          resolve(ok);
+        };
         const img = new Image();
-        img.onload = () => { assetStatus.images[src] = true; resolve(true); };
-        img.onerror = () => { assetStatus.images[src] = false; resolve(false); };
-        img.src = src + "?v=final1_7";
+        img.onload = () => finish(true);
+        img.onerror = () => finish(false);
+        img.src = src + "?v=final1_8";
+        setTimeout(() => finish(false), 1200);
       });
     }
 
     async function boot() {
       const params = new URL(location.href).searchParams;
-      if (params.has("staff")) document.body.classList.add("staff");
-      if (params.has("restart") || params.has("reset")) {
-        clearGameProgress(false);
-        const clean = new URL(location.href);
-        clean.searchParams.delete("restart");
-        clean.searchParams.delete("reset");
-        if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1");
-        history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
-      }
 
       try {
-        localStorage.setItem("__test", "1");
-        localStorage.removeItem("__test");
-        assetStatus.localStorage = true;
-      } catch (e) { assetStatus.localStorage = false; }
+        if (params.has("staff")) document.body.classList.add("staff");
 
-      assetStatus.camera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-      assetStatus.lowPerformance = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
-      if (assetStatus.lowPerformance) document.body.classList.add("low-performance");
+        if (params.has("restart") || params.has("reset")) {
+          clearGameProgress(false);
+          const clean = new URL(location.href);
+          clean.searchParams.delete("restart");
+          clean.searchParams.delete("reset");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_8");
+          history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
+        }
 
-      loadSettings();
+        try {
+          localStorage.setItem("__test", "1");
+          localStorage.removeItem("__test");
+          assetStatus.localStorage = true;
+        } catch (e) {
+          assetStatus.localStorage = false;
+        }
 
-      const wasReset = params.has("restart") || params.has("reset");
-      const exhibitMode = params.has("exhibit");
-      let loadedExistingProgress = false;
+        assetStatus.camera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+        assetStatus.lowPerformance = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        if (assetStatus.lowPerformance) document.body.classList.add("low-performance");
 
-      if (!wasReset && !exhibitMode) {
-        loadedExistingProgress = loadGame();
+        loadSettings();
+
+        const wasReset = params.has("restart") || params.has("reset");
+        const exhibitMode = params.has("exhibit");
+        let loadedExistingProgress = false;
+
+        if (!wasReset && !exhibitMode) {
+          loadedExistingProgress = loadGame();
+        }
+
+        if (exhibitMode) {
+          clearGameProgress(true);
+        }
+
+        const shouldAskResume = loadedExistingProgress && hasMeaningfulProgress(state);
+        if (shouldAskResume) {
+          pendingResumeState = JSON.parse(JSON.stringify(state));
+        }
+
+        const loadTargets = CONFIG.imageAssets;
+        for (let i = 0; i < loadTargets.length; i++) {
+          $("loading-text").textContent = i < 8 ? "檢查標本影像……" : "檢查骨片素材……";
+          $("loading-bar").style.width = Math.round((i / loadTargets.length) * 100) + "%";
+          $("loading-log").textContent = "SYSTEM：檢查 " + loadTargets[i];
+          await preloadImage(loadTargets[i]);
+        }
+
+        $("loading-bar").style.width = "100%";
+        $("loading-text").textContent = "系統接入完成。";
+        $("loading-log").textContent = "SYSTEM：準備進入主頁。";
+
+        setupImages();
+        bindEvents();
+        updateSettingsUI();
+        updateStatusAll();
+        updateBoxUI();
+
+        const bootTarget = pendingResumeState ? "screen-resume" : (state.screen === "screen-loading" ? "screen-home" : state.screen);
+        setTimeout(() => showScreen(bootTarget, false), 180);
+
+        setTimeout(() => {
+          const active = document.querySelector(".screen.active");
+          if (active && active.id === "screen-loading") {
+            console.warn("Boot fallback activated.");
+            showScreen("screen-home", false);
+          }
+        }, 1800);
+      } catch (err) {
+        console.error("Boot failed:", err);
+        try {
+          $("loading-text").textContent = "系統接入完成。";
+          $("loading-log").textContent = "SYSTEM：啟動備援主頁。";
+          bindEvents();
+          setTimeout(() => showScreen("screen-home", false), 120);
+        } catch (fallbackErr) {
+          console.error("Boot fallback failed:", fallbackErr);
+        }
       }
-
-      if (exhibitMode) {
-        clearGameProgress(true);
-      }
-
-      const shouldAskResume = loadedExistingProgress && hasMeaningfulProgress(state);
-      if (shouldAskResume) {
-        pendingResumeState = JSON.parse(JSON.stringify(state));
-      }
-
-      const loadTargets = CONFIG.imageAssets;
-      for (let i = 0; i < loadTargets.length; i++) {
-        $("loading-text").textContent = i < 8 ? "檢查標本影像……" : "檢查骨片素材……";
-        $("loading-bar").style.width = Math.round((i / loadTargets.length) * 100) + "%";
-        $("loading-log").textContent = "SYSTEM：檢查 " + loadTargets[i];
-        await preloadImage(loadTargets[i]);
-      }
-
-      $("loading-bar").style.width = "100%";
-      $("loading-text").textContent = "系統接入完成。";
-      $("loading-log").textContent = "SYSTEM：準備進入主頁。";
-
-      setupImages();
-      renderAll();
-      bindEvents();
-
-      const bootTarget = pendingResumeState ? "screen-resume" : (state.screen === "screen-loading" ? "screen-home" : state.screen);
-      setTimeout(() => showScreen(bootTarget, false), 420);
     }
 
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_7";
+        img.src = src + "?v=final1_8";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
     }
 
-    function bindEvents() {
-      document.addEventListener("click", e => {
-        const actionEl = e.target.closest("[data-action]");
-        if (!actionEl) return;
-        const action = actionEl.dataset.action;
-        safeAction(() => runAction(action));
-      });
+    function bindOnce(el, eventName, handler) {
+      if (!el || el.dataset.bound === "1") return;
+      el.dataset.bound = "1";
+      el.addEventListener(eventName, handler);
+    }
 
-      $$(".difficulty-card").forEach(btn => btn.addEventListener("click", () => safeAction(() => {
+
+    function bindEvents() {
+      if (document.body.dataset.globalBound !== "1") {
+        document.body.dataset.globalBound = "1";
+        document.addEventListener("click", e => {
+          const actionEl = e.target.closest("[data-action]");
+          if (!actionEl) return;
+          const action = actionEl.dataset.action;
+          safeAction(() => runAction(action));
+        });
+      }
+
+      $$(".difficulty-card").forEach(btn => bindOnce(btn, "click", () => safeAction(() => {
         state.difficulty = btn.dataset.difficulty;
+        ensureRandomLayouts(true);
         saveSettings();
         saveGame();
         tone("ok");
@@ -1939,7 +1984,7 @@
         updateStatusAll();
       })));
 
-      $("sound-toggle").addEventListener("click", () => safeAction(() => {
+      bindOnce($("sound-toggle"), "click", () => safeAction(() => {
         state.sound = !state.sound;
         if (state.sound) tone("ok");
         saveSettings();
@@ -1948,31 +1993,31 @@
         toast(state.sound ? "聲音已開啟" : "聲音已關閉");
       }));
 
-      $("scan-btn").addEventListener("click", () => safeAction(useScan));
-      $("to-order-btn").addEventListener("click", () => safeAction(() => showScreen("screen-order")));
-      $("confirm-order-btn").addEventListener("click", () => safeAction(confirmOrder));
-      $("reset-order-btn").addEventListener("click", () => safeAction(resetOrder));
-      $("to-box-btn").addEventListener("click", () => safeAction(() => showScreen("screen-box")));
+      bindOnce($("scan-btn"), "click", () => safeAction(useScan));
+      bindOnce($("to-order-btn"), "click", () => safeAction(() => showScreen("screen-order")));
+      bindOnce($("confirm-order-btn"), "click", () => safeAction(confirmOrder));
+      bindOnce($("reset-order-btn"), "click", () => safeAction(resetOrder));
+      bindOnce($("to-box-btn"), "click", () => safeAction(() => showScreen("screen-box")));
 
-      $("pin-input").addEventListener("input", updatePinDisplay);
-      $("confirm-pin-btn").addEventListener("click", () => safeAction(checkPin));
-      $("hint-btn").addEventListener("click", () => safeAction(useHint));
-      $("open-box-btn").addEventListener("click", () => safeAction(() => showScreen("screen-reveal")));
+      bindOnce($("pin-input"), "input", updatePinDisplay);
+      bindOnce($("confirm-pin-btn"), "click", () => safeAction(checkPin));
+      bindOnce($("hint-btn"), "click", () => safeAction(useHint));
+      bindOnce($("open-box-btn"), "click", () => safeAction(() => showScreen("screen-reveal")));
 
-      $("camera-btn").addEventListener("click", () => safeAction(openCamera));
-      $("capture-btn").addEventListener("click", () => safeAction(capturePhoto));
-      $("silhouette-btn").addEventListener("click", () => safeAction(useSilhouette));
-      $("finish-btn").addEventListener("click", () => safeAction(finishGame));
+      bindOnce($("camera-btn"), "click", () => safeAction(openCamera));
+      bindOnce($("capture-btn"), "click", () => safeAction(capturePhoto));
+      bindOnce($("silhouette-btn"), "click", () => safeAction(useSilhouette));
+      bindOnce($("finish-btn"), "click", () => safeAction(finishGame));
 
-      $$(".tab-btn").forEach(btn => btn.addEventListener("click", () => safeAction(() => setTab(btn.dataset.tab))));
-      $("save-card-btn").addEventListener("click", () => safeAction(saveCertificate));
-      $("ending-result-restart-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
-      $("reset-game-btn").addEventListener("click", () => safeAction(() => resetGame(true)));
-      $("failure-restart-btn").addEventListener("click", () => safeAction(() => resetGame(false)));
-      $("failure-home-btn").addEventListener("click", () => safeAction(() => { clearGameProgress(true); saveGame(); showScreen("screen-home"); }));
-      $("resume-continue-btn").addEventListener("click", () => safeAction(continueSavedProgress));
-      $("resume-new-btn").addEventListener("click", () => safeAction(startFreshPlayer));
-      $("resume-home-btn").addEventListener("click", () => safeAction(clearResumeAndHome));
+      $$(".tab-btn").forEach(btn => bindOnce(btn, "click", () => safeAction(() => setTab(btn.dataset.tab))));
+      bindOnce($("save-card-btn"), "click", () => safeAction(saveCertificate));
+      bindOnce($("ending-result-restart-btn"), "click", () => safeAction(() => resetGame(true)));
+      bindOnce($("reset-game-btn"), "click", () => safeAction(() => resetGame(true)));
+      bindOnce($("failure-restart-btn"), "click", () => safeAction(() => resetGame(false)));
+      bindOnce($("failure-home-btn"), "click", () => safeAction(() => { clearGameProgress(true); saveGame(); showScreen("screen-home"); }));
+      bindOnce($("resume-continue-btn"), "click", () => safeAction(continueSavedProgress));
+      bindOnce($("resume-new-btn"), "click", () => safeAction(startFreshPlayer));
+      bindOnce($("resume-home-btn"), "click", () => safeAction(clearResumeAndHome));
     }
 
     function runAction(action) {
@@ -2016,8 +2061,8 @@
 
     function setStage(id) {
       const map = {
-        "screen-loading":"CASE-1931 / SYSTEM BOOT",
-        "screen-resume":"CASE-1931 / 未完成紀錄",
+        "screen-loading":"LEVEL 07 / SYSTEM BOOT",
+        "screen-resume":"LEVEL 07 / 未完成紀錄",
         "screen-home":"LEVEL 07 / 主頁",
         "screen-settings":"LEVEL 07 / 遊戲設定",
         "screen-how":"LEVEL 07 / 遊戲玩法",
@@ -2230,7 +2275,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_7" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_8" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -2621,6 +2666,10 @@
     }
 
     function renderEnding() {
+      if (!state.boxUnlocked && !state.completedAt) {
+        showScreen("screen-home", false);
+        return;
+      }
       if (!state.completedAt) state.completedAt = new Date().toLocaleString("zh-TW");
       if (!state.certNo) state.certNo = makeCertNo();
       const r = calcRank();
