@@ -2019,6 +2019,85 @@
       }
     }
 
+
+    /* v1.21 pollution warning modal */
+    .penalty-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,.54);
+      backdrop-filter: blur(5px);
+    }
+    .penalty-modal.show {
+      display: flex;
+      animation: modalBackdropIn .18s ease both;
+    }
+    .penalty-card {
+      width: min(440px, 92vw);
+      border: 1px solid rgba(255,75,58,.35);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(190,28,28,.28), transparent 55%),
+        linear-gradient(180deg, rgba(68,5,5,.96), rgba(4,0,0,.98));
+      box-shadow: 0 0 36px rgba(255,24,24,.24), inset 0 0 22px rgba(255,70,55,.05);
+      padding: 22px;
+      animation: modalCardIn .22s cubic-bezier(.2,.9,.2,1) both;
+    }
+    .penalty-kicker {
+      color: rgba(255,178,164,.58);
+      font-size: 11px;
+      letter-spacing: .22em;
+      margin-bottom: 9px;
+    }
+    .penalty-title {
+      color: rgba(255,238,224,.96);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+    .penalty-reason {
+      color: rgba(241,227,200,.82);
+      line-height: 1.75;
+      font-size: 14.5px;
+      margin-bottom: 14px;
+      white-space: pre-line;
+    }
+    .penalty-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0 14px;
+    }
+    .penalty-chip {
+      border: 1px solid rgba(255,178,164,.14);
+      border-radius: 16px;
+      background: rgba(0,0,0,.24);
+      padding: 11px 10px;
+      text-align: center;
+    }
+    .penalty-chip span {
+      display: block;
+      color: rgba(255,178,164,.54);
+      font-size: 12px;
+      letter-spacing: .12em;
+      margin-bottom: 5px;
+    }
+    .penalty-chip b {
+      color: rgba(241,227,200,.92);
+      font-size: 18px;
+    }
+    .penalty-auto {
+      color: rgba(241,227,200,.48);
+      font-size: 12.5px;
+      line-height: 1.6;
+      margin: 2px 0 14px;
+    }
+
   </style>
 </head>
 
@@ -2039,7 +2118,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.20</div>
+          <div class="kicker">FINAL BUILD 1.21</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2399,13 +2478,28 @@
     </div>
   </div>
 
+
+  <div class="penalty-modal" id="penalty-modal" aria-hidden="true">
+    <div class="penalty-card">
+      <div class="penalty-kicker">SYSTEM WARNING</div>
+      <div class="penalty-title">封存異常</div>
+      <div class="penalty-reason" id="penalty-reason">系統偵測到封存程序異常。</div>
+      <div class="penalty-grid">
+        <div class="penalty-chip"><span>污染值</span><b id="penalty-pollution">+0%</b></div>
+        <div class="penalty-chip"><span>生命訊號</span><b id="penalty-life">未下降</b></div>
+      </div>
+      <div class="penalty-auto">5 秒後自動關閉</div>
+      <button class="btn primary" id="penalty-confirm">確認</button>
+    </div>
+  </div>
+
   <script>
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_20_TABLE_IMAGE_REFINEMENT",
-      saveKey: "fifthResearcher_final_v1_20",
-      settingsKey: "fifthResearcher_final_v1_20_settings",
+      version: "FINAL_BUILD_1_21_POLLUTION_WARNING",
+      saveKey: "fifthResearcher_final_v1_21",
+      settingsKey: "fifthResearcher_final_v1_21_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2673,6 +2767,34 @@
       clearTimeout(toast.timer);
       toast.timer = setTimeout(() => el.classList.remove("show"), 1800);
     }
+
+    function closePenaltyNotice() {
+      const modal = $("penalty-modal");
+      if (!modal) return;
+      clearTimeout(showPenaltyNotice.timer);
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function showPenaltyNotice(detail) {
+      detail = detail || {};
+      const modal = $("penalty-modal");
+      if (!modal || state.dead) return;
+      clearTimeout(showPenaltyNotice.timer);
+
+      const pollutionDelta = detail.pollutionDelta || 0;
+      const lifeDelta = detail.lifeDelta || 0;
+      const reason = detail.reason || "系統偵測到封存程序異常。";
+
+      $("penalty-reason").textContent = reason;
+      $("penalty-pollution").textContent = "+" + pollutionDelta + "%";
+      $("penalty-life").textContent = lifeDelta > 0 ? "-" + lifeDelta : "未下降";
+
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+      showPenaltyNotice.timer = setTimeout(closePenaltyNotice, 5000);
+    }
+    showPenaltyNotice.timer = null;
 
     function flashBodyClass(className, duration = 520) {
       document.body.classList.remove(className);
@@ -2970,7 +3092,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_20";
+        img.src = src + "?v=final1_21";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2986,7 +3108,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_20");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_21");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3091,7 +3213,7 @@
           }
           img.style.display = "";
         };
-        img.src = src + "?v=final1_20";
+        img.src = src + "?v=final1_21";
       });
     }
 
@@ -3134,6 +3256,7 @@
         toast(state.sound ? "聲音已開啟" : "聲音已關閉");
       }));
 
+      bindOnce($("penalty-confirm"), "click", () => safeAction(closePenaltyNotice));
       bindOnce($("system-modal-cancel"), "click", () => safeAction(closeSystemModal));
       bindOnce($("system-modal-confirm"), "click", () => safeAction(runSystemModalConfirm));
       bindOnce($("camera-toggle-btn"), "click", () => safeAction(() => { state.cameraPanelOpen = !state.cameraPanelOpen; updateCameraStatusUI(); saveSettings(); saveGame(); }));
@@ -3269,30 +3392,62 @@
       document.body.classList.toggle("pollution-critical", state.pollution >= 91);
     }
 
-    function addPollution(amount) {
+    function addPollution(amount, reason, options) {
+      options = options || {};
+      reason = reason || "污染值上升。";
+      const before = state.pollution;
       state.pollution = Math.min(100, state.pollution + amount);
+      const actualDelta = Math.max(0, state.pollution - before);
+
       tone("pollution");
       flashBodyClass("pollution-hit", assetStatus.lowPerformance ? 260 : 560);
       applyPollutionClass();
       updateStatusAll();
+
+      if (options.showNotice !== false && actualDelta > 0) {
+        showPenaltyNotice({
+          reason,
+          pollutionDelta: actualDelta,
+          lifeDelta: options.lifeDelta || 0
+        });
+      }
+
       if (state.pollution >= 100) {
-        triggerFailure("污染值已達 100%。\n標本完全污染，封存程序強制中止。");
+        state.pollution = 100;
+        state.life = 0;
+        state.emergency = true;
+        updateStatusAll();
+        triggerFailure("污染值已達 100%。\n標本完全污染，生命訊號歸零。\n第七層封存系統強制中止。");
       }
     }
 
-    function loseLife(amount = 1) {
+    function loseLife(amount, reason, options) {
+      options = options || {};
+      amount = amount || 1;
+      reason = reason || "生命訊號下降。";
       const before = state.life;
       state.life = Math.max(0, state.life - amount);
-      if (state.life < before) {
+      const actualDelta = Math.max(0, before - state.life);
+
+      if (actualDelta > 0) {
         tone("damage");
         flashBodyClass("life-hit", assetStatus.lowPerformance ? 260 : 460);
         document.querySelector(".frame").classList.add("shake");
         setTimeout(() => document.querySelector(".frame").classList.remove("shake"), 300);
+
+        if (options.showNotice) {
+          showPenaltyNotice({
+            reason,
+            pollutionDelta: options.pollutionDelta || 0,
+            lifeDelta: actualDelta
+          });
+        }
       }
+
       if (state.life === 0 && !state.dead) {
         state.emergency = true;
         updateStatusAll();
-        triggerFailure("生命訊號已歸零。\n第七層封存系統判定研究員失聯。");
+        triggerFailure("生命訊號已歸零。\n研究員狀態中斷，封存程序強制中止。");
         return;
       }
       updateStatusAll();
@@ -3318,34 +3473,51 @@
       $("failure-reason").innerHTML = reason.replace(/\n/g, "<br>");
     }
 
-    function registerMistake(kind) {
+    function registerMistake(type) {
       if (state.dead) return;
-
       state.mistakes++;
+
       const d = difficulty();
+      let pollution = 0;
+      let lifeLoss = 0;
+      let reason = "封存程序異常。";
 
-      if (kind === "puzzle") {
-        addPollution(d.puzzlePollution);
-
-        if (d.puzzleLifeEvery > 0) {
-          state.puzzleWrongStreak++;
-          if (state.puzzleWrongStreak >= d.puzzleLifeEvery) {
-            loseLife(1);
-            state.puzzleWrongStreak = 0;
-          }
+      if (type === "puzzle") {
+        pollution = d.puzzlePollution;
+        state.puzzleWrongStreak = (state.puzzleWrongStreak || 0) + 1;
+        reason = "骨片定位錯誤。標本污染值上升。";
+        if (d.puzzleLifeEvery > 0 && state.puzzleWrongStreak >= d.puzzleLifeEvery) {
+          lifeLoss = 1;
+          state.puzzleWrongStreak = 0;
         }
       }
 
-      if (kind === "order") {
-        addPollution(d.orderPollution);
-        if (d.orderLifeLoss > 0) loseLife(d.orderLifeLoss);
+      if (type === "order") {
+        pollution = d.orderPollution;
+        lifeLoss = d.orderLifeLoss;
+        reason = "刻痕排序錯誤。封存資料受到污染。";
       }
 
-      if (kind === "pin") {
-        addPollution(d.pinPollution);
-        if (d.pinLifeLoss > 0) loseLife(d.pinLifeLoss);
+      if (type === "pin") {
+        pollution = d.pinPollution;
+        lifeLoss = d.pinLifeLoss;
+        reason = "封存碼輸入錯誤。系統污染值上升。";
       }
 
+      addPollution(pollution, reason, { showNotice: false, lifeDelta: lifeLoss });
+      if (lifeLoss > 0 && !state.dead) {
+        loseLife(lifeLoss, reason, { showNotice: false, pollutionDelta: pollution });
+      }
+
+      if (!state.dead && pollution > 0) {
+        showPenaltyNotice({
+          reason,
+          pollutionDelta: pollution,
+          lifeDelta: lifeLoss
+        });
+      }
+
+      updateStatusAll();
       saveGame();
     }
 
@@ -3451,7 +3623,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_20" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_21" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -3596,7 +3768,7 @@
 
       state.scansUsed++;
       state.hints++;
-      addPollution(mode.scanCost);
+      addPollution(mode.scanCost, "標本掃描啟動。污染值上升。", { lifeDelta: 0 });
       tone("glitch");
       flashBodyClass("scan-hit", state.difficulty === "hard" ? 2200 : 3200);
 
