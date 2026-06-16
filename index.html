@@ -1450,6 +1450,163 @@
       }
     }
 
+
+    /* v1.15 collapsible settings refinement */
+    .collapse-card {
+      width: 100%;
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 22px;
+      background: rgba(0,0,0,.24);
+      padding: 0;
+      margin: 0 0 12px;
+      color: rgba(241,227,200,.72);
+      text-align: left;
+      overflow: hidden;
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .collapse-card.is-active {
+      border-color: rgba(255,178,164,.38);
+      background: linear-gradient(180deg, rgba(108,12,12,.30), rgba(0,0,0,.24));
+      box-shadow: 0 0 20px rgba(190,32,32,.10);
+    }
+
+    .collapse-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px;
+    }
+
+    .collapse-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.45;
+      color: var(--cream);
+      letter-spacing: .04em;
+    }
+
+    .collapse-arrow {
+      color: rgba(255,178,164,.62);
+      font-size: 17px;
+      transform: translateY(-1px);
+      min-width: 1.2em;
+    }
+
+    .collapse-status {
+      color: rgba(241,227,200,.58);
+      font-size: 13px;
+      line-height: 1.55;
+      text-align: right;
+    }
+
+    .collapse-body {
+      display: none;
+      padding: 0 18px 18px;
+      color: rgba(241,227,200,.76);
+      font-size: 15.5px;
+      line-height: 1.8;
+      animation: collapseIn .22s ease both;
+    }
+
+    .collapse-card.is-open .collapse-body {
+      display: block;
+    }
+
+    .collapse-card.is-open .collapse-arrow {
+      color: rgba(255,220,200,.88);
+    }
+
+    .collapse-body p {
+      margin: 0 0 10px;
+    }
+
+    @keyframes collapseIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .camera-collapse {
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 22px;
+      background: rgba(0,0,0,.24);
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .camera-collapse-head {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .camera-collapse-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      font-size: 24px;
+      letter-spacing: .04em;
+    }
+
+    .camera-collapse-body {
+      display: none;
+      padding: 0 18px 18px;
+      animation: collapseIn .22s ease both;
+    }
+
+    .camera-collapse.is-open .camera-collapse-body {
+      display: block;
+    }
+
+    .camera-collapse-body p {
+      margin: 0 0 12px;
+      color: rgba(241,227,200,.76);
+      line-height: 1.85;
+      font-size: 16px;
+    }
+
+    .camera-collapse .camera-status {
+      margin: 0;
+    }
+
+    @media (max-width: 520px) {
+      .collapse-head {
+        padding: 18px 17px;
+      }
+
+      .collapse-title {
+        font-size: 19px;
+      }
+
+      .collapse-body {
+        font-size: 16px;
+        line-height: 1.85;
+        padding: 0 17px 18px;
+      }
+
+      .collapse-status {
+        font-size: 14.5px;
+      }
+
+      .camera-collapse-title {
+        font-size: 25px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1470,7 +1627,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.14</div>
+          <div class="kicker">FINAL BUILD 1.15</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1529,30 +1686,49 @@
 
           <div class="section-label">ARCHIVE MODE</div>
           <div class="difficulty-grid">
-            <button class="difficulty-card" data-difficulty="easy">
-              <b>初次觀測</b>
-              適合第一次體驗。顯示骨頭名稱與位置名稱，生命訊號不扣除。
+            <button class="difficulty-card collapse-card" data-difficulty="easy">
+              <div class="collapse-head">
+                <div class="collapse-title"><span class="collapse-arrow">▸</span><span>初次觀測</span></div>
+              </div>
+              <div class="collapse-body">
+                適合第一次體驗。顯示骨頭名稱與位置名稱，生命訊號不扣除。
+              </div>
             </button>
-            <button class="difficulty-card" data-difficulty="normal">
-              <b>正式封存</b>
-              標準挑戰模式。隱藏直接配對提示，加入 3 張干擾骨片。
+
+            <button class="difficulty-card collapse-card" data-difficulty="normal">
+              <div class="collapse-head">
+                <div class="collapse-title"><span class="collapse-arrow">▸</span><span>正式封存</span></div>
+              </div>
+              <div class="collapse-body">
+                標準挑戰模式。隱藏直接配對提示，加入 3 張干擾骨片。
+              </div>
             </button>
-            <button class="difficulty-card" data-difficulty="hard">
-              <b>深層污染</b>
-              高風險模式。隱藏名稱與位置文字，加入 6 張干擾骨片。
+
+            <button class="difficulty-card collapse-card" data-difficulty="hard">
+              <div class="collapse-head">
+                <div class="collapse-title"><span class="collapse-arrow">▸</span><span>深層污染</span></div>
+              </div>
+              <div class="collapse-body">
+                高風險模式。隱藏名稱與位置文字，加入 6 張干擾骨片。
+              </div>
             </button>
           </div>
 
           <div class="section-label">SYSTEM AUDIO</div>
           <button class="btn primary" id="sound-toggle">聲音：開</button>
 
-          <div class="privacy-card">
-            <h3>相機權限</h3>
-            <p>後段會拍攝研究員影像，用於生成封存證明卡。</p>
-            <p>照片只會在你的手機瀏覽器內使用，不會上傳到伺服器，也不會傳送給我們。</p>
-            <p>若不想開啟相機，也可以使用觀測者剪影完成。</p>
-            <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
-            <button class="btn" id="camera-test-btn">測試相機權限</button>
+          <div class="section-label">CAMERA</div>
+          <div class="camera-collapse" id="camera-collapse">
+            <button class="camera-collapse-head" id="camera-toggle-btn" type="button">
+              <div class="camera-collapse-title"><span id="camera-arrow">▸</span><span>相機權限</span></div>
+              <div class="camera-status" id="camera-status-text">相機狀態：尚未測試</div>
+            </button>
+            <div class="camera-collapse-body" id="camera-collapse-body">
+              <p>可在此先測試相機權限。</p>
+              <p>若尚未測試，後段按下「拍攝研究員影像」時，瀏覽器仍會詢問是否允許相機。</p>
+              <p>照片只會在本機生成封存證明卡，不會上傳。</p>
+              <button class="btn" id="camera-test-btn">測試相機權限</button>
+            </div>
           </div>
 
           <div class="btn-grid" style="margin-top:14px;">
@@ -1714,7 +1890,7 @@
           </div>
           <p class="small-note">相機為選用，不開啟也能完成遊戲。</p>
         </div>
-      <p class="privacy-note">影像僅用於本機生成封存證明卡，不會上傳。</p>
+      <p class="privacy-note">若尚未授權相機，按下拍攝後瀏覽器會詢問是否允許。<br>影像僅用於本機生成封存證明卡，不會上傳。</p>
       </section>
 
 
@@ -1814,9 +1990,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_14_MOBILE_READABILITY",
-      saveKey: "fifthResearcher_final_v1_14",
-      settingsKey: "fifthResearcher_final_v1_14_settings",
+      version: "FINAL_BUILD_1_15_COLLAPSIBLE_SETTINGS",
+      saveKey: "fifthResearcher_final_v1_15",
+      settingsKey: "fifthResearcher_final_v1_15_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2141,7 +2317,8 @@
         localStorage.setItem(CONFIG.settingsKey, JSON.stringify({
           difficulty: state.difficulty,
           sound: state.sound,
-          cameraStatus: state.cameraStatus
+          cameraStatus: state.cameraStatus,
+          cameraPanelOpen: state.cameraPanelOpen
         }));
       } catch (e) {}
     }
@@ -2154,6 +2331,7 @@
         if (data.difficulty && DIFFICULTIES[data.difficulty]) state.difficulty = data.difficulty;
         if (typeof data.sound === "boolean") state.sound = data.sound;
         if (data.cameraStatus) state.cameraStatus = data.cameraStatus;
+        if (typeof data.cameraPanelOpen === "boolean") state.cameraPanelOpen = data.cameraPanelOpen;
       } catch (e) {}
     }
 
@@ -2372,7 +2550,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_14";
+        img.src = src + "?v=final1_15";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2388,7 +2566,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_14");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_15");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2467,7 +2645,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_14";
+        img.src = src + "?v=final1_15";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -2514,6 +2692,7 @@
 
       bindOnce($("system-modal-cancel"), "click", () => safeAction(closeSystemModal));
       bindOnce($("system-modal-confirm"), "click", () => safeAction(runSystemModalConfirm));
+      bindOnce($("camera-toggle-btn"), "click", () => safeAction(() => { state.cameraPanelOpen = !state.cameraPanelOpen; updateCameraStatusUI(); saveSettings(); saveGame(); }));
       bindOnce($("camera-test-btn"), "click", () => safeAction(requestCameraTest));
       bindOnce($("scan-btn"), "click", () => safeAction(useScan));
       bindOnce($("to-order-btn"), "click", () => safeAction(() => showScreen("screen-order")));
@@ -2751,10 +2930,15 @@
     }
 
     function updateSettingsUI() {
-      $$(".difficulty-card").forEach(btn => btn.classList.toggle("active", btn.dataset.difficulty === state.difficulty));
-      const st = $("sound-toggle");
-      if (st) st.textContent = state.sound ? "聲音：開" : "聲音：關";
-    
+      $$(".difficulty-card").forEach(btn => {
+        const active = btn.dataset.difficulty === state.difficulty;
+        btn.classList.toggle("selected", active);
+        btn.classList.toggle("is-active", active);
+        btn.classList.toggle("is-open", active);
+        const arrow = btn.querySelector(".collapse-arrow");
+        if (arrow) arrow.textContent = active ? "▾" : "▸";
+      });
+      $("sound-toggle").textContent = "聲音：" + (state.sound ? "開" : "關");
       updateCameraStatusUI();
     }
 
@@ -2770,6 +2954,10 @@
     function updateCameraStatusUI() {
       const el = $("camera-status-text");
       if (el) el.textContent = cameraStatusText();
+      const panel = $("camera-collapse");
+      const arrow = $("camera-arrow");
+      if (panel) panel.classList.toggle("is-open", !!state.cameraPanelOpen);
+      if (arrow) arrow.textContent = state.cameraPanelOpen ? "▾" : "▸";
     }
 
 
@@ -2819,7 +3007,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_14" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_15" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
