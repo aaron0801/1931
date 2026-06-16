@@ -2098,6 +2098,319 @@
       margin: 2px 0 14px;
     }
 
+
+    /* v1.23 full audit stability refinements */
+    .board.image-missing,
+    .box-visual.image-missing,
+    .bone-img.image-missing,
+    .visual.image-missing,
+    .image-box.image-missing {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(130,18,18,.20), transparent 58%),
+        linear-gradient(180deg, rgba(70,8,8,.20), rgba(0,0,0,.30));
+      position: relative;
+      overflow: hidden;
+    }
+    .board.image-missing::after,
+    .box-visual.image-missing::after,
+    .bone-img.image-missing::after,
+    .visual.image-missing::after,
+    .image-box.image-missing::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.022), rgba(255,255,255,.022) 1px, transparent 1px, transparent 8px);
+      pointer-events: none;
+      opacity: .38;
+    }
+    .board.image-missing .image-fallback,
+    .box-visual.image-missing .image-fallback,
+    .bone-img.image-missing .image-fallback,
+    .visual.image-missing .image-fallback,
+    .image-box.image-missing .image-fallback {
+      position: relative;
+      z-index: 2;
+      padding: 14px;
+      text-align: center;
+      color: rgba(241,227,200,.58);
+      font-size: 13px;
+      letter-spacing: .10em;
+      line-height: 1.65;
+    }
+    .board.loaded .image-fallback,
+    .box-visual.loaded .image-fallback,
+    .hero.loaded .image-fallback,
+    .bone-img.loaded .image-fallback,
+    .visual.loaded .image-fallback,
+    .image-box.loaded .image-fallback {
+      display: none !important;
+    }
+    .box-visual.locked .box-open-hint {
+      display: none;
+    }
+    .pin-input-clean {
+      caret-color: rgba(255,238,224,.95);
+    }
+    @media (max-width: 520px) {
+      .bone-img.image-missing .image-fallback {
+        font-size: 11px;
+        letter-spacing: .04em;
+      }
+    }
+
+
+    /* v1.24 puzzle answer mask */
+    .board {
+      background:
+        radial-gradient(circle at 50% 38%, rgba(120,12,12,.16), transparent 36%),
+        linear-gradient(145deg, #050000, #170303 58%, #030000);
+    }
+
+    .board.loaded img.full {
+      display: none !important;
+    }
+
+    .board.complete.loaded img.full {
+      display: block !important;
+      opacity: .16;
+      filter: blur(1.2px) brightness(.52) contrast(1.1);
+      mix-blend-mode: screen;
+    }
+
+    .board.complete .board-fallback {
+      display: none;
+    }
+
+    .board:not(.complete)::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(255,238,222,.08);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,.035), transparent 42%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.018), rgba(255,255,255,.018) 1px, transparent 1px, transparent 22px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.014), rgba(255,255,255,.014) 1px, transparent 1px, transparent 22px);
+      pointer-events: none;
+      opacity: .72;
+    }
+
+    .drop-zone.done {
+      opacity: 1;
+      pointer-events: none;
+      border-color: rgba(255,238,222,.08);
+      background: rgba(0,0,0,.12);
+      box-shadow: 0 0 18px rgba(255,178,164,.10);
+    }
+
+    .drop-zone.done > span:not(.placed-bone-wrap) {
+      display: none;
+    }
+
+    .placed-bone-wrap {
+      position: absolute;
+      inset: -8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .placed-bone-img {
+      max-width: 112%;
+      max-height: 112%;
+      object-fit: contain;
+      opacity: .92;
+      filter: sepia(.24) saturate(.68) brightness(.9) contrast(1.1) drop-shadow(0 0 8px rgba(255,221,190,.12));
+    }
+
+    .drop-zone.done.skull .placed-bone-img { max-width: 120%; max-height: 130%; }
+    .drop-zone.done.neck .placed-bone-img { max-width: 90%; max-height: 120%; }
+    .drop-zone.done.chest .placed-bone-img { max-width: 114%; max-height: 114%; }
+    .drop-zone.done.pelvis .placed-bone-img { max-width: 118%; max-height: 125%; }
+    .drop-zone.done.tail .placed-bone-img { max-width: 105%; max-height: 110%; }
+
+    .board-answer-note {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      z-index: 2;
+      color: rgba(241,227,200,.34);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .board.complete .board-answer-note {
+      color: rgba(255,238,222,.58);
+    }
+
+
+    /* v1.25 restored specimen, blackout, and paper note event */
+    .restored-visual {
+      border: 1px solid rgba(255,178,164,.18);
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(0,0,0,.32);
+      box-shadow: inset 0 0 22px rgba(255,255,255,.025);
+      margin: 18px 0;
+    }
+    .restored-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      opacity: .92;
+      filter: sepia(.16) saturate(.72) brightness(.86) contrast(1.08);
+    }
+    .restored-copy {
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 20px;
+      background: rgba(0,0,0,.20);
+      padding: 16px;
+      color: rgba(241,227,200,.78);
+      line-height: 1.85;
+      font-size: 15.5px;
+      margin-bottom: 16px;
+    }
+    .blackout-panel {
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,70,55,.20);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(170,18,18,.22), transparent 44%),
+        linear-gradient(180deg, rgba(10,0,0,.96), rgba(0,0,0,.99));
+      box-shadow: 0 0 38px rgba(180,20,20,.16), inset 0 0 24px rgba(255,70,55,.04);
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+    }
+    .blackout-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.026), rgba(255,255,255,.026) 1px, transparent 1px, transparent 7px);
+      opacity: .36;
+      pointer-events: none;
+    }
+    .blackout-panel.flash {
+      animation: blackoutFlash .9s steps(2,end) both;
+    }
+    @keyframes blackoutFlash {
+      0% { filter: brightness(1.4); }
+      12% { filter: brightness(.08); }
+      22% { filter: brightness(1.8); }
+      35% { filter: brightness(.12); }
+      52% { filter: brightness(.95); }
+      100% { filter: brightness(1); }
+    }
+    .terminal-text {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      color: rgba(241,227,200,.84);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px;
+      line-height: 1.85;
+      letter-spacing: .05em;
+      white-space: pre-line;
+      text-align: left;
+    }
+    .terminal-text::after {
+      content: "▋";
+      color: rgba(255,92,72,.9);
+      animation: caretBlink .8s steps(1,end) infinite;
+    }
+    @keyframes caretBlink {
+      0%, 48% { opacity: 1; }
+      49%, 100% { opacity: 0; }
+    }
+    .paper-note-card {
+      border: 1px solid rgba(255,178,164,.22);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,238,200,.12), transparent 36%),
+        linear-gradient(180deg, rgba(42,28,18,.96), rgba(18,8,5,.98));
+      padding: 18px;
+      box-shadow: 0 0 26px rgba(180,40,24,.16);
+      margin: 18px 0;
+    }
+    .paper-sketch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .paper-side {
+      border: 1px dashed rgba(255,238,210,.28);
+      border-radius: 18px;
+      background: rgba(0,0,0,.16);
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(241,227,200,.66);
+      font-size: 13px;
+      letter-spacing: .12em;
+      position: relative;
+      overflow: hidden;
+    }
+    .paper-side::before {
+      content: "";
+      width: 72px;
+      height: 104px;
+      border: 3px solid rgba(241,227,200,.42);
+      border-radius: 60% 42% 58% 40%;
+      transform: rotate(-18deg);
+      opacity: .72;
+    }
+    .paper-side.back::after {
+      content: "I   IX   III   I";
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255,220,185,.60);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      letter-spacing: .16em;
+      transform: rotate(-4deg);
+    }
+    .paper-side span {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      color: rgba(241,227,200,.56);
+      font-size: 12px;
+      letter-spacing: .18em;
+    }
+    .paper-note-text {
+      color: rgba(241,227,200,.82);
+      line-height: 1.85;
+      font-size: 15.5px;
+      text-align: left;
+    }
+    .paper-note-text b {
+      color: rgba(255,238,220,.96);
+      font-weight: 850;
+    }
+    @media (max-width: 520px) {
+      .blackout-panel { min-height: 390px; }
+      .terminal-text { font-size: 14px; }
+      .paper-side { min-height: 132px; }
+    }
+
   </style>
 </head>
 
@@ -2118,7 +2431,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.22</div>
+          <div class="kicker">FINAL BUILD 1.25</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2304,6 +2617,58 @@
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
       </section>
+
+        <section id="screen-restored" class="screen">
+          <div class="topbar"><span>SPECIMEN / 標本已恢復</span><i></i></div>
+          <div class="panel">
+            <div class="eyebrow">SPECIMEN RESTORED</div>
+            <h2>標本已恢復</h2>
+            <p class="subtitle">九塊骨片已完成定位。</p>
+            <div class="restored-visual">
+              <img data-src="images/reveal/full-fossil-board.png" alt="">
+            </div>
+            <div class="restored-copy">
+              標本輪廓重新顯示，系統判定結果如下：<br>
+              這並不是人類遺骸。<br>
+              它是一副被封存在第七層的雞骨化石標本。<br><br>
+              部分骨片表面出現不明刻痕，需進一步檢查標本細節。
+            </div>
+            <button class="btn primary" data-action="proceedToBlackout">繼續檢查標本</button>
+          </div>
+        </section>
+
+        <section id="screen-blackout" class="screen">
+          <div class="topbar"><span>SYSTEM / 照明中斷</span><i></i></div>
+          <div class="panel">
+            <div class="blackout-panel flash" id="blackout-panel">
+              <div class="terminal-text" id="blackout-terminal"></div>
+            </div>
+            <div class="btn-grid" id="blackout-actions" style="display:none;">
+              <button class="btn primary" data-action="viewPaperNote">查看紙條</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-note" class="screen">
+          <div class="topbar"><span>NOTE / 新線索</span><i></i></div>
+          <div class="panel">
+            <div class="eyebrow">PAPER NOTE</div>
+            <h2>被壓住的紙條</h2>
+            <div class="paper-note-card">
+              <div class="paper-sketch">
+                <div class="paper-side front"><span>正面</span></div>
+                <div class="paper-side back"><span>背面</span></div>
+              </div>
+              <div class="paper-note-text">
+                紙條上畫著骨片的正面與背面。<br>
+                背面似乎留下了某種刻痕。<br><br>
+                <b>後面好像有東西。<br>翻過來看看吧。</b>
+              </div>
+            </div>
+            <button class="btn primary" data-action="closePaperNote">關閉紙條</button>
+          </div>
+        </section>
+
 
       <section id="screen-clues" class="screen">
         <div id="status-clues" class="status"></div>
@@ -2497,14 +2862,14 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_22_IMAGE_BOX_RESET_FIX",
-      saveKey: "fifthResearcher_final_v1_22",
-      settingsKey: "fifthResearcher_final_v1_22_settings",
+      version: "FINAL_BUILD_1_25_RESTORED_BLACKOUT_NOTE",
+      saveKey: "fifthResearcher_final_v1_25",
+      settingsKey: "fifthResearcher_final_v1_25_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
         "screen-loading","screen-resume","screen-home","screen-settings","screen-how","screen-story","screen-name",
-        "screen-puzzle","screen-clues","screen-order","screen-box","screen-reveal","screen-failure","screen-ending"
+        "screen-puzzle", "screen-restored", "screen-blackout", "screen-note","screen-clues","screen-order","screen-box","screen-reveal","screen-failure","screen-ending"
       ],
       imageAssets: [
         "images/ui/title-main-visual.png",
@@ -2742,6 +3107,25 @@
       certNo: ""
     });
 
+    function sanitizeLoadedState(nextState) {
+      nextState = Object.assign(defaultState(), nextState || {});
+      nextState.life = Math.max(0, Math.min(3, Number(nextState.life) || 0));
+      nextState.pollution = Math.max(0, Math.min(100, Number(nextState.pollution) || 0));
+      nextState.mistakes = Math.max(0, Number(nextState.mistakes) || 0);
+      nextState.hints = Math.max(0, Number(nextState.hints) || 0);
+      nextState.scansUsed = Math.max(0, Number(nextState.scansUsed) || 0);
+      if (!DIFFICULTY[nextState.difficulty]) nextState.difficulty = "normal";
+      if (!Array.isArray(nextState.placedBones)) nextState.placedBones = [];
+      nextState.placedBones = nextState.placedBones.filter(id => BONES.some(b => b.id === id));
+      if (!Array.isArray(nextState.puzzleCardOrder)) nextState.puzzleCardOrder = [];
+      if (!Array.isArray(nextState.clueCardOrder)) nextState.clueCardOrder = [];
+      if (!Array.isArray(nextState.orderPickOrder)) nextState.orderPickOrder = [];
+      if (nextState.pollution >= 100) nextState.life = 0;
+      if (!nextState.cameraStatus) nextState.cameraStatus = "untested";
+      if (typeof nextState.cameraPanelOpen !== "boolean") nextState.cameraPanelOpen = false;
+      return nextState;
+    }
+
     let state = defaultState();
     let assetStatus = { images:{}, audio:{}, localStorage:false, camera:false, lowPerformance:false };
     let audioCtx = null;
@@ -2779,7 +3163,7 @@
     function showPenaltyNotice(detail) {
       detail = detail || {};
       const modal = $("penalty-modal");
-      if (!modal || state.dead) return;
+      if (!modal) return;
       clearTimeout(showPenaltyNotice.timer);
 
       const pollutionDelta = detail.pollutionDelta || 0;
@@ -2794,6 +3178,7 @@
       modal.setAttribute("aria-hidden", "false");
       showPenaltyNotice.timer = setTimeout(closePenaltyNotice, 5000);
     }
+    showPenaltyNotice.timer = null;
     showPenaltyNotice.timer = null;
 
     function flashBodyClass(className, duration = 520) {
@@ -2886,7 +3271,7 @@
         const raw = localStorage.getItem(CONFIG.saveKey);
         if (!raw) return false;
         const loaded = JSON.parse(raw);
-        const merged = Object.assign(defaultState(), loaded);
+        const merged = sanitizeLoadedState(loaded);
         if (!merged.cameraStatus) merged.cameraStatus = state.cameraStatus || "untested";
         if (typeof merged.cameraPanelOpen !== "boolean") merged.cameraPanelOpen = !!state.cameraPanelOpen;
         state = merged;
@@ -2978,6 +3363,7 @@
       state = defaultState();
       if (keepSettings) Object.assign(state, keep);
       if (typeof resetBoxFormUI === "function") resetBoxFormUI();
+      if (typeof closePenaltyNotice === "function") closePenaltyNotice();
       saveSettings();
     }
 
@@ -3093,7 +3479,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_22";
+        img.src = src + "?v=final1_25";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -3109,7 +3495,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_22");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_25");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3193,6 +3579,14 @@
         img.loading = "eager";
 
         const findHolder = () => img.closest(".hero, .observer-frame, .bone-img, .visual, .image-box, .board, .box-visual");
+        const labelFor = holder => {
+          if (!holder) return "影像待啟用";
+          if (holder.classList.contains("hero")) return "標本影像待啟用";
+          if (holder.classList.contains("board")) return "標本板影像待啟用";
+          if (holder.classList.contains("box-visual")) return "封存箱影像備用模式";
+          if (holder.classList.contains("bone-img")) return "骨片影像缺失";
+          return "影像待啟用";
+        };
 
         img.onerror = () => {
           img.removeAttribute("src");
@@ -3201,11 +3595,14 @@
           if (holder) {
             holder.classList.remove("loaded");
             holder.classList.add("image-missing");
-            if (!holder.querySelector(".image-fallback") && !holder.querySelector(".board-fallback") && !holder.querySelector(".box-fallback")) {
+            const existing = holder.querySelector(".image-fallback");
+            if (!existing && !holder.querySelector(".board-fallback") && !holder.querySelector(".box-fallback")) {
               const fallback = document.createElement("div");
               fallback.className = "image-fallback";
-              fallback.innerHTML = "<b>標本影像待啟用</b><small>ARCHIVE VISUAL OFFLINE</small>";
+              fallback.innerHTML = `<b>${labelFor(holder)}</b><small>ARCHIVE VISUAL OFFLINE</small>`;
               holder.appendChild(fallback);
+            } else if (existing) {
+              existing.innerHTML = `<b>${labelFor(holder)}</b><small>ARCHIVE VISUAL OFFLINE</small>`;
             }
           }
         };
@@ -3221,7 +3618,7 @@
           img.style.display = "";
         };
 
-        img.src = src + "?v=final1_22";
+        img.src = src + "?v=final1_25";
       });
     }
 
@@ -3305,7 +3702,10 @@
         toStory: () => showScreen("screen-story"),
         toName: () => showScreen("screen-name"),
         toOrder: () => showScreen("screen-order"),
-        startGame: () => startGame()
+        startGame: () => startGame(),
+        proceedToBlackout: () => proceedToBlackout(),
+        viewPaperNote: () => viewPaperNote(),
+        closePaperNote: () => closePaperNote()
       };
       if (routes[action]) routes[action]();
     }
@@ -3517,7 +3917,7 @@
         loseLife(lifeLoss, reason, { showNotice: false, pollutionDelta: pollution });
       }
 
-      if (!state.dead && pollution > 0) {
+      if (pollution > 0) {
         showPenaltyNotice({
           reason,
           pollutionDelta: pollution,
@@ -3589,7 +3989,14 @@
       ensureRandomLayouts(false);
       const zones = $("drop-zones");
       const grid = $("bone-grid");
+      const board = $("fossil-board");
       const mode = puzzleDisplayMode();
+      const isComplete = state.placedBones.length === BONES.length;
+
+      if (board) board.classList.toggle("complete", isComplete);
+      const note = $("board-answer-note");
+      if (note) note.textContent = isComplete ? "標本復原完成，完整影像已解封" : "答案影像已封存，請依定位框復原";
+
       zones.innerHTML = "";
       grid.innerHTML = "";
       grid.classList.toggle("more-cards", state.puzzleCardOrder.length > 12);
@@ -3601,8 +4008,16 @@
         if (mode.zone === "zone") zone.classList.add("zone-label");
         if (mode.zone === "code") zone.classList.add("code-label");
         zone.dataset.target = bone.id;
-        zone.innerHTML = `<span>${displayZoneLabel(bone)}</span>`;
-        if (state.placedBones.includes(bone.id)) zone.classList.add("done");
+
+        const isPlaced = state.placedBones.includes(bone.id);
+        if (isPlaced) zone.classList.add("done");
+
+        const label = `<span>${displayZoneLabel(bone)}</span>`;
+        const placedVisual = isPlaced
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_25" alt=""></span>`
+          : "";
+        zone.innerHTML = label + placedVisual;
+
         zone.addEventListener("click", () => safeAction(() => placeSelectedBone(bone.id)));
         zones.appendChild(zone);
       });
@@ -3631,7 +4046,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_22" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_25" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -3715,7 +4130,7 @@
           setTimeout(() => {
             if (!state.dead) {
               toast("標本復原完成。");
-              showScreen("screen-clues");
+              showScreen("screen-restored");
             }
           }, 650);
         }
@@ -3728,6 +4143,43 @@
       }
       renderPuzzle();
       saveGame();
+    }
+
+    function typeBlackoutText() {
+      const terminal = $("blackout-terminal");
+      const actions = $("blackout-actions");
+      if (!terminal || !actions) return;
+      clearInterval(typeBlackoutText.timer);
+      terminal.textContent = "";
+      actions.style.display = "none";
+
+      const text = "SYSTEM：照明中斷\n\n第七層供電不穩。\n標本室進入低照度模式。\n\n系統恢復中……\n\n桌面掃描完成。\n標本板旁偵測到一張新的紙條。";
+      let index = 0;
+      typeBlackoutText.timer = setInterval(() => {
+        terminal.textContent = text.slice(0, index);
+        index += 1;
+        if (index > text.length) {
+          clearInterval(typeBlackoutText.timer);
+          actions.style.display = "grid";
+        }
+      }, 34);
+    }
+    typeBlackoutText.timer = null;
+
+    function proceedToBlackout() {
+      tone("damage");
+      flashBodyClass("life-hit", 480);
+      showScreen("screen-blackout");
+      setTimeout(typeBlackoutText, 260);
+    }
+
+    function viewPaperNote() {
+      showScreen("screen-note");
+    }
+
+    function closePaperNote() {
+      clearInterval(typeBlackoutText.timer);
+      showScreen("screen-clues");
     }
 
     function updatePuzzleUI() {
@@ -3925,40 +4377,49 @@
 
       if (input) {
         input.disabled = false;
+        input.readOnly = false;
         input.value = "";
+        input.dataset.fromUnlocked = "false";
+        input.classList.add("pin-input-clean");
+        input.blur();
       }
       if (confirm) confirm.disabled = false;
       if (open) open.style.display = "none";
       if (display) display.textContent = "• • • •";
-      if (visual) visual.classList.remove("opening");
+      if (visual) {
+        visual.classList.remove("opening");
+        visual.classList.remove("unlocked");
+        visual.classList.add("locked");
+      }
       if (log) log.textContent = "SYSTEM：等待密碼。";
     }
 
     function checkPin() {
-      const pin = $("pin-input").value;
+      if (state.dead) return;
+      const input = $("pin-input");
+      const pin = (input.value || "").trim();
       if (pin === CONFIG.pin) {
         state.boxUnlocked = true;
-        tone("ok");
-        flashBodyClass("box-unlock", 1150);
-        playExternal("boxOpen").then(ok => { if (!ok) tone("ok"); });
+        tone("box");
+        flashBodyClass("box-unlock", 900);
+        $("box-log").textContent = "SYSTEM：密碼正確。封存箱已開啟。";
         $("box-visual").classList.add("opening");
-        logTo("box-log", "密碼正確。封存箱已開啟。");
-        setTimeout(() => $("box-visual").classList.remove("opening"), 1200);
+        $("box-visual").classList.add("unlocked");
+        $("box-visual").classList.remove("locked");
+        input.dataset.fromUnlocked = "true";
+        updateBoxUI();
+        saveGame();
       } else {
+        $("box-log").textContent = "SYSTEM：密碼錯誤。封存箱污染值上升。";
         registerMistake("pin");
-        tone("error");
-        $("pin-input").value = "";
-        updatePinDisplay();
-        logTo("box-log", "密碼錯誤。封存箱仍在鎖定中。");
       }
-      updateBoxUI();
-      saveGame();
     }
 
     function updateBoxUI() {
       const input = $("pin-input");
       const confirm = $("confirm-pin-btn");
       const open = $("open-box-btn");
+      const visual = $("box-visual");
 
       if (open) open.style.display = state.boxUnlocked ? "block" : "none";
 
@@ -3966,18 +4427,29 @@
         if (input) {
           input.value = CONFIG.pin;
           input.disabled = true;
+          input.readOnly = true;
+          input.dataset.fromUnlocked = "true";
         }
         if (confirm) confirm.disabled = true;
+        if (visual) {
+          visual.classList.add("unlocked");
+          visual.classList.remove("locked");
+        }
         updatePinDisplay();
         return;
       }
 
       if (input) {
-        const wasLockedFromPreviousRun = input.disabled || input.value === CONFIG.pin;
         input.disabled = false;
-        if (wasLockedFromPreviousRun) input.value = "";
+        input.readOnly = false;
+        if (input.value === CONFIG.pin || input.dataset.fromUnlocked === "true") input.value = "";
+        input.dataset.fromUnlocked = "false";
       }
       if (confirm) confirm.disabled = false;
+      if (visual) {
+        visual.classList.remove("unlocked");
+        visual.classList.add("locked");
+      }
       updatePinDisplay();
     }
 
@@ -4267,7 +4739,8 @@
     function performResetGame() {
       stopCamera();
       stopEndingMusic();
-      closePenaltyNotice();
+      if (typeof closePenaltyNotice === "function") closePenaltyNotice();
+      if (typeof closeSystemModal === "function") closeSystemModal();
       const keep = {
         difficulty: state.difficulty,
         sound: state.sound,
