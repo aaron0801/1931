@@ -1301,6 +1301,155 @@
       text-align:left;
     }
 
+
+    /* v1.14 mobile readability refinement */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        font-size: 16px;
+      }
+
+      .app, .frame {
+        padding-bottom: calc(112px + env(safe-area-inset-bottom));
+      }
+
+      .panel {
+        padding: 24px 22px;
+      }
+
+      .kicker {
+        font-size: 13px;
+        letter-spacing: .18em;
+      }
+
+      h1 {
+        font-size: clamp(38px, 11vw, 48px);
+        line-height: 1.15;
+        letter-spacing: .08em;
+      }
+
+      h2 {
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      .section-label {
+        font-size: 13px;
+        letter-spacing: .18em;
+        margin: 22px 0 10px;
+      }
+
+      .difficulty-card {
+        font-size: 15.5px;
+        line-height: 1.75;
+        padding: 18px 17px;
+        min-height: 92px;
+      }
+
+      .difficulty-card b {
+        font-size: 18px;
+        line-height: 1.4;
+        margin-bottom: 6px;
+      }
+
+      .privacy-card {
+        padding: 18px 17px;
+      }
+
+      .privacy-card h3 {
+        font-size: 25px;
+        line-height: 1.35;
+        margin-bottom: 12px;
+      }
+
+      .privacy-card p {
+        font-size: 16px;
+        line-height: 1.85;
+        margin-bottom: 12px;
+        color: rgba(241,227,200,.76);
+      }
+
+      .camera-status {
+        font-size: 15.5px;
+        line-height: 1.65;
+        padding: 13px 14px;
+      }
+
+      .btn {
+        font-size: 18px;
+        line-height: 1.35;
+        min-height: 58px;
+        padding: 16px 18px;
+      }
+
+      .btn.subtle {
+        font-size: 16px;
+      }
+
+      .small-note,
+      .minimal-note,
+      .privacy-note {
+        font-size: 14.5px;
+        line-height: 1.75;
+      }
+
+      .task,
+      .step-card,
+      .resume-line,
+      .file-row,
+      .row {
+        font-size: 15.5px;
+        line-height: 1.75;
+      }
+
+      .task b,
+      .step-card b {
+        font-size: 17px;
+      }
+
+      .status {
+        font-size: 14.5px;
+      }
+
+      input,
+      textarea {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .panel {
+        padding: 22px 18px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .privacy-card h3 {
+        font-size: 23px;
+      }
+
+      .difficulty-card,
+      .privacy-card p,
+      .camera-status,
+      .task,
+      .step-card,
+      .resume-line,
+      .file-row,
+      .row {
+        font-size: 15px;
+      }
+
+      .btn {
+        font-size: 17px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1321,7 +1470,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.13</div>
+          <div class="kicker">FINAL BUILD 1.14</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -1665,9 +1814,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_13_REFINED_COPY",
-      saveKey: "fifthResearcher_final_v1_13",
-      settingsKey: "fifthResearcher_final_v1_13_settings",
+      version: "FINAL_BUILD_1_14_MOBILE_READABILITY",
+      saveKey: "fifthResearcher_final_v1_14",
+      settingsKey: "fifthResearcher_final_v1_14_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -2223,7 +2372,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_13";
+        img.src = src + "?v=final1_14";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -2239,7 +2388,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_13");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_14");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -2318,7 +2467,7 @@
     function setupImages() {
       $$("img[data-src]").forEach(img => {
         const src = img.dataset.src;
-        img.src = src + "?v=final1_13";
+        img.src = src + "?v=final1_14";
         img.onload = () => img.closest(".hero,.board,.box-visual")?.classList.add("loaded");
         img.onerror = () => img.closest(".hero,.board,.box-visual")?.classList.remove("loaded");
       });
@@ -2670,7 +2819,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_13" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_14" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
