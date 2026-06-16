@@ -2411,6 +2411,54 @@
       .paper-side { min-height: 132px; }
     }
 
+
+    /* v1.26 blackout rhythm refinement */
+    #blackout-actions {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    #blackout-actions.ready {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .blackout-panel.power-drop {
+      animation: powerDrop .95s cubic-bezier(.18,.86,.22,1) both;
+    }
+
+    @keyframes powerDrop {
+      0% { filter: brightness(1.25) contrast(1.1); }
+      18% { filter: brightness(.04) contrast(1.8); }
+      42% { filter: brightness(.18) contrast(1.4); }
+      55% { filter: brightness(1.6) contrast(1.2); }
+      67% { filter: brightness(.08) contrast(1.9); }
+      100% { filter: brightness(1) contrast(1); }
+    }
+
+    .blackout-panel.glitch-pulse {
+      animation: glitchPulse .42s steps(2,end) both;
+    }
+
+    @keyframes glitchPulse {
+      0% { transform: translateX(0); filter: brightness(1); }
+      18% { transform: translateX(-3px); filter: brightness(2.1) contrast(1.7); }
+      35% { transform: translateX(4px); filter: brightness(.15) contrast(2); }
+      52% { transform: translateX(-2px); filter: brightness(1.7) contrast(1.4); }
+      100% { transform: translateX(0); filter: brightness(1); }
+    }
+
+    .terminal-pause {
+      color: rgba(255,92,72,.75);
+      letter-spacing: .18em;
+    }
+
+    .terminal-text.system-stalled::after {
+      color: rgba(255,60,45,.95);
+      animation-duration: .28s;
+    }
+
   </style>
 </head>
 
@@ -2431,7 +2479,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.25</div>
+          <div class="kicker">FINAL BUILD 1.26</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2862,9 +2910,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_25_RESTORED_BLACKOUT_NOTE",
-      saveKey: "fifthResearcher_final_v1_25",
-      settingsKey: "fifthResearcher_final_v1_25_settings",
+      version: "FINAL_BUILD_1_26_BLACKOUT_RHYTHM",
+      saveKey: "fifthResearcher_final_v1_26",
+      settingsKey: "fifthResearcher_final_v1_26_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3479,7 +3527,7 @@
         const img = new Image();
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        img.src = src + "?v=final1_25";
+        img.src = src + "?v=final1_26";
         setTimeout(() => finish(false), 1200);
       });
     }
@@ -3495,7 +3543,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_25");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_26");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3618,7 +3666,7 @@
           img.style.display = "";
         };
 
-        img.src = src + "?v=final1_25";
+        img.src = src + "?v=final1_26";
       });
     }
 
@@ -4014,7 +4062,7 @@
 
         const label = `<span>${displayZoneLabel(bone)}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_25" alt=""></span>`
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_26" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
 
@@ -4046,7 +4094,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_25" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_26" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -4145,40 +4193,117 @@
       saveGame();
     }
 
-    function typeBlackoutText() {
+    function clearBlackoutSequence() {
+      if (typeBlackoutText.timer) clearInterval(typeBlackoutText.timer);
+      if (Array.isArray(typeBlackoutText.timers)) {
+        typeBlackoutText.timers.forEach(id => clearTimeout(id));
+      }
+      typeBlackoutText.timers = [];
+      typeBlackoutText.token++;
+    }
+
+    async function typeBlackoutText() {
       const terminal = $("blackout-terminal");
       const actions = $("blackout-actions");
-      if (!terminal || !actions) return;
-      clearInterval(typeBlackoutText.timer);
-      terminal.textContent = "";
-      actions.style.display = "none";
+      const panel = $("blackout-panel");
+      if (!terminal || !actions || !panel) return;
 
-      const text = "SYSTEM：照明中斷\n\n第七層供電不穩。\n標本室進入低照度模式。\n\n系統恢復中……\n\n桌面掃描完成。\n標本板旁偵測到一張新的紙條。";
-      let index = 0;
-      typeBlackoutText.timer = setInterval(() => {
-        terminal.textContent = text.slice(0, index);
-        index += 1;
-        if (index > text.length) {
-          clearInterval(typeBlackoutText.timer);
-          actions.style.display = "grid";
+      clearBlackoutSequence();
+      const token = typeBlackoutText.token;
+      terminal.textContent = "";
+      terminal.classList.remove("system-stalled");
+      actions.style.display = "none";
+      actions.classList.remove("ready");
+
+      const wait = ms => new Promise(resolve => {
+        const id = setTimeout(resolve, ms);
+        typeBlackoutText.timers.push(id);
+      });
+
+      const effect = async className => {
+        if (typeBlackoutText.token !== token) return;
+        panel.classList.remove("flash", "power-drop", "glitch-pulse");
+        void panel.offsetWidth;
+        panel.classList.add(className);
+        if (navigator.vibrate) {
+          if (className === "power-drop") navigator.vibrate([90, 40, 120]);
+          if (className === "glitch-pulse") navigator.vibrate([35, 25, 60]);
         }
-      }, 34);
+        await wait(className === "power-drop" ? 920 : 430);
+        panel.classList.remove(className);
+      };
+
+      const typeSegment = async (text, speed = 42) => {
+        for (let i = 0; i < text.length; i++) {
+          if (typeBlackoutText.token !== token) return;
+          terminal.textContent += text[i];
+          const ch = text[i];
+          let delay = speed;
+          if (ch === "。" || ch === "！" || ch === "？") delay += 180;
+          if (ch === "\n") delay += 130;
+          await wait(delay);
+        }
+      };
+
+      await wait(650);
+      await effect("power-drop");
+
+      await typeSegment("SYSTEM：照明中斷\n\n", 48);
+      await wait(950);
+
+      await typeSegment("第七層供電不穩。\n標本室進入低照度模式。\n\n", 38);
+      await wait(1050);
+
+      terminal.classList.add("system-stalled");
+      await typeSegment("訊號中斷", 70);
+      await typeSegment("……\n", 280);
+      await effect("glitch-pulse");
+      terminal.classList.remove("system-stalled");
+      await wait(550);
+
+      await typeSegment("\n系統恢復中", 55);
+      await typeSegment("……\n\n", 420);
+      await wait(1250);
+
+      await typeSegment("桌面掃描完成。\n\n", 42);
+      await wait(850);
+
+      await typeSegment("標本板旁偵測到一張新的紙條。", 46);
+      await wait(760);
+
+      if (typeBlackoutText.token === token) {
+        actions.style.display = "grid";
+        await wait(40);
+        actions.classList.add("ready");
+        if (navigator.vibrate) navigator.vibrate(50);
+      }
     }
+    typeBlackoutText.timer = null;
+    typeBlackoutText.timers = [];
+    typeBlackoutText.token = 0;
     typeBlackoutText.timer = null;
 
     function proceedToBlackout() {
       tone("damage");
       flashBodyClass("life-hit", 480);
       showScreen("screen-blackout");
+      const actions = $("blackout-actions");
+      const terminal = $("blackout-terminal");
+      if (actions) {
+        actions.style.display = "none";
+        actions.classList.remove("ready");
+      }
+      if (terminal) terminal.textContent = "";
       setTimeout(typeBlackoutText, 260);
     }
 
     function viewPaperNote() {
+      clearBlackoutSequence();
       showScreen("screen-note");
     }
 
     function closePaperNote() {
-      clearInterval(typeBlackoutText.timer);
+      clearBlackoutSequence();
       showScreen("screen-clues");
     }
 
