@@ -3309,6 +3309,187 @@
       100% { opacity: .96; filter: brightness(.82) contrast(1.10) sepia(.12); }
     }
 
+
+    /* v1.35 stable mask/resume fix: final override */
+    #fossil-board.mask-reveal {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #fossil-board.mask-reveal:not(.complete) > img.full,
+    #fossil-board:not(.complete) > img.full {
+      display: block !important;
+      opacity: .025 !important;
+      filter: sepia(.18) brightness(.16) contrast(1.05) saturate(.7) blur(.4px) !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+    }
+
+    #fossil-board.mask-reveal.complete > img.full,
+    #fossil-board.complete > img.full {
+      display: block !important;
+      opacity: .95 !important;
+      filter: sepia(.12) brightness(.78) contrast(1.08) saturate(.9) !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+    }
+
+    #fossil-board.mask-reveal #drop-zones {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+    }
+
+    #fossil-board.mask-reveal .bone-mask,
+    #fossil-board.mask-reveal .drop-zone {
+      opacity: .98 !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,226,198,.07), transparent 52%),
+        linear-gradient(145deg, rgba(78,9,9,.82), rgba(0,0,0,.94)) !important;
+      border: 1px dashed rgba(255,190,170,.30) !important;
+      box-shadow:
+        inset 0 0 20px rgba(0,0,0,.78),
+        0 0 13px rgba(160,25,22,.16) !important;
+      overflow: hidden;
+    }
+
+    #fossil-board.mask-reveal .bone-mask span,
+    #fossil-board.mask-reveal .drop-zone span,
+    #fossil-board.mask-reveal .zone-label span,
+    #fossil-board.mask-reveal .bone-mask span::before,
+    #fossil-board.mask-reveal .drop-zone span::before {
+      content: "" !important;
+      display: none !important;
+    }
+
+    #fossil-board.mask-reveal .bone-mask::before,
+    #fossil-board.mask-reveal .drop-zone::before {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 12%;
+      opacity: var(--trace-opacity, .20);
+      filter: blur(.45px);
+      background:
+        radial-gradient(ellipse at center, rgba(238,222,194,.24), transparent 58%),
+        repeating-linear-gradient(98deg, transparent 0 11px, rgba(238,222,194,.10) 12px 13px, transparent 14px 24px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    #fossil-board.mask-reveal[data-difficulty="easy"] .bone-mask::before { --trace-opacity: .34; }
+    #fossil-board.mask-reveal[data-difficulty="normal"] .bone-mask::before { --trace-opacity: .22; }
+    #fossil-board.mask-reveal[data-difficulty="hard"] .bone-mask::before { --trace-opacity: .14; }
+
+    #fossil-board.mask-reveal .bone-mask.revealed,
+    #fossil-board.mask-reveal .drop-zone.revealed {
+      opacity: 1 !important;
+      background: transparent !important;
+      border: 1px solid rgba(255,200,180,.08) !important;
+      box-shadow: inset 0 0 10px rgba(255,220,190,.03) !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+    }
+
+    #fossil-board.mask-reveal .bone-mask.revealed::before,
+    #fossil-board.mask-reveal .drop-zone.revealed::before {
+      display: none !important;
+    }
+
+    #fossil-board.mask-reveal .bone-mask.revealed::after,
+    #fossil-board.mask-reveal .drop-zone.revealed::after {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 0;
+      background-image: var(--reveal-image);
+      background-repeat: no-repeat;
+      background-size: var(--board-w) var(--board-h);
+      background-position: var(--bg-x) var(--bg-y);
+      filter: sepia(.12) brightness(.82) contrast(1.10) saturate(.88);
+      opacity: .96;
+      pointer-events: none;
+      transform: translateZ(0);
+    }
+
+    #fossil-board.mask-reveal.complete .bone-mask,
+    #fossil-board.mask-reveal.complete .drop-zone {
+      opacity: 0 !important;
+      border-color: transparent !important;
+      background: transparent !important;
+      pointer-events: none !important;
+    }
+
+    #fossil-board.mask-reveal .placed-bone-wrap,
+    #fossil-board.mask-reveal .placed-bone-img {
+      display: none !important;
+    }
+
+    #bone-grid {
+      min-height: 360px;
+    }
+
+    #bone-grid .bone-card {
+      display: flex !important;
+    }
+
+    .bone-card .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,238,222,.07), transparent 48%),
+        rgba(0,0,0,.38) !important;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .bone-card img {
+      max-width: 68% !important;
+      max-height: 56px !important;
+      object-fit: contain !important;
+      opacity: .76 !important;
+      filter:
+        grayscale(.85)
+        brightness(.76)
+        contrast(1.14)
+        drop-shadow(0 0 8px rgba(255,224,190,.15)) !important;
+      mix-blend-mode: luminosity !important;
+      background: transparent !important;
+    }
+
+    .bone-card.active img {
+      opacity: .94 !important;
+      filter:
+        grayscale(.45)
+        brightness(1.02)
+        contrast(1.16)
+        drop-shadow(0 0 12px rgba(255,224,190,.28)) !important;
+    }
+
+    .bone-card.decoy .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,74,66,.10), transparent 52%),
+        rgba(0,0,0,.42) !important;
+    }
+
+    .bone-card.used {
+      opacity: .38 !important;
+      filter: saturate(.45) brightness(.72);
+    }
+
+    .system-fallback-error {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      z-index: 99999;
+      background: rgba(20,0,0,.92);
+      border: 1px solid rgba(255,74,66,.35);
+      color: rgba(255,238,222,.92);
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
   </style>
 </head>
 
@@ -3329,7 +3510,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.34</div>
+          <div class="kicker">FINAL BUILD 1.35</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -3522,15 +3703,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-              <button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_34" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>顱部骨片</span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_34" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>椎骨骨片</span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_34" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>胸腔骨片</span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_34" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>翼骨 A</span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_34" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>翼骨 B</span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_34" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>骨盆骨片</span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_34" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>腿骨 A</span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_34" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>腿骨 B</span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_34" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>尾端骨片</span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_35" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>顱部骨片</span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_35" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>椎骨骨片</span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_35" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>胸腔骨片</span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_35" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 A</span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_35" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 B</span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_35" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>骨盆骨片</span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_35" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 A</span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_35" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 B</span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_35" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>尾端骨片</span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_35" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_35" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_35" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -3781,9 +3965,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_34_REVEAL_RESUME_FIX",
-      saveKey: "fifthResearcher_final_v1_34",
-      settingsKey: "fifthResearcher_final_v1_34_settings",
+      version: "FINAL_BUILD_1_35_STABLE_MASK_RESUME",
+      saveKey: "fifthResearcher_final_v1_35",
+      settingsKey: "fifthResearcher_final_v1_35_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3897,17 +4081,13 @@ function ensureRandomLayouts(force = false) {
       if (force || !state.codeMap || typeof state.codeMap !== "object" || !correctBoneIds.every(id => state.codeMap[id])) {
         const nums = shuffleCopy(correctBoneIds.map((_, i) => String(i + 1).padStart(2, "0")));
         state.codeMap = {};
-        correctBoneIds.forEach((id, index) => {
-          state.codeMap[id] = nums[index];
-        });
+        correctBoneIds.forEach((id, index) => { state.codeMap[id] = nums[index]; });
       }
 
       if (force || !state.zoneMap || typeof state.zoneMap !== "object" || !correctBoneIds.every(id => state.zoneMap[id])) {
         const zoneTokens = shuffleCopy(["A","B","C","D","E","F","G","H","I"]);
         state.zoneMap = {};
-        correctBoneIds.forEach((id, index) => {
-          state.zoneMap[id] = zoneTokens[index];
-        });
+        correctBoneIds.forEach((id, index) => { state.zoneMap[id] = zoneTokens[index]; });
       }
     }
 
@@ -4050,6 +4230,7 @@ function ensureRandomLayouts(force = false) {
       return nextState;
     }
 
+    const PERSISTENT_SAVE_KEY = "fifthResearcher_final_persistent";
     let state = defaultState();
     let assetStatus = { images:{}, audio:{}, localStorage:false, camera:false, lowPerformance:false };
     let audioCtx = null;
@@ -4181,22 +4362,28 @@ function ensureRandomLayouts(force = false) {
       } catch (e) {}
     }
 
-    function saveGame() {
+function saveGame() {
       if (state.screen === "screen-resume") {
         updateStaffPanel();
         return;
       }
-      try { localStorage.setItem(CONFIG.saveKey, JSON.stringify(state)); } catch (e) {}
+      try {
+        localStorage.setItem(CONFIG.saveKey, JSON.stringify(state));
+        localStorage.setItem(PERSISTENT_SAVE_KEY, JSON.stringify(state));
+      } catch (e) {}
       updateStaffPanel();
     }
 
-    function loadGame() {
+function loadGame() {
       const keys = [
+        PERSISTENT_SAVE_KEY,
+        "fifthResearcher_final_v1_35",
         "fifthResearcher_final_v1_34",
         "fifthResearcher_final_v1_33",
         "fifthResearcher_final_v1_32",
-        CONFIG.saveKey,
+        "fifthResearcher_final_v1_31",
         "fifthResearcher_final_v1_30",
+        CONFIG.saveKey,
         "fifthResearcher_final_v1_29",
         "fifthResearcher_final_v1_28",
         "fifthResearcher_final_v1_27_safe",
@@ -4210,11 +4397,10 @@ function ensureRandomLayouts(force = false) {
           const merged = sanitizeLoadedState(loaded);
           if (!merged.cameraStatus) merged.cameraStatus = state.cameraStatus || "untested";
           if (typeof merged.cameraPanelOpen !== "boolean") merged.cameraPanelOpen = !!state.cameraPanelOpen;
+          if (!merged.currentScreen && merged.screen) merged.currentScreen = merged.screen;
           state = merged;
           ensureRandomLayouts(false);
-          try {
-            localStorage.setItem(CONFIG.saveKey, JSON.stringify(state));
-          } catch (e) {}
+          v135SaveNow();
           return true;
         } catch (e) {}
       }
@@ -4266,7 +4452,7 @@ function hasMeaningfulProgress(s) {
       $("resume-summary").innerHTML = rows.map(row => `<div class="resume-line"><span>${row[0]}</span><b>${row[1]}</b></div>`).join("");
     }
 
-    function continueSavedProgress() {
+function continueSavedProgress() {
       if (!pendingResumeState) {
         showScreen("screen-home");
         return;
@@ -4276,7 +4462,9 @@ function hasMeaningfulProgress(s) {
       const target = state.dead ? "screen-failure" : (CONFIG.screens.includes(state.currentScreen) ? state.currentScreen : (CONFIG.screens.includes(state.screen) ? state.screen : "screen-home"));
       state.screen = target;
       state.currentScreen = target;
+      v135SaveNow(target);
       showScreen(target, true);
+      if (target === "screen-puzzle") v135SchedulePuzzleRepair("resume");
     }
 
     function startFreshPlayer() {
@@ -4305,6 +4493,7 @@ function hasMeaningfulProgress(s) {
       };
       [
         CONFIG.saveKey,
+        PERSISTENT_SAVE_KEY,
         "fifthResearcher_final_v1_34",
         "fifthResearcher_final_v1_33",
         "fifthResearcher_final_v1_30",
@@ -4425,7 +4614,7 @@ function hasMeaningfulProgress(s) {
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_34";
+      return clean + "?v=final1_35";
     }
 
     function mobileUploadVariant(src) {
@@ -4500,6 +4689,14 @@ function hasMeaningfulProgress(s) {
       });
     }
 
+function v135PersistOnLeave() {
+      try {
+        const active = document.querySelector(".screen.active");
+        if (active && active.id && active.id !== "screen-loading" && active.id !== "screen-resume") v135SaveNow(active.id);
+        else v135SaveNow(state.currentScreen || state.screen || "screen-home");
+      } catch (e) {}
+    }
+
     async function boot() {
       const params = new URL(location.href).searchParams;
 
@@ -4512,7 +4709,7 @@ function hasMeaningfulProgress(s) {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_34");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_35");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -4802,37 +4999,40 @@ function hasMeaningfulProgress(s) {
     }
 
 function showScreen(id, remember = true) {
-      CONFIG.screens.forEach(s => {
-        const el = $(s);
-        if (el) el.classList.remove("active");
-      });
-      const target = $(id);
-      if (target) target.classList.add("active");
+      try {
+        CONFIG.screens.forEach(s => {
+          const el = $(s);
+          if (el) el.classList.remove("active");
+        });
+        const target = $(id);
+        if (target) target.classList.add("active");
 
-      if (id !== "screen-loading" && id !== "screen-resume") {
-        state.screen = id;
-        if (id !== "screen-home" && id !== "screen-settings" && id !== "screen-how" && id !== "screen-story") {
-          state.currentScreen = id;
+        if (id !== "screen-loading" && id !== "screen-resume") {
+          state.screen = id;
+          if (!["screen-home","screen-settings","screen-how","screen-story"].includes(id)) state.currentScreen = id;
         }
+
+        setStage(id);
+        updateHud();
+
+        if (id === "screen-resume") renderResume();
+        if (id === "screen-puzzle") {
+          renderPuzzle();
+          v135SchedulePuzzleRepair("showScreen");
+        }
+        if (id === "screen-clues") renderClues();
+        if (id === "screen-order") renderOrder();
+        if (id === "screen-box") updateBoxUI();
+        if (id === "screen-reveal") setupReveal();
+        if (id === "screen-ending") renderEnding();
+
+        if (remember && id !== "screen-home" && id !== "screen-loading" && id !== "screen-resume") v135SaveNow(id);
+
+        try { window.scrollTo({ top: 0, behavior: "auto" }); }
+        catch (e) { try { window.scrollTo(0, 0); } catch (_) {} }
+      } catch (e) {
+        v135ShowHardError(e, "showScreen:" + id);
       }
-
-      setStage(id);
-      updateHud();
-
-      if (id === "screen-resume") renderResume();
-      if (id === "screen-puzzle") { renderPuzzle(); if (typeof v132SchedulePuzzleRepair === "function") v132SchedulePuzzleRepair("showScreen"); }
-      if (id === "screen-clues") renderClues();
-      if (id === "screen-order") renderOrder();
-      if (id === "screen-box") updateBoxUI();
-      if (id === "screen-reveal") setupReveal();
-      if (id === "screen-ending") renderEnding();
-
-      if (remember && id !== "screen-home" && id !== "screen-loading" && id !== "screen-resume") {
-        saveGame();
-      }
-
-      try { window.scrollTo({ top: 0, behavior: "auto" }); }
-      catch (e) { try { window.scrollTo(0, 0); } catch (_) {} }
     }
 
     function setStage(id) {
@@ -4856,16 +5056,29 @@ function showScreen(id, remember = true) {
     }
 
 function startGame() {
-      if (state.dead) clearGameProgress(true);
-      state.puzzleWrongStreak = 0;
-      ensureRandomLayouts(true);
-      initAudio();
-      state.player = $("player-name").value.trim() || "觀測者";
-      state.screen = "screen-puzzle";
-      state.currentScreen = "screen-puzzle";
-      state.updatedAt = Date.now();
-      saveGame();
-      showScreen("screen-puzzle");
+      try {
+        if (state.dead) clearGameProgress(true);
+        state.puzzleWrongStreak = 0;
+        ensureRandomLayouts(true);
+        initAudio();
+        const nameEl = $("player-name");
+        state.player = nameEl && nameEl.value.trim() ? nameEl.value.trim() : "觀測者";
+        state.screen = "screen-puzzle";
+        state.currentScreen = "screen-puzzle";
+        state.updatedAt = Date.now();
+        v135SaveNow("screen-puzzle");
+        showScreen("screen-puzzle");
+        v135SchedulePuzzleRepair("startGame");
+      } catch (e) {
+        v135ShowHardError(e, "startGame");
+        try {
+          state.screen = "screen-puzzle";
+          state.currentScreen = "screen-puzzle";
+          v135SaveNow("screen-puzzle");
+          showScreen("screen-puzzle", false);
+          v135MakeStaticCardsIfNeeded();
+        } catch (_) {}
+      }
     }
 
     function difficulty() { return DIFFICULTIES[state.difficulty] || DIFFICULTIES.normal; }
@@ -5126,221 +5339,263 @@ function v134ResolveBoardImageUrl() {
       saveGame();
     }
 
+function v135ShowHardError(err, where = "unknown") {
+      console.error("v1.35 runtime error:", where, err);
+      let el = document.querySelector(".system-fallback-error");
+      if (!el) {
+        el = document.createElement("div");
+        el.className = "system-fallback-error";
+        document.body.appendChild(el);
+      }
+      el.innerHTML = "系統偵測到顯示異常，已啟動備援修復。<br><small>" + where + "</small>";
+      setTimeout(() => { if (el) el.remove(); }, 2800);
+    }
+
+    function v135SaveNow(screenId = "") {
+      try {
+        if (screenId) {
+          state.screen = screenId;
+          if (!["screen-loading","screen-resume","screen-home","screen-settings","screen-how","screen-story"].includes(screenId)) {
+            state.currentScreen = screenId;
+          }
+        }
+        state.updatedAt = Date.now();
+        localStorage.setItem(CONFIG.saveKey, JSON.stringify(state));
+        localStorage.setItem(PERSISTENT_SAVE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function v135MakeStaticCardsIfNeeded() {
+      const grid = $("bone-grid");
+      if (!grid) return;
+      const count = grid.querySelectorAll(".bone-card").length;
+      if (count >= 12) return;
+      const data = [
+        ["skull","顱部骨片","images/bones/skull.png",false],
+        ["neck","椎骨骨片","images/bones/neck.png",false],
+        ["chest","胸腔骨片","images/bones/chest.png",false],
+        ["leftWing","翼骨 A","images/bones/left-wing.png",false],
+        ["rightWing","翼骨 B","images/bones/right-wing.png",false],
+        ["pelvis","骨盆骨片","images/bones/pelvis.png",false],
+        ["leftLeg","腿骨 A","images/bones/left-leg.png",false],
+        ["rightLeg","腿骨 B","images/bones/right-leg.png",false],
+        ["tail","尾端骨片","images/bones/tail.png",false],
+        ["decoyA","UNKNOWN","images/bones/decoy-a.png",true],
+        ["decoyB","UNKNOWN","images/bones/decoy-b.png",true],
+        ["decoyC","UNKNOWN","images/bones/decoy-c.png",true]
+      ];
+      grid.innerHTML = data.map(row => {
+        const [id,label,img,decoy] = row;
+        const fallback = decoy ? "<span class='decoy-mark'>FRAGMENT</span>" : "<span class='missing-label'>影像缺失<br>需以掃描判斷</span>";
+        return `<button class="bone-card${decoy ? " decoy" : ""}" data-bone="${id}" onclick="safeAction(() => selectBone('${id}'))"><span class="bone-img"><img src="${assetWithCache(img)}" alt="${label}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallback}'"></span><span>${label}</span></button>`;
+      }).join("");
+    }
+
+    function v135EnsurePuzzleVisible(reason = "auto") {
+      const active = document.querySelector(".screen.active");
+      if (!active || active.id !== "screen-puzzle") return;
+      try {
+        const board = $("fossil-board");
+        const zones = $("drop-zones");
+        const grid = $("bone-grid");
+        if (board) board.classList.add("mask-reveal");
+        if (!zones || !grid) return;
+        if (zones.querySelectorAll(".bone-mask,.drop-zone").length < BONES.length || grid.querySelectorAll(".bone-card").length < 12) {
+          renderPuzzle();
+        } else {
+          v135MakeStaticCardsIfNeeded();
+          if (typeof v134AlignRevealPieces === "function") v134AlignRevealPieces();
+        }
+      } catch (e) {
+        v135ShowHardError(e, "puzzle repair " + reason);
+      }
+    }
+
+    function v135SchedulePuzzleRepair(reason = "schedule") {
+      [60, 180, 420, 900, 1600].forEach(ms => setTimeout(() => v135EnsurePuzzleVisible(reason + ":" + ms), ms));
+    }
+
 function renderPuzzle() {
       const zones = $("drop-zones");
       const grid = $("bone-grid");
       const board = $("fossil-board");
-      if (!zones || !grid || !board) {
-        console.warn("Puzzle containers missing.");
-        return;
-      }
+      if (!zones || !grid || !board) return;
 
-      if (!Array.isArray(state.placedBones)) state.placedBones = [];
-      if (!Array.isArray(state.puzzleCardOrder)) state.puzzleCardOrder = [];
-      if (!state.zoneMap || typeof state.zoneMap !== "object") state.zoneMap = {};
-      if (!state.codeMap || typeof state.codeMap !== "object") state.codeMap = {};
-      ensureRandomLayouts(false);
+      try {
+        if (!Array.isArray(state.placedBones)) state.placedBones = [];
+        if (!Array.isArray(state.puzzleCardOrder)) state.puzzleCardOrder = [];
+        if (!state.zoneMap || typeof state.zoneMap !== "object") state.zoneMap = {};
+        if (!state.codeMap || typeof state.codeMap !== "object") state.codeMap = {};
+        ensureRandomLayouts(false);
 
-      const mode = puzzleDisplayMode();
-      const isComplete = state.placedBones.length === BONES.length;
+        const mode = puzzleDisplayMode();
+        const isComplete = state.placedBones.length === BONES.length;
 
-      board.classList.add("mask-reveal");
-      board.dataset.difficulty = state.difficulty || "normal";
-      board.classList.toggle("complete", isComplete);
-      board.classList.toggle("has-selection", !!state.selectedBone);
+        board.classList.add("mask-reveal");
+        board.dataset.difficulty = state.difficulty || "normal";
+        board.classList.toggle("complete", isComplete);
+        board.classList.toggle("has-selection", !!state.selectedBone);
 
-      const note = $("board-answer-note");
-      if (note) {
-        note.textContent = isComplete
-          ? "標本復原完成，完整影像已解封"
-          : "污染遮罩尚未解除，請依化石殘痕復原";
-      }
+        const note = $("board-answer-note");
+        if (note) note.textContent = isComplete ? "標本復原完成，完整影像已解封" : "污染遮罩尚未解除，請依化石殘痕復原";
 
-      zones.innerHTML = "";
-      grid.innerHTML = "";
-      grid.classList.add("more-cards");
+        zones.innerHTML = "";
+        grid.innerHTML = "";
+        grid.classList.add("more-cards");
 
-      const selectedReal = BONES.find(b => b.id === state.selectedBone);
-      const selectedAny = !!state.selectedBone;
-      const justPlaced = state.lastPlacedBone || "";
+        const selectedReal = BONES.find(b => b.id === state.selectedBone);
+        const selectedAny = !!state.selectedBone;
 
-      BONES.forEach(bone => {
-        const zone = document.createElement("button");
-        zone.type = "button";
-        zone.className = "drop-zone bone-mask " + bone.className;
-        zone.dataset.target = bone.id;
-        zone.setAttribute("aria-label", bone.name + "封存遮罩");
+        BONES.forEach(bone => {
+          const zone = document.createElement("button");
+          zone.type = "button";
+          zone.className = "drop-zone bone-mask " + bone.className;
+          zone.dataset.target = bone.id;
+          zone.setAttribute("aria-label", bone.name + "封存遮罩");
 
-        const isPlaced = state.placedBones.includes(bone.id);
-        if (isPlaced) zone.classList.add("done", "revealed");
-        if (justPlaced === bone.id) zone.classList.add("reveal-flash");
+          const isPlaced = state.placedBones.includes(bone.id);
+          if (isPlaced) zone.classList.add("done", "revealed");
+          if (state.lastPlacedBone === bone.id) zone.classList.add("reveal-flash");
 
-        if (!isPlaced && selectedAny) {
-          zone.classList.add("ready");
-          if (state.difficulty === "easy" && selectedReal && selectedReal.id === bone.id) {
-            zone.classList.add("hint-target");
-          } else if (state.difficulty === "normal") {
-            zone.classList.add("hint-ambient");
+          if (!isPlaced && selectedAny) {
+            zone.classList.add("ready");
+            if (state.difficulty === "easy" && selectedReal && selectedReal.id === bone.id) zone.classList.add("hint-target");
+            else if (state.difficulty === "normal") zone.classList.add("hint-ambient");
           }
+
+          zone.innerHTML = `<span class="fossil-trace" aria-hidden="true"></span><span class="mask-shine" aria-hidden="true"></span>`;
+          zone.addEventListener("click", () => safeAction(() => placeSelectedBone(bone.id)));
+          zones.appendChild(zone);
+        });
+
+        const lookup = {};
+        BONES.forEach(b => lookup[b.id] = Object.assign({ decoy:false }, b));
+        DECOY_BONES.forEach(d => lookup[d.id] = Object.assign({ decoy:true }, d));
+        let cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
+        if (cards.length !== 12) {
+          ensureRandomLayouts(true);
+          cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
         }
 
-        zone.innerHTML = `<span class="fossil-trace" aria-hidden="true"></span><span class="mask-shine" aria-hidden="true"></span>`;
-        zone.addEventListener("click", () => safeAction(() => placeSelectedBone(bone.id)));
-        zones.appendChild(zone);
-      });
+        cards.forEach(item => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "bone-card";
+          if (item.decoy) card.classList.add("decoy");
+          if (mode.bone === "hidden") card.classList.add("mystery");
+          card.dataset.bone = item.id;
+          if (state.selectedBone === item.id) card.classList.add("active");
+          if (!item.decoy && state.placedBones.includes(item.id)) card.classList.add("used");
 
-      const lookup = {};
-      BONES.forEach(b => lookup[b.id] = Object.assign({ decoy:false }, b));
-      DECOY_BONES.forEach(d => lookup[d.id] = Object.assign({ decoy:true }, d));
-      let cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
-      if (!cards.length || cards.length !== 12) {
-        ensureRandomLayouts(true);
-        cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
+          const fallbackMarkup = item.decoy ? "<span class='decoy-mark'>FRAGMENT</span>" : "<span class='missing-label'>影像缺失<br>需以掃描判斷</span>";
+          const labelText = item.decoy ? (mode.bone === "name" ? item.name : "UNKNOWN") : displayBoneLabel(item);
+
+          card.innerHTML = `<span class="bone-img"><img src="${assetWithCache(item.img)}" alt="${item.name || "骨片"}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'"></span><span>${labelText}</span>`;
+          card.addEventListener("click", () => safeAction(() => selectBone(item.id)));
+          grid.appendChild(card);
+        });
+
+        updatePuzzleUI();
+        requestAnimationFrame(() => { if (typeof v134AlignRevealPieces === "function") v134AlignRevealPieces(); });
+        setTimeout(() => { if (typeof v134AlignRevealPieces === "function") v134AlignRevealPieces(); }, 250);
+        setTimeout(() => { if (typeof v134AlignRevealPieces === "function") v134AlignRevealPieces(); }, 900);
+      } catch (e) {
+        v135ShowHardError(e, "renderPuzzle");
+        v135MakeStaticCardsIfNeeded();
       }
-
-      cards.forEach(item => {
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "bone-card";
-        if (item.decoy) card.classList.add("decoy");
-        if (mode.bone === "hidden") card.classList.add("mystery");
-        card.dataset.bone = item.id;
-        if (state.selectedBone === item.id) card.classList.add("active");
-        if (!item.decoy && state.placedBones.includes(item.id)) card.classList.add("used");
-
-        const fallbackMarkup = item.decoy
-          ? "<span class='decoy-mark'>FRAGMENT</span>"
-          : "<span class='missing-label'>影像缺失<br>需以掃描判斷</span>";
-        const labelText = item.decoy ? (mode.bone === "name" ? item.name : "UNKNOWN") : displayBoneLabel(item);
-
-        card.innerHTML = `
-          <span class="bone-img">
-            <img src="${assetWithCache(item.img)}" alt="${item.name || "骨片"}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
-          </span>
-          <span>${labelText}</span>
-        `;
-        card.addEventListener("click", () => safeAction(() => selectBone(item.id)));
-        grid.appendChild(card);
-      });
-
-      updatePuzzleUI();
-      requestAnimationFrame(() => {
-        v134AlignRevealPieces();
-        const ok = zones.querySelectorAll(".bone-mask").length === BONES.length && grid.querySelectorAll(".bone-card").length === 12;
-        if (!ok && typeof v132RepairPuzzleIfEmpty === "function") v132RepairPuzzleIfEmpty("v1.34-mask-render");
-      });
-      setTimeout(v134AlignRevealPieces, 260);
-      setTimeout(v134AlignRevealPieces, 900);
     }
 
 function selectBone(id) {
-      if (!Array.isArray(state.placedBones)) state.placedBones = [];
-      const real = BONES.find(b => b.id === id);
-      const decoy = DECOY_BONES.find(b => b.id === id);
+      try {
+        if (!Array.isArray(state.placedBones)) state.placedBones = [];
+        const real = BONES.find(b => b.id === id);
+        const decoy = DECOY_BONES.find(b => b.id === id);
 
-      if (real && state.placedBones.includes(id)) {
-        toast("此骨片已完成定位。");
-        return;
+        if (real && state.placedBones.includes(id)) {
+          toast("此骨片已完成定位。");
+          return;
+        }
+
+        state.selectedBone = id;
+        state.screen = "screen-puzzle";
+        state.currentScreen = "screen-puzzle";
+        tone(decoy ? "glitch" : "click");
+
+        if (decoy) logTo("puzzle-log", "SYSTEM：目前選擇：疑似骨片。");
+        else logTo("puzzle-log", "SYSTEM：目前選擇：" + displayBoneLabel(real));
+
+        v135SaveNow("screen-puzzle");
+        renderPuzzle();
+      } catch (e) {
+        v135ShowHardError(e, "selectBone");
       }
-
-      state.selectedBone = id;
-      tone(decoy ? "glitch" : "click");
-
-      if (decoy) {
-        logTo("puzzle-log", "SYSTEM：已選擇疑似骨片，請謹慎判讀。");
-      } else {
-        logTo("puzzle-log", "SYSTEM：目前選擇：" + displayBoneLabel(real));
-      }
-
-      state.screen = "screen-puzzle";
-      state.currentScreen = "screen-puzzle";
-      saveGame();
-      renderPuzzle();
     }
 
 function placeSelectedBone(targetId) {
-      if (!Array.isArray(state.placedBones)) state.placedBones = [];
-      if (!state.selectedBone) {
-        toast("請先選擇下方骨片。");
-        logTo("puzzle-log", "SYSTEM：選擇骨片。");
-        state.screen = "screen-puzzle";
-        state.currentScreen = "screen-puzzle";
-        saveGame();
-        return;
-      }
+      try {
+        if (!Array.isArray(state.placedBones)) state.placedBones = [];
+        if (!state.selectedBone) {
+          toast("請先選擇下方骨片。");
+          logTo("puzzle-log", "SYSTEM：選擇骨片。");
+          v135SaveNow("screen-puzzle");
+          return;
+        }
 
-      const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
-      if (selectedDecoy) {
-        const card = document.querySelector(`[data-bone="${state.selectedBone}"]`);
-        const zone = document.querySelector(`[data-target="${targetId}"]`);
-        if (card) {
-          card.classList.add("decoy-glitch");
-          setTimeout(() => card.classList.remove("decoy-glitch"), 420);
+        const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
+        if (selectedDecoy) {
+          const zone = document.querySelector(`[data-target="${targetId}"]`);
+          if (zone) {
+            zone.classList.add("shake");
+            setTimeout(() => zone.classList.remove("shake"), 300);
+          }
+          registerMistake("puzzle");
+          tone("error");
+          logTo("puzzle-log", "非本標本骨片。污染值上升。");
+          state.selectedBone = "";
+          v135SaveNow("screen-puzzle");
+          renderPuzzle();
+          return;
         }
-        if (zone) {
-          zone.classList.add("shake");
-          setTimeout(() => zone.classList.remove("shake"), 300);
+
+        if (state.selectedBone === targetId) {
+          if (!state.placedBones.includes(targetId)) {
+            state.placedBones.push(targetId);
+            state.lastPlacedBone = targetId;
+            const bone = BONES.find(b => b.id === targetId);
+            tone("ok");
+            logTo("puzzle-log", (bone ? bone.name : "骨片") + " 封存遮罩解除。");
+          }
+
+          state.selectedBone = "";
+          v135SaveNow("screen-puzzle");
+          renderPuzzle();
+
+          if (state.placedBones.length === BONES.length) {
+            logTo("puzzle-log", "九塊骨片已定位。標本底圖完全顯示。");
+            setTimeout(() => {
+              if (!state.dead) {
+                toast("標本復原完成。");
+                v135SaveNow("screen-restored");
+                showScreen("screen-restored");
+              }
+            }, 900);
+          }
+          return;
         }
+
         registerMistake("puzzle");
         tone("error");
-        logTo("puzzle-log", "非本標本骨片。污染值上升。");
-        state.selectedBone = "";
-        state.screen = "screen-puzzle";
-        state.currentScreen = "screen-puzzle";
-        renderPuzzle();
-        saveGame();
-        return;
-      }
-
-      if (state.selectedBone === targetId) {
-        if (!state.placedBones.includes(targetId)) {
-          state.placedBones.push(targetId);
-          state.lastPlacedBone = targetId;
-          tone("ok");
-          const bone = BONES.find(b => b.id === targetId);
-          const zone = document.querySelector(`[data-target="${targetId}"]`);
-          const card = document.querySelector(`[data-bone="${targetId}"]`);
-          if (zone) zone.classList.add("correct-flash", "reveal-flash");
-          if (card) card.classList.add("correct-flash");
-          setTimeout(() => {
-            if (zone) zone.classList.remove("correct-flash", "reveal-flash");
-            if (card) card.classList.remove("correct-flash");
-          }, 820);
-          logTo("puzzle-log", (bone ? bone.name : "骨片") + " 封存遮罩解除。");
+        const board = $("fossil-board");
+        if (board) {
+          board.classList.add("shake");
+          setTimeout(() => board.classList.remove("shake"), 260);
         }
-
-        state.selectedBone = "";
-        state.screen = "screen-puzzle";
-        state.currentScreen = "screen-puzzle";
+        logTo("puzzle-log", "骨片不匹配。污染值上升。");
+        v135SaveNow("screen-puzzle");
         renderPuzzle();
-        saveGame();
-
-        if (state.placedBones.length === BONES.length) {
-          logTo("puzzle-log", "九塊骨片已定位。標本底圖完全顯示。");
-          setTimeout(() => {
-            if (!state.dead) {
-              toast("標本復原完成。");
-              state.currentScreen = "screen-restored";
-              saveGame();
-              showScreen("screen-restored");
-            }
-          }, 900);
-        }
-        return;
+      } catch (e) {
+        v135ShowHardError(e, "placeSelectedBone");
       }
-
-      registerMistake("puzzle");
-      tone("error");
-      const board = $("fossil-board");
-      if (board) {
-        board.classList.add("shake");
-        setTimeout(() => board.classList.remove("shake"), 260);
-      }
-      logTo("puzzle-log", "骨片不匹配。污染值上升。");
-      state.screen = "screen-puzzle";
-      state.currentScreen = "screen-puzzle";
-      renderPuzzle();
-      saveGame();
     }
 
     function clearBlackoutSequence() {
@@ -5461,39 +5716,45 @@ function placeSelectedBone(targetId) {
     }
 
 function updatePuzzleUI() {
-      if (!Array.isArray(state.placedBones)) state.placedBones = [];
-      const selected = BONES.find(b => b.id === state.selectedBone);
-      const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
-      if (selected) {
-        $("selected-label").textContent = "目前選擇：" + displayBoneLabel(selected);
-      } else if (selectedDecoy) {
-        $("selected-label").textContent = "目前選擇：疑似骨片";
-      } else {
-        $("selected-label").textContent = "尚未選擇骨片";
+      try {
+        if (!Array.isArray(state.placedBones)) state.placedBones = [];
+        const selected = BONES.find(b => b.id === state.selectedBone);
+        const selectedDecoy = DECOY_BONES.find(b => b.id === state.selectedBone);
+        const selectedLabel = $("selected-label");
+        if (selectedLabel) {
+          if (selected) selectedLabel.textContent = "目前選擇：" + displayBoneLabel(selected);
+          else if (selectedDecoy) selectedLabel.textContent = "目前選擇：疑似骨片";
+          else selectedLabel.textContent = "尚未選擇骨片";
+        }
+
+        const bar = $("puzzle-bar");
+        if (bar) bar.style.width = (state.placedBones.length / BONES.length * 100) + "%";
+
+        const mode = puzzleDisplayMode();
+        const scanLimit = mode.scans;
+        const scanUsed = state.scansUsed || 0;
+        const scanCount = $("scan-count");
+        if (scanCount) scanCount.textContent = scanLimit >= 90 ? `掃描：${scanUsed} / ∞` : `掃描：${scanUsed} / ${scanLimit}`;
+        const scanBtn = $("scan-btn");
+        if (scanBtn) scanBtn.disabled = scanLimit < 90 && scanUsed >= scanLimit;
+
+        $$(".bone-card").forEach(card => {
+          const id = card.dataset.bone;
+          card.classList.toggle("active", state.selectedBone === id);
+          card.classList.toggle("used", state.placedBones.includes(id));
+        });
+        $$(".drop-zone, .bone-mask").forEach(zone => {
+          const id = zone.dataset.target;
+          const done = state.placedBones.includes(id);
+          zone.classList.toggle("done", done);
+          zone.classList.toggle("revealed", done);
+          zone.classList.toggle("ready", !!state.selectedBone && !done);
+        });
+        if (typeof v134AlignRevealPieces === "function") v134AlignRevealPieces();
+        updateStatusAll();
+      } catch (e) {
+        v135ShowHardError(e, "updatePuzzleUI");
       }
-
-      $("puzzle-bar").style.width = (state.placedBones.length / BONES.length * 100) + "%";
-
-      const mode = puzzleDisplayMode();
-      const scanLimit = mode.scans;
-      const scanUsed = state.scansUsed || 0;
-      $("scan-count").textContent = scanLimit >= 90 ? `掃描：${scanUsed} / ∞` : `掃描：${scanUsed} / ${scanLimit}`;
-      $("scan-btn").disabled = scanLimit < 90 && scanUsed >= scanLimit;
-
-      $$(".bone-card").forEach(card => {
-        const id = card.dataset.bone;
-        card.classList.toggle("active", state.selectedBone === id);
-        card.classList.toggle("used", state.placedBones.includes(id));
-      });
-      $$(".drop-zone, .bone-mask").forEach(zone => {
-        const id = zone.dataset.target;
-        const done = state.placedBones.includes(id);
-        zone.classList.toggle("done", done);
-        zone.classList.toggle("revealed", done);
-        zone.classList.toggle("ready", !!state.selectedBone && !done);
-      });
-      v134AlignRevealPieces();
-      updateStatusAll();
     }
 
 
@@ -5526,7 +5787,7 @@ function updatePuzzleUI() {
       updatePuzzleUI();
       state.screen = "screen-puzzle";
       state.currentScreen = "screen-puzzle";
-      saveGame();
+      v135SaveNow("screen-puzzle");
     }
 
     function renderClues() {
@@ -6121,8 +6382,8 @@ function updatePuzzleUI() {
     window.addEventListener("beforeunload", () => { v133SaveActiveScreen(); if (typeof v132SaveActiveScreen === "function") v132SaveActiveScreen(); stopCamera(); });
     window.addEventListener("DOMContentLoaded", boot);
   
-    window.addEventListener("pagehide", () => { try { v134PersistActiveScreen(); } catch(e) {} });
-    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") { try { v134PersistActiveScreen(); } catch(e) {} } });
+    window.addEventListener("pagehide", () => { try { v135PersistOnLeave(); } catch(e) {} });
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") { try { v135PersistOnLeave(); } catch(e) {} } });
 </script>
 </body>
 </html>
