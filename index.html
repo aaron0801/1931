@@ -2477,6 +2477,139 @@
       opacity: .78;
     }
 
+
+    /* v1.29 bone visual cleanup: keep v1.26 UI, remove ugly white image blocks */
+    .bone-card .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,238,222,.09), transparent 48%),
+        linear-gradient(145deg, rgba(12,0,0,.72), rgba(0,0,0,.42)) !important;
+      border: 1px solid rgba(255,178,164,.08);
+      box-shadow: inset 0 0 16px rgba(0,0,0,.42);
+      overflow: hidden;
+      isolation: auto;
+    }
+
+    .bone-card img {
+      max-width: 78% !important;
+      max-height: 62px !important;
+      object-fit: contain !important;
+      background: transparent !important;
+      mix-blend-mode: screen;
+      filter:
+        grayscale(1)
+        invert(1)
+        brightness(1.45)
+        contrast(1.18)
+        sepia(.18)
+        drop-shadow(0 0 7px rgba(255,224,190,.22));
+      opacity: .88;
+    }
+
+    .bone-card.active .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,238,222,.16), transparent 50%),
+        linear-gradient(145deg, rgba(88,10,10,.68), rgba(0,0,0,.42)) !important;
+      box-shadow:
+        inset 0 0 18px rgba(0,0,0,.45),
+        0 0 18px rgba(210,40,34,.18);
+    }
+
+    .bone-card.used img {
+      opacity: .42;
+    }
+
+    .drop-zone.done {
+      opacity: 1 !important;
+      pointer-events: none !important;
+      border-color: rgba(255,178,164,.10) !important;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(255,238,222,.06), transparent 58%),
+        rgba(0,0,0,.18) !important;
+      box-shadow:
+        inset 0 0 14px rgba(0,0,0,.42),
+        0 0 14px rgba(120,20,20,.12) !important;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+
+    .drop-zone.done > span:not(.placed-bone-wrap) {
+      display: none !important;
+    }
+
+    .placed-bone-wrap {
+      position: absolute !important;
+      inset: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      pointer-events: none !important;
+      z-index: 4 !important;
+      padding: 4px !important;
+      overflow: hidden !important;
+    }
+
+    .placed-bone-img {
+      max-width: 86% !important;
+      max-height: 86% !important;
+      object-fit: contain !important;
+      background: transparent !important;
+      mix-blend-mode: screen;
+      filter:
+        grayscale(1)
+        invert(1)
+        brightness(1.55)
+        contrast(1.16)
+        sepia(.20)
+        drop-shadow(0 0 9px rgba(255,224,190,.24))
+        drop-shadow(0 0 14px rgba(140,22,20,.18));
+      opacity: .88 !important;
+      transform: none !important;
+    }
+
+    .drop-zone.done.skull .placed-bone-img { max-width: 82% !important; max-height: 82% !important; }
+    .drop-zone.done.neck .placed-bone-img { max-width: 72% !important; max-height: 84% !important; }
+    .drop-zone.done.chest .placed-bone-img { max-width: 88% !important; max-height: 88% !important; }
+    .drop-zone.done.leftWing .placed-bone-img,
+    .drop-zone.done.rightWing .placed-bone-img { max-width: 92% !important; max-height: 88% !important; }
+    .drop-zone.done.pelvis .placed-bone-img { max-width: 84% !important; max-height: 84% !important; }
+    .drop-zone.done.leftLeg .placed-bone-img,
+    .drop-zone.done.rightLeg .placed-bone-img { max-width: 72% !important; max-height: 92% !important; }
+    .drop-zone.done.tail .placed-bone-img { max-width: 64% !important; max-height: 82% !important; }
+
+    .board:not(.complete) .drop-zone.done::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,238,222,.035);
+      pointer-events: none;
+    }
+
+    .board:not(.complete)::before {
+      opacity: .52 !important;
+    }
+
+    .board-answer-note {
+      bottom: 8px !important;
+      font-size: 10px !important;
+      opacity: .82;
+    }
+
+    @media (max-width: 520px) {
+      .bone-card {
+        min-height: 92px !important;
+        padding: 7px !important;
+      }
+
+      .bone-card .bone-img {
+        min-height: 56px !important;
+      }
+
+      .bone-card img {
+        max-height: 54px !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -2497,7 +2630,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.28</div>
+          <div class="kicker">FINAL BUILD 1.29</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2929,9 +3062,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_28_MOBILE_FILENAME_COMPATIBLE",
-      saveKey: "fifthResearcher_final_v1_28",
-      settingsKey: "fifthResearcher_final_v1_28_settings",
+      version: "FINAL_BUILD_1_29_BONE_VISUAL_CLEANUP",
+      saveKey: "fifthResearcher_final_v1_29",
+      settingsKey: "fifthResearcher_final_v1_29_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3537,7 +3670,7 @@
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_28";
+      return clean + "?v=final1_29";
     }
 
     function mobileUploadVariant(src) {
@@ -3624,7 +3757,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_28");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_29");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -4146,7 +4279,7 @@
 
         const label = `<span>${displayZoneLabel(bone)}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_28" alt=""></span>`
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_29" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
 
@@ -4178,7 +4311,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_28" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_29" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
