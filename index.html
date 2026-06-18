@@ -2729,6 +2729,117 @@
       transform: translateX(-50%) translateY(-4px);
     }
 
+
+    /* v1.31 stable board visibility and resume fix */
+    .board .drop-zone:not(.done) {
+      opacity: 1 !important;
+      border: 1.6px dashed rgba(255,224,190,.34) !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,224,190,.055), transparent 58%),
+        rgba(0,0,0,.30) !important;
+      box-shadow:
+        inset 0 0 12px rgba(0,0,0,.52),
+        0 0 8px rgba(130,24,20,.10) !important;
+    }
+    .board .drop-zone.hidden-label span {
+      opacity: .38 !important;
+      color: rgba(255,224,190,.58) !important;
+      text-shadow: 0 0 8px rgba(180,34,28,.26);
+    }
+    .board .drop-zone.hidden-label span::before {
+      content: "定位區";
+      font-size: 10px;
+      letter-spacing: .12em;
+    }
+    .board .drop-zone.hidden-label span { font-size: 0 !important; }
+    .board .drop-zone.ready {
+      border-color: rgba(255,238,222,.72) !important;
+      background: rgba(78,10,10,.36) !important;
+      box-shadow: 0 0 20px rgba(220,42,34,.24) !important;
+    }
+    .drop-zone.done {
+      opacity: 1 !important;
+      pointer-events: none !important;
+      border: 1.4px solid rgba(255,178,164,.16) !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,224,190,.09), transparent 60%),
+        rgba(30,4,4,.34) !important;
+      box-shadow:
+        inset 0 0 14px rgba(0,0,0,.58),
+        0 0 12px rgba(190,36,30,.16) !important;
+    }
+    .drop-zone.done > span:not(.placed-bone-wrap) {
+      display: none !important;
+    }
+    .placed-bone-wrap {
+      position: absolute !important;
+      inset: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+    }
+    .placed-bone-wrap::before {
+      content: "定位完成";
+      color: rgba(255,224,190,.78);
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,178,164,.18);
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-shadow: 0 0 8px rgba(220,42,34,.35);
+    }
+    .placed-bone-img {
+      display: none !important;
+    }
+    .board.complete .drop-zone.done {
+      opacity: .22 !important;
+      background: transparent !important;
+      border-color: rgba(255,178,164,.06) !important;
+      box-shadow: none !important;
+    }
+    .board.complete .placed-bone-wrap { display:none !important; }
+    .bone-card .bone-img {
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255,238,222,.06), transparent 54%),
+        rgba(0,0,0,.38) !important;
+      border-radius: 14px !important;
+      overflow: hidden !important;
+      min-height: 58px;
+    }
+    .bone-card img {
+      max-width: 62% !important;
+      max-height: 52px !important;
+      object-fit: contain !important;
+      opacity: .76 !important;
+      background: transparent !important;
+      filter: grayscale(1) brightness(.70) contrast(1.18) drop-shadow(0 0 8px rgba(255,224,190,.16)) !important;
+      mix-blend-mode: luminosity !important;
+    }
+    .bone-card.active img {
+      opacity: .95 !important;
+      filter: grayscale(.72) brightness(.92) contrast(1.18) drop-shadow(0 0 10px rgba(255,224,190,.26)) !important;
+    }
+    .resume-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: rgba(9,0,0,.90);
+      border: 1px solid rgba(255,74,66,.28);
+      color: rgba(255,238,222,.9);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .resume-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
   </style>
 </head>
 
@@ -2749,7 +2860,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.30</div>
+          <div class="kicker">FINAL BUILD 1.31</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2798,8 +2909,7 @@
           </div>
           <p class="small-note">建議使用 Safari / Chrome，保持手機直向。</p>
         </div>
-      <button class="btn secondary" id="resume-btn" onclick="v130ResumeProgress()" style="display:none;">繼續未完成紀錄</button>
-    </section>
+</section>
 
       <section id="screen-settings" class="screen">
         <div class="panel">
@@ -3182,9 +3292,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_30_PROGRESS_AND_BOARD_POLISH",
-      saveKey: "fifthResearcher_final_v1_30",
-      settingsKey: "fifthResearcher_final_v1_30_settings",
+      version: "FINAL_BUILD_1_31_STABLE_RESUME_AND_VISIBLE_BOARD",
+      saveKey: "fifthResearcher_final_v1_31",
+      settingsKey: "fifthResearcher_final_v1_31_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3444,6 +3554,10 @@
       if (nextState.pollution >= 100) nextState.life = 0;
       if (!nextState.cameraStatus) nextState.cameraStatus = "untested";
       if (typeof nextState.cameraPanelOpen !== "boolean") nextState.cameraPanelOpen = false;
+      const preferred = nextState.currentScreen || nextState.screen || "screen-home";
+      nextState.currentScreen = CONFIG.screens.includes(preferred) ? preferred : "screen-home";
+      if (!CONFIG.screens.includes(nextState.screen)) nextState.screen = nextState.currentScreen;
+      if (nextState.screen === "screen-loading") nextState.screen = nextState.currentScreen || "screen-home";
       return nextState;
     }
 
@@ -3588,19 +3702,31 @@
     }
 
     function loadGame() {
-      try {
-        const raw = localStorage.getItem(CONFIG.saveKey);
-        if (!raw) return false;
-        const loaded = JSON.parse(raw);
-        const merged = sanitizeLoadedState(loaded);
-        if (!merged.cameraStatus) merged.cameraStatus = state.cameraStatus || "untested";
-        if (typeof merged.cameraPanelOpen !== "boolean") merged.cameraPanelOpen = !!state.cameraPanelOpen;
-        state = merged;
-        ensureRandomLayouts(false);
-        return true;
-      } catch (e) {
-        return false;
+      const keys = [
+        CONFIG.saveKey,
+        "fifthResearcher_final_v1_30",
+        "fifthResearcher_final_v1_29",
+        "fifthResearcher_final_v1_28",
+        "fifthResearcher_final_v1_27_safe",
+        "fifthResearcher_final_v1_26"
+      ];
+      for (const key of keys) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          const loaded = JSON.parse(raw);
+          const merged = sanitizeLoadedState(loaded);
+          if (!merged.cameraStatus) merged.cameraStatus = state.cameraStatus || "untested";
+          if (typeof merged.cameraPanelOpen !== "boolean") merged.cameraPanelOpen = !!state.cameraPanelOpen;
+          state = merged;
+          ensureRandomLayouts(false);
+          try {
+            localStorage.setItem(CONFIG.saveKey, JSON.stringify(state));
+          } catch (e) {}
+          return true;
+        } catch (e) {}
       }
+      return false;
     }
     function hasMeaningfulProgress(s) {
       if (!s) return false;
@@ -3636,9 +3762,10 @@
     function renderResume() {
       const s = pendingResumeState || state;
       const diff = DIFFICULTIES[s.difficulty] || DIFFICULTIES.normal;
+      const resumeScreen = s.dead ? "screen-failure" : (s.currentScreen || s.screen || "screen-home");
       const rows = [
         ["觀測代號", s.player || "觀測者"],
-        ["停留階段", screenName(s.dead ? "screen-failure" : s.screen)],
+        ["停留階段", screenName(resumeScreen)],
         ["封存模式", diff.label],
         ["污染值", (s.pollution ?? 0) + "%"]
       ];
@@ -3650,9 +3777,11 @@
         showScreen("screen-home");
         return;
       }
-      state = JSON.parse(JSON.stringify(pendingResumeState));
+      state = sanitizeLoadedState(JSON.parse(JSON.stringify(pendingResumeState)));
       pendingResumeState = null;
-      const target = state.dead ? "screen-failure" : (CONFIG.screens.includes(state.screen) ? state.screen : "screen-home");
+      const target = state.dead ? "screen-failure" : (CONFIG.screens.includes(state.currentScreen) ? state.currentScreen : (CONFIG.screens.includes(state.screen) ? state.screen : "screen-home"));
+      state.screen = target;
+      state.currentScreen = target;
       showScreen(target, true);
     }
 
@@ -3680,8 +3809,16 @@
         cameraStatus: state.cameraStatus || "untested",
         cameraPanelOpen: !!state.cameraPanelOpen
       };
-      try { localStorage.removeItem(CONFIG.saveKey); } catch (e) {}
+      [
+        CONFIG.saveKey,
+        "fifthResearcher_final_v1_30",
+        "fifthResearcher_final_v1_29",
+        "fifthResearcher_final_v1_28",
+        "fifthResearcher_final_v1_27_safe",
+        "fifthResearcher_final_v1_26"
+      ].forEach(key => { try { localStorage.removeItem(key); } catch (e) {} });
       state = defaultState();
+      state.screen = "screen-home";
       state.currentScreen = "screen-home";
       if (keepSettings) Object.assign(state, keep);
       if (typeof resetBoxFormUI === "function") resetBoxFormUI();
@@ -3792,7 +3929,7 @@
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_30";
+      return clean + "?v=final1_31";
     }
 
     function mobileUploadVariant(src) {
@@ -3879,7 +4016,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_30");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_31");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3901,18 +4038,11 @@
         const exhibitMode = params.has("exhibit");
         let loadedExistingProgress = false;
 
-        if (!wasReset && !exhibitMode) {
-          loadedExistingProgress = loadGame();
-        }
-
-        if (exhibitMode) {
-          clearGameProgress(true);
-        }
+        if (!wasReset && !exhibitMode) loadedExistingProgress = loadGame();
+        if (exhibitMode) clearGameProgress(true);
 
         const shouldAskResume = loadedExistingProgress && hasMeaningfulProgress(state);
-        if (shouldAskResume) {
-          pendingResumeState = JSON.parse(JSON.stringify(state));
-        }
+        if (shouldAskResume) pendingResumeState = JSON.parse(JSON.stringify(state));
 
         const loadTargets = CONFIG.imageAssets;
         for (let i = 0; i < loadTargets.length; i++) {
@@ -3924,7 +4054,7 @@
 
         $("loading-bar").style.width = "100%";
         $("loading-text").textContent = "系統接入完成。";
-        $("loading-log").textContent = "SYSTEM：準備進入主頁。";
+        $("loading-log").textContent = shouldAskResume ? "SYSTEM：偵測到未完成紀錄。" : "SYSTEM：準備進入主頁。";
 
         setupImages();
         bindEvents();
@@ -3932,22 +4062,14 @@
         updateStatusAll();
         updateBoxUI();
 
-        const bootTarget = pendingResumeState ? "screen-resume" : (state.screen === "screen-loading" ? "screen-home" : state.screen);
+        const bootTarget = pendingResumeState ? "screen-resume" : "screen-home";
         setTimeout(() => showScreen(bootTarget, false), 180);
 
         setTimeout(() => {
           const active = document.querySelector(".screen.active");
           if (active && active.id === "screen-loading") {
             console.warn("Boot fallback activated.");
-            
-        if (v130HasMeaningfulProgress()) {
-          const target = v130SafeResumeScreen(state.currentScreen);
-          showScreen(target, false);
-          v130ShowResumeToast("已回到未完成紀錄");
-        } else {
-          showScreen("screen-home", false);
-        }
-        v130UpdateResumeButton();
+            showScreen(pendingResumeState ? "screen-resume" : "screen-home", false);
           }
         }, 1800);
       } catch (err) {
@@ -4164,20 +4286,27 @@
       const target = $(id);
       if (target) target.classList.add("active");
 
-      setStage(id);
-      updateHud();
-      v130UpdateResumeButton();
-
-      if (remember && id !== "screen-home" && id !== "screen-loading" && id !== "screen-resume") {
-        v130RememberCurrentScreen(id);
+      if (id !== "screen-loading" && id !== "screen-resume") {
+        state.screen = id;
+        if (id !== "screen-home" && id !== "screen-settings" && id !== "screen-how" && id !== "screen-story") {
+          state.currentScreen = id;
+        }
       }
 
+      setStage(id);
+      updateHud();
+
+      if (id === "screen-resume") renderResume();
       if (id === "screen-puzzle") renderPuzzle();
       if (id === "screen-clues") renderClues();
       if (id === "screen-order") renderOrder();
       if (id === "screen-box") updateBoxUI();
       if (id === "screen-reveal") setupReveal();
       if (id === "screen-ending") renderEnding();
+
+      if (remember && id !== "screen-home" && id !== "screen-loading" && id !== "screen-resume") {
+        saveGame();
+      }
 
       window.scrollTo({ top: 0, behavior: "instant" });
     }
@@ -4459,7 +4588,7 @@
 
         const label = `<span>${displayZoneLabel(bone)}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_30" alt=""></span>`
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_31" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
 
@@ -4491,7 +4620,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_30" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_31" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -4551,6 +4680,8 @@
         state.selectedBone = "";
         renderPuzzle();
         v130RememberCurrentScreen("screen-puzzle");
+      state.screen = "screen-puzzle";
+      state.currentScreen = "screen-puzzle";
       saveGame();
         return;
       }
@@ -4885,6 +5016,8 @@
       }
       renderOrder();
       v130RememberCurrentScreen("screen-order");
+      state.screen = "screen-order";
+      state.currentScreen = "screen-order";
       saveGame();
     }
 
@@ -4936,6 +5069,8 @@
         input.dataset.fromUnlocked = "true";
         updateBoxUI();
         v130RememberCurrentScreen("screen-box");
+      state.screen = "screen-box";
+      state.currentScreen = "screen-box";
       saveGame();
       } else {
         $("box-log").textContent = "SYSTEM：密碼錯誤。封存箱污染值上升。";
