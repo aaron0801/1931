@@ -2840,6 +2840,85 @@
     }
     .resume-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
+
+    /* v1.32 hard fix: puzzle must never be visually empty */
+    #fossil-board #drop-zones {
+      position: absolute !important;
+      inset: 0 !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 6 !important;
+      pointer-events: none;
+    }
+    #fossil-board #drop-zones .drop-zone {
+      display: grid !important;
+      place-items: center !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      border: 1.6px dashed rgba(255,224,190,.48) !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,224,190,.075), transparent 58%),
+        rgba(12,0,0,.42) !important;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.55), 0 0 10px rgba(165,30,25,.14) !important;
+      color: rgba(255,224,190,.72) !important;
+    }
+    #fossil-board #drop-zones .drop-zone.hidden-label span,
+    #fossil-board #drop-zones .drop-zone span:empty {
+      font-size: 0 !important;
+    }
+    #fossil-board #drop-zones .drop-zone.hidden-label span::before,
+    #fossil-board #drop-zones .drop-zone span:empty::before {
+      content: "定位區";
+      font-size: 10px;
+      letter-spacing: .12em;
+      color: rgba(255,224,190,.72);
+      text-shadow: 0 0 10px rgba(220,42,34,.32);
+    }
+    #fossil-board #drop-zones .drop-zone.done {
+      opacity: 1 !important;
+      border: 1.4px solid rgba(255,178,164,.22) !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,224,190,.10), transparent 60%),
+        rgba(35,4,4,.42) !important;
+    }
+    .placed-bone-img { display: none !important; }
+    .placed-bone-wrap::before {
+      content: "定位完成" !important;
+      color: rgba(255,224,190,.82) !important;
+      background: rgba(0,0,0,.54) !important;
+      border: 1px solid rgba(255,178,164,.24) !important;
+      border-radius: 999px !important;
+      padding: 3px 8px !important;
+      font-size: 10px !important;
+      letter-spacing: .12em !important;
+    }
+    #bone-grid {
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      min-height: 120px !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+    #bone-grid .bone-card {
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1;
+    }
+    #bone-grid:empty::before {
+      content: "骨片清單重新載入中……";
+      display: block;
+      grid-column: 1 / -1;
+      color: rgba(255,224,190,.65);
+      border: 1px dashed rgba(255,178,164,.24);
+      padding: 14px;
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(0,0,0,.28);
+    }
+
   </style>
 </head>
 
@@ -2860,7 +2939,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.31</div>
+          <div class="kicker">FINAL BUILD 1.32</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -3040,9 +3119,29 @@
             <img class="full" data-src="images/reveal/full-fossil-board.png" alt="完整雞骨化石標本">
             <div class="board-fallback">備用標本板已啟用<br>請依掃描與位置判斷</div>
             <div class="scan-line"></div>
-            <div id="drop-zones"></div>
+            <div id="drop-zones">
+              <button class="drop-zone skull zone-label" data-target="skull" onclick="safeAction(() => placeSelectedBone('skull'))"><span>定位區</span></button>
+              <button class="drop-zone neck zone-label" data-target="neck" onclick="safeAction(() => placeSelectedBone('neck'))"><span>定位區</span></button>
+              <button class="drop-zone chest zone-label" data-target="chest" onclick="safeAction(() => placeSelectedBone('chest'))"><span>定位區</span></button>
+              <button class="drop-zone leftWing zone-label" data-target="leftWing" onclick="safeAction(() => placeSelectedBone('leftWing'))"><span>定位區</span></button>
+              <button class="drop-zone rightWing zone-label" data-target="rightWing" onclick="safeAction(() => placeSelectedBone('rightWing'))"><span>定位區</span></button>
+              <button class="drop-zone pelvis zone-label" data-target="pelvis" onclick="safeAction(() => placeSelectedBone('pelvis'))"><span>定位區</span></button>
+              <button class="drop-zone leftLeg zone-label" data-target="leftLeg" onclick="safeAction(() => placeSelectedBone('leftLeg'))"><span>定位區</span></button>
+              <button class="drop-zone rightLeg zone-label" data-target="rightLeg" onclick="safeAction(() => placeSelectedBone('rightLeg'))"><span>定位區</span></button>
+              <button class="drop-zone tail zone-label" data-target="tail" onclick="safeAction(() => placeSelectedBone('tail'))"><span>定位區</span></button>
+            </div>
           </div>
-          <div class="bone-grid" id="bone-grid"></div>
+          <div class="bone-grid" id="bone-grid">
+              <button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_32" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>顱部骨片</span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_32" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>椎骨骨片</span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_32" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>胸腔骨片</span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_32" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>翼骨 A</span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_32" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>翼骨 B</span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_32" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>骨盆骨片</span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_32" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>腿骨 A</span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_32" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>腿骨 B</span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_32" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='&lt;span class=&quot;missing-label&quot;&gt;影像缺失&lt;br&gt;需以掃描判斷&lt;/span&gt;'"></span><span>尾端骨片</span></button>
+            </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
       </section>
@@ -3293,8 +3392,8 @@
 
     const CONFIG = {
       version: "FINAL_BUILD_1_31_STABLE_RESUME_AND_VISIBLE_BOARD",
-      saveKey: "fifthResearcher_final_v1_31",
-      settingsKey: "fifthResearcher_final_v1_31_settings",
+      saveKey: "fifthResearcher_final_v1_32",
+      settingsKey: "fifthResearcher_final_v1_32_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3703,6 +3802,7 @@
 
     function loadGame() {
       const keys = [
+        "fifthResearcher_final_v1_32",
         CONFIG.saveKey,
         "fifthResearcher_final_v1_30",
         "fifthResearcher_final_v1_29",
@@ -3929,7 +4029,7 @@
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_31";
+      return clean + "?v=final1_32";
     }
 
     function mobileUploadVariant(src) {
@@ -4016,7 +4116,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_31");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_32");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -4063,7 +4163,7 @@
         updateBoxUI();
 
         const bootTarget = pendingResumeState ? "screen-resume" : "screen-home";
-        setTimeout(() => showScreen(bootTarget, false), 180);
+        setTimeout(() => { showScreen(bootTarget, false); v132SchedulePuzzleRepair("boot"); }, 180);
 
         setTimeout(() => {
           const active = document.querySelector(".screen.active");
@@ -4278,6 +4378,33 @@
       v130ShowResumeToast("已繼續未完成紀錄");
     }
 
+    function v132RepairPuzzleIfEmpty(reason = "auto") {
+      const active = document.querySelector(".screen.active");
+      if (!active || active.id !== "screen-puzzle") return false;
+      const zones = $("drop-zones");
+      const grid = $("bone-grid");
+      if (!zones || !grid) return false;
+      const missingZones = zones.querySelectorAll(".drop-zone").length < BONES.length;
+      const missingCards = grid.querySelectorAll(".bone-card").length < BONES.length;
+      if (!missingZones && !missingCards) return true;
+      try {
+        console.warn("Puzzle render repair:", reason, { missingZones, missingCards });
+        ensureRandomLayouts(true);
+        renderPuzzle();
+        logTo("puzzle-log", "SYSTEM：骨片清單已重新載入。");
+        return true;
+      } catch (err) {
+        console.error("Puzzle repair failed", err);
+        return false;
+      }
+    }
+
+    function v132SchedulePuzzleRepair(reason = "schedule") {
+      setTimeout(() => v132RepairPuzzleIfEmpty(reason + ":120"), 120);
+      setTimeout(() => v132RepairPuzzleIfEmpty(reason + ":520"), 520);
+      setTimeout(() => v132RepairPuzzleIfEmpty(reason + ":1200"), 1200);
+    }
+
     function showScreen(id, remember = true) {
       CONFIG.screens.forEach(s => {
         const el = $(s);
@@ -4297,7 +4424,7 @@
       updateHud();
 
       if (id === "screen-resume") renderResume();
-      if (id === "screen-puzzle") renderPuzzle();
+      if (id === "screen-puzzle") { renderPuzzle(); v132SchedulePuzzleRepair("showScreen"); }
       if (id === "screen-clues") renderClues();
       if (id === "screen-order") renderOrder();
       if (id === "screen-box") updateBoxUI();
@@ -4560,14 +4687,23 @@
 
 
     function renderPuzzle() {
-      ensureRandomLayouts(false);
       const zones = $("drop-zones");
       const grid = $("bone-grid");
       const board = $("fossil-board");
+      if (!zones || !grid || !board) {
+        console.warn("Puzzle containers missing.");
+        return;
+      }
+
+      if (!Array.isArray(state.placedBones)) state.placedBones = [];
+      if (!Array.isArray(state.puzzleCardOrder)) state.puzzleCardOrder = [];
+      if (!state.zoneMap || typeof state.zoneMap !== "object") state.zoneMap = {};
+      if (!state.codeMap || typeof state.codeMap !== "object") state.codeMap = {};
+      ensureRandomLayouts(false);
+
       const mode = puzzleDisplayMode();
       const isComplete = state.placedBones.length === BONES.length;
-
-      if (board) board.classList.toggle("complete", isComplete);
+      board.classList.toggle("complete", isComplete);
       const note = $("board-answer-note");
       if (note) note.textContent = isComplete ? "標本復原完成，完整影像已解封" : "答案影像已封存，請依定位框復原";
 
@@ -4577,6 +4713,7 @@
 
       BONES.forEach(bone => {
         const zone = document.createElement("button");
+        zone.type = "button";
         zone.className = "drop-zone " + bone.className;
         if (mode.zone === "hidden") zone.classList.add("hidden-label");
         if (mode.zone === "zone") zone.classList.add("zone-label");
@@ -4586,12 +4723,11 @@
         const isPlaced = state.placedBones.includes(bone.id);
         if (isPlaced) zone.classList.add("done");
 
-        const label = `<span>${displayZoneLabel(bone)}</span>`;
+        const label = `<span>${displayZoneLabel(bone) || "定位區"}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_31" alt=""></span>`
+          ? `<span class="placed-bone-wrap" aria-label="定位完成"><img class="placed-bone-img" src="${assetWithCache(bone.img)}" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
-
         zone.addEventListener("click", () => safeAction(() => placeSelectedBone(bone.id)));
         zones.appendChild(zone);
       });
@@ -4600,9 +4736,14 @@
       BONES.forEach(b => lookup[b.id] = Object.assign({ decoy:false }, b));
       DECOY_BONES.forEach(d => lookup[d.id] = Object.assign({ decoy:true }, d));
       const cards = state.puzzleCardOrder.map(id => lookup[id]).filter(Boolean);
+      if (!cards.length) {
+        ensureRandomLayouts(true);
+        state.puzzleCardOrder.forEach(id => { if (lookup[id]) cards.push(lookup[id]); });
+      }
 
       cards.forEach(item => {
         const card = document.createElement("button");
+        card.type = "button";
         card.className = "bone-card";
         if (item.decoy) card.classList.add("decoy");
         if (mode.bone === "hidden") card.classList.add("mystery");
@@ -4613,14 +4754,11 @@
         const fallbackMarkup = item.decoy
           ? "<span class='decoy-mark'>FRAGMENT</span>"
           : "<span class='missing-label'>影像缺失<br>需以掃描判斷</span>";
-
-        const labelText = item.decoy
-          ? (mode.bone === "name" ? item.name : "UNKNOWN")
-          : displayBoneLabel(item);
+        const labelText = item.decoy ? (mode.bone === "name" ? item.name : "UNKNOWN") : displayBoneLabel(item);
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_31" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${assetWithCache(item.img)}" alt="${item.name || "骨片"}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -4629,6 +4767,10 @@
       });
 
       updatePuzzleUI();
+      requestAnimationFrame(() => {
+        const ok = zones.querySelectorAll(".drop-zone").length >= BONES.length && grid.querySelectorAll(".bone-card").length >= BONES.length;
+        if (!ok) v132RepairPuzzleIfEmpty("post-render");
+      });
     }
 
     function selectBone(id) {
@@ -4646,7 +4788,8 @@
           setTimeout(() => card.classList.remove("decoy-glitch"), 360);
         }
         logTo("puzzle-log", "已選擇疑似骨片。請放入標本板位置進行比對。");
-        saveGame();
+        state.currentScreen = "screen-puzzle";
+      saveGame();
         return;
       }
 
@@ -5469,7 +5612,17 @@
       showScreen("screen-ending");
     }
 
-    window.addEventListener("beforeunload", () => stopCamera());
+    
+    function v132SaveActiveScreen() {
+      const active = document.querySelector(".screen.active");
+      if (active && active.id && active.id !== "screen-loading" && active.id !== "screen-resume") {
+        state.screen = active.id;
+        if (active.id !== "screen-home" && active.id !== "screen-settings" && active.id !== "screen-how" && active.id !== "screen-story") state.currentScreen = active.id;
+        saveGame();
+      }
+    }
+
+    window.addEventListener("beforeunload", () => { v132SaveActiveScreen(); stopCamera(); });
     window.addEventListener("DOMContentLoaded", boot);
   </script>
 </body>
