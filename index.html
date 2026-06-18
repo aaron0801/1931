@@ -2497,7 +2497,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.27-safe</div>
+          <div class="kicker">FINAL BUILD 1.28</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2929,9 +2929,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_27_SAFE_KEEP_126_UI",
-      saveKey: "fifthResearcher_final_v1_27_safe",
-      settingsKey: "fifthResearcher_final_v1_27_safe_settings",
+      version: "FINAL_BUILD_1_28_MOBILE_FILENAME_COMPATIBLE",
+      saveKey: "fifthResearcher_final_v1_28",
+      settingsKey: "fifthResearcher_final_v1_28_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3534,20 +3534,81 @@
       }
     }
 
+    function assetWithCache(src) {
+      if (!src) return src;
+      const clean = String(src).split("?")[0];
+      return clean + "?v=final1_28";
+    }
+
+    function mobileUploadVariant(src) {
+      if (!src) return "";
+      const raw = String(src);
+      const parts = raw.split("?");
+      const path = parts[0];
+      const query = parts.length > 1 ? "?" + parts.slice(1).join("?") : "";
+      if (/\.png\.PNG$/i.test(path)) return "";
+      if (/\.png$/i.test(path)) return path + ".PNG" + query;
+      return "";
+    }
+
+    function tryMobileImageFallback(img) {
+      if (!img || img.dataset.mobileFallbackTried === "1") return false;
+
+      const current = img.getAttribute("src") || img.dataset.src || "";
+      const candidate = mobileUploadVariant(current);
+
+      if (!candidate) return false;
+
+      img.dataset.mobileFallbackTried = "1";
+      img.src = candidate;
+      return true;
+    }
+
+    function installMobileImageFallback() {
+      if (document.body.dataset.mobileFallbackBound === "1") return;
+      document.body.dataset.mobileFallbackBound = "1";
+
+      document.addEventListener("error", event => {
+        const img = event.target;
+        if (!img || img.tagName !== "IMG") return;
+        if (tryMobileImageFallback(img)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      }, true);
+    }
+
     function preloadImage(src) {
       return new Promise(resolve => {
+        const candidates = [assetWithCache(src)];
+        const mobile = mobileUploadVariant(assetWithCache(src));
+        if (mobile) candidates.push(mobile);
+
         let done = false;
+        let index = 0;
+
         const finish = ok => {
           if (done) return;
           done = true;
           assetStatus.images[src] = ok;
           resolve(ok);
         };
-        const img = new Image();
-        img.onload = () => finish(true);
-        img.onerror = () => finish(false);
-        img.src = src + "?v=final1_27safe";
-        setTimeout(() => finish(false), 1200);
+
+        const tryNext = () => {
+          if (index >= candidates.length) {
+            finish(false);
+            return;
+          }
+
+          const img = new Image();
+          const current = candidates[index++];
+          img.onload = () => finish(true);
+          img.onerror = tryNext;
+          img.src = current;
+        };
+
+        tryNext();
+        setTimeout(() => finish(false), 1800);
       });
     }
 
@@ -3555,6 +3616,7 @@
       const params = new URL(location.href).searchParams;
 
       try {
+        installMobileImageFallback();
         if (params.has("staff")) document.body.classList.add("staff");
 
         if (params.has("restart") || params.has("reset")) {
@@ -3562,7 +3624,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_27safe");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_28");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3644,6 +3706,7 @@
         img.alt = "";
         img.decoding = "async";
         img.loading = "eager";
+        img.dataset.mobileFallbackTried = "0";
 
         const findHolder = () => img.closest(".hero, .observer-frame, .bone-img, .visual, .image-box, .board, .box-visual");
         const labelFor = holder => {
@@ -3656,6 +3719,8 @@
         };
 
         img.onerror = () => {
+          if (tryMobileImageFallback(img)) return;
+
           img.removeAttribute("src");
           img.style.display = "none";
           const holder = findHolder();
@@ -3685,7 +3750,7 @@
           img.style.display = "";
         };
 
-        img.src = src + "?v=final1_27safe";
+        img.src = assetWithCache(src);
       });
     }
 
@@ -4081,7 +4146,7 @@
 
         const label = `<span>${displayZoneLabel(bone)}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_27safe" alt=""></span>`
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_28" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
 
@@ -4113,7 +4178,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_27safe" alt="${item.name}" onerror="this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_28" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
