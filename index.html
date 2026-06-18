@@ -2610,6 +2610,125 @@
       }
     }
 
+
+    /* v1.30 board polish: specimen positioning, not paper-image collage */
+    .drop-zone.done {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,220,185,.10), transparent 58%),
+        linear-gradient(145deg, rgba(110,14,13,.30), rgba(0,0,0,.24)) !important;
+      border-color: rgba(255,178,164,.22) !important;
+      box-shadow:
+        inset 0 0 16px rgba(0,0,0,.55),
+        0 0 14px rgba(180,30,24,.16) !important;
+      overflow: hidden;
+    }
+    .drop-zone.done > span:not(.placed-bone-wrap) { display: none !important; }
+    .placed-bone-wrap {
+      position: absolute !important;
+      inset: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+      pointer-events: none !important;
+      z-index: 4 !important;
+      overflow: hidden !important;
+    }
+    .placed-bone-wrap::before {
+      content: "定位完成";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: max-content;
+      max-width: 88%;
+      color: rgba(255,224,190,.72);
+      border: 1px solid rgba(255,178,164,.22);
+      background: rgba(0,0,0,.38);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-shadow: 0 0 10px rgba(220,42,34,.42);
+    }
+    .placed-bone-wrap::after {
+      content: "";
+      width: 42%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,178,164,.55), transparent);
+      box-shadow: 0 0 10px rgba(220,42,34,.35);
+      transform: rotate(-8deg);
+      opacity: .88;
+    }
+    .placed-bone-img { display: none !important; }
+    .board.complete .drop-zone.done {
+      opacity: .32 !important;
+      border-color: rgba(255,178,164,.06) !important;
+      background: rgba(0,0,0,.10) !important;
+    }
+    .board.complete .placed-bone-wrap { display: none !important; }
+    .bone-card .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,238,222,.07), transparent 48%),
+        rgba(0,0,0,.36) !important;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .bone-card img {
+      max-width: 66% !important;
+      max-height: 54px !important;
+      object-fit: contain !important;
+      opacity: .72 !important;
+      filter:
+        grayscale(1)
+        brightness(.72)
+        contrast(1.14)
+        drop-shadow(0 0 8px rgba(255,224,190,.13)) !important;
+      mix-blend-mode: luminosity !important;
+      background: transparent !important;
+    }
+    .bone-card.active img {
+      opacity: .92 !important;
+      filter:
+        grayscale(.8)
+        brightness(.95)
+        contrast(1.18)
+        drop-shadow(0 0 10px rgba(255,224,190,.26)) !important;
+    }
+    .bone-card.used {
+      opacity: .40 !important;
+      filter: saturate(.45) brightness(.75);
+    }
+    .board-answer-note {
+      background: rgba(0,0,0,.50);
+      border: 1px solid rgba(255,178,164,.12);
+      border-radius: 999px;
+      padding: 4px 10px;
+      left: 50% !important;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 86%;
+    }
+    .resume-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: rgba(9,0,0,.88);
+      border: 1px solid rgba(255,74,66,.28);
+      color: rgba(255,238,222,.9);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .resume-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
   </style>
 </head>
 
@@ -2630,7 +2749,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.29</div>
+          <div class="kicker">FINAL BUILD 1.30</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -2679,7 +2798,8 @@
           </div>
           <p class="small-note">建議使用 Safari / Chrome，保持手機直向。</p>
         </div>
-      </section>
+      <button class="btn secondary" id="resume-btn" onclick="v130ResumeProgress()" style="display:none;">繼續未完成紀錄</button>
+    </section>
 
       <section id="screen-settings" class="screen">
         <div class="panel">
@@ -3062,9 +3182,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_29_BONE_VISUAL_CLEANUP",
-      saveKey: "fifthResearcher_final_v1_29",
-      settingsKey: "fifthResearcher_final_v1_29_settings",
+      version: "FINAL_BUILD_1_30_PROGRESS_AND_BOARD_POLISH",
+      saveKey: "fifthResearcher_final_v1_30",
+      settingsKey: "fifthResearcher_final_v1_30_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -3279,6 +3399,7 @@
       sound: true,
       cameraStatus: "untested",
       cameraPanelOpen: false,
+        currentScreen: "screen-home",
       life: 3,
       pollution: 0,
       emergency: false,
@@ -3561,6 +3682,7 @@
       };
       try { localStorage.removeItem(CONFIG.saveKey); } catch (e) {}
       state = defaultState();
+      state.currentScreen = "screen-home";
       if (keepSettings) Object.assign(state, keep);
       if (typeof resetBoxFormUI === "function") resetBoxFormUI();
       if (typeof closePenaltyNotice === "function") closePenaltyNotice();
@@ -3670,7 +3792,7 @@
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_29";
+      return clean + "?v=final1_30";
     }
 
     function mobileUploadVariant(src) {
@@ -3757,7 +3879,7 @@
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_29");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_30");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -3817,7 +3939,15 @@
           const active = document.querySelector(".screen.active");
           if (active && active.id === "screen-loading") {
             console.warn("Boot fallback activated.");
-            showScreen("screen-home", false);
+            
+        if (v130HasMeaningfulProgress()) {
+          const target = v130SafeResumeScreen(state.currentScreen);
+          showScreen(target, false);
+          v130ShowResumeToast("已回到未完成紀錄");
+        } else {
+          showScreen("screen-home", false);
+        }
+        v130UpdateResumeButton();
           }
         }, 1800);
       } catch (err) {
@@ -3975,32 +4105,81 @@
       if (routes[action]) routes[action]();
     }
 
-    function showScreen(id, persist = true) {
-      if (!CONFIG.screens.includes(id)) id = "screen-home";
-      stopCamera();
-      if (id !== "screen-ending") stopEndingMusic();
+    function v130RememberCurrentScreen(id) {
+      if (!id || id === "screen-loading") return;
+      state.currentScreen = id;
+      state.updatedAt = Date.now();
+      saveGame();
+    }
 
-      $$(".screen").forEach(s => s.classList.remove("active"));
-      $(id).classList.add("active");
-      state.screen = id;
+    function v130HasMeaningfulProgress() {
+      return Boolean(
+        state.player ||
+        state.placedBones?.length ||
+        state.flipped?.length ||
+        state.order?.length ||
+        state.orderSolved ||
+        state.boxUnlocked ||
+        state.completedAt
+      );
+    }
+
+    function v130SafeResumeScreen(id) {
+      if (!id) return "screen-home";
+      const allowed = new Set(CONFIG.screens);
+      if (!allowed.has(id)) return "screen-home";
+      if (id === "screen-loading" || id === "screen-failure") return "screen-home";
+      return id;
+    }
+
+    function v130ShowResumeToast(text = "已回到未完成紀錄") {
+      let el = document.querySelector(".resume-toast");
+      if (!el) {
+        el = document.createElement("div");
+        el.className = "resume-toast";
+        document.body.appendChild(el);
+      }
+      el.textContent = text;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2200);
+    }
+
+    function v130UpdateResumeButton() {
+      const btn = $("resume-btn");
+      if (!btn) return;
+      btn.style.display = v130HasMeaningfulProgress() ? "block" : "none";
+    }
+
+    function v130ResumeProgress() {
+      const target = v130SafeResumeScreen(state.currentScreen);
+      showScreen(target);
+      v130ShowResumeToast("已繼續未完成紀錄");
+    }
+
+    function showScreen(id, remember = true) {
+      CONFIG.screens.forEach(s => {
+        const el = $(s);
+        if (el) el.classList.remove("active");
+      });
+      const target = $(id);
+      if (target) target.classList.add("active");
+
       setStage(id);
-      applyPollutionClass();
-      updateStatusAll();
-      if (id === "screen-resume") renderResume();
+      updateHud();
+      v130UpdateResumeButton();
+
+      if (remember && id !== "screen-home" && id !== "screen-loading" && id !== "screen-resume") {
+        v130RememberCurrentScreen(id);
+      }
+
       if (id === "screen-puzzle") renderPuzzle();
       if (id === "screen-clues") renderClues();
       if (id === "screen-order") renderOrder();
       if (id === "screen-box") updateBoxUI();
-      if (id === "screen-reveal") {
-        renderReveal();
-        flashBodyClass("identity-reveal", 950);
-      }
-      if (id === "screen-failure") renderFailure();
+      if (id === "screen-reveal") setupReveal();
       if (id === "screen-ending") renderEnding();
-      document.body.classList.toggle("death-active", id === "screen-failure");
 
-      if (persist) saveGame();
-      window.scrollTo(0,0);
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
 
     function setStage(id) {
@@ -4032,6 +4211,7 @@
       state.screen = "screen-puzzle";
       saveGame();
       showScreen("screen-puzzle");
+      v130RememberCurrentScreen("screen-puzzle");
     }
 
     function difficulty() { return DIFFICULTIES[state.difficulty] || DIFFICULTIES.normal; }
@@ -4279,7 +4459,7 @@
 
         const label = `<span>${displayZoneLabel(bone)}</span>`;
         const placedVisual = isPlaced
-          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_29" alt=""></span>`
+          ? `<span class="placed-bone-wrap"><img class="placed-bone-img" src="${bone.img}?v=final1_30" alt=""></span>`
           : "";
         zone.innerHTML = label + placedVisual;
 
@@ -4311,7 +4491,7 @@
 
         card.innerHTML = `
           <span class="bone-img">
-            <img src="${item.img}?v=final1_29" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
+            <img src="${item.img}?v=final1_30" alt="${item.name}" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='${fallbackMarkup}'">
           </span>
           <span>${labelText}</span>
         `;
@@ -4370,7 +4550,8 @@
         logTo("puzzle-log", "非本標本骨片。污染值上升。");
         state.selectedBone = "";
         renderPuzzle();
-        saveGame();
+        v130RememberCurrentScreen("screen-puzzle");
+      saveGame();
         return;
       }
 
@@ -4504,6 +4685,7 @@
       tone("damage");
       flashBodyClass("life-hit", 480);
       showScreen("screen-blackout");
+      v130RememberCurrentScreen("screen-blackout");
       const actions = $("blackout-actions");
       const terminal = $("blackout-terminal");
       if (actions) {
@@ -4517,11 +4699,13 @@
     function viewPaperNote() {
       clearBlackoutSequence();
       showScreen("screen-note");
+      v130RememberCurrentScreen("screen-note");
     }
 
     function closePaperNote() {
       clearBlackoutSequence();
       showScreen("screen-clues");
+      v130RememberCurrentScreen("screen-clues");
     }
 
     function updatePuzzleUI() {
@@ -4700,6 +4884,7 @@
         logTo("order-log", "排序錯誤。請重新判讀身體位置。");
       }
       renderOrder();
+      v130RememberCurrentScreen("screen-order");
       saveGame();
     }
 
@@ -4750,7 +4935,8 @@
         $("box-visual").classList.remove("locked");
         input.dataset.fromUnlocked = "true";
         updateBoxUI();
-        saveGame();
+        v130RememberCurrentScreen("screen-box");
+      saveGame();
       } else {
         $("box-log").textContent = "SYSTEM：密碼錯誤。封存箱污染值上升。";
         registerMistake("pin");
