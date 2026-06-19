@@ -3534,6 +3534,193 @@
       display: none !important;
     }
 
+
+    /* v1.40 specimen-board layout polish for ALL difficulty modes
+       Applies to: easy / normal / hard. Keeps v1.26 black-red UI and v1.39 resume flag. */
+
+    #screen-puzzle .panel {
+      padding: 12px 10px 16px !important;
+    }
+
+    #screen-puzzle .panel > h1 {
+      font-size: clamp(24px, 7vw, 34px) !important;
+      letter-spacing: .10em !important;
+      margin-top: 0 !important;
+    }
+
+    #screen-puzzle .panel > h2 {
+      margin-top: 6px !important;
+      margin-bottom: 8px !important;
+      font-size: 13px !important;
+      letter-spacing: .18em !important;
+    }
+
+    #screen-puzzle #fossil-board,
+    #screen-puzzle #fossil-board[data-difficulty="easy"],
+    #screen-puzzle #fossil-board[data-difficulty="normal"],
+    #screen-puzzle #fossil-board[data-difficulty="hard"] {
+      width: min(100%, 530px) !important;
+      height: clamp(540px, 66dvh, 640px) !important;
+      min-height: 540px !important;
+      max-height: 660px !important;
+      aspect-ratio: auto !important;
+      margin: 12px auto 13px !important;
+      border-radius: 24px !important;
+    }
+
+    @media (max-width: 430px) {
+      #screen-puzzle #fossil-board,
+      #screen-puzzle #fossil-board[data-difficulty="easy"],
+      #screen-puzzle #fossil-board[data-difficulty="normal"],
+      #screen-puzzle #fossil-board[data-difficulty="hard"] {
+        width: min(100%, 94vw) !important;
+        height: clamp(520px, 62dvh, 600px) !important;
+        min-height: 520px !important;
+      }
+    }
+
+    @media (max-height: 760px) {
+      #screen-puzzle #fossil-board,
+      #screen-puzzle #fossil-board[data-difficulty="easy"],
+      #screen-puzzle #fossil-board[data-difficulty="normal"],
+      #screen-puzzle #fossil-board[data-difficulty="hard"] {
+        height: 520px !important;
+        min-height: 500px !important;
+      }
+    }
+
+    /* All difficulties share same board scale; only trace clarity changes by difficulty. */
+    #fossil-board[data-difficulty="easy"] .bone-mask::before,
+    #fossil-board[data-difficulty="easy"] .drop-zone::before {
+      opacity: .34 !important;
+    }
+
+    #fossil-board[data-difficulty="normal"] .bone-mask::before,
+    #fossil-board[data-difficulty="normal"] .drop-zone::before {
+      opacity: .22 !important;
+    }
+
+    #fossil-board[data-difficulty="hard"] .bone-mask::before,
+    #fossil-board[data-difficulty="hard"] .drop-zone::before {
+      opacity: .15 !important;
+    }
+
+    /* Bone database becomes a smaller scrolling drawer for every difficulty. */
+    #screen-puzzle #bone-grid,
+    #screen-puzzle #bone-grid.more-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 8px !important;
+      max-height: 338px !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 2px 1px 12px !important;
+      margin: 10px 0 8px !important;
+      border-top: 1px solid rgba(255,178,164,.08);
+      border-bottom: 1px solid rgba(255,178,164,.08);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.32));
+    }
+
+    #screen-puzzle #bone-grid::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #screen-puzzle #bone-grid::-webkit-scrollbar-thumb {
+      background: rgba(255,178,164,.22);
+      border-radius: 999px;
+    }
+
+    #screen-puzzle #bone-grid .bone-card,
+    #screen-puzzle #bone-grid.more-cards .bone-card {
+      min-height: 92px !important;
+      padding: 6px !important;
+      border-radius: 15px !important;
+      gap: 5px !important;
+      grid-template-rows: 50px auto !important;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(120,14,14,.18), transparent 52%),
+        rgba(0,0,0,.30) !important;
+      text-align: center !important;
+    }
+
+    #screen-puzzle #bone-grid .bone-card .bone-img {
+      min-height: 50px !important;
+      height: 50px !important;
+      width: 100% !important;
+      display: grid !important;
+      place-items: center !important;
+      border-radius: 12px !important;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,220,190,.07), transparent 52%),
+        rgba(0,0,0,.62) !important;
+      overflow: hidden !important;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.50);
+    }
+
+    /* White / checkerboard backgrounds are suppressed by inversion + screen blend.
+       This is a visual rescue; true transparent PNGs are still the cleanest final asset. */
+    #screen-puzzle #bone-grid .bone-card img {
+      max-width: 70% !important;
+      max-height: 42px !important;
+      object-fit: contain !important;
+      opacity: .82 !important;
+      background: transparent !important;
+      filter:
+        invert(1)
+        grayscale(1)
+        contrast(1.18)
+        brightness(.94)
+        sepia(.12)
+        drop-shadow(0 0 8px rgba(255,222,190,.18)) !important;
+      mix-blend-mode: screen !important;
+    }
+
+    #screen-puzzle #bone-grid .bone-card.active {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(180,30,28,.38), transparent 58%),
+        linear-gradient(135deg, rgba(135,16,16,.58), rgba(0,0,0,.40)) !important;
+      box-shadow: 0 0 18px rgba(210,40,34,.24) !important;
+    }
+
+    #screen-puzzle #bone-grid .bone-card.active img {
+      opacity: .96 !important;
+      filter:
+        invert(1)
+        grayscale(.75)
+        contrast(1.22)
+        brightness(1.06)
+        sepia(.14)
+        drop-shadow(0 0 12px rgba(255,222,190,.30)) !important;
+    }
+
+    #screen-puzzle #bone-grid .bone-card.decoy .bone-img {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,74,66,.10), transparent 58%),
+        rgba(0,0,0,.64) !important;
+    }
+
+    #screen-puzzle #bone-grid .bone-card > span:last-child {
+      display: block !important;
+      width: 100% !important;
+      white-space: normal !important;
+      word-break: keep-all !important;
+      overflow-wrap: normal !important;
+      writing-mode: horizontal-tb !important;
+      font-size: 11px !important;
+      line-height: 1.25 !important;
+      letter-spacing: .03em !important;
+      color: rgba(241,227,200,.72) !important;
+    }
+
+    #screen-puzzle .system-log#puzzle-log {
+      margin-top: 10px !important;
+      font-size: 12px !important;
+      min-height: 44px !important;
+    }
+
   </style>
 </head>
 
@@ -3554,7 +3741,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.39</div>
+          <div class="kicker">FINAL BUILD 1.40</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -3747,18 +3934,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_39" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>顱部骨片</span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_39" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>椎骨骨片</span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_39" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>胸腔骨片</span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_39" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 A</span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_39" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 B</span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_39" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>骨盆骨片</span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_39" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 A</span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_39" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 B</span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_39" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>尾端骨片</span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_39" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_39" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_39" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_40" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>顱部骨片</span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_40" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>椎骨骨片</span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_40" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>胸腔骨片</span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_40" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 A</span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_40" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 B</span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_40" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>骨盆骨片</span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_40" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 A</span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_40" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 B</span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_40" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>尾端骨片</span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_40" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_40" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_40" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -4009,9 +4196,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_39_RESUME_FLAG",
-      saveKey: "fifthResearcher_final_v1_39",
-      settingsKey: "fifthResearcher_final_v1_39_settings",
+      version: "FINAL_BUILD_1_40_LAYOUT_ALL_DIFFICULTIES",
+      saveKey: "fifthResearcher_final_v1_40",
+      settingsKey: "fifthResearcher_final_v1_40_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -4668,6 +4855,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_40",
         "fifthResearcher_final_v1_39",
         "fifthResearcher_final_v1_38",
         "fifthResearcher_final_v1_37",
@@ -4803,6 +4991,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_40",
         "fifthResearcher_final_v1_39",
         "fifthResearcher_final_v1_38",
         "fifthResearcher_final_v1_37",
@@ -4930,7 +5119,7 @@ function clearGameProgress(keepSettings = true) {
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_39";
+      return clean + "?v=final1_40";
     }
 
     function mobileUploadVariant(src) {
@@ -5025,7 +5214,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_39");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_40");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
