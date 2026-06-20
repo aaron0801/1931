@@ -3721,6 +3721,246 @@
       min-height: 44px !important;
     }
 
+
+    /* v1.43 mask alignment fix
+       Goal: complete fossil image stays fixed underneath;
+       solved zones only remove the pollution mask, no per-zone cropped image. */
+
+    #screen-puzzle #fossil-board,
+    #screen-puzzle #fossil-board.mask-reveal {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    /* Full fossil is one fixed board image. Do not crop by each revealed zone. */
+    #screen-puzzle #fossil-board.mask-reveal > img.full,
+    #screen-puzzle #fossil-board > img.full {
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      opacity: .88 !important;
+      filter: sepia(.12) brightness(.70) contrast(1.08) saturate(.86) !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+      background: transparent !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal.complete > img.full,
+    #screen-puzzle #fossil-board.complete > img.full {
+      opacity: .96 !important;
+      filter: sepia(.10) brightness(.78) contrast(1.08) saturate(.92) !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 44%, transparent 0 42%, rgba(0,0,0,.16) 70%, rgba(0,0,0,.38) 100%),
+        repeating-linear-gradient(0deg, rgba(255,220,190,.018) 0 1px, transparent 1px 8px);
+      mix-blend-mode: multiply;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal.complete::after {
+      opacity: .35;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal #drop-zones {
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 6 !important;
+      pointer-events: auto !important;
+    }
+
+    /* Unfinished zones are pollution covers. They hide the underlying full fossil. */
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone {
+      opacity: 1 !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,226,198,.08), transparent 52%),
+        linear-gradient(145deg, rgba(78,9,9,.90), rgba(0,0,0,.96)) !important;
+      border: 1px dashed rgba(255,190,170,.33) !important;
+      box-shadow:
+        inset 0 0 21px rgba(0,0,0,.82),
+        0 0 13px rgba(160,25,22,.18) !important;
+      overflow: hidden !important;
+      backdrop-filter: blur(1.2px);
+      -webkit-backdrop-filter: blur(1.2px);
+      transition: opacity .46s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask span,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone span,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask span::before,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone span::before {
+      content: "" !important;
+      display: none !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask::before,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone::before {
+      content: "";
+      display: block !important;
+      position: absolute;
+      inset: 12%;
+      opacity: var(--trace-opacity, .20);
+      filter: blur(.45px);
+      background:
+        radial-gradient(ellipse at center, rgba(238,222,194,.24), transparent 58%),
+        repeating-linear-gradient(98deg, transparent 0 11px, rgba(238,222,194,.10) 12px 13px, transparent 14px 24px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* When solved: remove the cover. The fixed full-fossil image underneath appears naturally. */
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.revealed,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.revealed,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.done,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.done {
+      opacity: 0 !important;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Remove the old cropped-background reveal method completely. */
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.revealed::after,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.revealed::after,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.done::after,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.done::after {
+      content: none !important;
+      display: none !important;
+      background-image: none !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.revealed::before,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.revealed::before,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.done::before,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.done::before {
+      display: none !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .mask-shine,
+    #screen-puzzle #fossil-board.mask-reveal .placed-bone-wrap,
+    #screen-puzzle #fossil-board.mask-reveal .placed-bone-img {
+      display: none !important;
+    }
+
+    /* Better alignment: wing covers larger, legs taller, tail independent. */
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.skull,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.skull {
+      left: 24% !important;
+      top: 6.5% !important;
+      width: 28% !important;
+      height: 13.5% !important;
+      transform: rotate(0deg) !important;
+      z-index: 8 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.neck,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.neck {
+      left: 42% !important;
+      top: 17.5% !important;
+      width: 18% !important;
+      height: 15% !important;
+      transform: rotate(0deg) !important;
+      z-index: 8 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.chest,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.chest {
+      left: 28% !important;
+      top: 30% !important;
+      width: 42% !important;
+      height: 24% !important;
+      transform: rotate(0deg) !important;
+      z-index: 8 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.leftWing,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.leftWing {
+      left: 4.5% !important;
+      top: 35.5% !important;
+      width: 37% !important;
+      height: 23% !important;
+      transform: rotate(-8deg) !important;
+      z-index: 7 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.rightWing,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.rightWing {
+      right: 4.5% !important;
+      top: 35.5% !important;
+      width: 37% !important;
+      height: 23% !important;
+      transform: rotate(8deg) !important;
+      z-index: 7 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.pelvis,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.pelvis {
+      left: 35% !important;
+      top: 54.5% !important;
+      width: 30% !important;
+      height: 15.5% !important;
+      transform: rotate(0deg) !important;
+      z-index: 8 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.leftLeg,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.leftLeg {
+      left: 21% !important;
+      top: 66.5% !important;
+      width: 28% !important;
+      height: 28% !important;
+      transform: rotate(0deg) !important;
+      z-index: 7 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.rightLeg,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.rightLeg {
+      right: 21% !important;
+      top: 66.5% !important;
+      width: 28% !important;
+      height: 28% !important;
+      transform: rotate(0deg) !important;
+      z-index: 7 !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.tail,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.tail {
+      left: 42% !important;
+      top: 79% !important;
+      width: 16% !important;
+      height: 14% !important;
+      transform: rotate(0deg) !important;
+      z-index: 9 !important;
+    }
+
+    /* Difficulty keeps only trace clarity differences; layout stays consistent. */
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="easy"] .bone-mask::before,
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="easy"] .drop-zone::before {
+      --trace-opacity: .34;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="normal"] .bone-mask::before,
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="normal"] .drop-zone::before {
+      --trace-opacity: .22;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="hard"] .bone-mask::before,
+    #screen-puzzle #fossil-board.mask-reveal[data-difficulty="hard"] .drop-zone::before {
+      --trace-opacity: .15;
+    }
+
   </style>
 </head>
 
@@ -3741,7 +3981,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.42</div>
+          <div class="kicker">FINAL BUILD 1.43</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -3934,18 +4174,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_42" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>顱部骨片</span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_42" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>椎骨骨片</span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_42" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>胸腔骨片</span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_42" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 A</span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_42" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 B</span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_42" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>骨盆骨片</span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_42" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 A</span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_42" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 B</span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_42" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>尾端骨片</span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_42" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_42" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_42" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_43" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>顱部骨片</span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_43" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>椎骨骨片</span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_43" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>胸腔骨片</span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_43" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 A</span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_43" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>翼骨 B</span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_43" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>骨盆骨片</span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_43" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 A</span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_43" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>腿骨 B</span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_43" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span><span>尾端骨片</span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_43" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_43" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_43" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span><span>UNKNOWN</span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -4196,9 +4436,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_42_BLACKOUT_RESUME_FIX",
-      saveKey: "fifthResearcher_final_v1_42",
-      settingsKey: "fifthResearcher_final_v1_42_settings",
+      version: "FINAL_BUILD_1_43_MASK_ALIGNMENT_FIX",
+      saveKey: "fifthResearcher_final_v1_43",
+      settingsKey: "fifthResearcher_final_v1_43_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -4855,6 +5095,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_43",
         "fifthResearcher_final_v1_42",
         "fifthResearcher_final_v1_41",
         "fifthResearcher_final_v1_40",
@@ -4994,6 +5235,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_43",
         "fifthResearcher_final_v1_42",
         "fifthResearcher_final_v1_41",
         "fifthResearcher_final_v1_40",
@@ -5124,7 +5366,7 @@ function clearGameProgress(keepSettings = true) {
     function assetWithCache(src) {
       if (!src) return src;
       const clean = String(src).split("?")[0];
-      return clean + "?v=final1_42";
+      return clean + "?v=final1_43";
     }
 
     function mobileUploadVariant(src) {
@@ -5219,7 +5461,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_42");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_43");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
