@@ -4633,6 +4633,97 @@
       50% { filter: brightness(.82) contrast(1.18); }
     }
 
+
+    /* v1.51 official proof-card result page */
+
+    .ending-stage { padding: 10px 0 var(--safe-bottom); display: grid; gap: 14px; }
+    .ending-kicker { color: rgba(255,178,164,.62); letter-spacing: .22em; font-size: 12px; text-align: center; margin-top: 4px; }
+    .ending-title { text-align: center; margin: 0; font-size: clamp(28px, 8vw, 42px); line-height: 1.18; letter-spacing: .08em; }
+    .ending-sub { text-align: center; margin: -4px auto 6px; max-width: 520px; color: rgba(241,227,200,.64); font-size: 14px; line-height: 1.65; }
+
+    .official-proof-card {
+      position: relative; width: min(96vw, 760px); aspect-ratio: 16 / 9; margin: 4px auto 8px;
+      border-radius: 18px; overflow: hidden; background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+      border: 1px solid rgba(255,178,164,.18);
+      box-shadow: 0 24px 80px rgba(0,0,0,.72), 0 0 42px rgba(180,22,18,.16);
+      isolation: isolate; transform-origin: center;
+    }
+    .official-proof-card::before {
+      content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(circle at 76% 12%, rgba(220,30,24,.12), transparent 28%), linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.30));
+      mix-blend-mode: multiply;
+    }
+    .official-proof-card::after {
+      content: ""; position: absolute; inset: 0; z-index: 12; pointer-events: none; opacity: .22;
+      background: repeating-linear-gradient(0deg, rgba(255,235,220,.028) 0 1px, transparent 1px 7px), linear-gradient(90deg, transparent, rgba(255,40,32,.06), transparent);
+      mix-blend-mode: screen;
+    }
+    .proof-card-overlay { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(circle at 70% 54%, transparent 0 44%, rgba(0,0,0,.20) 74%, rgba(0,0,0,.42) 100%); }
+
+    .proof-photo-box {
+      position: absolute; z-index: 5; left: 7.9%; top: 15.2%; width: 20.3%; height: 36.5%;
+      border-radius: 4px; overflow: hidden; background: rgba(0,0,0,.72);
+      box-shadow: inset 0 0 24px rgba(0,0,0,.88), 0 0 18px rgba(180,20,20,.18);
+    }
+    .proof-photo-box img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(.65) contrast(1.18) brightness(.68) sepia(.18); opacity: .84; }
+    .proof-photo-static { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.055) 0 1px, transparent 1px 5px), radial-gradient(circle at 50% 32%, transparent, rgba(0,0,0,.38)); mix-blend-mode: screen; opacity: .45; }
+    .proof-photo-scan { position: absolute; left: 0; right: 0; top: -35%; height: 22%; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(255,42,34,.62), transparent); mix-blend-mode: screen; animation: proofPhotoScan 2.2s ease-in-out infinite; opacity: .55; }
+    @keyframes proofPhotoScan { 0% { transform: translateY(0); opacity: 0; } 24% { opacity: .72; } 100% { transform: translateY(620%); opacity: 0; } }
+
+    .proof-main-info { position: absolute; z-index: 6; left: 34.5%; top: 19.5%; width: 43.5%; color: rgba(255,240,230,.88); }
+    .proof-case { font-size: clamp(13px, 2.2vw, 18px); letter-spacing: .24em; color: rgba(255,178,164,.72); margin-bottom: 5px; }
+    .proof-title-line { font-size: clamp(18px, 4.2vw, 32px); line-height: 1.22; font-weight: 900; letter-spacing: .08em; color: rgba(255,245,235,.96); text-shadow: 0 0 20px rgba(210,34,28,.26); margin-bottom: 8px; }
+    .proof-main-lines { display: grid; gap: 4px; max-width: 96%; }
+    .proof-line { display: grid; grid-template-columns: 34% 1fr; gap: 7px; align-items: baseline; min-height: clamp(16px, 3.2vw, 24px); opacity: 0; transform: translateY(5px); }
+    .proof-line span, .proof-bottom-left span, .proof-bottom-mid span { color: rgba(241,227,200,.48); font-size: clamp(9px, 1.9vw, 13px); letter-spacing: .10em; white-space: nowrap; }
+    .proof-line b, .proof-bottom-left b, .proof-bottom-mid b { color: rgba(255,245,238,.92); font-size: clamp(10px, 2.2vw, 15px); letter-spacing: .06em; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .proof-line b.low { color: rgba(255,240,230,.92); } .proof-line b.mid { color: rgba(255,190,150,.95); } .proof-line b.high { color: rgba(255,100,80,.98); } .proof-line b.critical { color: rgba(255,45,38,1); text-shadow: 0 0 10px rgba(255,20,20,.36); }
+
+    .proof-bottom-left { position: absolute; z-index: 6; left: 7.8%; bottom: 12.5%; width: 20.5%; display: grid; gap: 4px; }
+    .proof-bottom-mid { position: absolute; z-index: 6; left: 34.7%; bottom: 12.2%; width: 34.5%; display: grid; gap: 4px; }
+    .proof-bottom-left div, .proof-bottom-mid div { display: grid; grid-template-columns: 34% 1fr; gap: 6px; opacity: 0; transform: translateY(5px); }
+
+    .proof-stamp {
+      position: absolute; z-index: 8; right: 8.1%; bottom: 12.1%; width: 17%; aspect-ratio: 1 / 1; border-radius: 50%;
+      display: grid; place-items: center; text-align: center; color: rgba(255,225,210,.92);
+      border: 2px solid rgba(220,38,32,.58); background: radial-gradient(circle, rgba(150,0,0,.12), rgba(20,0,0,.36));
+      text-shadow: 0 0 12px rgba(255,40,34,.35); box-shadow: inset 0 0 22px rgba(120,0,0,.30), 0 0 22px rgba(210,28,24,.18);
+      font-size: clamp(10px, 2.5vw, 19px); font-weight: 900; letter-spacing: .12em; transform: rotate(-10deg) scale(1.28); opacity: 0;
+    }
+    .proof-scan-bar { position: absolute; z-index: 10; top: 0; bottom: 0; width: 16%; left: -20%; background: linear-gradient(90deg, transparent, rgba(255,240,230,.11), rgba(255,36,28,.36), transparent); mix-blend-mode: screen; opacity: 0; pointer-events: none; }
+    .proof-blood-edge { position: absolute; inset: 0; z-index: 4; pointer-events: none; opacity: 0; background: radial-gradient(circle at 0% 100%, rgba(130,0,0,.22), transparent 34%), radial-gradient(circle at 100% 92%, rgba(150,0,0,.25), transparent 30%), linear-gradient(180deg, rgba(120,0,0,.14), transparent 26%, transparent 72%, rgba(120,0,0,.22)); mix-blend-mode: screen; transition: opacity .35s ease; }
+    .official-proof-card.proof-contaminated .proof-blood-edge, .official-proof-card.proof-signal-lost .proof-blood-edge { opacity: .46; }
+    .official-proof-card.proof-contaminated, .official-proof-card.proof-signal-lost { filter: saturate(1.12) contrast(1.08); }
+    .official-proof-card.proof-abnormal { box-shadow: 0 24px 80px rgba(0,0,0,.74), 0 0 52px rgba(210,30,24,.25); }
+
+    .official-proof-card.proof-enter { animation: proofCardEnter 1.25s ease both; }
+    .official-proof-card.proof-enter .proof-scan-bar { animation: proofCardScan 1.1s ease .22s both; }
+    .official-proof-card.proof-enter .proof-line, .official-proof-card.proof-enter .proof-bottom-left div, .official-proof-card.proof-enter .proof-bottom-mid div { animation: proofDataIn .56s ease both; }
+    .official-proof-card.proof-enter .proof-line:nth-child(1) { animation-delay: .28s; } .official-proof-card.proof-enter .proof-line:nth-child(2) { animation-delay: .38s; } .official-proof-card.proof-enter .proof-line:nth-child(3) { animation-delay: .48s; } .official-proof-card.proof-enter .proof-line:nth-child(4) { animation-delay: .58s; } .official-proof-card.proof-enter .proof-line:nth-child(5) { animation-delay: .68s; } .official-proof-card.proof-enter .proof-line:nth-child(6) { animation-delay: .78s; }
+    .official-proof-card.proof-enter .proof-bottom-left div, .official-proof-card.proof-enter .proof-bottom-mid div { animation-delay: .86s; }
+    .official-proof-card.proof-issued .proof-stamp { animation: proofStampHit .55s cubic-bezier(.16,1.1,.28,1) both; }
+    .official-proof-card.proof-issued { animation: proofCardStampShake .45s ease both; }
+    .official-proof-card.proof-save-pulse { box-shadow: 0 24px 80px rgba(0,0,0,.72), 0 0 60px rgba(255,45,38,.32); }
+
+    @keyframes proofCardEnter { 0% { opacity: 0; transform: translateY(18px) scale(.96); filter: brightness(.28) blur(2px); } 36% { opacity: 1; filter: brightness(1.22) blur(.5px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1) blur(0); } }
+    @keyframes proofCardScan { 0% { opacity: 0; left: -20%; } 18% { opacity: .92; } 100% { opacity: 0; left: 104%; } }
+    @keyframes proofDataIn { 0% { opacity: 0; transform: translateY(5px); filter: blur(2px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+    @keyframes proofStampHit { 0% { opacity: 0; transform: rotate(-10deg) scale(1.55); filter: blur(1px); } 58% { opacity: 1; transform: rotate(-10deg) scale(.92); filter: blur(0); } 100% { opacity: 1; transform: rotate(-10deg) scale(1); } }
+    @keyframes proofCardStampShake { 0%,100% { transform: none; } 34% { transform: translateX(-3px); } 52% { transform: translateX(3px); } 70% { transform: translateX(-1px); } }
+
+    .ending-actions { width: min(96vw, 760px); margin: 2px auto 0; display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .proof-save-note { width: min(96vw, 760px); margin: 0 auto; color: rgba(241,227,200,.52); font-size: 13px; line-height: 1.55; text-align: center; }
+    .unlocked-files-panel { display: none; width: min(96vw, 760px); margin: 4px auto 0; }
+    .unlocked-files-panel.open { display: block; animation: proofDataIn .45s ease both; }
+    @media (min-width: 700px) { .ending-actions { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (max-width: 480px) {
+      .official-proof-card { width: 96vw; border-radius: 14px; }
+      .proof-main-info { left: 34%; top: 18.5%; width: 45%; }
+      .proof-line { grid-template-columns: 36% 1fr; gap: 5px; }
+      .proof-bottom-left, .proof-bottom-mid { gap: 2px; }
+      .proof-stamp { font-size: 10px; letter-spacing: .06em; }
+    }
+
   </style>
 </head>
 
@@ -4653,7 +4744,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.50</div>
+          <div class="kicker">FINAL BUILD 1.51</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -4846,18 +4937,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_50" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_50" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_50" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_50" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_50" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_50" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_50" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_50" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_50" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_51" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_51" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_51" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_51" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_51" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_51" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_51" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_51" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_51" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -5015,56 +5106,67 @@
       </section>
 
       <section id="screen-ending" class="screen">
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="result">結果</button>
-          <button class="tab-btn" data-tab="card">證明卡</button>
-          <button class="tab-btn" data-tab="files">解鎖檔案</button>
-        </div>
+        <div id="status-ending" class="status"></div>
 
-        <div id="tab-result" class="tab-page active">
-          <div class="panel">
-            <h1 style="font-size:30px;">研究員登錄結果</h1>
-            <h2 id="rank-title">封存完成</h2>
-            <div class="table" id="result-table"></div>
-            <button class="btn danger" id="ending-result-restart-btn" style="margin-top:14px;">重新開始</button>
-          </div>
-        </div>
+        <div class="ending-stage">
+          <div class="ending-kicker">ARCHIVE CERTIFICATE GENERATED</div>
+          <h1 class="ending-title">封存證明已生成</h1>
+          <p class="ending-sub">第七層系統已將本次復原程序寫入封存紀錄。</p>
 
-        <div id="tab-card" class="tab-page">
-          <div class="panel">
-            <h1 style="font-size:30px;">封存證明卡</h1>
-            <div class="certificate" id="certificate">
-              <div class="stamp">SEALED</div>
-              <h3 style="color:#ff4a42;font-size:22px;letter-spacing:.12em;">CASE-1931</h3>
-              <p style="color:rgba(241,227,200,.58);letter-spacing:.18em;">第五位研究員登錄完成</p>
-              <div class="table" id="cert-table"></div>
+          <div class="official-proof-card" id="official-proof-card">
+            <div class="proof-card-overlay"></div>
+
+            <div class="proof-photo-box" id="proof-photo-box">
+              <img id="proof-photo-img" alt="研究員識別影像">
+              <div class="proof-photo-static"></div>
+              <div class="proof-photo-scan"></div>
             </div>
-            <button class="btn primary" id="save-card-btn">保存封存證明卡</button>
-            <button class="btn danger" id="reset-game-btn" style="margin-top:10px;">重新開始</button>
-          </div>
-        </div>
 
-        <div id="tab-files" class="tab-page">
-          <div class="panel">
-            <h1 style="font-size:30px;">解鎖檔案</h1>
-            <details class="file-card">
-              <summary>FILE 01｜1931：封存起點
-                <span>1931 是左鎮化石記憶被打開的年份，也是本作封存編號的來源。</span>
-              </summary>
-              <div class="file-body">1931 代表左鎮化石故事的起點。作品把這個年份轉化成封存系統的核心密碼，讓玩家在解謎後理解：檔案不是單純資料，而是地方記憶被重新打開的入口。</div>
-            </details>
-            <details class="file-card">
-              <summary>FILE 02｜化石形成條件
-                <span>化石需要掩埋、時間、壓力與礦物質滲入，才可能保存生命痕跡。</span>
-              </summary>
-              <div class="file-body">遺骸不會直接變成化石。它需要被快速掩埋，經過長時間壓力與礦物質滲入，才有機會把原本的生命痕跡轉化成地層中的紀錄。</div>
-            </details>
-            <details class="file-card">
-              <summary>FILE 03｜真正任務
-                <span>玩家復原的不是普通雞骨，而是把左鎮化石知識轉化成互動學習體驗。</span>
-              </summary>
-              <div class="file-body">黑暗研究室只是包裝。真正被保存的是左鎮化石的地方知識、歷史記憶與學習經驗。玩家完成的不是恐怖任務，而是一場化石教育轉譯。</div>
-            </details>
+            <div class="proof-main-info">
+              <div class="proof-case">CASE-1931</div>
+              <div class="proof-title-line" id="proof-title-line">第五位研究員</div>
+              <div class="proof-main-lines" id="proof-main-lines"></div>
+            </div>
+
+            <div class="proof-bottom-left" id="proof-bottom-left"></div>
+            <div class="proof-bottom-mid" id="proof-bottom-mid"></div>
+
+            <div class="proof-stamp" id="proof-stamp">封存完成</div>
+            <div class="proof-scan-bar"></div>
+            <div class="proof-blood-edge"></div>
+          </div>
+
+          <div class="ending-actions">
+            <button class="btn danger" id="ending-result-restart-btn">重新開始</button>
+            <button class="btn primary" id="save-card-btn">保存證明</button>
+            <button class="btn" id="unlock-files-btn">查看解鎖檔案</button>
+          </div>
+
+          <p class="proof-save-note" id="proof-save-note">保存證明：建議使用手機截圖，或長按證明卡保存畫面。</p>
+
+          <div class="unlocked-files-panel" id="unlocked-files-panel">
+            <div class="panel">
+              <h1 style="font-size:28px;">解鎖檔案</h1>
+              <details class="file-card" open>
+                <summary>FILE 01｜1931：封存起點
+                  <span>1931 是左鎮化石記憶被打開的年份，也是本作封存編號的來源。</span>
+                </summary>
+                <div class="file-body">1931 代表左鎮化石故事的起點。作品把這個年份轉化成封存系統的核心密碼，讓玩家在解謎後理解：檔案不是單純資料，而是地方記憶被重新打開的入口。</div>
+              </details>
+              <details class="file-card">
+                <summary>FILE 02｜化石形成條件
+                  <span>化石需要掩埋、時間、壓力與礦物質滲入，才可能保存生命痕跡。</span>
+                </summary>
+                <div class="file-body">遺骸不會直接變成化石。它需要被快速掩埋，經過長時間壓力與礦物質滲入，才有機會把原本的生命痕跡轉化成地層中的紀錄。</div>
+              </details>
+              <details class="file-card">
+                <summary>FILE 03｜真正任務
+                  <span>玩家復原的不是普通雞骨，而是把左鎮化石知識轉化成互動學習體驗。</span>
+                </summary>
+                <div class="file-body">黑暗研究室只是包裝。真正被保存的是左鎮化石的地方知識、歷史記憶與學習經驗。玩家完成的不是恐怖任務，而是一場化石教育轉譯。</div>
+              </details>
+              <button class="btn subtle" id="close-files-btn">收起解鎖檔案</button>
+            </div>
           </div>
         </div>
       </section>
@@ -5108,9 +5210,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_50_HORROR_DIRECTOR",
-      saveKey: "fifthResearcher_final_v1_50",
-      settingsKey: "fifthResearcher_final_v1_50_settings",
+      version: "FINAL_BUILD_1_51_PROOF_CARD_APPLIED",
+      saveKey: "fifthResearcher_final_v1_51",
+      settingsKey: "fifthResearcher_final_v1_51_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -5809,6 +5911,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_51",
         "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
@@ -5956,6 +6059,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_51",
         "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
@@ -6094,7 +6198,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_50";
+      return normalizedPath + sep + "v=final1_51";
     }
 
     function mobileUploadVariant(src) {
@@ -6277,7 +6381,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_50");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_51");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -6472,6 +6576,8 @@ function v135PersistOnLeave() {
 
       $$(".tab-btn").forEach(btn => bindOnce(btn, "click", () => safeAction(() => setTab(btn.dataset.tab))));
       bindOnce($("save-card-btn"), "click", () => safeAction(saveCertificate));
+      bindOnce($("unlock-files-btn"), "click", () => safeAction(toggleUnlockedFiles));
+      bindOnce($("close-files-btn"), "click", () => safeAction(() => toggleUnlockedFiles(false)));
       bindOnce($("ending-result-restart-btn"), "click", () => safeAction(() => resetGame(true)));
       bindOnce($("reset-game-btn"), "click", () => safeAction(() => resetGame(true)));
       bindOnce($("failure-restart-btn"), "click", () => safeAction(() => resetGame(false)));
@@ -8071,6 +8177,16 @@ function updatePuzzleUI() {
       return `CASE-1931-${player}-${rand}`;
     }
 
+function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "\"":"&quot;",
+        "'":"&#39;"
+      }[ch]));
+    }
+
     function calcRank() {
       if (state.difficulty === "hard" && state.life === 3 && state.pollution <= 10 && state.mistakes === 0 && state.hints === 0) {
         return { rank:"S+", title:"完美封存", desc:"深層污染模式下仍維持完整生命訊號，系統授予最高封存評級。" };
@@ -8081,135 +8197,160 @@ function updatePuzzleUI() {
       return { rank:"C", title:"緊急封存", desc:"生命訊號歸零或污染值過高，系統以緊急程序完成封存。" };
     }
 
-    function renderEnding() {
+function proofOutcome() {
+      const r = calcRank();
+      const pollution = Number(state.pollution || 0);
+      const life = Number(state.life || 0);
+      if (state.dead || life <= 0) {
+        return { key: "signal-lost", label: "生命訊號歸零", stamp: "訊號中斷", title: "第五位研究員訊號中斷", desc: "封存程序完成前，研究員生命訊號已低於安全範圍。", rank: r };
+      }
+      if (pollution >= 100) {
+        return { key: "contaminated", label: "污染失控", stamp: "污染失敗", title: "污染封存失敗", desc: "標本污染值達到臨界點，系統已改用緊急紀錄。", rank: r };
+      }
+      if ((state.difficulty || "normal") === "hard") {
+        return { key: "abnormal", label: "異常封存", stamp: "異常封存", title: "深層污染下完成封存", desc: "高干擾條件下仍完成第七層標本復原程序。", rank: r };
+      }
+      return { key: "sealed", label: "封存完成", stamp: "封存完成", title: "第五位研究員登錄完成", desc: "標本復原程序完成，CASE-1931 已重新歸檔。", rank: r };
+    }
+
+    function proofMetricClass(value) {
+      const n = Number(value || 0);
+      if (n >= 90) return "critical";
+      if (n >= 70) return "high";
+      if (n >= 40) return "mid";
+      return "low";
+    }
+
+    function renderOfficialProofCard() {
+      const card = $("official-proof-card");
+      if (!card) return;
+      const outcome = proofOutcome();
+      const r = outcome.rank;
+      const pollution = Number(state.pollution || 0);
+      const life = Number(state.life || 0);
+      const player = state.player || "觀測者";
+
+      card.classList.remove("proof-sealed", "proof-contaminated", "proof-signal-lost", "proof-abnormal", "proof-enter", "proof-issued", "proof-save-pulse");
+      card.classList.add("proof-" + outcome.key);
+      card.dataset.pollution = String(pollution);
+      card.style.backgroundImage = `url("${assetWithCache("images/ui/proof-card-bg.PNG")}")`;
+
+      const photo = $("proof-photo-img");
+      if (photo) {
+        photo.dataset.rawSrc = state.photoData || "images/ui/no-camera-fallback.PNG";
+        photo.src = state.photoData || assetWithCache("images/ui/no-camera-fallback.PNG");
+        photo.onerror = function() {
+          if (tryMobileImageFallback(this)) return;
+          this.style.display = "none";
+        };
+      }
+
+      const titleLine = $("proof-title-line");
+      if (titleLine) titleLine.textContent = outcome.title;
+
+      const main = $("proof-main-lines");
+      if (main) {
+        main.innerHTML = `
+          <div class="proof-line"><span>封存案件</span><b>CASE-1931</b></div>
+          <div class="proof-line"><span>研究員代號</span><b>${escapeHtml(player)}</b></div>
+          <div class="proof-line"><span>難度模式</span><b>${difficulty().label}</b></div>
+          <div class="proof-line"><span>污染值</span><b class="${proofMetricClass(pollution)}">${pollution}%</b></div>
+          <div class="proof-line"><span>生命訊號</span><b>${life} / 3</b></div>
+          <div class="proof-line"><span>封存結果</span><b>${outcome.label}</b></div>
+        `;
+      }
+
+      const bottomLeft = $("proof-bottom-left");
+      if (bottomLeft) {
+        bottomLeft.innerHTML = `
+          <div><span>復原率</span><b>${state.placedBones?.length || 9} / 9</b></div>
+          <div><span>判讀錯誤</span><b>${state.mistakes || 0}</b></div>
+          <div><span>標本掃描</span><b>${state.hints || 0}</b></div>
+        `;
+      }
+
+      const bottomMid = $("proof-bottom-mid");
+      if (bottomMid) {
+        bottomMid.innerHTML = `
+          <div><span>封存編號</span><b>${state.certNo}</b></div>
+          <div><span>封存評級</span><b>${r.rank}｜${r.title}</b></div>
+          <div><span>系統紀錄</span><b>${outcome.desc}</b></div>
+        `;
+      }
+
+      const stamp = $("proof-stamp");
+      if (stamp) stamp.textContent = outcome.stamp;
+
+      const status = $("status-ending");
+      if (status) status.innerHTML = `<span>CASE-1931</span><b>${outcome.label}</b><span>${difficulty().label}</span><b>污染 ${pollution}%</b>`;
+
+      const saveNote = $("proof-save-note");
+      if (saveNote) saveNote.textContent = "保存證明：建議使用手機截圖，或長按證明卡保存畫面。";
+    }
+
+    function playProofCardIntro() {
+      const card = $("official-proof-card");
+      if (!card) return;
+      card.classList.remove("proof-enter", "proof-issued");
+      void card.offsetWidth;
+      card.classList.add("proof-enter");
+      HorrorDirector.play("blackout", { duration: 360 });
+      setTimeout(() => HorrorDirector.play("scan", { duration: 900 }), 260);
+      setTimeout(() => HorrorDirector.play("glitch", { duration: 520 }), 520);
+      setTimeout(() => {
+        card.classList.add("proof-issued");
+        HorrorDirector.play("lightning", { duration: 360 });
+        try { tone("ok"); } catch (_) {}
+      }, 1180);
+    }
+
+    function toggleUnlockedFiles(force) {
+      const panel = $("unlocked-files-panel");
+      if (!panel) return;
+      const open = typeof force === "boolean" ? force : !panel.classList.contains("open");
+      panel.classList.toggle("open", open);
+      if (open) {
+        HorrorDirector.play("scan", { duration: 520 });
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      saveGame();
+    }
+
+function renderEnding() {
       if (!state.boxUnlocked && !state.completedAt) {
         showScreen("screen-home", false);
         return;
       }
       if (!state.completedAt) state.completedAt = new Date().toLocaleString("zh-TW");
       if (!state.certNo) state.certNo = makeCertNo();
-      const r = calcRank();
-      $("rank-title").textContent = `封存評級 ${r.rank}｜${r.title}`;
 
-      const resultRows = `
-        <div class="result-hero">
-          <div class="result-hero-title">封存完成</div>
-          <div class="result-hero-sub">第五位研究員身份已確認。<br>CASE-1931 已重新歸檔。</div>
-        </div>
-        <div class="result-chip-grid">
-          <div class="result-chip"><span>封存案</span><b>CASE-1931</b></div>
-          <div class="result-chip"><span>核心封存碼</span><b>1931</b></div>
-          <div class="result-chip"><span>評級</span><b>${r.rank}</b></div>
-          <div class="result-chip"><span>模式</span><b>${difficulty().label}</b></div>
-          <div class="result-chip"><span>污染值</span><b>${state.pollution}%</b></div>
-          <div class="result-chip"><span>掃描</span><b>${state.hints}</b></div>
-        </div>
-        <div class="row"><span>判讀錯誤</span><b>${state.mistakes}</b></div>
-        <div class="result-note-card"><span>封存說明</span><b>${r.desc}</b></div>
-      `;
-
-      const certRows = `
-        <div class="row"><span>封存編號</span><b>${state.certNo}</b></div>
-        <div class="row"><span>核心封存案</span><b>CASE-1931</b></div>
-        <div class="row"><span>核心封存碼</span><b>1931</b></div>
-        <div class="row"><span>研究員代號</span><b>${state.player || "觀測者"}</b></div>
-        <div class="row"><span>封存模式</span><b>${difficulty().label}</b></div>
-        <div class="row"><span>生命訊號</span><b>${state.life} / 3</b></div>
-        <div class="row"><span>污染值</span><b>${state.pollution}%</b></div>
-        <div class="row"><span>判讀錯誤</span><b>${state.mistakes}</b></div>
-        <div class="row"><span>標本掃描</span><b>${state.hints}</b></div>
-        <div class="row"><span>封存評級</span><b>${r.rank}</b></div>
-        <div class="row"><span>封存日期</span><b>${state.completedAt}</b></div>
-      `;
-      $("result-table").innerHTML = resultRows;
-      $("cert-table").innerHTML = certRows;
-      setTab(state.endingTab || "result", false);
+      renderOfficialProofCard();
+      toggleUnlockedFiles(false);
       clearResumeFlag();
       saveGame();
+
+      setTimeout(playProofCardIntro, 80);
     }
 
-    function setTab(tab, persist = true) {
-      state.endingTab = tab;
+function setTab(tab, persist = true) {
+      state.endingTab = tab || "result";
       $$(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
       $$(".tab-page").forEach(p => p.classList.toggle("active", p.id === "tab-" + tab));
+      if (tab === "files") toggleUnlockedFiles(true);
       if (persist) saveGame();
     }
 
-    function saveCertificate() {
-      const r = calcRank();
-      const c = document.createElement("canvas");
-      c.width = 1080;
-      c.height = 1350;
-      const ctx = c.getContext("2d");
-
-      ctx.fillStyle = "#080101";
-      ctx.fillRect(0,0,c.width,c.height);
-      const grd = ctx.createRadialGradient(800,120,40,540,675,900);
-      grd.addColorStop(0,"#3a0505");
-      grd.addColorStop(1,"#050000");
-      ctx.fillStyle = grd;
-      ctx.fillRect(0,0,c.width,c.height);
-
-      ctx.strokeStyle = "#d92b25";
-      ctx.lineWidth = 6;
-      ctx.strokeRect(70,70,c.width-140,c.height-140);
-      ctx.strokeStyle = "rgba(255,178,164,.30)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(100,100,c.width-200,c.height-200);
-
-      ctx.fillStyle = "#fff0e7";
-      ctx.font = "bold 66px serif";
-      ctx.fillText("封存證明卡", 120, 185);
-      ctx.font = "32px serif";
-      ctx.fillStyle = "#caa777";
-      ctx.fillText("CASE-1931 / FIFTH RESEARCHER", 120, 238);
-
-      ctx.strokeStyle = "rgba(255,178,164,.62)";
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.arc(810, 205, 98, 0, Math.PI*2);
-      ctx.stroke();
-      ctx.fillStyle = "#fff0e7";
-      ctx.font = "bold 38px serif";
-      ctx.fillText("SEALED", 738, 218);
-
-      const lines = [
-        ["封存編號", state.certNo],
-        ["核心封存案", "CASE-1931"],
-        ["核心封存碼", "1931"],
-        ["第五位研究員", state.player || "觀測者"],
-        ["難度", difficulty().label],
-        ["生命訊號", state.life + " / 3"],
-        ["污染值", state.pollution + "%"],
-        ["錯誤紀錄", state.mistakes + " 次"],
-        ["提示使用", state.hints + " 次"],
-        ["結局評級", r.rank + "｜" + r.title],
-        ["封存日期", state.completedAt || new Date().toLocaleString("zh-TW")]
-      ];
-
-      ctx.font = "36px serif";
-      lines.forEach((row, i) => {
-        const y = 360 + i * 78;
-        ctx.fillStyle = "rgba(241,227,200,.62)";
-        ctx.fillText(row[0], 120, y);
-        ctx.fillStyle = "#fff0e7";
-        ctx.fillText(row[1], 380, y);
-      });
-
-      ctx.fillStyle = "rgba(255,74,66,.92)";
-      ctx.font = "bold 44px serif";
-      ctx.fillText("研究員登錄完成", 120, 1130);
-
-      ctx.fillStyle = "rgba(241,227,200,.58)";
-      ctx.font = "28px serif";
-      ctx.fillText("左鎮化石互動封存程序", 120, 1186);
-
-      const a = document.createElement("a");
-      a.download = "第五位研究員_封存證明卡.png";
-      a.href = c.toDataURL("image/png");
-      a.click();
-      playExternal("save").then(ok => { if (!ok) tone("save"); });
-      toast("封存證明卡已生成。");
+function saveCertificate() {
+      const card = $("official-proof-card");
+      if (card) {
+        card.classList.add("proof-save-pulse");
+        setTimeout(() => card.classList.remove("proof-save-pulse"), 900);
+      }
+      const note = $("proof-save-note");
+      if (note) note.textContent = "請使用手機截圖保存封存證明；之後可再升級成自動下載圖片。";
+      HorrorDirector.play("scan", { duration: 650 });
+      try { toast("請截圖保存封存證明卡。"); } catch (_) {}
+      try { playExternal("save").then(ok => { if (!ok) tone("ok"); }); } catch (_) {}
     }
 
     function performResetGame() {
