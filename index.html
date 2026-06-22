@@ -4442,6 +4442,8 @@
       100% { opacity: 1; filter: none; transform: translateY(0); }
     }
 
+
+    /* v1.49 UI filename compatibility marker */
   </style>
 </head>
 
@@ -4462,7 +4464,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.48</div>
+          <div class="kicker">FINAL BUILD 1.49</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -4597,7 +4599,7 @@
           <h1>封存檔案</h1>
           <h2>CASE-████</h2>
           <div class="hero" id="hero-story">
-            <img data-src="images/ui/story-bg.png" alt="劇情背景">
+            <img data-src="images/ui/story-bg.PNG" alt="劇情背景">
           </div>
           <div class="table">
             <div class="file-row"><span>檔案狀態</span><b>重新開啟</b></div>
@@ -4655,18 +4657,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_48" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_48" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_48" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_48" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_48" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_48" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_48" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_48" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_48" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_49" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_49" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_49" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_49" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_49" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_49" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_49" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_49" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_49" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -4766,7 +4768,7 @@
         <div class="panel">
           <h1 style="font-size:30px;">百寶封存箱</h1>
           <div class="box-visual" id="box-visual">
-            <img data-src="images/ui/containment-box.png" alt="封存箱">
+            <img data-src="images/ui/containment-box.PNG" alt="封存箱">
             <div class="box-fallback">封存箱影像備用模式</div>
           </div>
           <input class="input" id="pin-input" type="tel" inputmode="numeric" maxlength="4" placeholder="輸入 4 位數">
@@ -4917,9 +4919,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_48_HARDMODE_HORROR_FEEDBACK",
-      saveKey: "fifthResearcher_final_v1_48",
-      settingsKey: "fifthResearcher_final_v1_48_settings",
+      version: "FINAL_BUILD_1_49_UI_FILENAME_COMPAT",
+      saveKey: "fifthResearcher_final_v1_49",
+      settingsKey: "fifthResearcher_final_v1_49_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -4928,11 +4930,11 @@
       ],
       imageAssets: [
         "images/ui/title-main-visual.png",
-        "images/ui/containment-box.png",
-        "images/ui/researcher-reveal-bg.png",
-        "images/ui/proof-card-bg.png",
-        "images/ui/no-camera-fallback.png",
-        "images/ui/story-bg.png",
+        "images/ui/containment-box.PNG",
+        "images/ui/researcher-reveal-bg.PNG",
+        "images/ui/proof-card-bg.PNG",
+        "images/ui/no-camera-fallback.PNG",
+        "images/ui/story-bg.PNG",
         "images/reveal/full-fossil-board.png",
         "images/bones/skull.png",
         "images/bones/neck.png",
@@ -5618,6 +5620,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
         "fifthResearcher_final_v1_46",
@@ -5763,6 +5766,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
         "fifthResearcher_final_v1_46",
@@ -5899,7 +5903,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_48";
+      return normalizedPath + sep + "v=final1_49";
     }
 
     function mobileUploadVariant(src) {
@@ -5934,9 +5938,34 @@ const FOSSIL_IMAGE_ALIASES = {
       "images/bones/decoy-i.png": ["images/bones/decoy-l.png", "images/bones/decoy-i.png.PNG", "images/bones/decoy-i.PNG", "images/bones/decoy-l.png.PNG", "images/bones/decoy-l.PNG"]
     };
 
+const UI_IMAGE_ALIASES = {
+      "images/ui/title-main-visual.png": ["images/ui/title-main-visual.PNG", "images/ui/title-main-visual.png.PNG"],
+      "images/ui/containment-box.PNG": ["images/ui/containment-box.png", "images/ui/containment-box.png.PNG"],
+      "images/ui/no-camera-fallback.PNG": ["images/ui/no-camera-fallback.png", "images/ui/no-camera-fallback.png.PNG"],
+      "images/ui/proof-card-bg.PNG": ["images/ui/proof-card-bg.png", "images/ui/proof-card-bg.png.PNG"],
+      "images/ui/researcher-reveal-bg.PNG": ["images/ui/researcher-reveal-bg.png", "images/ui/researcher-reveal-bg.png.PNG"],
+      "images/ui/story-bg.PNG": ["images/ui/story-bg.png", "images/ui/story-bg.png.PNG"]
+    };
+
+    function normalizeUiAssetPath(path) {
+      if (!path || typeof path !== "string") return path;
+      const clean = String(path).split("?")[0];
+      const map = {
+        "images/ui/containment-box.png": "images/ui/containment-box.PNG",
+        "images/ui/no-camera-fallback.png": "images/ui/no-camera-fallback.PNG",
+        "images/ui/proof-card-bg.png": "images/ui/proof-card-bg.PNG",
+        "images/ui/researcher-reveal-bg.png": "images/ui/researcher-reveal-bg.PNG",
+        "images/ui/story-bg.png": "images/ui/story-bg.PNG",
+        "images/ui/title-main-visual.PNG": "images/ui/title-main-visual.png"
+      };
+      return map[clean] || path;
+    }
+
 function normalizeAssetPathForUpload(path) {
       if (!path || typeof path !== "string") return path;
-      return path
+      const uiNormalized = normalizeUiAssetPath(path);
+      if (/^images\/ui\//i.test(uiNormalized)) return uiNormalized;
+      return uiNormalized
         .replace(/\.png\.PNG$/i, ".png")
         .replace(/\.PNG$/i, ".png")
         .replace(/\/decoy-l\.png$/i, "/decoy-i.png");
@@ -5946,13 +5975,14 @@ function getImageFallbackCandidates(rawPath) {
       const original = String(rawPath || "").split("?")[0];
       const clean = normalizeAssetPathForUpload(original);
       const candidates = [];
-      const add = (p) => {
-        if (p && !candidates.includes(p)) candidates.push(p);
-      };
+      const add = (p) => { if (p && !candidates.includes(p)) candidates.push(p); };
 
       add(clean);
 
-      if (FOSSIL_IMAGE_ALIASES[clean]) {
+      if (typeof UI_IMAGE_ALIASES !== "undefined" && UI_IMAGE_ALIASES[clean]) {
+        UI_IMAGE_ALIASES[clean].forEach(add);
+      }
+      if (typeof FOSSIL_IMAGE_ALIASES !== "undefined" && FOSSIL_IMAGE_ALIASES[clean]) {
         FOSSIL_IMAGE_ALIASES[clean].forEach(add);
       }
 
@@ -5960,12 +5990,14 @@ function getImageFallbackCandidates(rawPath) {
         add(clean + ".PNG");
         add(clean.replace(/\.png$/i, ".PNG"));
       }
-
+      if (/\.PNG$/.test(clean)) {
+        add(clean.replace(/\.PNG$/, ".png"));
+        add(clean + ".PNG");
+      }
       if (/\/decoy-i\.png$/i.test(clean)) {
         add(clean.replace(/\/decoy-i\.png$/i, "/decoy-l.png"));
         add(clean.replace(/\/decoy-i\.png$/i, "/decoy-l.png.PNG"));
       }
-
       return candidates;
     }
 
@@ -6054,7 +6086,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_48");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_49");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
