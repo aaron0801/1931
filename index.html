@@ -4444,6 +4444,195 @@
 
 
     /* v1.49 UI filename compatibility marker */
+
+    /* v1.50 Horror Director system: no settings, centralized one-shot effects */
+
+    #horror-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 2200;
+      pointer-events: none;
+      overflow: hidden;
+      contain: layout paint;
+    }
+
+    #horror-blood-edge {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .45s ease;
+      background:
+        radial-gradient(circle at 50% 40%, transparent 0 48%, rgba(80,0,0,.14) 70%, rgba(120,0,0,.28) 100%),
+        linear-gradient(180deg, rgba(90,0,0,.18), transparent 18%, transparent 78%, rgba(110,0,0,.28)),
+        linear-gradient(90deg, rgba(100,0,0,.20), transparent 18%, transparent 82%, rgba(100,0,0,.20));
+      mix-blend-mode: screen;
+      filter: blur(.2px);
+    }
+
+    .horror-effect {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .horror-effect.horror-blackout {
+      background:
+        radial-gradient(circle at 50% 48%, rgba(90,0,0,.22), #000 58%),
+        #000;
+      animation: horrorBlackout .62s steps(2,end) both;
+    }
+
+    .horror-effect.horror-blackout.after-jumpscare {
+      animation-duration: .50s;
+    }
+
+    @keyframes horrorBlackout {
+      0% { opacity: 0; }
+      12% { opacity: 1; }
+      76% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .horror-effect.horror-lightning {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,245,230,.86), transparent 22%),
+        linear-gradient(115deg, transparent 0 36%, rgba(255,255,255,.72) 38%, rgba(255,40,36,.30) 42%, transparent 52%),
+        repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,.18) 19px 20px);
+      mix-blend-mode: screen;
+      animation: horrorLightning .42s steps(4,end) both;
+    }
+
+    @keyframes horrorLightning {
+      0% { opacity: 0; transform: translateX(0); }
+      18% { opacity: 1; transform: translateX(-3px); }
+      38% { opacity: .18; transform: translateX(4px); }
+      62% { opacity: .88; transform: translateX(-1px); }
+      100% { opacity: 0; transform: translateX(0); }
+    }
+
+    .horror-effect.horror-pollution-flash {
+      background:
+        radial-gradient(circle at 50% 46%, rgba(255,18,12,.26), transparent 36%),
+        repeating-linear-gradient(0deg, transparent 0 12px, rgba(255,40,30,.12) 13px 14px),
+        linear-gradient(180deg, transparent, rgba(120,0,0,.18), transparent);
+      mix-blend-mode: screen;
+      animation: horrorPollutionFlash .72s steps(3,end) both;
+    }
+
+    @keyframes horrorPollutionFlash {
+      0% { opacity: 0; filter: blur(2px); }
+      18% { opacity: .9; filter: blur(.4px); }
+      52% { opacity: .28; }
+      78% { opacity: .65; transform: translateX(-2px); }
+      100% { opacity: 0; }
+    }
+
+    .horror-effect.horror-blood-burst {
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 45%, rgba(115,0,0,.20) 74%, rgba(160,0,0,.35) 100%),
+        linear-gradient(180deg, rgba(120,0,0,.20), transparent 26%, transparent 68%, rgba(150,0,0,.30));
+      mix-blend-mode: multiply;
+      animation: horrorBloodBurst 1s ease both;
+    }
+
+    @keyframes horrorBloodBurst {
+      0% { opacity: 0; transform: scale(1.02); }
+      28% { opacity: .88; }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
+    .horror-effect.horror-jumpscare {
+      background:
+        radial-gradient(ellipse at 50% 43%, rgba(255,230,210,.65) 0 4%, transparent 9%),
+        radial-gradient(ellipse at 44% 42%, rgba(255,255,255,.75) 0 2%, transparent 5%),
+        radial-gradient(ellipse at 56% 42%, rgba(255,255,255,.75) 0 2%, transparent 5%),
+        radial-gradient(ellipse at 50% 52%, rgba(140,0,0,.62) 0 4%, transparent 11%),
+        radial-gradient(ellipse at 50% 48%, rgba(210,210,190,.30), rgba(160,0,0,.22) 30%, transparent 50%);
+      mix-blend-mode: screen;
+      filter: contrast(1.5) brightness(1.18);
+      animation: horrorJumpscare .36s steps(2,end) both;
+    }
+
+    @keyframes horrorJumpscare {
+      0% { opacity: 0; transform: scale(.78) translateY(16px); }
+      28% { opacity: 1; transform: scale(1.18) translateY(-6px); }
+      62% { opacity: .18; transform: scale(.96); }
+      100% { opacity: 0; transform: scale(1.26) translateY(-12px); }
+    }
+
+    .horror-effect.horror-glitch {
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 7px),
+        linear-gradient(90deg, transparent 0 30%, rgba(255,20,20,.22) 34%, transparent 40%, rgba(255,255,255,.13) 58%, transparent 62%);
+      mix-blend-mode: screen;
+      animation: horrorGlitch .70s steps(5,end) both;
+    }
+
+    @keyframes horrorGlitch {
+      0% { opacity: 0; transform: translateX(0); }
+      18% { opacity: .8; transform: translateX(-8px); }
+      34% { opacity: .26; transform: translateX(6px); }
+      52% { opacity: .75; transform: translateX(-3px); }
+      100% { opacity: 0; transform: translateX(0); }
+    }
+
+    .horror-effect.horror-scanline {
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(255,238,220,.05) 42%, rgba(255,34,24,.55) 50%, rgba(255,238,220,.05) 58%, transparent 100%);
+      mix-blend-mode: screen;
+      animation: horrorScanline .92s ease both;
+    }
+
+    @keyframes horrorScanline {
+      0% { opacity: 0; transform: translateY(-85%); }
+      18% { opacity: .95; }
+      100% { opacity: 0; transform: translateY(85%); }
+    }
+
+    body.horror-impact-shake .frame,
+    body.horror-pollution-shock .frame {
+      animation: horrorFrameShake .52s steps(3,end) both;
+    }
+
+    body.horror-electric-shock .frame {
+      animation: horrorElectricFrame .36s steps(3,end) both;
+    }
+
+    @keyframes horrorFrameShake {
+      0%,100% { transform: none; filter: none; }
+      18% { transform: translateX(-3px); filter: brightness(1.22) contrast(1.25); }
+      38% { transform: translateX(4px); filter: brightness(.78) contrast(1.6); }
+      66% { transform: translateX(-2px); filter: brightness(1.12); }
+    }
+
+    @keyframes horrorElectricFrame {
+      0%,100% { filter: none; }
+      28% { filter: brightness(1.55) contrast(1.4) saturate(1.2); }
+      54% { filter: brightness(.62) contrast(1.7); }
+    }
+
+    body.pollution-mid .frame {
+      box-shadow: 0 0 0 1px rgba(255,70,60,.12), 0 0 28px rgba(120,0,0,.08);
+    }
+
+    body.pollution-high .frame {
+      box-shadow: 0 0 0 1px rgba(255,45,35,.18), 0 0 34px rgba(150,0,0,.16);
+      filter: saturate(1.06);
+    }
+
+    body.pollution-critical .frame {
+      box-shadow: 0 0 0 1px rgba(255,25,20,.25), 0 0 42px rgba(180,0,0,.24);
+      animation: criticalBreath 1.5s ease-in-out infinite;
+    }
+
+    @keyframes criticalBreath {
+      0%,100% { filter: brightness(1) contrast(1); }
+      50% { filter: brightness(.82) contrast(1.18); }
+    }
+
   </style>
 </head>
 
@@ -4464,7 +4653,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.49</div>
+          <div class="kicker">FINAL BUILD 1.50</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -4657,18 +4846,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_49" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_49" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_49" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_49" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_49" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_49" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_49" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_49" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_49" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_49" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_50" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_50" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_50" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_50" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_50" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_50" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_50" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_50" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_50" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_50" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -4919,9 +5108,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_49_UI_FILENAME_COMPAT",
-      saveKey: "fifthResearcher_final_v1_49",
-      settingsKey: "fifthResearcher_final_v1_49_settings",
+      version: "FINAL_BUILD_1_50_HORROR_DIRECTOR",
+      saveKey: "fifthResearcher_final_v1_50",
+      settingsKey: "fifthResearcher_final_v1_50_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -5620,6 +5809,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
@@ -5766,6 +5956,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
         "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
@@ -5903,7 +6094,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_49";
+      return normalizedPath + sep + "v=final1_50";
     }
 
     function mobileUploadVariant(src) {
@@ -6086,7 +6277,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_49");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_50");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -6403,6 +6594,7 @@ function updateHud() {
 function setupReveal() {
       try {
         renderReveal();
+        HorrorDirector.onRevealStart();
         startIdentityRevealGlitch();
         updateStatusAll();
       } catch (e) {
@@ -6436,6 +6628,7 @@ function showScreen(id, remember = true) {
         if (id === "screen-resume") renderResume();
         if (id === "screen-blackout") {
           startBlackoutSequence(240);
+          HorrorDirector.play("lightning", { duration: 520 });
         }
         if (id === "screen-puzzle") {
           v135SaveNow("screen-puzzle");
@@ -6484,6 +6677,7 @@ function startGame() {
       try {
         if (state.dead) clearGameProgress(true);
         state.puzzleWrongStreak = 0;
+        state.horrorJumps = 0;
         prepareHardDecoyShuffle("startGame");
         ensureRandomLayouts(true);
         initAudio();
@@ -6531,6 +6725,7 @@ function startGame() {
       });
       applyPollutionClass();
       updateSettingsUI();
+      if (typeof HorrorDirector !== "undefined") HorrorDirector.updateAmbient();
     }
 
     function applyPollutionClass() {
@@ -6665,6 +6860,7 @@ function startGame() {
       }
 
       updateStatusAll();
+      HorrorDirector.onMistake(type, pollution, lifeLoss);
       saveGame();
     }
 
@@ -6994,6 +7190,163 @@ function selectBone(id) {
       }
     }
 
+const HorrorDirector = (() => {
+      const activeTimers = new Map();
+      const MAX_JUMPSCARE_PER_RUN = 2;
+
+      function clearTimer(key) {
+        if (activeTimers.has(key)) {
+          clearTimeout(activeTimers.get(key));
+          activeTimers.delete(key);
+        }
+      }
+
+      function getLayer() {
+        let layer = document.getElementById("horror-layer");
+        if (!layer) {
+          layer = document.createElement("div");
+          layer.id = "horror-layer";
+          layer.setAttribute("aria-hidden", "true");
+          document.body.appendChild(layer);
+        }
+        return layer;
+      }
+
+      function addEffect(className, duration = 600, extraClass = "") {
+        const layer = getLayer();
+        const el = document.createElement("div");
+        el.className = `horror-effect ${className} ${extraClass}`.trim();
+        layer.appendChild(el);
+        setTimeout(() => el.remove(), duration);
+        return el;
+      }
+
+      function bodyPulse(className, duration = 600) {
+        document.body.classList.add(className);
+        clearTimer(className);
+        activeTimers.set(className, setTimeout(() => {
+          document.body.classList.remove(className);
+          activeTimers.delete(className);
+        }, duration));
+      }
+
+      function vibrate(pattern) {
+        try {
+          if (navigator.vibrate) navigator.vibrate(pattern);
+        } catch (_) {}
+      }
+
+      function play(type, opts = {}) {
+        const duration = opts.duration || 600;
+
+        if (type === "blackout") {
+          addEffect("horror-blackout", duration);
+          bodyPulse("horror-impact-shake", Math.min(duration, 720));
+          vibrate([45, 35, 80]);
+          return;
+        }
+
+        if (type === "lightning") {
+          addEffect("horror-lightning", duration || 360);
+          bodyPulse("horror-electric-shock", 360);
+          vibrate(35);
+          return;
+        }
+
+        if (type === "blood" || type === "bleed") {
+          addEffect("horror-blood-burst", duration || 900);
+          bodyPulse("horror-blood-pulse", 900);
+          return;
+        }
+
+        if (type === "pollution") {
+          addEffect("horror-pollution-flash", duration || 720);
+          bodyPulse("horror-pollution-shock", 620);
+          vibrate(50);
+          return;
+        }
+
+        if (type === "jumpscare") {
+          state.horrorJumps = state.horrorJumps || 0;
+          if (state.horrorJumps >= MAX_JUMPSCARE_PER_RUN) return;
+          state.horrorJumps += 1;
+          addEffect("horror-jumpscare", 360);
+          addEffect("horror-blackout", 520, "after-jumpscare");
+          bodyPulse("horror-impact-shake", 720);
+          vibrate([90, 30, 120]);
+          try { tone("glitch"); } catch (_) {}
+          return;
+        }
+
+        if (type === "glitch") {
+          addEffect("horror-glitch", duration || 700);
+          bodyPulse("horror-electric-shock", 520);
+          return;
+        }
+
+        if (type === "scan") {
+          addEffect("horror-scanline", duration || 900);
+          return;
+        }
+      }
+
+      function updateAmbient() {
+        const p = Number(state.pollution || 0);
+        document.body.classList.toggle("pollution-mid", p >= 40 && p < 70);
+        document.body.classList.toggle("pollution-high", p >= 70 && p < 90);
+        document.body.classList.toggle("pollution-critical", p >= 90);
+
+        const layer = getLayer();
+        let edge = document.getElementById("horror-blood-edge");
+        if (!edge) {
+          edge = document.createElement("div");
+          edge.id = "horror-blood-edge";
+          edge.setAttribute("aria-hidden", "true");
+          layer.appendChild(edge);
+        }
+
+        const opacity = p >= 90 ? 0.72 : p >= 70 ? 0.50 : p >= 40 ? 0.28 : 0;
+        edge.style.opacity = String(opacity);
+      }
+
+      function onMistake(type, pollutionDelta = 0, lifeDelta = 0) {
+        updateAmbient();
+
+        if (type === "puzzle") {
+          play("pollution", { duration: 700 });
+          if ((state.difficulty || "normal") === "hard") play("blackout", { duration: 560 });
+          if ((state.difficulty || "normal") === "hard" && (state.puzzleWrongStreak || 0) >= 2) play("jumpscare");
+        }
+
+        if (type === "order") {
+          play("lightning", { duration: 420 });
+          play("blackout", { duration: 500 });
+        }
+
+        if (type === "pin") {
+          play("blackout", { duration: 620 });
+          play("lightning", { duration: 420 });
+          if ((state.pinMistakes || 0) <= 1) play("jumpscare");
+        }
+
+        if ((state.pollution || 0) >= 40) play("bleed", { duration: 1050 });
+        if ((state.pollution || 0) >= 80) play("jumpscare");
+      }
+
+      function onCorrectBone() {
+        play("scan", { duration: 950 });
+        if ((state.pollution || 0) >= 70) play("glitch", { duration: 520 });
+      }
+
+      function onRevealStart() {
+        play("glitch", { duration: 950 });
+        play("lightning", { duration: 520 });
+        setTimeout(() => play("blackout", { duration: 360 }), 460);
+      }
+
+      return { play, updateAmbient, onMistake, onCorrectBone, onRevealStart };
+    })();
+
 function triggerWrongBoneFeedback(kind = "mismatch") {
       const board = $("fossil-board");
       if (board) {
@@ -7006,12 +7359,11 @@ function triggerWrongBoneFeedback(kind = "mismatch") {
         setTimeout(() => board.classList.remove("pollution-bone-flash"), 760);
       }
 
-      document.body.classList.add("pollution-impact-flash");
-      setTimeout(() => document.body.classList.remove("pollution-impact-flash"), 620);
+      HorrorDirector.play("pollution", { duration: 720 });
+      HorrorDirector.play("lightning", { duration: 360 });
 
       if ((state.difficulty || "normal") === "hard") {
-        document.body.classList.add("hard-mistake-blackout");
-        setTimeout(() => document.body.classList.remove("hard-mistake-blackout"), 520);
+        HorrorDirector.play("blackout", { duration: 560 });
       }
 
       if (kind === "decoy") {
@@ -7020,6 +7372,7 @@ function triggerWrongBoneFeedback(kind = "mismatch") {
           card.classList.add("decoy-glitch");
           setTimeout(() => card.classList.remove("decoy-glitch"), 520);
         }
+        if ((state.difficulty || "normal") === "hard") HorrorDirector.play("jumpscare");
       }
     }
 
@@ -7090,6 +7443,7 @@ function placeSelectedBone(targetId) {
             const isFinalPiece = state.placedBones.length === BONES.length;
             state.finalScanPending = !!isFinalPiece;
             tone("ok");
+            HorrorDirector.onCorrectBone();
             logTo("puzzle-log", (bone ? bone.name : "骨片") + " 掃描鎖定。");
             v135SaveNow("screen-puzzle");
             renderPuzzle();
@@ -7874,6 +8228,7 @@ function updatePuzzleUI() {
       state.finalScanPending = false;
       state.lastPlacedBone = "";
       state.hardDecoySeed = "";
+      state.horrorJumps = 0;
       resetBoxFormUI();
       saveSettings();
       saveGame();
