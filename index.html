@@ -4295,6 +4295,153 @@
         rgba(0,0,0,.70) !important;
     }
 
+
+    /* v1.48 hard mode horror feedback and reveal scan polish */
+
+    body.hard-mistake-blackout::before {
+      content: "" !important;
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 2100 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(55,0,0,.18), #000 64%),
+        #000 !important;
+      animation: hardBlackoutPulse .52s steps(2,end) both !important;
+    }
+
+    @keyframes hardBlackoutPulse {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      72% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    body.pollution-impact-flash .frame {
+      animation: pollutionFrameShock .48s steps(2,end) both;
+    }
+
+    @keyframes pollutionFrameShock {
+      0%,100% { filter: none; transform: none; }
+      18% { filter: brightness(1.38) contrast(1.25) hue-rotate(-8deg); transform: translateX(-2px); }
+      38% { filter: brightness(.72) contrast(1.55); transform: translateX(3px); }
+      62% { filter: brightness(1.18) contrast(1.25); transform: translateX(-1px); }
+    }
+
+    #fossil-board .pollution-ghost {
+      position: absolute;
+      inset: 0;
+      z-index: 18;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,34,26,.22), transparent 34%),
+        linear-gradient(110deg, transparent 0 28%, rgba(255,40,34,.20) 38%, transparent 52%),
+        repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,46,38,.10) 19px 20px);
+      mix-blend-mode: screen;
+      filter: blur(.4px) contrast(1.25);
+      animation: pollutionGhostFlash .68s steps(3,end) both;
+    }
+
+    @keyframes pollutionGhostFlash {
+      0% { opacity: 0; transform: scale(.98) translateX(0); }
+      18% { opacity: 1; transform: scale(1.02) translateX(-3px); }
+      42% { opacity: .35; transform: scale(1.0) translateX(4px); }
+      70% { opacity: .86; transform: scale(1.03) translateX(-1px); }
+      100% { opacity: 0; transform: scale(1.0); }
+    }
+
+    #fossil-board.pollution-bone-flash {
+      box-shadow:
+        0 0 32px rgba(255,28,22,.24),
+        inset 0 0 30px rgba(255,30,24,.12) !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.revealed.reveal-flash::after,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.revealed.reveal-flash::after,
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.done.reveal-flash::after,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.done.reveal-flash::after {
+      opacity: .62 !important;
+      filter: sepia(.08) brightness(1.04) contrast(1.22) saturate(.95) !important;
+      animation: correctBoneScanReveal 1.04s ease both !important;
+    }
+
+    #screen-puzzle #fossil-board.mask-reveal .bone-mask.reveal-flash::before,
+    #screen-puzzle #fossil-board.mask-reveal .drop-zone.reveal-flash::before {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: -20% -10% !important;
+      z-index: 5 !important;
+      pointer-events: none !important;
+      opacity: .95 !important;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(255,232,210,.08) 40%, rgba(255,70,55,.55) 50%, rgba(255,232,210,.08) 60%, transparent 100%);
+      mix-blend-mode: screen;
+      animation: correctScanLine 1.02s ease both !important;
+    }
+
+    @keyframes correctBoneScanReveal {
+      0% { opacity: 0; filter: brightness(.55) blur(1.5px); }
+      18% { opacity: .86; filter: brightness(1.25) contrast(1.35); }
+      68% { opacity: .50; }
+      100% { opacity: var(--solved-opacity, .30); filter: sepia(.12) brightness(var(--solved-brightness, .72)) contrast(1.06) saturate(.82) blur(.15px); }
+    }
+
+    @keyframes correctScanLine {
+      0% { opacity: 0; transform: translateY(-85%); }
+      18% { opacity: .95; }
+      100% { opacity: 0; transform: translateY(85%); }
+    }
+
+    body.identity-glitch-intro #screen-reveal .identity,
+    body.identity-glitch-intro #screen-reveal .small-note,
+    body.identity-glitch-intro #screen-reveal .photo-frame,
+    body.identity-glitch-intro #screen-reveal .btn-grid,
+    body.identity-glitch-intro #screen-reveal .privacy-note {
+      opacity: 0 !important;
+      filter: blur(3px) contrast(1.4);
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+
+    body.identity-glitch-intro #screen-reveal .reveal-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,30,24,.22), transparent 34%),
+        repeating-linear-gradient(0deg, rgba(255,240,230,.07) 0 1px, transparent 1px 8px),
+        linear-gradient(180deg, transparent, rgba(255,40,34,.14), transparent);
+      mix-blend-mode: screen;
+      animation: identityGlitchGate 1.2s steps(4,end) both;
+    }
+
+    body.identity-reveal-ready #screen-reveal .identity,
+    body.identity-reveal-ready #screen-reveal .small-note,
+    body.identity-reveal-ready #screen-reveal .photo-frame,
+    body.identity-reveal-ready #screen-reveal .btn-grid,
+    body.identity-reveal-ready #screen-reveal .privacy-note {
+      animation: identityRevealAfterGlitch .85s ease both;
+    }
+
+    @keyframes identityGlitchGate {
+      0% { opacity: 0; transform: translateX(0); }
+      12% { opacity: 1; transform: translateX(-5px); }
+      28% { opacity: .28; transform: translateX(6px); }
+      46% { opacity: .88; transform: translateX(-2px); }
+      70% { opacity: .40; transform: translateX(3px); }
+      100% { opacity: 0; transform: translateX(0); }
+    }
+
+    @keyframes identityRevealAfterGlitch {
+      0% { opacity: 0; filter: blur(4px) brightness(.6); transform: translateY(8px); }
+      42% { opacity: .95; filter: blur(.6px) brightness(1.35); }
+      100% { opacity: 1; filter: none; transform: translateY(0); }
+    }
+
   </style>
 </head>
 
@@ -4315,7 +4462,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.47</div>
+          <div class="kicker">FINAL BUILD 1.48</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -4508,18 +4655,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_47" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_47" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_47" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_47" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_47" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_47" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_47" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_47" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_47" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_47" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_47" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_47" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_48" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_48" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_48" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_48" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_48" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_48" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_48" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_48" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_48" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_48" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -4770,9 +4917,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_47_ALL_18_FOSSIL_FILENAME_AUDIT",
-      saveKey: "fifthResearcher_final_v1_47",
-      settingsKey: "fifthResearcher_final_v1_47_settings",
+      version: "FINAL_BUILD_1_48_HARDMODE_HORROR_FEEDBACK",
+      saveKey: "fifthResearcher_final_v1_48",
+      settingsKey: "fifthResearcher_final_v1_48_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -4829,7 +4976,7 @@
       { id: "decoyF", name: "污染碎骨 F", img: "images/bones/decoy-f.png" },
       { id: "decoyG", name: "污染碎骨 G", img: "images/bones/decoy-g.png" },
       { id: "decoyH", name: "污染碎骨 H", img: "images/bones/decoy-h.png" },
-      { id: "decoyI", name: "污染碎骨 I", img: "images/bones/decoy-l.png" }
+      { id: "decoyI", name: "污染碎骨 I", img: "images/bones/decoy-i.png" }
     ];
 
     function puzzleDisplayMode() {
@@ -5471,6 +5618,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
         "fifthResearcher_final_v1_46",
         "fifthResearcher_final_v1_45",
@@ -5615,6 +5763,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_48",
         "fifthResearcher_final_v1_47",
         "fifthResearcher_final_v1_46",
         "fifthResearcher_final_v1_45",
@@ -5750,7 +5899,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_47";
+      return normalizedPath + sep + "v=final1_48";
     }
 
     function mobileUploadVariant(src) {
@@ -5782,18 +5931,18 @@ const FOSSIL_IMAGE_ALIASES = {
       "images/bones/decoy-f.png": ["images/bones/decoy-f.png.PNG", "images/bones/decoy-f.PNG"],
       "images/bones/decoy-g.png": ["images/bones/decoy-g.png.PNG", "images/bones/decoy-g.PNG"],
       "images/bones/decoy-h.png": ["images/bones/decoy-h.png.PNG", "images/bones/decoy-h.PNG"],
-      "images/bones/decoy-l.png": ["images/bones/decoy-i.png", "images/bones/decoy-i.png.PNG", "images/bones/decoy-l.png.PNG", "images/bones/decoy-l.PNG"]
+      "images/bones/decoy-i.png": ["images/bones/decoy-l.png", "images/bones/decoy-i.png.PNG", "images/bones/decoy-i.PNG", "images/bones/decoy-l.png.PNG", "images/bones/decoy-l.PNG"]
     };
 
-    function normalizeAssetPathForUpload(path) {
+function normalizeAssetPathForUpload(path) {
       if (!path || typeof path !== "string") return path;
       return path
         .replace(/\.png\.PNG$/i, ".png")
         .replace(/\.PNG$/i, ".png")
-        .replace(/\/decoy-i\.png$/i, "/decoy-l.png");
+        .replace(/\/decoy-l\.png$/i, "/decoy-i.png");
     }
 
-    function getImageFallbackCandidates(rawPath) {
+function getImageFallbackCandidates(rawPath) {
       const original = String(rawPath || "").split("?")[0];
       const clean = normalizeAssetPathForUpload(original);
       const candidates = [];
@@ -5812,9 +5961,9 @@ const FOSSIL_IMAGE_ALIASES = {
         add(clean.replace(/\.png$/i, ".PNG"));
       }
 
-      if (/\/decoy-l\.png$/i.test(clean)) {
-        add(clean.replace(/\/decoy-l\.png$/i, "/decoy-i.png"));
-        add(clean.replace(/\/decoy-l\.png$/i, "/decoy-i.png.PNG"));
+      if (/\/decoy-i\.png$/i.test(clean)) {
+        add(clean.replace(/\/decoy-i\.png$/i, "/decoy-l.png"));
+        add(clean.replace(/\/decoy-i\.png$/i, "/decoy-l.png.PNG"));
       }
 
       return candidates;
@@ -5905,7 +6054,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_47");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_48");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -6222,6 +6371,7 @@ function updateHud() {
 function setupReveal() {
       try {
         renderReveal();
+        startIdentityRevealGlitch();
         updateStatusAll();
       } catch (e) {
         console.warn("setupReveal fallback", e);
@@ -6244,6 +6394,10 @@ function showScreen(id, remember = true) {
           }
         }
 
+        if (id !== "screen-reveal") {
+          const reveal = $("screen-reveal");
+          if (reveal) reveal.dataset.glitched = "false";
+        }
         setStage(id);
         updateHud();
 
@@ -6298,6 +6452,7 @@ function startGame() {
       try {
         if (state.dead) clearGameProgress(true);
         state.puzzleWrongStreak = 0;
+        prepareHardDecoyShuffle("startGame");
         ensureRandomLayouts(true);
         initAudio();
         const nameEl = $("player-name");
@@ -6691,7 +6846,7 @@ function renderPuzzle() {
 
         const rules = getPuzzleRevealRules();
         const mode = puzzleDisplayMode();
-        const isComplete = state.placedBones.length === BONES.length;
+        const isComplete = state.placedBones.length === BONES.length && !state.finalScanPending;
 
         board.classList.add("mask-reveal", "no-piece-labels");
         board.dataset.difficulty = state.difficulty || "normal";
@@ -6807,6 +6962,67 @@ function selectBone(id) {
       }
     }
 
+function triggerWrongBoneFeedback(kind = "mismatch") {
+      const board = $("fossil-board");
+      if (board) {
+        board.classList.add("pollution-bone-flash");
+        const ghost = document.createElement("div");
+        ghost.className = "pollution-ghost";
+        ghost.setAttribute("aria-hidden", "true");
+        board.appendChild(ghost);
+        setTimeout(() => ghost.remove(), 720);
+        setTimeout(() => board.classList.remove("pollution-bone-flash"), 760);
+      }
+
+      document.body.classList.add("pollution-impact-flash");
+      setTimeout(() => document.body.classList.remove("pollution-impact-flash"), 620);
+
+      if ((state.difficulty || "normal") === "hard") {
+        document.body.classList.add("hard-mistake-blackout");
+        setTimeout(() => document.body.classList.remove("hard-mistake-blackout"), 520);
+      }
+
+      if (kind === "decoy") {
+        const card = document.querySelector(`[data-bone="${state.selectedBone}"]`);
+        if (card) {
+          card.classList.add("decoy-glitch");
+          setTimeout(() => card.classList.remove("decoy-glitch"), 520);
+        }
+      }
+    }
+
+    function scheduleSoftRevealSettle(boneId, isFinalPiece = false) {
+      setTimeout(() => {
+        if (state.lastPlacedBone === boneId) {
+          state.lastPlacedBone = "";
+          if (!isFinalPiece && document.querySelector(".screen.active")?.id === "screen-puzzle") {
+            renderPuzzle();
+          }
+          saveGame();
+        }
+      }, 1080);
+    }
+
+    function prepareHardDecoyShuffle(reason = "new") {
+      if ((state.difficulty || "normal") !== "hard") return;
+      state.hardDecoySeed = Date.now() + "-" + Math.random().toString(16).slice(2);
+      state.puzzleCardOrder = [];
+    }
+
+    function startIdentityRevealGlitch() {
+      const screen = $("screen-reveal");
+      if (!screen || screen.dataset.glitched === "true") return;
+      screen.dataset.glitched = "true";
+      document.body.classList.add("identity-glitch-intro");
+      tone("glitch");
+
+      setTimeout(() => {
+        document.body.classList.remove("identity-glitch-intro");
+        document.body.classList.add("identity-reveal-ready");
+        setTimeout(() => document.body.classList.remove("identity-reveal-ready"), 900);
+      }, 1250);
+    }
+
 function placeSelectedBone(targetId) {
       try {
         if (!Array.isArray(state.placedBones)) state.placedBones = [];
@@ -6824,6 +7040,7 @@ function placeSelectedBone(targetId) {
             zone.classList.add("shake");
             setTimeout(() => zone.classList.remove("shake"), 300);
           }
+          triggerWrongBoneFeedback("decoy");
           registerMistake("puzzle");
           tone("error");
           logTo("puzzle-log", "非本標本骨片。污染值上升。");
@@ -6838,27 +7055,36 @@ function placeSelectedBone(targetId) {
             state.placedBones.push(targetId);
             state.lastPlacedBone = targetId;
             const bone = BONES.find(b => b.id === targetId);
+            const isFinalPiece = state.placedBones.length === BONES.length;
+            state.finalScanPending = !!isFinalPiece;
             tone("ok");
-            logTo("puzzle-log", (bone ? bone.name : "骨片") + " 封存遮罩解除。");
-          }
+            logTo("puzzle-log", (bone ? bone.name : "骨片") + " 掃描鎖定。");
+            v135SaveNow("screen-puzzle");
+            renderPuzzle();
+            scheduleSoftRevealSettle(targetId, isFinalPiece);
 
-          state.selectedBone = "";
-          v135SaveNow("screen-puzzle");
-          renderPuzzle();
-
-          if (state.placedBones.length === BONES.length) {
-            logTo("puzzle-log", "九塊骨片已定位。標本底圖完全顯示。");
-            setTimeout(() => {
-              if (!state.dead) {
-                toast("標本復原完成。");
-                v135SaveNow("screen-restored");
-                showScreen("screen-restored");
-              }
-            }, 900);
+            if (isFinalPiece) {
+              logTo("puzzle-log", "九塊骨片已定位。完整標本正在解封。");
+              setTimeout(() => {
+                if (!state.dead) {
+                  state.finalScanPending = false;
+                  state.lastPlacedBone = "";
+                  renderPuzzle();
+                  toast("標本復原完成。");
+                  v135SaveNow("screen-restored");
+                  showScreen("screen-restored");
+                }
+              }, 1180);
+            }
+          } else {
+            state.selectedBone = "";
+            v135SaveNow("screen-puzzle");
+            renderPuzzle();
           }
           return;
         }
 
+        triggerWrongBoneFeedback("mismatch");
         registerMistake("puzzle");
         tone("error");
         const board = $("fossil-board");
@@ -6867,6 +7093,7 @@ function placeSelectedBone(targetId) {
           setTimeout(() => board.classList.remove("shake"), 260);
         }
         logTo("puzzle-log", "骨片不匹配。污染值上升。");
+        state.selectedBone = "";
         v135SaveNow("screen-puzzle");
         renderPuzzle();
       } catch (e) {
@@ -7612,6 +7839,9 @@ function updatePuzzleUI() {
       };
       clearGameProgress(true);
       Object.assign(state, keep);
+      state.finalScanPending = false;
+      state.lastPlacedBone = "";
+      state.hardDecoySeed = "";
       resetBoxFormUI();
       saveSettings();
       saveGame();
