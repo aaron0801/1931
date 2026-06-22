@@ -4724,6 +4724,313 @@
       .proof-stamp { font-size: 10px; letter-spacing: .06em; }
     }
 
+
+    /* v1.52 observer silhouette image fix */
+    .photo-frame.silhouette-photo img {
+      display: block !important;
+      filter: grayscale(.72) contrast(1.2) brightness(.68) sepia(.18);
+      opacity: .92;
+    }
+
+    .photo-frame.silhouette-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 7px),
+        radial-gradient(circle at 50% 34%, transparent, rgba(0,0,0,.36));
+      mix-blend-mode: screen;
+      opacity: .55;
+    }
+
+    .photo-frame.silhouette-photo .no-camera {
+      display: none !important;
+    }
+
+    .photo-frame.fallback-missing .no-camera {
+      display: grid !important;
+    }
+
+
+    /* v1.53 mobile proof-card layout fix: prevent cropping and text pile-up */
+
+    #screen-ending {
+      overflow-x: hidden !important;
+    }
+
+    #screen-ending .status {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+
+    .compact-proof-stage {
+      width: 100% !important;
+      max-width: 680px !important;
+      margin: 0 auto !important;
+      padding-inline: 0 !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+
+    .compact-proof-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 8px auto 14px !important;
+      box-sizing: border-box !important;
+      aspect-ratio: 16 / 9 !important;
+      border-radius: 14px !important;
+      background-size: 100% 100% !important;
+      transform: none !important;
+    }
+
+    .compact-proof-card .proof-bottom-left,
+    .compact-proof-card .proof-bottom-mid,
+    .compact-proof-card .proof-main-lines {
+      display: none !important;
+    }
+
+    .compact-proof-photo {
+      left: 7.6% !important;
+      top: 15.1% !important;
+      width: 19.6% !important;
+      height: 36.3% !important;
+      opacity: .78 !important;
+    }
+
+    .compact-proof-main {
+      left: 33.8% !important;
+      top: 17.6% !important;
+      width: 43.8% !important;
+      max-width: 43.8% !important;
+      overflow: visible !important;
+    }
+
+    .compact-proof-main .proof-case {
+      font-size: clamp(11px, 3.2vw, 18px) !important;
+      letter-spacing: .18em !important;
+      margin-bottom: 5px !important;
+      white-space: nowrap !important;
+      opacity: .86 !important;
+    }
+
+    .compact-proof-main .proof-title-line {
+      font-size: clamp(18px, 5.4vw, 34px) !important;
+      line-height: 1.08 !important;
+      margin: 0 0 7px !important;
+      max-width: 100% !important;
+      white-space: normal !important;
+      text-wrap: balance !important;
+      letter-spacing: .05em !important;
+    }
+
+    .proof-result-large {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,90,74,.32);
+      background: rgba(90,0,0,.24);
+      color: rgba(255,235,220,.95);
+      font-size: clamp(12px, 3.5vw, 20px);
+      font-weight: 900;
+      letter-spacing: .10em;
+      box-shadow: 0 0 18px rgba(180,20,20,.12);
+    }
+
+    .proof-card-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 7px;
+      max-width: 108%;
+    }
+
+    .proof-card-pills span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 18px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,210,190,.12);
+      background: rgba(0,0,0,.34);
+      color: rgba(241,227,200,.68);
+      font-size: clamp(9px, 2.4vw, 12px);
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .compact-proof-card .proof-stamp {
+      right: 8.0% !important;
+      bottom: 12.0% !important;
+      width: 16.8% !important;
+      font-size: clamp(9px, 2.7vw, 18px) !important;
+      letter-spacing: .05em !important;
+      line-height: 1.12 !important;
+      padding: 3px !important;
+      box-sizing: border-box !important;
+    }
+
+    .proof-detail-panel {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px;
+      box-sizing: border-box;
+      padding: 16px 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,178,164,.12);
+      background:
+        linear-gradient(180deg, rgba(45,0,0,.36), rgba(0,0,0,.42)),
+        rgba(0,0,0,.28);
+      box-shadow: inset 0 0 28px rgba(255,40,30,.035);
+    }
+
+    .proof-detail-panel h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: .10em;
+      color: rgba(255,240,230,.92);
+    }
+
+    .proof-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .proof-detail-row {
+      display: grid;
+      grid-template-columns: 34% 1fr;
+      gap: 10px;
+      align-items: baseline;
+      min-height: 30px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.20);
+      border: 1px solid rgba(255,255,255,.045);
+      box-sizing: border-box;
+    }
+
+    .proof-detail-row span {
+      color: rgba(241,227,200,.50);
+      font-size: 13px;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .proof-detail-row b {
+      min-width: 0;
+      color: rgba(255,245,238,.90);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .proof-detail-row b.low { color: rgba(255,240,230,.92); }
+    .proof-detail-row b.mid { color: rgba(255,190,150,.95); }
+    .proof-detail-row b.high { color: rgba(255,100,80,.98); }
+    .proof-detail-row b.critical { color: rgba(255,45,38,1); text-shadow: 0 0 10px rgba(255,20,20,.36); }
+
+    .proof-detail-row.full {
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    #screen-ending .ending-actions,
+    #screen-ending .proof-save-note,
+    #screen-ending .unlocked-files-panel {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    #screen-ending .ending-actions {
+      gap: 12px !important;
+      margin-top: 4px !important;
+    }
+
+    #screen-ending .ending-actions .btn {
+      min-height: 62px !important;
+      font-size: 20px !important;
+      border-radius: 20px !important;
+    }
+
+    #screen-ending .proof-save-note {
+      padding: 0 6px !important;
+      line-height: 1.7 !important;
+    }
+
+    @media (min-width: 700px) {
+      .proof-detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .proof-detail-row.full {
+        grid-column: 1 / -1;
+      }
+
+      #screen-ending .ending-actions {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      #screen-ending .panel {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        overflow-x: hidden !important;
+      }
+
+      .ending-kicker {
+        font-size: 11px !important;
+        letter-spacing: .18em !important;
+      }
+
+      .ending-title {
+        font-size: 34px !important;
+        line-height: 1.12 !important;
+      }
+
+      .ending-sub {
+        font-size: 14px !important;
+      }
+
+      .compact-proof-card {
+        border-radius: 12px !important;
+      }
+
+      .proof-card-pills span:nth-child(3) {
+        display: none;
+      }
+
+      .proof-detail-panel {
+        border-radius: 20px;
+        padding: 15px 12px;
+      }
+
+      .proof-detail-row {
+        grid-template-columns: 35% 1fr;
+        padding: 8px 9px;
+      }
+
+      .proof-detail-row span {
+        font-size: 12px;
+      }
+
+      .proof-detail-row b {
+        font-size: 13px;
+      }
+    }
+
   </style>
 </head>
 
@@ -4744,7 +5051,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.51</div>
+          <div class="kicker">FINAL BUILD 1.53</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -4937,18 +5244,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_51" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_51" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_51" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_51" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_51" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_51" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_51" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_51" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_51" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_51" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_53" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_53" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_53" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_53" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_53" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_53" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_53" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_53" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_53" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -5108,32 +5415,35 @@
       <section id="screen-ending" class="screen">
         <div id="status-ending" class="status"></div>
 
-        <div class="ending-stage">
+        <div class="ending-stage compact-proof-stage">
           <div class="ending-kicker">ARCHIVE CERTIFICATE GENERATED</div>
           <h1 class="ending-title">封存證明已生成</h1>
           <p class="ending-sub">第七層系統已將本次復原程序寫入封存紀錄。</p>
 
-          <div class="official-proof-card" id="official-proof-card">
+          <div class="official-proof-card compact-proof-card" id="official-proof-card">
             <div class="proof-card-overlay"></div>
 
-            <div class="proof-photo-box" id="proof-photo-box">
+            <div class="proof-photo-box compact-proof-photo" id="proof-photo-box">
               <img id="proof-photo-img" alt="研究員識別影像">
               <div class="proof-photo-static"></div>
               <div class="proof-photo-scan"></div>
             </div>
 
-            <div class="proof-main-info">
+            <div class="proof-main-info compact-proof-main">
               <div class="proof-case">CASE-1931</div>
               <div class="proof-title-line" id="proof-title-line">第五位研究員</div>
-              <div class="proof-main-lines" id="proof-main-lines"></div>
+              <div class="proof-result-large" id="proof-result-large">封存完成</div>
+              <div class="proof-card-pills" id="proof-card-pills"></div>
             </div>
-
-            <div class="proof-bottom-left" id="proof-bottom-left"></div>
-            <div class="proof-bottom-mid" id="proof-bottom-mid"></div>
 
             <div class="proof-stamp" id="proof-stamp">封存完成</div>
             <div class="proof-scan-bar"></div>
             <div class="proof-blood-edge"></div>
+          </div>
+
+          <div class="proof-detail-panel" id="proof-detail-panel">
+            <h2>封存詳細紀錄</h2>
+            <div class="proof-detail-grid" id="proof-detail-grid"></div>
           </div>
 
           <div class="ending-actions">
@@ -5210,9 +5520,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_51_PROOF_CARD_APPLIED",
-      saveKey: "fifthResearcher_final_v1_51",
-      settingsKey: "fifthResearcher_final_v1_51_settings",
+      version: "FINAL_BUILD_1_53_MOBILE_PROOF_CARD_LAYOUT",
+      saveKey: "fifthResearcher_final_v1_53",
+      settingsKey: "fifthResearcher_final_v1_53_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -5911,6 +6221,8 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_53",
+        "fifthResearcher_final_v1_52",
         "fifthResearcher_final_v1_51",
         "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
@@ -6059,6 +6371,8 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_53",
+        "fifthResearcher_final_v1_52",
         "fifthResearcher_final_v1_51",
         "fifthResearcher_final_v1_50",
         "fifthResearcher_final_v1_49",
@@ -6198,7 +6512,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_51";
+      return normalizedPath + sep + "v=final1_53";
     }
 
     function mobileUploadVariant(src) {
@@ -6381,7 +6695,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_51");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_53");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -8072,6 +8386,8 @@ function updatePuzzleUI() {
 
       try {
         stopCamera();
+        state.usedSilhouette = false;
+        clearRevealPhotoImage();
         cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio:false });
         $("camera-video").srcObject = cameraStream;
         $("camera-video").style.display = "block";
@@ -8119,22 +8435,55 @@ function updatePuzzleUI() {
 
       state.photoData = canvas.toDataURL("image/png");
       state.usedSilhouette = false;
-      img.src = state.photoData;
-      $("photo-frame").classList.remove("live");
-      $("photo-frame").classList.add("has-photo");
+      setRevealPhotoImage(state.photoData, false);
       $("capture-btn").style.display = "none";
       stopCamera();
       saveGame();
       tone("ok");
     }
 
-    function useSilhouette() {
+function setRevealPhotoImage(src, isSilhouette = false) {
+      const frame = $("photo-frame");
+      const img = $("researcher-photo");
+      if (!frame || !img) return;
+
+      img.style.display = "";
+      img.dataset.rawSrc = src;
+      img.dataset.fallbackIndex = "0";
+      img.onerror = function() {
+        if (tryMobileImageFallback(this)) return;
+        this.style.display = "none";
+        frame.classList.remove("has-photo", "silhouette-photo");
+        frame.classList.add("fallback-missing");
+      };
+      img.src = state.photoData && !isSilhouette ? state.photoData : assetWithCache(src);
+
+      frame.classList.remove("live", "fallback-missing");
+      frame.classList.add("has-photo");
+      frame.classList.toggle("silhouette-photo", !!isSilhouette);
+    }
+
+    function clearRevealPhotoImage() {
+      const frame = $("photo-frame");
+      const img = $("researcher-photo");
+      if (img) {
+        img.removeAttribute("src");
+        img.style.display = "";
+      }
+      if (frame) {
+        frame.classList.remove("live", "has-photo", "silhouette-photo", "fallback-missing");
+      }
+    }
+
+function useSilhouette() {
       state.photoData = "";
       state.usedSilhouette = true;
-      $("photo-frame").classList.remove("live","has-photo");
+      setRevealPhotoImage("images/ui/no-camera-fallback.PNG", true);
       $("capture-btn").style.display = "none";
       stopCamera();
       saveGame();
+      toast("已使用觀測者剪影。");
+      HorrorDirector.play("scan", { duration: 620 });
       tone("click");
     }
 
@@ -8148,12 +8497,13 @@ function updatePuzzleUI() {
       $("photo-frame")?.classList.remove("live");
     }
 
-    function renderReveal() {
+function renderReveal() {
       if (state.photoData) {
-        $("researcher-photo").src = state.photoData;
-        $("photo-frame").classList.add("has-photo");
+        setRevealPhotoImage(state.photoData, false);
+      } else if (state.usedSilhouette) {
+        setRevealPhotoImage("images/ui/no-camera-fallback.PNG", true);
       } else {
-        $("photo-frame").classList.remove("has-photo");
+        clearRevealPhotoImage();
       }
       playExternal("reveal").then(ok => { if (!ok) tone("glitch"); });
     }
@@ -8221,7 +8571,7 @@ function proofOutcome() {
       return "low";
     }
 
-    function renderOfficialProofCard() {
+function renderOfficialProofCard() {
       const card = $("official-proof-card");
       if (!card) return;
       const outcome = proofOutcome();
@@ -8229,6 +8579,7 @@ function proofOutcome() {
       const pollution = Number(state.pollution || 0);
       const life = Number(state.life || 0);
       const player = state.player || "觀測者";
+      const recovered = Math.min(Number(state.placedBones?.length || 9), 9);
 
       card.classList.remove("proof-sealed", "proof-contaminated", "proof-signal-lost", "proof-abnormal", "proof-enter", "proof-issued", "proof-save-pulse");
       card.classList.add("proof-" + outcome.key);
@@ -8246,35 +8597,33 @@ function proofOutcome() {
       }
 
       const titleLine = $("proof-title-line");
-      if (titleLine) titleLine.textContent = outcome.title;
+      if (titleLine) titleLine.textContent = "第五位研究員";
 
-      const main = $("proof-main-lines");
-      if (main) {
-        main.innerHTML = `
-          <div class="proof-line"><span>封存案件</span><b>CASE-1931</b></div>
-          <div class="proof-line"><span>研究員代號</span><b>${escapeHtml(player)}</b></div>
-          <div class="proof-line"><span>難度模式</span><b>${difficulty().label}</b></div>
-          <div class="proof-line"><span>污染值</span><b class="${proofMetricClass(pollution)}">${pollution}%</b></div>
-          <div class="proof-line"><span>生命訊號</span><b>${life} / 3</b></div>
-          <div class="proof-line"><span>封存結果</span><b>${outcome.label}</b></div>
+      const resultLarge = $("proof-result-large");
+      if (resultLarge) resultLarge.textContent = outcome.label;
+
+      const pills = $("proof-card-pills");
+      if (pills) {
+        pills.innerHTML = `
+          <span>${difficulty().label}</span>
+          <span>污染 ${pollution}%</span>
+          <span>生命 ${life}/3</span>
         `;
       }
 
-      const bottomLeft = $("proof-bottom-left");
-      if (bottomLeft) {
-        bottomLeft.innerHTML = `
-          <div><span>復原率</span><b>${state.placedBones?.length || 9} / 9</b></div>
-          <div><span>判讀錯誤</span><b>${state.mistakes || 0}</b></div>
-          <div><span>標本掃描</span><b>${state.hints || 0}</b></div>
-        `;
-      }
-
-      const bottomMid = $("proof-bottom-mid");
-      if (bottomMid) {
-        bottomMid.innerHTML = `
-          <div><span>封存編號</span><b>${state.certNo}</b></div>
-          <div><span>封存評級</span><b>${r.rank}｜${r.title}</b></div>
-          <div><span>系統紀錄</span><b>${outcome.desc}</b></div>
+      const detail = $("proof-detail-grid");
+      if (detail) {
+        detail.innerHTML = `
+          <div class="proof-detail-row"><span>封存案件</span><b>CASE-1931</b></div>
+          <div class="proof-detail-row"><span>研究員代號</span><b>${escapeHtml(player)}</b></div>
+          <div class="proof-detail-row"><span>封存結果</span><b>${outcome.label}</b></div>
+          <div class="proof-detail-row"><span>難度模式</span><b>${difficulty().label}</b></div>
+          <div class="proof-detail-row"><span>污染值</span><b class="${proofMetricClass(pollution)}">${pollution}%</b></div>
+          <div class="proof-detail-row"><span>生命訊號</span><b>${life} / 3</b></div>
+          <div class="proof-detail-row"><span>復原率</span><b>${recovered} / 9</b></div>
+          <div class="proof-detail-row"><span>判讀錯誤</span><b>${state.mistakes || 0}</b></div>
+          <div class="proof-detail-row"><span>封存評級</span><b>${r.rank}｜${r.title}</b></div>
+          <div class="proof-detail-row full"><span>系統紀錄</span><b>${outcome.desc}</b></div>
         `;
       }
 
@@ -8282,10 +8631,14 @@ function proofOutcome() {
       if (stamp) stamp.textContent = outcome.stamp;
 
       const status = $("status-ending");
-      if (status) status.innerHTML = `<span>CASE-1931</span><b>${outcome.label}</b><span>${difficulty().label}</span><b>污染 ${pollution}%</b>`;
+      if (status) {
+        status.innerHTML = `<span>FINAL / CASE-1931</span><b>${outcome.label}</b><span>${difficulty().label}</span><b>污染 ${pollution}%</b>`;
+      }
 
       const saveNote = $("proof-save-note");
-      if (saveNote) saveNote.textContent = "保存證明：建議使用手機截圖，或長按證明卡保存畫面。";
+      if (saveNote) {
+        saveNote.textContent = "保存證明：建議使用手機截圖，或長按證明卡保存畫面。";
+      }
     }
 
     function playProofCardIntro() {
