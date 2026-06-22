@@ -5031,6 +5031,130 @@
       }
     }
 
+
+    /* v1.54 certificate PNG download + red observer silhouette */
+
+    .observer-red-silhouette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      border-radius: inherit;
+      background: #050000;
+    }
+
+    .observer-red-bg {
+      position: absolute;
+      inset: 0;
+      background-image: var(--observer-bg, url("images/ui/researcher-reveal-bg.PNG"));
+      background-size: cover;
+      background-position: center;
+      filter: brightness(.78) contrast(1.15) saturate(1.18);
+      opacity: .88;
+    }
+
+    .observer-red-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 43%, rgba(255,32,24,.14), transparent 26%),
+        linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.52));
+      mix-blend-mode: multiply;
+    }
+
+    .observer-red-person {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      width: 34%;
+      height: 45%;
+      transform: translate(-50%, -50%);
+      border-radius: 48% 48% 34% 34% / 28% 28% 48% 48%;
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255,95,78,.72) 0 13%, rgba(185,18,18,.62) 14% 27%, transparent 28%),
+        radial-gradient(ellipse at 50% 68%, rgba(255,54,45,.58) 0 47%, rgba(110,0,0,.28) 72%, transparent 73%);
+      filter: blur(.25px) drop-shadow(0 0 18px rgba(255,28,20,.62));
+      opacity: .86;
+    }
+
+    .observer-red-person::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 15%;
+      width: 42%;
+      aspect-ratio: 1;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,80,64,.58), rgba(120,0,0,.34) 64%, transparent 70%);
+      box-shadow: 0 0 24px rgba(255,35,28,.44);
+    }
+
+    .observer-red-noise {
+      position: absolute;
+      inset: 0;
+      opacity: .34;
+      mix-blend-mode: screen;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.055) 0 1px, transparent 1px 7px),
+        repeating-linear-gradient(90deg, transparent 0 16px, rgba(255,35,28,.06) 17px 18px);
+    }
+
+    .observer-red-scan {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -20%;
+      height: 18%;
+      background: linear-gradient(180deg, transparent, rgba(255,55,42,.62), rgba(255,240,230,.18), transparent);
+      mix-blend-mode: screen;
+      animation: observerRedScan 2.1s ease-in-out infinite;
+      opacity: .7;
+    }
+
+    @keyframes observerRedScan {
+      0% { transform: translateY(0); opacity: 0; }
+      18% { opacity: .82; }
+      100% { transform: translateY(720%); opacity: 0; }
+    }
+
+    .photo-frame.observer-red-active img,
+    .proof-photo-box.observer-proof-photo img {
+      display: none !important;
+    }
+
+    .photo-frame.observer-red-active .no-camera {
+      display: none !important;
+    }
+
+    .photo-frame.observer-red-active {
+      background: rgba(0,0,0,.82) !important;
+      box-shadow:
+        inset 0 0 42px rgba(0,0,0,.9),
+        0 0 28px rgba(255,35,28,.22) !important;
+    }
+
+    .proof-photo-box.observer-proof-photo .observer-red-silhouette {
+      z-index: 4;
+    }
+
+    .proof-photo-box.observer-proof-photo {
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,.9),
+        0 0 24px rgba(255,35,28,.22) !important;
+    }
+
+    .proof-save-pulse {
+      animation: certOutputPulse .72s ease both;
+    }
+
+    @keyframes certOutputPulse {
+      0%,100% { filter: none; }
+      36% { filter: brightness(1.35) contrast(1.18); }
+      62% { filter: brightness(.72) contrast(1.35); }
+    }
+
   </style>
 </head>
 
@@ -5051,7 +5175,7 @@
 
       <section id="screen-loading" class="screen active">
         <div class="panel">
-          <div class="kicker">FINAL BUILD 1.53</div>
+          <div class="kicker">FINAL BUILD 1.54</div>
           <h1>接入中</h1>
           <h2>第七層封存系統</h2>
           <div class="task" id="loading-text">正在接入第七層封存系統……</div>
@@ -5244,18 +5368,18 @@
             </div>
           </div>
           <div class="bone-grid" id="bone-grid">
-<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_53" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_53" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_53" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_53" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_53" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_53" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_53" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_53" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_53" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
-<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_53" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card" data-bone="skull" onclick="safeAction(() => selectBone('skull'))"><span class="bone-img"><img src="images/bones/skull.png?v=final1_54" alt="顱部骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="neck" onclick="safeAction(() => selectBone('neck'))"><span class="bone-img"><img src="images/bones/neck.png?v=final1_54" alt="椎骨骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="chest" onclick="safeAction(() => selectBone('chest'))"><span class="bone-img"><img src="images/bones/chest.png?v=final1_54" alt="胸腔骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftWing" onclick="safeAction(() => selectBone('leftWing'))"><span class="bone-img"><img src="images/bones/left-wing.png?v=final1_54" alt="翼骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightWing" onclick="safeAction(() => selectBone('rightWing'))"><span class="bone-img"><img src="images/bones/right-wing.png?v=final1_54" alt="翼骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="pelvis" onclick="safeAction(() => selectBone('pelvis'))"><span class="bone-img"><img src="images/bones/pelvis.png?v=final1_54" alt="骨盆骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="leftLeg" onclick="safeAction(() => selectBone('leftLeg'))"><span class="bone-img"><img src="images/bones/left-leg.png?v=final1_54" alt="腿骨 A" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="rightLeg" onclick="safeAction(() => selectBone('rightLeg'))"><span class="bone-img"><img src="images/bones/right-leg.png?v=final1_54" alt="腿骨 B" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card" data-bone="tail" onclick="safeAction(() => selectBone('tail'))"><span class="bone-img"><img src="images/bones/tail.png?v=final1_54" alt="尾端骨片" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='missing-label'>影像缺失<br>需以掃描判斷</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyA" onclick="safeAction(() => selectBone('decoyA'))"><span class="bone-img"><img src="images/bones/decoy-a.png?v=final1_54" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyB" onclick="safeAction(() => selectBone('decoyB'))"><span class="bone-img"><img src="images/bones/decoy-b.png?v=final1_54" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
+<button class="bone-card decoy" data-bone="decoyC" onclick="safeAction(() => selectBone('decoyC'))"><span class="bone-img"><img src="images/bones/decoy-c.png?v=final1_54" alt="UNKNOWN" onerror="if(tryMobileImageFallback(this)) return; this.parentNode.parentNode.classList.add('image-missing'); this.remove(); this.parentNode.innerHTML='<span class='decoy-mark'>FRAGMENT</span>'"></span></button>
             </div>
           <div class="system-log" id="puzzle-log">SYSTEM：選擇骨片。</div>
         </div>
@@ -5520,9 +5644,9 @@
     "use strict";
 
     const CONFIG = {
-      version: "FINAL_BUILD_1_53_MOBILE_PROOF_CARD_LAYOUT",
-      saveKey: "fifthResearcher_final_v1_53",
-      settingsKey: "fifthResearcher_final_v1_53_settings",
+      version: "FINAL_BUILD_1_54_CERT_DOWNLOAD_RED_SILHOUETTE",
+      saveKey: "fifthResearcher_final_v1_54",
+      settingsKey: "fifthResearcher_final_v1_54_settings",
       pin: "1931",
       debounceMs: 520,
       screens: [
@@ -6221,6 +6345,7 @@ function loadGame() {
         CONFIG.saveKey,
         PERSISTENT_SAVE_KEY,
         SESSION_SAVE_KEY,
+        "fifthResearcher_final_v1_54",
         "fifthResearcher_final_v1_53",
         "fifthResearcher_final_v1_52",
         "fifthResearcher_final_v1_51",
@@ -6371,6 +6496,7 @@ function clearGameProgress(keepSettings = true) {
         SESSION_SAVE_KEY,
         RESUME_FLAG_KEY,
         RESUME_STATE_KEY,
+        "fifthResearcher_final_v1_54",
         "fifthResearcher_final_v1_53",
         "fifthResearcher_final_v1_52",
         "fifthResearcher_final_v1_51",
@@ -6512,7 +6638,7 @@ function clearGameProgress(keepSettings = true) {
 function assetWithCache(path) {
       const normalizedPath = normalizeAssetPathForUpload(path);
       const sep = normalizedPath.includes("?") ? "&" : "?";
-      return normalizedPath + sep + "v=final1_53";
+      return normalizedPath + sep + "v=final1_54";
     }
 
     function mobileUploadVariant(src) {
@@ -6695,7 +6821,7 @@ function v135PersistOnLeave() {
           const clean = new URL(location.href);
           clean.searchParams.delete("restart");
           clean.searchParams.delete("reset");
-          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_53");
+          if (!clean.searchParams.has("v")) clean.searchParams.set("v", "final1_54");
           history.replaceState(null, "", clean.pathname + "?" + clean.searchParams.toString());
         }
 
@@ -8388,6 +8514,7 @@ function updatePuzzleUI() {
         stopCamera();
         state.usedSilhouette = false;
         clearRevealPhotoImage();
+        removeRevealObserverSilhouette();
         cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio:false });
         $("camera-video").srcObject = cameraStream;
         $("camera-video").style.display = "block";
@@ -8442,25 +8569,325 @@ function updatePuzzleUI() {
       tone("ok");
     }
 
+function observerSilhouetteHtml() {
+      return `
+        <div class="observer-red-bg" aria-hidden="true"></div>
+        <div class="observer-red-person" aria-hidden="true"></div>
+        <div class="observer-red-noise" aria-hidden="true"></div>
+        <div class="observer-red-scan" aria-hidden="true"></div>
+      `;
+    }
+
+    function setRevealPhotoAsObserverSilhouette() {
+      const frame = $("photo-frame");
+      const img = $("researcher-photo");
+      if (!frame) return;
+
+      if (img) {
+        img.style.display = "none";
+        img.removeAttribute("src");
+      }
+
+      let layer = frame.querySelector(".observer-red-silhouette");
+      if (!layer) {
+        layer = document.createElement("div");
+        layer.className = "observer-red-silhouette";
+        frame.appendChild(layer);
+      }
+      layer.innerHTML = observerSilhouetteHtml();
+
+      frame.classList.remove("live", "fallback-missing", "has-photo");
+      frame.classList.add("has-photo", "silhouette-photo", "observer-red-active");
+    }
+
+    function removeRevealObserverSilhouette() {
+      const frame = $("photo-frame");
+      const img = $("researcher-photo");
+      if (frame) {
+        frame.classList.remove("observer-red-active", "silhouette-photo");
+        const layer = frame.querySelector(".observer-red-silhouette");
+        if (layer) layer.remove();
+      }
+      if (img) img.style.display = "";
+    }
+
+    function loadCanvasImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+    }
+
+    function drawCoverImage(ctx, img, x, y, w, h) {
+      if (!img || !img.width || !img.height) return false;
+      const scale = Math.max(w / img.width, h / img.height);
+      const sw = w / scale;
+      const sh = h / scale;
+      const sx = (img.width - sw) / 2;
+      const sy = (img.height - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+      return true;
+    }
+
+    function drawContainImage(ctx, img, x, y, w, h) {
+      if (!img || !img.width || !img.height) return false;
+      const scale = Math.min(w / img.width, h / img.height);
+      const dw = img.width * scale;
+      const dh = img.height * scale;
+      ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+      return true;
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 2) {
+      const words = String(text || "").split("");
+      let line = "";
+      let lines = [];
+      for (const ch of words) {
+        const test = line + ch;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = ch;
+          if (lines.length >= maxLines) break;
+        } else {
+          line = test;
+        }
+      }
+      if (line && lines.length < maxLines) lines.push(line);
+      lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+      return y + lines.length * lineHeight;
+    }
+
+    function drawCanvasObserverSilhouette(ctx, x, y, w, h, bgImg) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.clip();
+
+      if (bgImg) {
+        drawCoverImage(ctx, bgImg, x, y, w, h);
+      } else {
+        const g = ctx.createLinearGradient(x, y, x, y + h);
+        g.addColorStop(0, "#160000");
+        g.addColorStop(.5, "#5b0908");
+        g.addColorStop(1, "#050000");
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y, w, h);
+      }
+
+      ctx.fillStyle = "rgba(0,0,0,.34)";
+      ctx.fillRect(x, y, w, h);
+
+      // Red anonymous person: head and body, no face.
+      const cx = x + w * .5;
+      ctx.shadowColor = "rgba(255,36,30,.72)";
+      ctx.shadowBlur = w * .045;
+      const redGrad = ctx.createRadialGradient(cx, y + h*.38, w*.04, cx, y + h*.46, w*.34);
+      redGrad.addColorStop(0, "rgba(255,92,78,.76)");
+      redGrad.addColorStop(.48, "rgba(180,18,18,.54)");
+      redGrad.addColorStop(1, "rgba(70,0,0,.14)");
+      ctx.fillStyle = redGrad;
+      ctx.beginPath();
+      ctx.ellipse(cx, y + h * .33, w * .105, h * .105, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.roundRect(x + w*.34, y + h*.45, w*.32, h*.30, w*.10);
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = "rgba(255,65,55,.42)";
+      ctx.lineWidth = Math.max(2, w * .008);
+      ctx.strokeRect(x + w*.08, y + h*.08, w*.84, h*.84);
+
+      // Scanlines
+      ctx.fillStyle = "rgba(255,255,255,.045)";
+      for (let yy = y; yy < y + h; yy += 10) ctx.fillRect(x, yy, w, 1);
+
+      const scan = ctx.createLinearGradient(x, y, x, y+h);
+      scan.addColorStop(0, "rgba(255,0,0,0)");
+      scan.addColorStop(.5, "rgba(255,50,42,.40)");
+      scan.addColorStop(1, "rgba(255,0,0,0)");
+      ctx.fillStyle = scan;
+      ctx.fillRect(x, y + h*.43, w, h*.08);
+
+      ctx.restore();
+    }
+
+    async function generateCertificateCanvas() {
+      const outcome = proofOutcome();
+      const r = outcome.rank;
+      const pollution = Number(state.pollution || 0);
+      const life = Number(state.life || 0);
+      const player = state.player || "觀測者";
+      const recovered = Math.min(Number(state.placedBones?.length || 9), 9);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1600;
+      canvas.height = 900;
+      const ctx = canvas.getContext("2d");
+
+      const proofBg = await loadCanvasImage(assetWithCache("images/ui/proof-card-bg.PNG"));
+      const revealBg = await loadCanvasImage(assetWithCache("images/ui/researcher-reveal-bg.PNG"));
+      const userPhoto = state.photoData ? await loadCanvasImage(state.photoData) : null;
+
+      ctx.fillStyle = "#070000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (proofBg) drawCoverImage(ctx, proofBg, 0, 0, canvas.width, canvas.height);
+
+      // Photo area based on the proof-card layout.
+      const px = 126;
+      const py = 137;
+      const pw = 326;
+      const ph = 328;
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(px, py, pw, ph, 10);
+      ctx.clip();
+      if (userPhoto) {
+        drawCoverImage(ctx, userPhoto, px, py, pw, ph);
+        ctx.fillStyle = "rgba(0,0,0,.22)";
+        ctx.fillRect(px, py, pw, ph);
+      } else {
+        drawCanvasObserverSilhouette(ctx, px, py, pw, ph, revealBg);
+      }
+      ctx.restore();
+
+      // Main certificate text.
+      ctx.save();
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "rgba(255,185,170,.78)";
+      ctx.font = "36px sans-serif";
+      ctx.letterSpacing = "8px";
+      ctx.fillText("CASE-1931", 535, 170);
+
+      ctx.fillStyle = "rgba(255,245,235,.96)";
+      ctx.font = "700 64px sans-serif";
+      drawWrappedText(ctx, "第五位研究員", 535, 228, 560, 76, 2);
+
+      ctx.fillStyle = outcome.key === "sealed" ? "rgba(255,235,220,.95)" : "rgba(255,95,80,.98)";
+      ctx.font = "700 38px sans-serif";
+      ctx.fillText(outcome.label, 535, 380);
+
+      ctx.font = "28px sans-serif";
+      ctx.fillStyle = "rgba(245,225,210,.72)";
+      const lines = [
+        ["研究員代號", player],
+        ["難度模式", difficulty().label],
+        ["污染值", `${pollution}%`],
+        ["生命訊號", `${life} / 3`],
+        ["復原率", `${recovered} / 9`],
+        ["封存評級", `${r.rank}｜${r.title}`],
+      ];
+      let yy = 470;
+      lines.forEach(([k, v]) => {
+        ctx.fillStyle = "rgba(245,225,210,.50)";
+        ctx.font = "28px sans-serif";
+        ctx.fillText(k, 535, yy);
+        ctx.fillStyle = "rgba(255,245,235,.92)";
+        ctx.font = "700 30px sans-serif";
+        drawWrappedText(ctx, String(v), 735, yy, 420, 36, 1);
+        yy += 48;
+      });
+
+      // Stamp.
+      const sx = 1265, sy = 620, sr = 112;
+      ctx.translate(sx, sy);
+      ctx.rotate(-Math.PI / 15);
+      ctx.beginPath();
+      ctx.arc(0, 0, sr, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(230,35,30,.78)";
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, sr - 20, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(230,35,30,.36)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255,210,195,.94)";
+      ctx.font = "700 38px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      drawWrappedText(ctx, outcome.stamp, -70, -24, 140, 44, 2);
+      ctx.restore();
+
+      // Mild red edge if contaminated.
+      if (pollution >= 40 || outcome.key !== "sealed") {
+        const g = ctx.createRadialGradient(800, 450, 220, 800, 450, 850);
+        g.addColorStop(0, "rgba(120,0,0,0)");
+        g.addColorStop(1, "rgba(160,0,0,.22)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 1600, 900);
+      }
+
+      return canvas;
+    }
+
+    async function downloadCertificatePng() {
+      const note = $("proof-save-note");
+      const card = $("official-proof-card");
+      if (card) {
+        card.classList.add("proof-save-pulse");
+        setTimeout(() => card.classList.remove("proof-save-pulse"), 900);
+      }
+      if (note) note.textContent = "封存證明輸出中……";
+      HorrorDirector.play("scan", { duration: 650 });
+
+      try {
+        const canvas = await generateCertificateCanvas();
+        const filename = `CASE-1931_第五位研究員_封存證明.png`;
+
+        const dataUrl = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        if (note) note.textContent = "已生成 PNG。若 iPhone 沒有自動下載，系統會開啟圖片頁，請長按圖片保存。";
+        setTimeout(() => {
+          try {
+            const win = window.open();
+            if (win) {
+              win.document.write(`<title>${filename}</title><body style="margin:0;background:#000;display:grid;place-items:center;min-height:100vh;"><img src="${dataUrl}" style="width:100%;height:auto;max-width:1600px;"><p style="position:fixed;bottom:14px;color:#ddd;font-family:sans-serif;">長按圖片即可保存</p></body>`);
+              win.document.close();
+            }
+          } catch (_) {}
+        }, 350);
+      } catch (e) {
+        console.warn("downloadCertificatePng failed", e);
+        if (note) note.textContent = "下載失敗。請先用手機截圖保存；之後可再檢查圖片是否載入完成。";
+        toast("下載失敗，請先截圖保存。");
+      }
+    }
+
 function setRevealPhotoImage(src, isSilhouette = false) {
       const frame = $("photo-frame");
       const img = $("researcher-photo");
       if (!frame || !img) return;
 
+      if (isSilhouette) {
+        setRevealPhotoAsObserverSilhouette();
+        return;
+      }
+
+      removeRevealObserverSilhouette();
       img.style.display = "";
       img.dataset.rawSrc = src;
       img.dataset.fallbackIndex = "0";
       img.onerror = function() {
         if (tryMobileImageFallback(this)) return;
         this.style.display = "none";
-        frame.classList.remove("has-photo", "silhouette-photo");
+        frame.classList.remove("has-photo", "silhouette-photo", "observer-red-active");
         frame.classList.add("fallback-missing");
       };
-      img.src = state.photoData && !isSilhouette ? state.photoData : assetWithCache(src);
+      img.src = state.photoData ? state.photoData : assetWithCache(src);
 
       frame.classList.remove("live", "fallback-missing");
       frame.classList.add("has-photo");
-      frame.classList.toggle("silhouette-photo", !!isSilhouette);
+      frame.classList.toggle("silhouette-photo", false);
     }
 
     function clearRevealPhotoImage() {
@@ -8478,11 +8905,11 @@ function setRevealPhotoImage(src, isSilhouette = false) {
 function useSilhouette() {
       state.photoData = "";
       state.usedSilhouette = true;
-      setRevealPhotoImage("images/ui/no-camera-fallback.PNG", true);
+      setRevealPhotoAsObserverSilhouette();
       $("capture-btn").style.display = "none";
       stopCamera();
       saveGame();
-      toast("已使用觀測者剪影。");
+      toast("已生成紅色觀測者剪影。");
       HorrorDirector.play("scan", { duration: 620 });
       tone("click");
     }
@@ -8586,10 +9013,28 @@ function renderOfficialProofCard() {
       card.dataset.pollution = String(pollution);
       card.style.backgroundImage = `url("${assetWithCache("images/ui/proof-card-bg.PNG")}")`;
 
+      const photoBox = $("proof-photo-box");
       const photo = $("proof-photo-img");
+      if (photoBox) {
+        photoBox.classList.toggle("observer-proof-photo", !state.photoData);
+        let layer = photoBox.querySelector(".observer-red-silhouette");
+        if (!state.photoData && !layer) {
+          layer = document.createElement("div");
+          layer.className = "observer-red-silhouette";
+          layer.innerHTML = observerSilhouetteHtml();
+          photoBox.appendChild(layer);
+        }
+        if (state.photoData && layer) layer.remove();
+      }
       if (photo) {
-        photo.dataset.rawSrc = state.photoData || "images/ui/no-camera-fallback.PNG";
-        photo.src = state.photoData || assetWithCache("images/ui/no-camera-fallback.PNG");
+        if (state.photoData) {
+          photo.style.display = "";
+          photo.dataset.rawSrc = state.photoData;
+          photo.src = state.photoData;
+        } else {
+          photo.style.display = "none";
+          photo.removeAttribute("src");
+        }
         photo.onerror = function() {
           if (tryMobileImageFallback(this)) return;
           this.style.display = "none";
@@ -8694,16 +9139,7 @@ function setTab(tab, persist = true) {
     }
 
 function saveCertificate() {
-      const card = $("official-proof-card");
-      if (card) {
-        card.classList.add("proof-save-pulse");
-        setTimeout(() => card.classList.remove("proof-save-pulse"), 900);
-      }
-      const note = $("proof-save-note");
-      if (note) note.textContent = "請使用手機截圖保存封存證明；之後可再升級成自動下載圖片。";
-      HorrorDirector.play("scan", { duration: 650 });
-      try { toast("請截圖保存封存證明卡。"); } catch (_) {}
-      try { playExternal("save").then(ok => { if (!ok) tone("ok"); }); } catch (_) {}
+      downloadCertificatePng();
     }
 
     function performResetGame() {
